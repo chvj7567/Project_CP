@@ -1,0 +1,14 @@
+using System;
+using UnityEditorInternal;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Infomation
+{
+    [Serializable]
+    public class StringInfo
+    {
+        public int stringID = -1;
+        public string value = "";
+    }
+}

@@ -1,0 +1,41 @@
+ManifestFileVersion: 0
+CRC: 642680883
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8dc5b8961450af4eb9aed9c1aa9a8a1b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 424122d047e7fa6061e1950f1d0a9b6f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1511ccae7919cfc46b603b9b337fdc94, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/ui/UICamera.prefab
+- Assets/AssetBundleResources/ui/EventSystem.prefab
+- Assets/AssetBundleResources/ui/UICanvas.prefab
+Dependencies: []
