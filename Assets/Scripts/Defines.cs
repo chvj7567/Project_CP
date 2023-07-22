@@ -18,6 +18,8 @@ public class Defines
 
         huchu1,
         huchu2,
+        huchu3,
+        huchu4,
 
         Max
     }

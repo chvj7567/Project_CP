@@ -173,6 +173,7 @@ MonoBehaviour:
   parent: {fileID: 813981275}
   instBtn: {fileID: 813981276}
   isDrag: 0
+  isAni: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +378,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 116e692c8c088de438cb9d859279cfb0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a88dad00cffa088408211bbd7551120d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -459,6 +460,9 @@ MonoBehaviour:
   col: 0
   type: 0
   state: -1
+  horizontalScore: 0
+  verticalScore: 0
+  rectTransform: {fileID: 0}
   originPos: {x: 0, y: 0}
 --- !u!1 &2089328439
 GameObject:

@@ -107,7 +107,14 @@ public class CHMAssetBundle
         }
         else if (typeof(T) == typeof(Sprite))
         {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.jpg";
+            if (_assetName == "huchu1")
+            {
+                path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.jpg";
+            }
+            else
+            {
+                path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.png";
+            }
         }
 
         T original = AssetDatabase.LoadAssetAtPath<T>(path);

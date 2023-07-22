@@ -17,31 +17,59 @@ public class Game : MonoBehaviour
 
     [SerializeField] CHInstantiateButton instBtn;
 
-    List<int> removeIndex = new List<int>();
-
     [ReadOnly]
     Block[,] boardArr = new Block[9, 9];
 
     [ReadOnly]
     public bool isDrag = false;
 
+    [ReadOnly]
+    public bool isAni = false;
+
+    [ReadOnly]
+    bool isMatch = false;
+
     async void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         instBtn.InstantiateButton(origin, margin, horizontalCount, verticalCount, parent, boardArr);
+
         MakeMap();
 
-        for (int i = 0; i < 100; ++i)
-        {
-            await Task.Delay(1000);
-            CheckMap();
-            await Task.Delay(1000);
-            DownBlock();
-            await Task.Delay(1000);
-            UpdateMap();
+        AfterDrag(null, null);
+    }
 
-            removeIndex.Clear();
-        }
+    public async void AfterDrag(Block block1, Block block2, float moveTime = .5f)
+    {
+        isAni = true;
+
+        bool first = false;
+        await Task.Delay((int)(moveTime * 1000));
+
+        do
+        {
+            isMatch = false;
+            CheckMap();
+            if (block1 != null && block2 != null)
+            {
+                if (first == false && isMatch == false)
+                {
+                    block1.rectTransform.DOAnchorPos(block2.originPos, .5f);
+                    block2.rectTransform.DOAnchorPos(block1.originPos, .5f);
+                    ChangeBlock(block1, block2);
+                }
+            }
+            first = true;
+            RemoveMatchBlock();
+            await Task.Delay(500);
+            DownBlock();
+            await Task.Delay(500);
+            UpdateMap();
+            await Task.Delay(500);
+
+        } while (isMatch == true);
+
+        isAni = false;
     }
 
     void UpdateMap()
@@ -61,9 +89,8 @@ public class Game : MonoBehaviour
                     img.sprite = sprite;
                 });
 
-                block.transform.localScale = Vector3.one;
                 block.ResetScore();
-                block.MoveOriginPos();
+                block.SetOriginPos();
             }
         }
     }
@@ -78,7 +105,8 @@ public class Game : MonoBehaviour
             var random = Random.Range(0, (int)Defines.ESpriteType.Max);
             CHMMain.Resource.LoadSprite((Defines.ESpriteType)random, (sprite) =>
             {
-                block.type = (Defines.ESpriteType)random;
+                var spriteType = (Defines.ESpriteType)random;
+                block.type = spriteType;
                 img.sprite = sprite;
             });
         }
@@ -99,7 +127,7 @@ public class Game : MonoBehaviour
                 }
             }
 
-            CheckMatch(hBlockList, removeIndex, Defines.EDirection.Horizontal);
+            CheckMatch(hBlockList, Defines.EDirection.Horizontal);
         }
 
         for (int i = 0; i < verticalCount; ++i)
@@ -114,23 +142,23 @@ public class Game : MonoBehaviour
                 }
             }
 
-            CheckMatch(vBlockList, removeIndex, Defines.EDirection.Vertical);
+            CheckMatch(vBlockList, Defines.EDirection.Vertical);
         }
+    }
 
+    void RemoveMatchBlock()
+    {
         foreach (var block in boardArr)
         {
             if (block.state == Defines.EState.Match)
             {
                 var rectTransform = block.GetComponent<RectTransform>();
-                var pos = rectTransform.anchoredPosition;
-                var boardWidth = CHInstantiateButton.GetVerticalDistance() * verticalCount + margin * verticalCount;
-                block.rectTransform.DOAnchorPosY(pos.y + boardWidth + 100f, 2f);
-                block.transform.DOScale(.5f, .5f);
+                block.transform.DOScale(0f, .5f);
             }
         }
     }
 
-    void CheckMatch(List<Block> blockList, List<int> removeIndex, Defines.EDirection direction)
+    void CheckMatch(List<Block> blockList, Defines.EDirection direction)
     {
         Defines.ESpriteType matchType = Defines.ESpriteType.None;
         List<int> tempIndex = new List<int>();
@@ -157,6 +185,7 @@ public class Game : MonoBehaviour
                         var block = blockList[temp--];
                         block.SetScore(matchCount, direction);
                         block.state = Defines.EState.Match;
+                        isMatch = true;
                     }
                 }
             }
@@ -187,47 +216,26 @@ public class Game : MonoBehaviour
 
         foreach (var block in order)
         {
-            if (removeIndex.Contains(block.index) == false)
+            int row = block.row;
+            int col = block.col;
+            if (boardArr[row, col].state != Defines.EState.Normal) continue;
+
+            Block moveBlock = boardArr[row, col];
+            Block targetBlock = null;
+            int targetRow = -1;
+            for (int i = horizontalCount - 1; i > block.row; --i)
             {
-                int row = block.row;
-                int col = block.col;
-                if (boardArr[row, col].state != Defines.EState.Normal) continue;
-
-                Block moveBlock = boardArr[row, col];
-                Block targetBlock = null;
-                int targetRow = -1;
-                for (int i = horizontalCount - 1; i > block.row; --i)
+                if (boardArr[i, col].state == Defines.EState.Match)
                 {
-                    if (boardArr[i, col].state == Defines.EState.Match)
-                    {
-                        targetBlock = boardArr[i, col];
-                        targetRow = i;
-                        break;
-                    }
+                    targetBlock = boardArr[i, col];
+                    targetRow = i;
+                    break;
                 }
+            }
 
-                if (targetBlock != null)
-                {
-                    //Debug.Log($"Change {row}/{col} - {targetRow}/{col}");
-                    var tempPos = moveBlock.originPos;
-                    moveBlock.originPos = targetBlock.originPos;
-                    targetBlock.originPos = tempPos;
-                    var tempIndex = moveBlock.index;
-                    moveBlock.index = targetBlock.index;
-                    targetBlock.index = tempIndex;
-                    var tempRow = moveBlock.row;
-                    moveBlock.row = targetBlock.row;
-                    targetBlock.row = tempRow;
-                    var tempCol = moveBlock.col;
-                    moveBlock.col = targetBlock.col;
-                    targetBlock.col = tempCol;
-
-                    moveBlock.name = $"Block{moveBlock.row}/{moveBlock.col}";
-                    targetBlock.name = $"Block{targetBlock.row}/{targetBlock.col}";
-
-                    boardArr[targetRow, col] = moveBlock;
-                    boardArr[row, col] = targetBlock;
-                }
+            if (targetBlock != null)
+            {
+                ChangeBlock(moveBlock, targetBlock);
             }
         }
 
@@ -238,5 +246,28 @@ public class Game : MonoBehaviour
                 block.MoveOriginPos();
             }
         }
+    }
+
+    public void ChangeBlock(Block moveBlock, Block targetBlock)
+    {
+        //Debug.Log($"Change {row}/{col} - {targetRow}/{col}");
+        var tempPos = moveBlock.originPos;
+        moveBlock.originPos = targetBlock.originPos;
+        targetBlock.originPos = tempPos;
+        var tempIndex = moveBlock.index;
+        moveBlock.index = targetBlock.index;
+        targetBlock.index = tempIndex;
+        var tempRow = moveBlock.row;
+        moveBlock.row = targetBlock.row;
+        targetBlock.row = tempRow;
+        var tempCol = moveBlock.col;
+        moveBlock.col = targetBlock.col;
+        targetBlock.col = tempCol;
+
+        moveBlock.name = $"Block{moveBlock.row}/{moveBlock.col}";
+        targetBlock.name = $"Block{targetBlock.row}/{targetBlock.col}";
+
+        boardArr[moveBlock.row, moveBlock.col] = moveBlock;
+        boardArr[targetBlock.row, targetBlock.col] = targetBlock;
     }
 }

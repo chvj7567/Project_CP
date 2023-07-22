@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -25,8 +26,6 @@ public class Block : MonoBehaviour
     [ReadOnly]
     public Defines.EState state = Defines.EState.None;
     [ReadOnly]
-    bool isMy = false;
-    [ReadOnly]
     public int horizontalScore;
     [ReadOnly]
     public int verticalScore;
@@ -44,7 +43,6 @@ public class Block : MonoBehaviour
             if (game.isDrag == true) return;
 
             game.isDrag = true;
-            isMy = true;
         });
 
         btn.OnDragAsObservable().Subscribe(_ =>
@@ -54,10 +52,9 @@ public class Block : MonoBehaviour
 
         btn.OnEndDragAsObservable().Subscribe(_ =>
         {
-            if (isMy == false) return;
+            if (game.isAni == true) return;
 
             game.isDrag = false;
-            isMy = false;
 
             Vector2 rectPosition;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(backRect, _.position, _.pressEventCamera, out rectPosition);
@@ -78,10 +75,9 @@ public class Block : MonoBehaviour
                         {
                             rectTransform.DOAnchorPosX(movePos.x, .5f);
                             ret.Item1.DOAnchorPosX(originPos.x, .5f);
-                            ret.Item2.originPos = originPos;
-                            originPos = movePos;
 
                             ChangeBlock(ret.Item2);
+                            game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;
@@ -95,10 +91,9 @@ public class Block : MonoBehaviour
                         {
                             rectTransform.DOAnchorPosY(movePos.y, .5f);
                             ret.Item1.DOAnchorPosY(originPos.y, .5f);
-                            ret.Item2.originPos = originPos;
-                            originPos = movePos;
 
                             ChangeBlock(ret.Item2);
+                            game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;
@@ -112,10 +107,9 @@ public class Block : MonoBehaviour
                         {
                             rectTransform.DOAnchorPosX(movePos.x, .5f);
                             ret.Item1.DOAnchorPosX(originPos.x, .5f);
-                            ret.Item2.originPos = originPos;
-                            originPos = movePos;
 
                             ChangeBlock(ret.Item2);
+                            game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;
@@ -129,10 +123,9 @@ public class Block : MonoBehaviour
                         {
                             rectTransform.DOAnchorPosY(movePos.y, .5f);
                             ret.Item1.DOAnchorPosY(originPos.y, .5f);
-                            ret.Item2.originPos = originPos;
-                            originPos = movePos;
 
                             ChangeBlock(ret.Item2);
+                            game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;
@@ -157,17 +150,13 @@ public class Block : MonoBehaviour
 
     void ChangeBlock(Block block)
     {
-        var tempIndex = index;
-        index = block.index;
-        block.index = tempIndex;
+        game.ChangeBlock(this, block);
+    }
 
-        var tempRow = row;
-        row = block.row;
-        block.row = tempRow;
-
-        var tempCol = col;
-        col = block.col;
-        block.col = tempCol;
+    public void SetOriginPos()
+    {
+        rectTransform.anchoredPosition = originPos;
+        transform.DOScale(1f, .5f);
     }
 
     public void MoveOriginPos()
