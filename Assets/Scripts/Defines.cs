@@ -12,7 +12,7 @@ public class Defines
         Max
     }
 
-    public enum ESpriteType
+    public enum ENormalBlockType
     {
         None = -1,
 
@@ -20,6 +20,15 @@ public class Defines
         huchu2,
         huchu3,
         huchu4,
+
+        Max
+    }
+
+    public enum ESpecailBlockType
+    {
+        None = -1,
+
+        Boom,
 
         Max
     }

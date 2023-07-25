@@ -21,8 +21,10 @@ public class Block : MonoBehaviour
     public int row;
     [ReadOnly]
     public int col;
-    [ReadOnly]
-    public Defines.ESpriteType type;
+    [SerializeField, ReadOnly]
+    Defines.ENormalBlockType normalType;
+    [SerializeField, ReadOnly]
+    Defines.ESpecailBlockType specailType;
     [ReadOnly]
     public Defines.EState state = Defines.EState.None;
     [ReadOnly]
@@ -30,13 +32,18 @@ public class Block : MonoBehaviour
     [ReadOnly]
     public int verticalScore;
 
+    public Image img;
     public RectTransform rectTransform;
     public Vector2 originPos;
 
     private void Start()
     {
-        rectTransform = GetComponent<RectTransform>();
         originPos = rectTransform.anchoredPosition;
+
+        btn.OnClickAsObservable().Subscribe(_ =>
+        {
+            if (game.isAni == false && specailType == Defines.ESpecailBlockType.Boom) game.Boom(this);
+        });
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
         {
@@ -156,7 +163,7 @@ public class Block : MonoBehaviour
     public void SetOriginPos()
     {
         rectTransform.anchoredPosition = originPos;
-        transform.DOScale(1f, .5f);
+        transform.DOScale(1f, 1f);
     }
 
     public void MoveOriginPos()
@@ -168,8 +175,6 @@ public class Block : MonoBehaviour
     {
         switch (direction)
         {
-            case Defines.EDirection.None:
-                break;
             case Defines.EDirection.Horizontal:
                 horizontalScore = score;
                 break;
@@ -183,5 +188,27 @@ public class Block : MonoBehaviour
     {
         horizontalScore = 0;
         verticalScore = 0;
+    }
+
+    public Defines.ENormalBlockType GetNormalType()
+    {
+        return normalType;
+    }
+
+    public Defines.ESpecailBlockType GetSpecailType()
+    {
+        return specailType;
+    }
+
+    public void SetNormalType(Defines.ENormalBlockType normalType)
+    {
+        this.specailType = Defines.ESpecailBlockType.None;
+        this.normalType = normalType;
+    }
+
+    public void SetSpecailType(Defines.ESpecailBlockType specailType)
+    {
+        this.normalType = Defines.ENormalBlockType.None;
+        this.specailType = specailType;
     }
 }
