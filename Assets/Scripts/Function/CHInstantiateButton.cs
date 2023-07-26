@@ -90,6 +90,7 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
             block.col = (int)pos.Key.y;
             block.index = index++;
             block.state = Defines.EState.Normal;
+            block.originPos = pos.Value;
 
             _boardArr[block.row, block.col] = block;
             addObject.name = $"Block{block.row}/{block.col}";

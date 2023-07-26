@@ -169,8 +169,8 @@ MonoBehaviour:
   viewImg: {fileID: 1897689331}
   origin: {fileID: 1975192477}
   margin: 3.75
-  horizontalCount: 9
-  verticalCount: 9
+  horizontalCount: 8
+  verticalCount: 8
   parent: {fileID: 813981275}
   instBtn: {fileID: 813981276}
   isDrag: 0
@@ -505,7 +505,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -535, y: 535}
+  m_AnchoredPosition: {x: 0, y: 540}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1975192479
