@@ -42,7 +42,7 @@ public class Block : MonoBehaviour
 
         btn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (game.isAni == false && specailType == Defines.ESpecailBlockType.Boom) game.Boom(this);
+            if (game.isDrag == false && game.isAni == false && specailType == Defines.ESpecailBlockType.Boom) game.Boom(this);
         });
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
@@ -59,9 +59,9 @@ public class Block : MonoBehaviour
 
         btn.OnEndDragAsObservable().Subscribe(_ =>
         {
-            if (game.isAni == true) return;
-
             game.isDrag = false;
+
+            if (game.isAni == true) return;
 
             Vector2 rectPosition;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(backRect, _.position, _.pressEventCamera, out rectPosition);
@@ -163,12 +163,7 @@ public class Block : MonoBehaviour
     public void SetOriginPos()
     {
         rectTransform.anchoredPosition = originPos;
-        transform.DOScale(1f, 1f);
-    }
-
-    public void MoveOriginPos()
-    {
-        rectTransform.DOAnchorPos(originPos, .5f);
+        rectTransform.DOScale(1f, game.delay);
     }
 
     public void SetScore(int score, Defines.EDirection direction)

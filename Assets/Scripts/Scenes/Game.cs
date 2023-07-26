@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 public class Game : MonoBehaviour
 {
+    [SerializeField] Image viewImg;
     [SerializeField] GameObject origin;
     [SerializeField] float margin = 0f;
     [SerializeField, Range(1, 9)] int horizontalCount = 1;
@@ -29,22 +30,36 @@ public class Game : MonoBehaviour
     [ReadOnly]
     bool isMatch = false;
 
-    void Start()
+    public float delay;
+
+    async void Start()
     {
         CHMMain.UI.CreateEventSystemObject();
         instBtn.InstantiateButton(origin, margin, horizontalCount, verticalCount, parent, boardArr);
 
-        UpdateMap(true);
+        await UpdateMap(true);
 
         AfterDrag(null, null);
     }
 
-    public async void AfterDrag(Block block1, Block block2, float moveTime = .5f)
+    private void Update()
+    {
+        if (isAni == true)
+        {
+            viewImg.color = Color.red;
+        }
+        else
+        {
+            viewImg.color = Color.green;
+        }
+    }
+
+    public async void AfterDrag(Block block1, Block block2)
     {
         isAni = true;
 
         bool first = false;
-        await Task.Delay((int)(moveTime * 1000));
+        await Task.Delay((int)(delay * 1000));
 
         do
         {
@@ -54,17 +69,15 @@ public class Game : MonoBehaviour
             {
                 if (first == false && isMatch == false)
                 {
-                    block1.rectTransform.DOAnchorPos(block2.originPos, .5f);
-                    block2.rectTransform.DOAnchorPos(block1.originPos, .5f);
+                    block1.rectTransform.DOAnchorPos(block2.originPos, delay);
+                    block2.rectTransform.DOAnchorPos(block1.originPos, delay);
                     ChangeBlock(block1, block2);
                 }
             }
             first = true;
             await RemoveMatchBlock();
-            DownBlock();
-            await Task.Delay(1000);
-            UpdateMap();
-            await Task.Delay(1000);
+            await DownBlock();
+            await UpdateMap();
             CheckMap();
 
         } while (isMatch == true);
@@ -72,20 +85,34 @@ public class Game : MonoBehaviour
         isAni = false;
     }
 
-    void UpdateMap(bool first = false)
+    async Task UpdateMap(bool first = false)
     // 맵생성
     {
         foreach (var block in boardArr)
         {
             if (first == true || block.state == Defines.EState.Match)
             {
-                var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
-                CHMMain.Resource.LoadSprite((Defines.ENormalBlockType)random, (sprite) =>
+                if (block.horizontalScore >= 4 || block.verticalScore >= 4)
                 {
-                    block.SetNormalType((Defines.ENormalBlockType)random);
-                    block.state = Defines.EState.Normal;
-                    block.img.sprite = sprite;
-                });
+                    CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
+                    {
+                        block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                        block.state = Defines.EState.Normal;
+                        block.img.sprite = sprite;
+                        block.ResetScore();
+                        block.SetOriginPos();
+                    });
+                }
+                else
+                {
+                    var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+                    CHMMain.Resource.LoadSprite((Defines.ENormalBlockType)random, (sprite) =>
+                    {
+                        block.SetNormalType((Defines.ENormalBlockType)random);
+                        block.state = Defines.EState.Normal;
+                        block.img.sprite = sprite;
+                    });
+                }
 
                 if (first == false)
                 {
@@ -94,6 +121,8 @@ public class Game : MonoBehaviour
                 }
             }
         }
+
+        await Task.Delay((int)(delay * 1000));
     }
 
     void CheckMap()
@@ -132,6 +161,8 @@ public class Game : MonoBehaviour
 
     async Task RemoveMatchBlock()
     {
+        bool removeDelay = false;
+
         for (int i = 0; i < boardArr.GetLength(0); ++i)
         {
             for (int j = 0; j < boardArr.GetLength(1); ++j)
@@ -139,35 +170,38 @@ public class Game : MonoBehaviour
                 // 없어져야 할 블럭
                 if (boardArr[i, j].state == Defines.EState.Match)
                 {
-                    int hScore = boardArr[i, j].horizontalScore;
-                    int vScore = boardArr[i, j].verticalScore;
-                    if (hScore >= 3 && vScore >= 3)
-                    {
-                        CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
-                        {
-                            boardArr[i, j].SetSpecailType(Defines.ESpecailBlockType.Boom);
-                            boardArr[i, j].state = Defines.EState.Normal;
-                            boardArr[i, j].img.sprite = sprite;
-                            boardArr[i, j].ResetScore();
-                            boardArr[i, j].SetOriginPos();
-                        });
-                    }
-                    else
-                    {
-                        if (boardArr[i, j].GetSpecailType() == Defines.ESpecailBlockType.Boom)
-                        {
-                            Boom(boardArr[i, j]);
-                            i = -1;
-                            break;
-                        }
+                    var block = boardArr[i, j];
 
-                        boardArr[i, j].transform.DOScale(0f, 1f);
+                    if (boardArr[i, j].GetSpecailType() == Defines.ESpecailBlockType.Boom)
+                    {
+                        Boom(boardArr[i, j], false);
+                        i = -1;
+                        break;
                     }
+
+                    removeDelay = true;
+                    boardArr[i, j].rectTransform.DOScale(0f, delay).OnComplete(() =>
+                    {
+                        if (block.horizontalScore >= 4 || block.verticalScore >= 4)
+                        {
+                            CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = sprite;
+                                block.ResetScore();
+                                block.SetOriginPos();
+                            });
+                        }
+                    });
                 }
             }
         }
 
-        await Task.Delay(1000);
+        if (removeDelay)
+        {
+            await Task.Delay((int)(delay * 2000));
+        }
     }
 
     void CheckMatch(List<Block> blockList, Defines.EDirection direction)
@@ -211,7 +245,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    void DownBlock()
+    async Task DownBlock()
     {
         List<Block> order = new List<Block>();
         for (int i = 8; i >= 0; --i)
@@ -251,12 +285,20 @@ public class Game : MonoBehaviour
             }
         }
 
+        bool downDelay = false;
+
         foreach (var block in boardArr)
         {
             if (block.state == Defines.EState.Normal)
             {
-                block.MoveOriginPos();
+                downDelay = true;
+                block.rectTransform.DOAnchorPos(block.originPos, delay);
             }
+        }
+
+        if (downDelay)
+        {
+            await Task.Delay((int)(delay * 1000));
         }
     }
 
@@ -283,7 +325,7 @@ public class Game : MonoBehaviour
         boardArr[targetBlock.row, targetBlock.col] = targetBlock;
     }
 
-    public void Boom(Block block)
+    public void Boom(Block block, bool ani = true)
     {
         Debug.Log($"{block.row} {block.col}");
 
@@ -330,7 +372,10 @@ public class Game : MonoBehaviour
             boardArr[block.row + 1, block.col + 1].state = Defines.EState.Match;
         }
 
-        AfterDrag(null, null);
+        if (ani)
+        {
+            AfterDrag(null, null);
+        }
     }
 
     bool IsValidIndex(int row, int column, int rows, int columns)
