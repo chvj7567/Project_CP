@@ -33,6 +33,11 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
         return blockDict;
     }
 
+    public static void ResetBlockDict()
+    {
+        blockDict.Clear();
+    }
+
     public static (RectTransform, Block) GetBlockInfo(Vector2 pos)
     {
         foreach (var block in blockDict)

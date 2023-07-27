@@ -68,10 +68,54 @@ public partial class AssetBundlePool
     }
 }
 
+public partial class ObjectPool
+{
+    [Serializable]
+    public class Task
+    {
+        public string key;
+        public Subject<AssetBundle> onDownloaded;
+    }
+
+    [Serializable]
+    class Item
+    {
+        public string key;
+        public UnityEngine.Object obj;
+    }
+
+    Dictionary<string, Item> dicItem = new Dictionary<string, Item>();
+    Dictionary<string, Task> dicTask = new Dictionary<string, Task>();
+
+    public void LoadObject(string _bundleName, UnityEngine.Object _object)
+    {
+        if (dicItem.TryGetValue(_bundleName, out Item item) == false && _object != null)
+        {
+            dicItem.Add(_bundleName, new Item
+            {
+                key = _bundleName,
+                obj = _object,
+            });
+        }
+    }
+
+    public UnityEngine.Object GetItem(string _bundleName)
+    {
+        if (dicItem.TryGetValue(_bundleName.ToLower(), out Item ret))
+        {
+            return ret.obj;
+        }
+        else
+        {
+            return null;
+        }
+    }
+}
+
 public class CHMAssetBundle
 {
-    AssetBundlePool assetBundlePool = new AssetBundlePool();
-    //private static ObjectPool objectPool = new ObjectPool();
+    static AssetBundlePool assetBundlePool = new AssetBundlePool();
+    static ObjectPool objectPool = new ObjectPool();
 
     public void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
     {

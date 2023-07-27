@@ -6,10 +6,14 @@ using DG.Tweening;
 using UnityEngine.UI;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] Image viewImg;
+    [SerializeField] Image viewImg1;
+    [SerializeField] Image viewImg2;
+    [SerializeField] Button backBtn;
     [SerializeField] GameObject origin;
     [SerializeField] float margin = 0f;
     [SerializeField, Range(1, 9)] int boardSize = 1;
@@ -31,9 +35,54 @@ public class Game : MonoBehaviour
 
     public float delay;
 
+    List<Sprite> spriteList = new List<Sprite>();
+
+    [SerializeField] public TMP_Text t1;
+    [SerializeField] public TMP_Text t2;
+
     async void Start()
     {
-        CHMMain.UI.CreateEventSystemObject();
+        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu1", (texture) =>
+        {
+            Rect rect = new Rect(0, 0, texture.width, texture.height);
+            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+        });
+
+        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu2", (texture) =>
+        {
+            Rect rect = new Rect(0, 0, texture.width, texture.height);
+            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+        });
+
+        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu3", (texture) =>
+        {
+            Rect rect = new Rect(0, 0, texture.width, texture.height);
+            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+        });
+
+        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu4", (texture) =>
+        {
+            Rect rect = new Rect(0, 0, texture.width, texture.height);
+            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+        });
+
+        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "Boom", (texture) =>
+        {
+            Rect rect = new Rect(0, 0, texture.width, texture.height);
+            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+        });
+
+        if (backBtn)
+        {
+            backBtn.OnClickAsObservable().Subscribe(_ =>
+            {
+                CHInstantiateButton.ResetBlockDict();
+                SceneManager.LoadScene(1);
+            });
+        }
+
+        boardSize = PlayerPrefs.GetInt("size");
+
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
         await UpdateMap(true);
@@ -45,11 +94,20 @@ public class Game : MonoBehaviour
     {
         if (isAni == true)
         {
-            viewImg.color = Color.red;
+            viewImg1.color = Color.red;
         }
         else
         {
-            viewImg.color = Color.green;
+            viewImg1.color = Color.green;
+        }
+
+        if (isDrag == true)
+        {
+            viewImg2.color = Color.red;
+        }
+        else
+        {
+            viewImg2.color = Color.green;
         }
     }
 
@@ -100,27 +158,17 @@ public class Game : MonoBehaviour
 
             if (first == true || block.state == Defines.EState.Match)
             {
-                if (block.horizontalScore >= 4 || block.verticalScore >= 4)
+                var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+                /*CHMMain.Resource.LoadSprite((Defines.ENormalBlockType)random, (sprite) =>
                 {
-                    CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
-                    {
-                        block.SetSpecailType(Defines.ESpecailBlockType.Boom);
-                        block.state = Defines.EState.Normal;
-                        block.img.sprite = sprite;
-                        block.ResetScore();
-                        block.SetOriginPos();
-                    });
-                }
-                else
-                {
-                    var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
-                    CHMMain.Resource.LoadSprite((Defines.ENormalBlockType)random, (sprite) =>
-                    {
-                        block.SetNormalType((Defines.ENormalBlockType)random);
-                        block.state = Defines.EState.Normal;
-                        block.img.sprite = sprite;
-                    });
-                }
+                    block.SetNormalType((Defines.ENormalBlockType)random);
+                    block.state = Defines.EState.Normal;
+                    block.img.sprite = sprite;
+                });*/
+
+                block.SetNormalType((Defines.ENormalBlockType)random);
+                block.state = Defines.EState.Normal;
+                block.img.sprite = spriteList[random];
 
                 if (first == false)
                 {
@@ -197,14 +245,20 @@ public class Game : MonoBehaviour
                     {
                         if (block.horizontalScore >= 4 || block.verticalScore >= 4)
                         {
-                            CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
+                            /*CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
                             {
                                 block.SetSpecailType(Defines.ESpecailBlockType.Boom);
                                 block.state = Defines.EState.Normal;
                                 block.img.sprite = sprite;
                                 block.ResetScore();
                                 block.SetOriginPos();
-                            });
+                            });*/
+
+                            block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                            block.state = Defines.EState.Normal;
+                            block.img.sprite = spriteList.Last();
+                            block.ResetScore();
+                            block.SetOriginPos();
                         }
                     });
                 }

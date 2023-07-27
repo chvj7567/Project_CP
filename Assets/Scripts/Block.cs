@@ -70,6 +70,8 @@ public class Block : MonoBehaviour
 
             int swipe = (((int)angle + 45) % 360) / 90;
 
+            game.t1.text = swipe.ToString();
+
             switch (swipe)
             {
                 // Right
@@ -78,8 +80,10 @@ public class Block : MonoBehaviour
                         var addDis = CHInstantiateButton.GetHorizontalDistance();
                         var movePos = new Vector2(originPos.x + addDis, originPos.y);
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                        
                         if (ret.Item1 != null)
                         {
+                            game.t2.text = ret.Item1.gameObject.name;
                             rectTransform.DOAnchorPosX(movePos.x, .5f);
                             ret.Item1.DOAnchorPosX(originPos.x, .5f);
 
@@ -96,6 +100,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
+                            game.t2.text = ret.Item1.gameObject.name;
                             rectTransform.DOAnchorPosY(movePos.y, .5f);
                             ret.Item1.DOAnchorPosY(originPos.y, .5f);
 
@@ -112,6 +117,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
+                            game.t2.text = ret.Item1.gameObject.name;
                             rectTransform.DOAnchorPosX(movePos.x, .5f);
                             ret.Item1.DOAnchorPosX(originPos.x, .5f);
 
@@ -128,6 +134,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
+                            game.t2.text = ret.Item1.gameObject.name;
                             rectTransform.DOAnchorPosY(movePos.y, .5f);
                             ret.Item1.DOAnchorPosY(originPos.y, .5f);
 
