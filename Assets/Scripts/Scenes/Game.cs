@@ -11,19 +11,21 @@ using TMPro;
 
 public class Game : MonoBehaviour
 {
+    const int MAX = 9;
+
     [SerializeField] Image viewImg1;
     [SerializeField] Image viewImg2;
     [SerializeField] Button backBtn;
     [SerializeField] GameObject origin;
     [SerializeField] float margin = 0f;
-    [SerializeField, Range(1, 9)] int boardSize = 1;
+    [SerializeField, Range(1, MAX)] int boardSize = 1;
     [SerializeField] Transform parent;
 
     [SerializeField] CHInstantiateButton instBtn;
 
     [ReadOnly]
-    Block[,] boardArr = new Block[9, 9];
-
+    Block[,] boardArr = new Block[MAX, MAX];
+    
     [ReadOnly]
     public bool isDrag = false;
 
@@ -154,17 +156,12 @@ public class Game : MonoBehaviour
                 float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
                 block.originPos.x -= moveDis;
                 block.SetOriginPos();
+                block.rectTransform.DOScale(1f, delay);
             }
 
             if (first == true || block.state == Defines.EState.Match)
             {
                 var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
-                /*CHMMain.Resource.LoadSprite((Defines.ENormalBlockType)random, (sprite) =>
-                {
-                    block.SetNormalType((Defines.ENormalBlockType)random);
-                    block.state = Defines.EState.Normal;
-                    block.img.sprite = sprite;
-                });*/
 
                 block.SetNormalType((Defines.ENormalBlockType)random);
                 block.state = Defines.EState.Normal;
@@ -174,6 +171,7 @@ public class Game : MonoBehaviour
                 {
                     block.ResetScore();
                     block.SetOriginPos();
+                    block.rectTransform.DOScale(1f, delay);
                 }
             }
         }
@@ -222,43 +220,113 @@ public class Game : MonoBehaviour
     async Task RemoveMatchBlock()
     {
         bool removeDelay = false;
+        bool createBoomDelay = false;
 
-        for (int i = 0; i < boardArr.GetLength(0); ++i)
+        for (int i = 0; i < MAX; ++i)
         {
-            for (int j = 0; j < boardArr.GetLength(1); ++j)
+            for (int j = 0; j < MAX; ++j)
             {
                 var block = boardArr[i, j];
                 if (block == null) continue;
 
                 // 없어져야 할 블럭
-                if (boardArr[i, j].state == Defines.EState.Match)
+                if (block.state == Defines.EState.Match)
                 {
-                    if (boardArr[i, j].GetSpecailType() == Defines.ESpecailBlockType.Boom)
+                    if (block.GetSpecailType() == Defines.ESpecailBlockType.Boom)
                     {
-                        Boom(boardArr[i, j], false);
+                        Boom(block, false);
                         i = -1;
                         break;
                     }
 
                     removeDelay = true;
-                    boardArr[i, j].rectTransform.DOScale(0f, delay).OnComplete(() =>
-                    {
-                        if (block.horizontalScore >= 4 || block.verticalScore >= 4)
-                        {
-                            /*CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
-                            {
-                                block.SetSpecailType(Defines.ESpecailBlockType.Boom);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = sprite;
-                                block.ResetScore();
-                                block.SetOriginPos();
-                            });*/
 
+                    int row = i;
+                    int col = j;
+                    block.rectTransform.DOScale(0f, delay).OnComplete(() =>
+                    {
+                        // 블럭 제거 후 + 매치 특수 블럭 생성
+                        if (block.hScore >= 3 && block.vScore >= 3)
+                        {
+                            createBoomDelay = true;
                             block.SetSpecailType(Defines.ESpecailBlockType.Boom);
                             block.state = Defines.EState.Normal;
                             block.img.sprite = spriteList.Last();
                             block.ResetScore();
                             block.SetOriginPos();
+                            block.rectTransform.DOScale(1f, delay);
+
+                            for (int idx = 1; idx < MAX; ++idx)
+                            {
+                                int tempRow = row + idx;
+                                int tempCol = col;
+                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                                {
+                                    if (boardArr[tempRow, tempCol].hScore > 0
+                                    || boardArr[tempRow, tempCol].vScore > 0)
+                                    {
+                                        boardArr[tempRow, tempCol].ResetScore();
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            for (int idx = 1; idx < MAX; ++idx)
+                            {
+                                int tempRow = row - idx;
+                                int tempCol = col;
+                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                                {
+                                    if (boardArr[tempRow, tempCol].hScore > 0
+                                    || boardArr[tempRow, tempCol].vScore > 0)
+                                    {
+                                        boardArr[tempRow, tempCol].ResetScore();
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            for (int idx = 1; idx < MAX; ++idx)
+                            {
+                                int tempRow = row;
+                                int tempCol = col + idx;
+                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                                {
+                                    if (boardArr[tempRow, tempCol].hScore > 0
+                                    || boardArr[tempRow, tempCol].vScore > 0)
+                                    {
+                                        boardArr[tempRow, tempCol].ResetScore();
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            for (int idx = 1; idx < MAX; ++idx)
+                            {
+                                int tempRow = row;
+                                int tempCol = col - idx;
+                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                                {
+                                    if (boardArr[tempRow, tempCol].hScore > 0
+                                    || boardArr[tempRow, tempCol].vScore > 0)
+                                    {
+                                        boardArr[tempRow, tempCol].ResetScore();
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     });
                 }
@@ -267,7 +335,61 @@ public class Game : MonoBehaviour
 
         if (removeDelay)
         {
-            await Task.Delay((int)(delay * 2000));
+            await Task.Delay((int)(delay * 1000));
+        }
+
+        for (int i = 0; i < MAX; ++i)
+        {
+            for (int j = 0; j < MAX; ++j)
+            {
+                var block = boardArr[i, j];
+                if (block == null) continue;
+
+                if (block.state == Defines.EState.Match)
+                {
+                    // 가로 3개 초과 매치 시 특수 블럭 생성
+                    if (block.hScore > 3)
+                    {
+                        createBoomDelay = true;
+                        block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                        block.state = Defines.EState.Normal;
+                        block.img.sprite = spriteList.Last();
+
+                        j += block.hScore;
+
+                        block.ResetScore();
+                        block.SetOriginPos();
+                        block.rectTransform.DOScale(1f, delay);
+                    }
+                    // 세로 3개 초과 매치 시 특수 블럭 생성
+                    else if (block.vScore > 3)
+                    {
+                        createBoomDelay = true;
+                        block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                        block.state = Defines.EState.Normal;
+                        block.img.sprite = spriteList.Last();
+                        
+                        for (int idx = 1; idx < block.vScore; ++idx)
+                        {
+                            int tempRow = i + idx;
+                            int tempCol = j;
+                            if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                            {
+                                boardArr[tempRow, tempCol].ResetScore();
+                            }
+                        }
+
+                        block.ResetScore();
+                        block.SetOriginPos();
+                        block.rectTransform.DOScale(1f, delay);
+                    }
+                }
+            }
+        }
+
+        if (createBoomDelay)
+        {
+            await Task.Delay((int)(delay * 1000));
         }
     }
 
@@ -373,7 +495,6 @@ public class Game : MonoBehaviour
 
     public void ChangeBlock(Block moveBlock, Block targetBlock)
     {
-        //Debug.Log($"Change {row}/{col} - {targetRow}/{col}");
         var tempPos = moveBlock.originPos;
         moveBlock.originPos = targetBlock.originPos;
         targetBlock.originPos = tempPos;
@@ -398,25 +519,25 @@ public class Game : MonoBehaviour
     {
         //Debug.Log($"{block.row} {block.col}");
 
-        if (IsValidIndex(block.row - 1, block.col - 1, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row - 1, block.col - 1))
         {
             if (boardArr[block.row - 1, block.col - 1] != null)
                 boardArr[block.row - 1, block.col - 1].state = Defines.EState.Match;
         }
 
-        if (IsValidIndex(block.row - 1, block.col, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row - 1, block.col))
         {
             if (boardArr[block.row - 1, block.col] != null)
                 boardArr[block.row - 1, block.col].state = Defines.EState.Match;
         }
 
-        if (IsValidIndex(block.row - 1, block.col + 1, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row - 1, block.col + 1))
         {
             if (boardArr[block.row - 1, block.col + 1] != null)
                 boardArr[block.row - 1, block.col + 1].state = Defines.EState.Match;
         }
 
-        if (IsValidIndex(block.row, block.col - 1, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row, block.col - 1))
         {
             if (boardArr[block.row, block.col - 1] != null)
                 boardArr[block.row, block.col - 1].state = Defines.EState.Match;
@@ -425,25 +546,25 @@ public class Game : MonoBehaviour
         block.SetNormalType(Defines.ENormalBlockType.None);
         block.state = Defines.EState.Match;
 
-        if (IsValidIndex(block.row, block.col + 1, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row, block.col + 1))
         {
             if (boardArr[block.row, block.col + 1] != null)
                 boardArr[block.row, block.col + 1].state = Defines.EState.Match;
         }
 
-        if (IsValidIndex(block.row + 1, block.col - 1, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row + 1, block.col - 1))
         {
             if (boardArr[block.row + 1, block.col - 1] != null)
                 boardArr[block.row + 1, block.col - 1].state = Defines.EState.Match;
         }
 
-        if (IsValidIndex(block.row + 1, block.col, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row + 1, block.col))
         {
             if (boardArr[block.row + 1, block.col] != null)
                 boardArr[block.row + 1, block.col].state = Defines.EState.Match;
         }
 
-        if (IsValidIndex(block.row + 1, block.col + 1, boardArr.GetLength(0), boardArr.GetLength(1)))
+        if (IsValidIndex(block.row + 1, block.col + 1))
         {
             if (boardArr[block.row + 1, block.col + 1] != null)
                 boardArr[block.row + 1, block.col + 1].state = Defines.EState.Match;
@@ -455,8 +576,8 @@ public class Game : MonoBehaviour
         }
     }
 
-    bool IsValidIndex(int row, int column, int rows, int columns)
+    bool IsValidIndex(int row, int column)
     {
-        return row >= 0 && row < rows && column >= 0 && column < columns;
+        return row >= 0 && row < MAX && column >= 0 && column < MAX;
     }
 }

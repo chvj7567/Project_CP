@@ -28,9 +28,9 @@ public class Block : MonoBehaviour
     [ReadOnly]
     public Defines.EState state = Defines.EState.None;
     [ReadOnly]
-    public int horizontalScore;
+    public int hScore;
     [ReadOnly]
-    public int verticalScore;
+    public int vScore;
 
     public Image img;
     public RectTransform rectTransform;
@@ -170,7 +170,6 @@ public class Block : MonoBehaviour
     public void SetOriginPos()
     {
         rectTransform.anchoredPosition = originPos;
-        rectTransform.DOScale(1f, game.delay);
     }
 
     public void SetScore(int score, Defines.EDirection direction)
@@ -178,18 +177,18 @@ public class Block : MonoBehaviour
         switch (direction)
         {
             case Defines.EDirection.Horizontal:
-                horizontalScore = score;
+                hScore = score;
                 break;
             case Defines.EDirection.Vertical:
-                verticalScore = score;
+                vScore = score;
                 break;
         }
     }
 
     public void ResetScore()
     {
-        horizontalScore = 0;
-        verticalScore = 0;
+        hScore = 0;
+        vScore = 0;
     }
 
     public Defines.ENormalBlockType GetNormalType()
