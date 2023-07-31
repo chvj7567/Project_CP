@@ -100,6 +100,7 @@ public partial class ObjectPool
 
 public static class CHMAssetBundle
 {
+    public static bool firstDownload = true;
     static AssetBundlePool assetBundlePool = new AssetBundlePool();
     static ObjectPool objectPool = new ObjectPool();
 
@@ -140,21 +141,21 @@ public static class CHMAssetBundle
 
         if (typeof(T) == typeof(GameObject))
         {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.prefab";
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.prefab";
         }
         else if (typeof(T) == typeof(TextAsset))
         {
-            path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.json";
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.json";
         }
         else if (typeof(T) == typeof(Sprite))
         {
-            if (_assetName == "huchu1")
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.jpg";
+
+            T temp = AssetDatabase.LoadAssetAtPath<T>(path);
+            
+            if (temp == null)
             {
-                path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.jpg";
-            }
-            else
-            {
-                path += $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.png";
+                path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.png";
             }
         }
 

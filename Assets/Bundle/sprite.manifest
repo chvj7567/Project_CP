@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2659610109
+CRC: 1436527512
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b64c6828b06aa9fd9219eaf4e7890804
+    Hash: ae7782164064a54f3fdb4c84790a5150
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4df8c69f2c8a6ad9e3cbf82bb83e4dc3
@@ -15,9 +15,13 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/AssetBundleResources/sprite/huchu2.png
-- Assets/AssetBundleResources/sprite/huchu3.png
-- Assets/AssetBundleResources/sprite/Boom.png
-- Assets/AssetBundleResources/sprite/huchu1.jpg
-- Assets/AssetBundleResources/sprite/huchu4.png
+- Assets/AssetBundleResources/sprite/Cat4.png
+- Assets/AssetBundleResources/sprite/HpBar.png
+- Assets/AssetBundleResources/sprite/Cat2.png
+- Assets/AssetBundleResources/sprite/CatPang1.png
+- Assets/AssetBundleResources/sprite/Cat5.png
+- Assets/AssetBundleResources/sprite/Logo.png
+- Assets/AssetBundleResources/sprite/Cat3.png
+- Assets/AssetBundleResources/sprite/ButtonBackground.png
+- Assets/AssetBundleResources/sprite/Cat1.png
 Dependencies: []

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class StageSelectScene : MonoBehaviour
+public class StageSelect : MonoBehaviour
 {
     [SerializeField]
     List<Button> btnList = new List<Button>();
@@ -21,7 +21,7 @@ public class StageSelectScene : MonoBehaviour
             btnList[index].OnClickAsObservable().Subscribe(_ =>
             {
                 PlayerPrefs.SetInt("size", int.Parse(textList[index].text));
-                SceneManager.LoadScene(2);
+                SceneManager.LoadScene(1);
             });
         }
     }

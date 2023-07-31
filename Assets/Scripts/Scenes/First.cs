@@ -4,31 +4,49 @@ using System.IO;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class First : MonoBehaviour
 {
     [SerializeField] Image loadingBar;
     [SerializeField] TMP_Text loadingText;
+    [SerializeField] GameObject stageGroupObj;
     [SerializeField] Button startBtn;
     [SerializeField] List<string> liDownloadKey = new List<string>();
 
-    private void Awake()
+    bool canStart = false;
+    int downloadCount = 0;
+    private void Start()
     {
+        startBtn.gameObject.SetActive(true);
+        stageGroupObj.SetActive(false);
+
         if (loadingBar) loadingBar.fillAmount = 0f;
         if (startBtn)
         {
             startBtn.OnClickAsObservable().Subscribe(_ =>
             {
-                SceneManager.LoadScene(1);
+                if (canStart == false) return;
+
+                startBtn.gameObject.SetActive(false);
+                stageGroupObj.SetActive(true);
+                loadingBar.gameObject.SetActive(false);
+                loadingText.gameObject.SetActive(false);
             });
         }
 
-        foreach (var key in liDownloadKey)
+        if (CHMAssetBundle.firstDownload == true)
         {
-            StartCoroutine(LoadAssetBundle(key));
+            foreach (var key in liDownloadKey)
+            {
+                StartCoroutine(LoadAssetBundle(key));
+            }
+        }
+        else
+        {
+            canStart = true;
+            loadingBar.gameObject.SetActive(false);
+            loadingText.gameObject.SetActive(false);
         }
     }
 
@@ -43,28 +61,33 @@ public class First : MonoBehaviour
 
         // 다운로드 표시
         float downloadProgress = 0;
-        int downloadPercentage = 0;
+
+        ++downloadCount;
 
         while (!bundleRequest.isDone)
         {
             downloadProgress = bundleRequest.progress;
-            downloadPercentage = Mathf.RoundToInt(downloadProgress * 100);
 
             if (loadingBar) loadingBar.fillAmount = downloadProgress;
-            if (loadingText) loadingText.text = downloadPercentage.ToString() + "%";
+            if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f+ "%";
 
             yield return null;
         }
 
         downloadProgress = bundleRequest.progress;
-        downloadPercentage = Mathf.RoundToInt(downloadProgress * 100);
 
         if (loadingBar) loadingBar.fillAmount = downloadProgress;
-        if (loadingText) loadingText.text = downloadPercentage.ToString() + "%";
+        if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
 
         AssetBundle assetBundle = bundleRequest.assetBundle;
 
         CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
+
+        if (downloadCount == liDownloadKey.Count)
+        {
+            canStart = true;
+            CHMAssetBundle.firstDownload = false;
+        }
 
         /*if (assetBundle != null)
         {

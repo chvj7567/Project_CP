@@ -16,10 +16,11 @@ public class Defines
     {
         None = -1,
 
-        huchu1,
-        huchu2,
-        huchu3,
-        huchu4,
+        Cat1,
+        Cat2,
+        Cat3,
+        Cat4,
+        Cat5,
 
         Max
     }
@@ -28,7 +29,7 @@ public class Defines
     {
         None = -1,
 
-        Boom,
+        CatPang1,
 
         Max
     }

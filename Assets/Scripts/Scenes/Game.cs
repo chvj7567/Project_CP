@@ -43,27 +43,32 @@ public class Game : MonoBehaviour
 
     async void Start()
     {
-        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu1, (sprite) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.Cat1, (sprite) =>
         {
             spriteList.Add(sprite);
         });
 
-        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu2, (sprite) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.Cat2, (sprite) =>
         {
             spriteList.Add(sprite);
         });
 
-        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu3, (sprite) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.Cat3, (sprite) =>
         {
             spriteList.Add(sprite);
         });
 
-        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu4, (sprite) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.Cat4, (sprite) =>
         {
             spriteList.Add(sprite);
         });
 
-        CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.Cat5, (sprite) =>
+        {
+            spriteList.Add(sprite);
+        });
+
+        CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.CatPang1, (sprite) =>
         {
             spriteList.Add(sprite);
         });
@@ -73,7 +78,7 @@ public class Game : MonoBehaviour
             backBtn.OnClickAsObservable().Subscribe(_ =>
             {
                 CHInstantiateButton.ResetBlockDict();
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(0);
             });
         }
 
@@ -244,7 +249,7 @@ public class Game : MonoBehaviour
                 {
                     totScore.Value += 1;
                     oneTimeScore.Value += 1;
-                    if (block.GetSpecailType() == Defines.ESpecailBlockType.Boom)
+                    if (block.GetSpecailType() == Defines.ESpecailBlockType.CatPang1)
                     {
                         Boom(block, false);
                         i = -1;
@@ -261,7 +266,7 @@ public class Game : MonoBehaviour
                         if (block.hScore >= 3 && block.vScore >= 3)
                         {
                             createBoomDelay = true;
-                            block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
                             block.state = Defines.EState.Normal;
                             block.img.sprite = spriteList.Last();
                             block.ResetScore();
@@ -375,7 +380,7 @@ public class Game : MonoBehaviour
                                 boardArr[tempRow, tempCol].index == moveIndex2)
                             {
                                 checkMoveBlock = true;
-                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.Boom);
+                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang1);
                                 boardArr[tempRow, tempCol].state = Defines.EState.Normal;
                                 boardArr[tempRow, tempCol].img.sprite = spriteList.Last();
                                 boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
@@ -386,7 +391,7 @@ public class Game : MonoBehaviour
 
                         if (checkMoveBlock == false)
                         {
-                            block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
                             block.state = Defines.EState.Normal;
                             block.img.sprite = spriteList.Last();
                             block.rectTransform.DOScale(1f, delay);
@@ -409,7 +414,7 @@ public class Game : MonoBehaviour
                                 boardArr[tempRow, tempCol].index == moveIndex2)
                             {
                                 checkMoveBlock = true;
-                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.Boom);
+                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang1);
                                 boardArr[tempRow, tempCol].state = Defines.EState.Normal;
                                 boardArr[tempRow, tempCol].img.sprite = spriteList.Last();
                                 boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
@@ -420,7 +425,7 @@ public class Game : MonoBehaviour
 
                         if (checkMoveBlock == false)
                         {
-                            block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
                             block.state = Defines.EState.Normal;
                             block.img.sprite = spriteList.Last();
                             block.rectTransform.DOScale(1f, delay);
