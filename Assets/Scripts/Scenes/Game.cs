@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class Game : MonoBehaviour
 {
@@ -23,24 +22,24 @@ public class Game : MonoBehaviour
 
     [SerializeField] CHInstantiateButton instBtn;
 
-    [ReadOnly]
-    Block[,] boardArr = new Block[MAX, MAX];
-    
-    [ReadOnly]
-    public bool isDrag = false;
-
-    [ReadOnly]
-    public bool isAni = false;
-
-    [ReadOnly]
-    bool isMatch = false;
-
-    public float delay;
+    [ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
+    [ReadOnly] public bool isDrag = false;
+    [ReadOnly] public bool isAni = false;
+    [ReadOnly] bool isMatch = false;
+    [ReadOnly] public float delay;
 
     List<Sprite> spriteList = new List<Sprite>();
 
-    [SerializeField] public TMP_Text t1;
-    [SerializeField] public TMP_Text t2;
+    [SerializeField] CHTMPro totScoreText;
+    [SerializeField] CHTMPro oneTimeScoreText;
+
+    [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] ReactiveProperty<int> oneTimeScore = new ReactiveProperty<int>();
+
+    [SerializeField, ReadOnly] int moveIndex1 = 0;
+    [SerializeField, ReadOnly] int moveIndex2 = 0;
+
+    [SerializeField, ReadOnly] List<int> towerPoint = new List<int>();
 
     async void Start()
     {
@@ -83,6 +82,16 @@ public class Game : MonoBehaviour
             });
         }
 
+        totScore.Subscribe(_ =>
+        {
+            totScoreText.SetText(_);
+        });
+
+        oneTimeScore.Subscribe(_ =>
+        {
+            oneTimeScoreText.SetText(_);
+        });
+
         boardSize = PlayerPrefs.GetInt("size");
 
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
@@ -116,8 +125,11 @@ public class Game : MonoBehaviour
     public async void AfterDrag(Block block1, Block block2)
     {
         isAni = true;
+        if (block1) moveIndex1 = block1.index;
+        if (block2) moveIndex2 = block2.index;
 
         bool first = false;
+
         await Task.Delay((int)(delay * 1000));
 
         do
@@ -133,14 +145,17 @@ public class Game : MonoBehaviour
                     ChangeBlock(block1, block2);
                 }
             }
+
             first = true;
+
             await RemoveMatchBlock();
             await DownBlock();
             await UpdateMap();
             CheckMap();
 
         } while (isMatch == true);
-
+        towerPoint.Add(oneTimeScore.Value);
+        oneTimeScore.Value = 0;
         isAni = false;
     }
 
@@ -232,6 +247,8 @@ public class Game : MonoBehaviour
                 // 없어져야 할 블럭
                 if (block.state == Defines.EState.Match)
                 {
+                    totScore.Value += 1;
+                    oneTimeScore.Value += 1;
                     if (block.GetSpecailType() == Defines.ESpecailBlockType.Boom)
                     {
                         Boom(block, false);
@@ -351,37 +368,68 @@ public class Game : MonoBehaviour
                     if (block.hScore > 3)
                     {
                         createBoomDelay = true;
-                        block.SetSpecailType(Defines.ESpecailBlockType.Boom);
-                        block.state = Defines.EState.Normal;
-                        block.img.sprite = spriteList.Last();
 
-                        j += block.hScore;
+                        bool checkMoveBlock = false;
 
-                        block.ResetScore();
-                        block.SetOriginPos();
-                        block.rectTransform.DOScale(1f, delay);
+                        int tempScore = block.hScore;
+                        for (int idx = 0; idx < tempScore; ++idx)
+                        {
+                            int tempRow = i;
+                            int tempCol = j + idx;
+                            if (boardArr[tempRow, tempCol].index == moveIndex1 ||
+                                boardArr[tempRow, tempCol].index == moveIndex2)
+                            {
+                                checkMoveBlock = true;
+                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.Boom);
+                                boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                boardArr[tempRow, tempCol].img.sprite = spriteList.Last();
+                                boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                            }
+
+                            boardArr[tempRow, tempCol].ResetScore();
+                        }
+
+                        if (checkMoveBlock == false)
+                        {
+                            block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                            block.state = Defines.EState.Normal;
+                            block.img.sprite = spriteList.Last();
+                            block.rectTransform.DOScale(1f, delay);
+                        }
                     }
                     // 세로 3개 초과 매치 시 특수 블럭 생성
                     else if (block.vScore > 3)
                     {
                         createBoomDelay = true;
-                        block.SetSpecailType(Defines.ESpecailBlockType.Boom);
-                        block.state = Defines.EState.Normal;
-                        block.img.sprite = spriteList.Last();
-                        
-                        for (int idx = 1; idx < block.vScore; ++idx)
+
+                        bool checkMoveBlock = false;
+
+                        int tempScore = block.vScore;
+                        for (int idx = 0; idx < tempScore; ++idx)
                         {
                             int tempRow = i + idx;
                             int tempCol = j;
-                            if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+
+                            if (boardArr[tempRow, tempCol].index == moveIndex1 ||
+                                boardArr[tempRow, tempCol].index == moveIndex2)
                             {
-                                boardArr[tempRow, tempCol].ResetScore();
+                                checkMoveBlock = true;
+                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.Boom);
+                                boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                boardArr[tempRow, tempCol].img.sprite = spriteList.Last();
+                                boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
                             }
+
+                            boardArr[tempRow, tempCol].ResetScore();
                         }
 
-                        block.ResetScore();
-                        block.SetOriginPos();
-                        block.rectTransform.DOScale(1f, delay);
+                        if (checkMoveBlock == false)
+                        {
+                            block.SetSpecailType(Defines.ESpecailBlockType.Boom);
+                            block.state = Defines.EState.Normal;
+                            block.img.sprite = spriteList.Last();
+                            block.rectTransform.DOScale(1f, delay);
+                        }
                     }
                 }
             }

@@ -9,7 +9,7 @@ public class CHTMPro : MonoBehaviour
 {
     [SerializeField] int stringID = -1;
     [SerializeField] public RectTransform rtText;
-    [SerializeField] TMP_Text text;
+    [SerializeField] public TMP_Text text;
     [ReadOnly] object[] argArr;
 
     private void Awake()

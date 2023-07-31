@@ -8,7 +8,7 @@ public class CHMJson
     [Serializable]
     public class JsonData
     {
-        public StringInfo[] stringDataArray;
+        public StringInfo[] stringInfoArray;
     }
 
     int loadCompleteFileCount = 0;
@@ -33,7 +33,7 @@ public class CHMJson
         loadCompleteFileCount = 0;
         actionList.Clear();
 
-        //actionList.Add(LoadStringData());
+        actionList.Add(LoadStringData());
 
         loadingFileCount = actionList.Count;
     }
@@ -57,7 +57,7 @@ public class CHMJson
         CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"stringInfoArray\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.stringDataArray)
+            foreach (var data in jsonData.stringInfoArray)
             {
                 stringInfoDic.Add(data.stringID, data.value);
             }
