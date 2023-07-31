@@ -43,34 +43,29 @@ public class Game : MonoBehaviour
 
     async void Start()
     {
-        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu1", (texture) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu1, (sprite) =>
         {
-            Rect rect = new Rect(0, 0, texture.width, texture.height);
-            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+            spriteList.Add(sprite);
         });
 
-        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu2", (texture) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu2, (sprite) =>
         {
-            Rect rect = new Rect(0, 0, texture.width, texture.height);
-            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+            spriteList.Add(sprite);
         });
 
-        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu3", (texture) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu3, (sprite) =>
         {
-            Rect rect = new Rect(0, 0, texture.width, texture.height);
-            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+            spriteList.Add(sprite);
         });
 
-        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "huchu4", (texture) =>
+        CHMMain.Resource.LoadSprite(Defines.ENormalBlockType.huchu4, (sprite) =>
         {
-            Rect rect = new Rect(0, 0, texture.width, texture.height);
-            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+            spriteList.Add(sprite);
         });
 
-        CHMMain.Bundle.LoadAsset<Texture2D>("sprite", "Boom", (texture) =>
+        CHMMain.Resource.LoadSprite(Defines.ESpecailBlockType.Boom, (sprite) =>
         {
-            Rect rect = new Rect(0, 0, texture.width, texture.height);
-            spriteList.Add(Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f)));
+            spriteList.Add(sprite);
         });
 
         if (backBtn)

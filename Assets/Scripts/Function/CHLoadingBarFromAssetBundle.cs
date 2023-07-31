@@ -58,7 +58,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         if (assetBundle != null)
         {
-            CHMMain.Bundle.LoadAssetBundle(_bundleName, assetBundle);
+            CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
         }
         else
         {
@@ -151,7 +151,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
             Debug.Log($"Success : {_bundleName}");
 
-            CHMMain.Bundle.LoadAssetBundle(_bundleName, assetBundle);
+            CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
         }
     }
 }

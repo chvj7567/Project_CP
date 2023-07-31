@@ -64,7 +64,7 @@ public class First : MonoBehaviour
 
         AssetBundle assetBundle = bundleRequest.assetBundle;
 
-        CHMMain.Bundle.LoadAssetBundle(_bundleName, assetBundle);
+        CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
 
         /*if (assetBundle != null)
         {

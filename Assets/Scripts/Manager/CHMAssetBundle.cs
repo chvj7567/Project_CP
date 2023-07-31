@@ -27,13 +27,6 @@ public class AssetBundleData
 public partial class AssetBundlePool
 {
     [Serializable]
-    public class Task
-    {
-        public string key;
-        public Subject<AssetBundle> onDownloaded;
-    }
-
-    [Serializable]
     class Item
     {
         public string key;
@@ -41,7 +34,6 @@ public partial class AssetBundlePool
     }
 
     Dictionary<string, Item> dicItem = new Dictionary<string, Item>();
-    Dictionary<string, Task> dicTask = new Dictionary<string, Task>();
 
     public void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
     {
@@ -71,13 +63,6 @@ public partial class AssetBundlePool
 public partial class ObjectPool
 {
     [Serializable]
-    public class Task
-    {
-        public string key;
-        public Subject<AssetBundle> onDownloaded;
-    }
-
-    [Serializable]
     class Item
     {
         public string key;
@@ -85,11 +70,10 @@ public partial class ObjectPool
     }
 
     Dictionary<string, Item> dicItem = new Dictionary<string, Item>();
-    Dictionary<string, Task> dicTask = new Dictionary<string, Task>();
 
     public void Load<T>(string _bundleName, string _assetName, T _object)
     {
-        string key = _bundleName.ToLower() + "\\" + _assetName.ToLower();
+        string key = $"{_bundleName.ToLower()}/{_assetName.ToLower()}";
         if (dicItem.TryGetValue(key, out Item item) == false && _object != null)
         {
             dicItem.Add(key, new Item
@@ -102,7 +86,7 @@ public partial class ObjectPool
 
     public UnityEngine.Object GetItem(string _bundleName, string _assetName)
     {
-        string key = _bundleName.ToLower() + "\\" + _assetName.ToLower();
+        string key = $"{_bundleName.ToLower()}/{_assetName.ToLower()}";
         if (dicItem.TryGetValue(key, out Item ret))
         {
             return ret.obj;
@@ -114,17 +98,17 @@ public partial class ObjectPool
     }
 }
 
-public class CHMAssetBundle
+public static class CHMAssetBundle
 {
     static AssetBundlePool assetBundlePool = new AssetBundlePool();
     static ObjectPool objectPool = new ObjectPool();
 
-    public void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
+    public static void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
     {
         assetBundlePool.LoadAssetBundle(_bundleName, _assetBundle);
     }
 
-    public void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public static void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         var obj = objectPool.GetItem(_bundleName, _assetName);
         if (obj == null)
@@ -150,7 +134,7 @@ public class CHMAssetBundle
     }
 
 #if UNITY_EDITOR
-    public void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public static void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         string path = null;
 

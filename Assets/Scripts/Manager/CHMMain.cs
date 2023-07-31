@@ -11,14 +11,12 @@ public class CHMMain : MonoBehaviour
     CHMUI m_ui = new CHMUI();
     CHMJson m_json = new CHMJson();
     CHMString m_string = new CHMString();
-    CHMAssetBundle m_bundle = new CHMAssetBundle();
 
     public static CHMPool Pool { get { return Instance.m_pool; } }
     public static CHMResource Resource { get { return Instance.m_resource; } }
     public static CHMUI UI { get { return Instance.m_ui; } }
     public static CHMJson Json { get { return Instance.m_json; } }
     public static CHMString String { get { return Instance.m_string; } }
-    public static CHMAssetBundle Bundle { get { return Instance.m_bundle; } }
     #endregion
 
     void Start()
