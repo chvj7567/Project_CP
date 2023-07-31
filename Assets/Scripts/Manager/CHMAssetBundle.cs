@@ -87,14 +87,14 @@ public partial class ObjectPool
     Dictionary<string, Item> dicItem = new Dictionary<string, Item>();
     Dictionary<string, Task> dicTask = new Dictionary<string, Task>();
 
-    public void LoadObject(string _bundleName, UnityEngine.Object _object)
+    public void Load<T>(string _bundleName, T _object)
     {
         if (dicItem.TryGetValue(_bundleName, out Item item) == false && _object != null)
         {
             dicItem.Add(_bundleName, new Item
             {
                 key = _bundleName,
-                obj = _object,
+                obj = _object as UnityEngine.Object,
             });
         }
     }
@@ -124,15 +124,26 @@ public class CHMAssetBundle
 
     public void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
-        AssetBundle assetBundle = assetBundlePool.GetItem(_bundleName);
-
-        if (assetBundle != null)
+        var obj = objectPool.GetItem(_bundleName);
+        if (obj == null)
         {
-            _callback(assetBundle.LoadAsset<T>(_assetName));
+            AssetBundle assetBundle = assetBundlePool.GetItem(_bundleName);
+
+            if (assetBundle != null)
+            {
+                var tempObj = assetBundle.LoadAsset<T>(_assetName);
+                objectPool.Load<T>(_bundleName, tempObj);
+
+                _callback(assetBundle.LoadAsset<T>(_assetName));
+            }
+            else
+            {
+                _callback(null);
+            }
         }
         else
         {
-            _callback(null);
+            _callback(obj as T);
         }
     }
 
