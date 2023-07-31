@@ -13,9 +13,9 @@ public class CHMResource
     private void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
 #if UNITY_EDITOR
-        CHMMain.Bundle.LoadAssetOnEditor<T>(_bundleName, _assetName, _callback);
+        CHMAssetBundle.LoadAssetOnEditor<T>(_bundleName, _assetName, _callback);
 #else
-        CHMMain.Bundle.LoadAsset<T>(_bundleName, _assetName, _callback);
+        CHMAssetBundle.LoadAsset<T>(_bundleName, _assetName, _callback);
 #endif
     }
 
