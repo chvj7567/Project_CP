@@ -7,13 +7,17 @@ using DG.Tweening;
 public class Monster : MonoBehaviour
 {
     [SerializeField] Image gaugeBar;
+    [SerializeField] GameObject moveObj;
+    [SerializeField] GameObject cryObj;
     [SerializeField] int maxHp;
     [SerializeField, ReadOnly] int curHp;
 
     private void Start()
     {
+        cryObj.SetActive(false);
+
         var rt = GetComponent<RectTransform>();
-        rt.DOAnchorPos(new Vector2(rt.anchoredPosition.x - 500, rt.anchoredPosition.y), 15f);
+        rt.DOAnchorPos(new Vector2(rt.anchoredPosition.x - 100, rt.anchoredPosition.y), 15f);
         SetHp(maxHp);
     }
 
@@ -31,6 +35,11 @@ public class Monster : MonoBehaviour
     public void TakeDamage(int _damage)
     {
         curHp -= _damage;
-        gaugeBar.DOFillAmount((float)curHp / maxHp, 1f);
+        cryObj.SetActive(true);
+
+        gaugeBar.DOFillAmount((float)curHp / maxHp, .5f).OnComplete(() =>
+        {
+            cryObj.SetActive(false);
+        });
     }
 }

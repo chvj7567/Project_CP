@@ -2,5 +2,13 @@
   {
     "stringID": "1",
     "value": "{0}"
+  },
+  {
+    "stringID": "2",
+    "value": "Total Score:{0}"
+  },
+  {
+    "stringID": "3",
+    "value": "One Time Score:{0}"
   }
 ]
