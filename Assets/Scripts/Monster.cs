@@ -7,13 +7,14 @@ using DG.Tweening;
 public class Monster : MonoBehaviour
 {
     [SerializeField] Image gaugeBar;
-    [SerializeField, ReadOnly] int maxHp = 100;
-    [SerializeField, ReadOnly] int curHp = 100;
+    [SerializeField] int maxHp;
+    [SerializeField, ReadOnly] int curHp;
 
     private void Start()
     {
         var rt = GetComponent<RectTransform>();
         rt.DOAnchorPos(new Vector2(rt.anchoredPosition.x - 500, rt.anchoredPosition.y), 15f);
+        SetHp(maxHp);
     }
 
     public void SetHp(int _maxHp)

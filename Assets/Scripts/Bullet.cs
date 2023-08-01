@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Bullet : MonoBehaviour
 {
-    public Canvas canvas;
+    public AttackCat cat;
     public Image attackImg;
     public RectTransform targetRectTransform;
     private RectTransform followerRectTransform;
@@ -42,7 +42,7 @@ public class Bullet : MonoBehaviour
             }
             else
             {
-                targetRectTransform.GetComponent<Monster>().TakeDamage(10);
+                targetRectTransform.GetComponent<Monster>().TakeDamage(cat.attackPower);
                 CHMMain.Resource.Destroy(gameObject);
             }
         }

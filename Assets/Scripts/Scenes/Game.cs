@@ -251,7 +251,7 @@ public class Game : MonoBehaviour
                     oneTimeScore.Value += 1;
                     if (block.GetSpecailType() == Defines.ESpecailBlockType.CatPang1)
                     {
-                        Boom(block, false);
+                        Boom1(block, false);
                         i = -1;
                         break;
                     }
@@ -563,10 +563,13 @@ public class Game : MonoBehaviour
         boardArr[targetBlock.row, targetBlock.col] = targetBlock;
     }
 
-    public void Boom(Block block, bool ani = true)
+    bool IsValidIndex(int row, int column)
     {
-        //Debug.Log($"{block.row} {block.col}");
+        return row >= 0 && row < MAX && column >= 0 && column < MAX;
+    }
 
+    public void Boom1(Block block, bool ani = true)
+    {
         if (IsValidIndex(block.row - 1, block.col - 1))
         {
             if (boardArr[block.row - 1, block.col - 1] != null)
@@ -622,10 +625,5 @@ public class Game : MonoBehaviour
         {
             AfterDrag(null, null);
         }
-    }
-
-    bool IsValidIndex(int row, int column)
-    {
-        return row >= 0 && row < MAX && column >= 0 && column < MAX;
     }
 }

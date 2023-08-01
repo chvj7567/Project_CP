@@ -6,11 +6,10 @@ using UniRx;
 
 public class AttackCat : MonoBehaviour
 {
-    [SerializeField] Canvas canvas;
     [SerializeField] Image attackImg;
     [SerializeField] Monster target;
     [SerializeField] float attackDelay;
-
+    [SerializeField] public int attackPower;
     float timeSinceLastAttack = 0f;
 
     void Start()
@@ -41,11 +40,11 @@ public class AttackCat : MonoBehaviour
         var attackImage = CHMMain.Resource.Instantiate(attackImg.gameObject, transform.parent);
         var rectTransform = attackImage.GetComponent<RectTransform>();
         
-        rectTransform.localScale = Vector3.one;
+        rectTransform.localScale = new Vector3(3f, 3f, 3f);
         rectTransform.anchoredPosition = my2DPos;
 
         var bullet = attackImage.gameObject.GetOrAddComponent<Bullet>();
-        bullet.canvas = canvas;
+        bullet.cat = this;
         bullet.targetRectTransform = target.GetComponent<RectTransform>();
     }
 }
