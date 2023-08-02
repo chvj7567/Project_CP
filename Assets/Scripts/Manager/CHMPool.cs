@@ -106,7 +106,9 @@ public class CHMPool
     public CHPoolable Pop(GameObject _original, Transform _parent = null)
     {
         if (poolDic.ContainsKey(_original.name) == false)
+        {
             CreatePool(_original);
+        }
 
         return poolDic[_original.name].Pop(_parent);
     }

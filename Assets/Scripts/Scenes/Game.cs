@@ -251,7 +251,7 @@ public class Game : MonoBehaviour
                     oneTimeScore.Value += 1;
                     if (block.GetSpecailType() == Defines.ESpecailBlockType.CatPang1)
                     {
-                        Boom1(block, false);
+                        Boom2(block, false);
                         i = -1;
                         break;
                     }
@@ -619,6 +619,35 @@ public class Game : MonoBehaviour
         {
             if (boardArr[block.row + 1, block.col + 1] != null)
                 boardArr[block.row + 1, block.col + 1].state = Defines.EState.Match;
+        }
+
+        if (ani)
+        {
+            AfterDrag(null, null);
+        }
+    }
+
+    public void Boom2(Block block, bool ani = true)
+    {
+        block.SetNormalType(Defines.ENormalBlockType.None);
+        block.state = Defines.EState.Match;
+
+        for (int i = 0; i < MAX; ++i)
+        {
+            if (IsValidIndex(i, block.col))
+            {
+                if (boardArr[i, block.col] != null)
+                    boardArr[i, block.col].state = Defines.EState.Match;
+            }
+        }
+
+        for (int i = 0; i < MAX; ++i)
+        {
+            if (IsValidIndex(block.row, i))
+            {
+                if (boardArr[block.row, i] != null)
+                    boardArr[block.row, i].state = Defines.EState.Match;
+            }
         }
 
         if (ani)
