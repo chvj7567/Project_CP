@@ -17,7 +17,7 @@ public class Monster : MonoBehaviour
         cryObj.SetActive(false);
 
         var rt = GetComponent<RectTransform>();
-        rt.DOAnchorPos(new Vector2(rt.anchoredPosition.x - 100, rt.anchoredPosition.y), 15f);
+        rt.DOAnchorPos(new Vector2(rt.anchoredPosition.x - 500, rt.anchoredPosition.y), 15f);
         SetHp(maxHp);
     }
 

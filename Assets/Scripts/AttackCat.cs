@@ -3,11 +3,14 @@ using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
+using System.Collections.Generic;
+using System.Linq;
+using static UnityEngine.GraphicsBuffer;
 
 public class AttackCat : MonoBehaviour
 {
     [SerializeField] Image attackImg;
-    [SerializeField] Monster target;
+    [SerializeField] List<Monster> targetList;
     [SerializeField] float attackDelay;
     [SerializeField] public int attackPower;
     float timeSinceLastAttack = 0f;
@@ -24,9 +27,25 @@ public class AttackCat : MonoBehaviour
             {
                 timeSinceLastAttack = 0f;
 
-                Attack(target);
+                for (int i = 0; i < targetList.Count; ++i)
+                {
+                    if (targetList[i].GetHp() <= 0)
+                    {
+                        targetList.Remove(targetList[i]);
+                    }
+                    else
+                    {
+                        Attack(targetList[i]);
+                        break;
+                    }
+                }
             }
         });
+    }
+
+    public void SetTarget(Monster target)
+    {
+        targetList.Add(target);
     }
 
     public void Attack(Monster target)
