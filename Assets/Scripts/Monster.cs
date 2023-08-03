@@ -6,6 +6,8 @@ using DG.Tweening;
 
 public class Monster : MonoBehaviour
 {
+    [SerializeField] public RectTransform rectTransform;
+    [SerializeField] Image gaugeBarBack;
     [SerializeField] Image gaugeBar;
     [SerializeField] GameObject moveObj;
     [SerializeField] GameObject cryObj;
@@ -14,10 +16,11 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
-        cryObj.SetActive(false);
+        if (cryObj)
+            cryObj.SetActive(false);
 
-        var rt = GetComponent<RectTransform>();
-        rt.DOAnchorPos(new Vector2(rt.anchoredPosition.x - 500, rt.anchoredPosition.y), 15f);
+        if (rectTransform)
+            rectTransform.DOAnchorPos(new Vector2(0, rectTransform.anchoredPosition.y), 60f);
         SetHp(maxHp);
     }
 
@@ -35,11 +38,27 @@ public class Monster : MonoBehaviour
     public void TakeDamage(int _damage)
     {
         curHp -= _damage;
-        cryObj.SetActive(true);
+        if (cryObj)
+            cryObj.SetActive(true);
 
         gaugeBar.DOFillAmount((float)curHp / maxHp, .5f).OnComplete(() =>
         {
-            cryObj.SetActive(false);
+            if (cryObj)
+                cryObj.SetActive(false);
+
+            if (curHp <= 0)
+            {
+                transform.DOScale(Vector3.zero, 1f);
+                gaugeBar.DOFillAmount(1f, .1f);
+            }
+        });
+
+        gaugeBarBack.DOFillAmount((float)curHp / maxHp, 1f).OnComplete(() =>
+        {
+            if (curHp <= 0)
+            {
+                gaugeBar.DOFillAmount(1f, .2f);
+            }
         });
     }
 }
