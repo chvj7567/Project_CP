@@ -418,14 +418,16 @@ MonoBehaviour:
   isDrag: 0
   isAni: 0
   delay: 0.3
+  moveIndex1: 0
+  moveIndex2: 0
   totScoreText: {fileID: 2051093205}
-  oneTimeScoreText: {fileID: 1926604862}
+  bonusScoreText: {fileID: 1926604862}
   totScore:
     value: 0
   oneTimeScore:
     value: 0
-  moveIndex1: 0
-  moveIndex2: 0
+  bonusScore:
+    value: 0
   towerPoint: 
 --- !u!1 &395370463
 GameObject:
@@ -2681,7 +2683,7 @@ GameObject:
   - component: {fileID: 1926604863}
   - component: {fileID: 1926604862}
   m_Layer: 5
-  m_Name: OneTimeScoreText
+  m_Name: BonusScoreText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
