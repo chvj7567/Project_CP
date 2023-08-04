@@ -11,8 +11,16 @@ public class Spawner : MonoBehaviour
     [SerializeField] float spawnTime = 5f;
     [SerializeField, ReadOnly] public ReactiveProperty<bool> OnSpawn = new ReactiveProperty<bool>();
 
+    int index = 0;
+    int increaseHp = 100;
+
     bool isSpawn = false;
     IEnumerator cor;
+
+    public List<AttackCat> GetAttackCatList()
+    {
+        return attackCatList;
+    }
 
     void Start()
     {
@@ -56,7 +64,8 @@ public class Spawner : MonoBehaviour
                     if (copyMonster != null)
                     {
                         var pos = copyMonster.rectTransform.anchoredPosition;
-                        copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y + 150));
+                        copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y));
+                        copyMonster.SetHp(increaseHp * ++index);
                         copyMonster.Move();
                         for (int i = 0; i < attackCatList.Count; ++i)
                         {

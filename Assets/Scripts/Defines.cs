@@ -69,8 +69,8 @@ public class Defines
         EventSystem,
         UICamera,
         UICanvas,
+        UIChoice,
         UIAlarm,
-        UIMenu,
 
         Max
     }

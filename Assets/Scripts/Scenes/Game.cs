@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Game : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class Game : MonoBehaviour
 
     [SerializeField] CHInstantiateButton instBtn;
 
+    [SerializeField] Spawner spawner;
+
     [ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
     [ReadOnly] public bool isDrag = false;
     [ReadOnly] public bool isAni = false;
@@ -32,11 +35,22 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] int moveIndex2 = 0;
 
     [SerializeField] CHTMPro totScoreText;
-    [SerializeField] CHTMPro bonusScoreText;
+    [SerializeField] CHTMPro oneTimeScoreText;
+    [SerializeField] CHTMPro killCountText;
+    [SerializeField] CHTMPro powerText;
+    [SerializeField] CHTMPro delayText;
 
     [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> oneTimeScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] public ReactiveProperty<int> killCount = new ReactiveProperty<int>();
+
+    [SerializeField, ReadOnly] ReactiveProperty<int> power = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] ReactiveProperty<float> attackDelay = new ReactiveProperty<float>();
+
+    [SerializeField] GameObject gameOverObj;
+    [SerializeField] TMP_Text gameOverText;
+    [SerializeField, ReadOnly] public ReactiveProperty<bool> gameOver = new ReactiveProperty<bool>();
 
     [SerializeField, ReadOnly] List<int> towerPoint = new List<int>();
 
@@ -67,6 +81,7 @@ public class Game : MonoBehaviour
         {
             backBtn.OnClickAsObservable().Subscribe(_ =>
             {
+                Time.timeScale = 1;
                 CHInstantiateButton.ResetBlockDict();
                 SceneManager.LoadScene(0);
             });
@@ -77,10 +92,42 @@ public class Game : MonoBehaviour
             totScoreText.SetText(_);
         });
 
-        bonusScore.Subscribe(_ =>
+        oneTimeScore.Subscribe(_ =>
         {
-            bonusScoreText.SetText(_);
+            oneTimeScoreText.SetText(_);
         });
+
+        killCount.Subscribe(_ =>
+        {
+            killCountText.SetText(_);
+        });
+
+        power.Subscribe(_ =>
+        {
+            powerText.SetText(_);
+        });
+
+        attackDelay.Subscribe(_ =>
+        {
+            var a = Mathf.Round(_ * 10) / 10;
+            delayText.SetText(a);
+        });
+
+        gameOverObj.SetActive(false);
+
+        gameOver.Subscribe(_ =>
+        {
+            if(_ == true)
+            {
+                Time.timeScale = 0;
+                gameOverObj.transform.SetAsLastSibling();
+                gameOverObj.SetActive(true);
+                gameOverText.DOText("GameOver", 5f);
+            }
+        });
+
+        power.Value = spawner.GetAttackCatList().First().attackPower;
+        attackDelay.Value = spawner.GetAttackCatList().First().attackDelay;
 
         boardSize = PlayerPrefs.GetInt("size");
 
@@ -145,11 +192,25 @@ public class Game : MonoBehaviour
 
         } while (isMatch == true);
 
+        if (totScore.Value > 0 && oneTimeScore.Value > 0)
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
+            {
+                totScore = totScore,
+                power = power,
+                delay = attackDelay,
+                attackCatList = spawner.GetAttackCatList()
+            });
+        }
+
         towerPoint.Add(oneTimeScore.Value);
         totScore.Value += oneTimeScore.Value;
         totScore.Value += bonusScore.Value;
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
+
+        
+
         isAni = false;
     }
 

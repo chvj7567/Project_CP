@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 781585119
+CRC: 3657191315
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3a71d40ac5b721bda2c790f2c527ca76
+    Hash: 6c2987635e10f44ce826ca9b9cbbec5b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 166d1afcbe84680a1ed0391429921c67
+    Hash: d697aac9348c1090334d690a8888a83f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -15,17 +15,41 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 20
   Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 1511ccae7919cfc46b603b9b337fdc94, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: bb222f37d4e8f6d47afc5b36328e5323, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c504186a59242e245ba6fdc376241f13, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 222
   Script: {instanceID: 0}
 - Class: 223
   Script: {instanceID: 0}
@@ -33,6 +57,8 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/AssetBundleResources/ui/UIAlarm.prefab
+- Assets/AssetBundleResources/ui/UIChoice.prefab
 - Assets/AssetBundleResources/ui/UICamera.prefab
 - Assets/AssetBundleResources/ui/EventSystem.prefab
 - Assets/AssetBundleResources/ui/UICanvas.prefab

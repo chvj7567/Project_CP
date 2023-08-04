@@ -10,5 +10,17 @@
   {
     "stringID": "3",
     "value": "One Time Score:{0}"
+  },
+  {
+    "stringID": "4",
+    "value": "Kill Count\n{0}"
+  },
+  {
+    "stringID": "5",
+    "value": "Power\n{0}"
+  },
+  {
+    "stringID": "6",
+    "value": "Delay\n{0}"
   }
 ]

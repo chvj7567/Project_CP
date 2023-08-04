@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.ComponentModel;
+using UniRx.Triggers;
+using System;
+using UniRx;
 
 public class Monster : MonoBehaviour
 {
+    [SerializeField] Game game;
     [SerializeField] public RectTransform rectTransform;
     [SerializeField] Image gaugeBarBack;
     [SerializeField] Image gaugeBar;
@@ -14,12 +19,29 @@ public class Monster : MonoBehaviour
     [SerializeField] int maxHp;
     [SerializeField, ReadOnly] int curHp;
 
+    bool isDie = false;
+
     private void Start()
     {
         if (cryObj)
             cryObj.SetActive(false);
 
         SetHp(maxHp);
+
+        Observable.Timer(System.TimeSpan.FromSeconds(1), System.TimeSpan.FromSeconds(1))
+            .Subscribe(_ => ExecuteFunction())
+            .AddTo(gameObject);
+    }
+
+    public void ExecuteFunction()
+    {
+        if (rectTransform)
+        {
+            if (rectTransform.anchoredPosition.x < 110f && isDie == false)
+            {
+                game.gameOver.Value = true;
+            }
+        }
     }
 
     public void SetHp(int _maxHp)
@@ -35,6 +57,8 @@ public class Monster : MonoBehaviour
 
     public void Move()
     {
+        isDie = false;
+
         if (rectTransform)
             rectTransform.DOAnchorPos(new Vector2(0, rectTransform.anchoredPosition.y), 60f);
     }
@@ -50,19 +74,14 @@ public class Monster : MonoBehaviour
             if (cryObj)
                 cryObj.SetActive(false);
 
-            if (curHp <= 0)
+            if (curHp <= 0 && isDie == false)
             {
+                isDie = true;
                 transform.DOScale(Vector3.zero, 1f);
-                gaugeBar.DOFillAmount(1f, .1f);
+                game.killCount.Value += 1;
             }
         });
 
-        gaugeBarBack.DOFillAmount((float)curHp / maxHp, 1f).OnComplete(() =>
-        {
-            if (curHp <= 0)
-            {
-                gaugeBar.DOFillAmount(1f, .2f);
-            }
-        });
+        gaugeBarBack.DOFillAmount((float)curHp / maxHp, 1.5f);
     }
 }

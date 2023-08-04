@@ -9,7 +9,7 @@ public class AttackCat : MonoBehaviour
 {
     [SerializeField] Image attackImg;
     [SerializeField] List<Monster> targetList;
-    [SerializeField] float attackDelay;
+    [SerializeField] public float attackDelay;
     [SerializeField] public int attackPower;
     float timeSinceLastAttack = 0f;
 

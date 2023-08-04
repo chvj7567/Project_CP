@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 
 [RequireComponent(typeof(TMP_Text))]
 public class CHTMPro : MonoBehaviour
 {
-    [SerializeField] int stringID = -1;
+    [SerializeField] int stringID = 1;
     [SerializeField] public RectTransform rtText;
     [SerializeField] public TMP_Text text;
     [ReadOnly] object[] argArr;
