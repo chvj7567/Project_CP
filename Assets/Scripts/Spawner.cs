@@ -57,6 +57,7 @@ public class Spawner : MonoBehaviour
                     {
                         var pos = copyMonster.rectTransform.anchoredPosition;
                         copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y + 150));
+                        copyMonster.Move();
                         for (int i = 0; i < attackCatList.Count; ++i)
                         {
                             if (attackCatList[i].gameObject.activeSelf == true)

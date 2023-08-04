@@ -19,8 +19,6 @@ public class Monster : MonoBehaviour
         if (cryObj)
             cryObj.SetActive(false);
 
-        if (rectTransform)
-            rectTransform.DOAnchorPos(new Vector2(0, rectTransform.anchoredPosition.y), 60f);
         SetHp(maxHp);
     }
 
@@ -33,6 +31,12 @@ public class Monster : MonoBehaviour
     public int GetHp()
     {
         return curHp;
+    }
+
+    public void Move()
+    {
+        if (rectTransform)
+            rectTransform.DOAnchorPos(new Vector2(0, rectTransform.anchoredPosition.y), 60f);
     }
 
     public void TakeDamage(int _damage)
