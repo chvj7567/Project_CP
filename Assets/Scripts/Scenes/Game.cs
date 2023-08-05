@@ -47,6 +47,7 @@ public class Game : MonoBehaviour
 
     [SerializeField, ReadOnly] ReactiveProperty<int> power = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<float> attackDelay = new ReactiveProperty<float>();
+    [SerializeField, ReadOnly] ReactiveProperty<int> attackCatCount = new ReactiveProperty<int>();
 
     [SerializeField] GameObject gameOverObj;
     [SerializeField] TMP_Text gameOverText;
@@ -128,6 +129,7 @@ public class Game : MonoBehaviour
 
         power.Value = spawner.GetAttackCatList().First().attackPower;
         attackDelay.Value = spawner.GetAttackCatList().First().attackDelay;
+        attackCatCount.Value = 1;
 
         boardSize = PlayerPrefs.GetInt("size");
 

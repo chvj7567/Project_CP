@@ -69,10 +69,7 @@ public class Spawner : MonoBehaviour
                         copyMonster.Move();
                         for (int i = 0; i < attackCatList.Count; ++i)
                         {
-                            if (attackCatList[i].gameObject.activeSelf == true)
-                            {
-                                attackCatList[i].SetTarget(copyMonster);
-                            }
+                            attackCatList[i].SetTarget(copyMonster);
                         }
                     }
                 }

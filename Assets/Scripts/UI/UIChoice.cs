@@ -11,6 +11,7 @@ public class UIChoiceArg : CHUIArg
     public ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     public ReactiveProperty<int> power = new ReactiveProperty<int>();
     public ReactiveProperty<float> delay = new ReactiveProperty<float>();
+    public ReactiveProperty<int> attackCatCount = new ReactiveProperty<int>();
     public List<AttackCat> attackCatList = new List<AttackCat>();
 }
 
@@ -21,6 +22,7 @@ public class UIChoice : UIBase
     [SerializeField] Button backBtn;
     [SerializeField] Button redBtn;
     [SerializeField] Button blueBtn;
+    [SerializeField] Button greenBtn;
     [SerializeField] Button yellowBtn;
 
     public override void InitUI(CHUIArg _uiArg)
@@ -74,6 +76,41 @@ public class UIChoice : UIBase
                 }
 
                 arg.delay.Value = arg.attackCatList.First().attackDelay;
+                Time.timeScale = 1;
+                CHMMain.UI.CloseUI(gameObject);
+            }
+            else
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    alarmText = "Not Enough Score"
+                });
+            }
+        });
+
+        greenBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            if (arg.attackCatCount.Value == 9)
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    alarmText = "Max Cat"
+                });
+            }
+            else if (arg.totScore.Value >= 100)
+            {
+                arg.totScore.Value -= 100;
+
+                foreach (var cat in arg.attackCatList)
+                {
+                    if (cat.gameObject.activeSelf == false)
+                    {
+                        cat.gameObject.SetActive(true);
+                        break;
+                    }
+                }
+
+                arg.attackCatCount.Value += 1;
                 Time.timeScale = 1;
                 CHMMain.UI.CloseUI(gameObject);
             }

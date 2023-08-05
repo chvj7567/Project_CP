@@ -7,11 +7,17 @@ using System.Collections.Generic;
 
 public class AttackCat : MonoBehaviour
 {
+    [SerializeField] RectTransform myRectTransform;
     [SerializeField] Image attackImg;
     [SerializeField] List<Monster> targetList;
     [SerializeField] public float attackDelay;
     [SerializeField] public int attackPower;
     float timeSinceLastAttack = 0f;
+
+    private void Awake()
+    {
+        myRectTransform = GetComponent<RectTransform>();
+    }
 
     void Start()
     {
@@ -25,6 +31,8 @@ public class AttackCat : MonoBehaviour
             {
                 timeSinceLastAttack = 0f;
 
+                Monster target = null;
+                float minDistance = 9999f;
                 for (int i = 0; i < targetList.Count; ++i)
                 {
                     if (targetList[i].GetHp() <= 0)
@@ -33,9 +41,20 @@ public class AttackCat : MonoBehaviour
                     }
                     else
                     {
-                        Attack(targetList[i]);
+                        var distance = Vector2.Distance(myRectTransform.anchoredPosition, targetList[i].rectTransform.anchoredPosition);
+                        if (minDistance > distance)
+                        {
+                            minDistance = distance;
+                            target = targetList[i];
+                        }
+                        
                         break;
                     }
+                }
+
+                if (target != null)
+                {
+                    Attack(target);
                 }
             }
         });
@@ -50,7 +69,7 @@ public class AttackCat : MonoBehaviour
     {
         if (target.GetHp() <= 0) return;
 
-        var my2DPos = GetComponent<Image>().rectTransform.anchoredPosition;
+        var my2DPos = myRectTransform.anchoredPosition;
 
         //attackImg.gameObject.GetOrAddComponent<CHPoolable>();
         
