@@ -17,6 +17,7 @@ public class Monster : MonoBehaviour
     [SerializeField] GameObject moveObj;
     [SerializeField] GameObject cryObj;
     [SerializeField] int maxHp;
+    [SerializeField] float destX = 110f;
     [SerializeField, ReadOnly] int curHp;
 
     bool isDie = false;
@@ -37,7 +38,7 @@ public class Monster : MonoBehaviour
     {
         if (rectTransform)
         {
-            if (rectTransform.anchoredPosition.x < 110f && isDie == false)
+            if (rectTransform.anchoredPosition.x < destX && isDie == false)
             {
                 game.gameOver.Value = true;
             }
@@ -55,12 +56,12 @@ public class Monster : MonoBehaviour
         return curHp;
     }
 
-    public void Move()
+    public void Move(float _time)
     {
         isDie = false;
 
         if (rectTransform)
-            rectTransform.DOAnchorPos(new Vector2(0, rectTransform.anchoredPosition.y), 60f);
+            rectTransform.DOAnchorPos(new Vector2(0, rectTransform.anchoredPosition.y), _time).SetEase(Ease.Linear);
     }
 
     public void TakeDamage(int _damage)

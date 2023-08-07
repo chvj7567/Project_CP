@@ -746,9 +746,9 @@ MonoBehaviour:
   parent: {fileID: 2089328443}
   instBtn: {fileID: 2089328444}
   spawner: {fileID: 1208139740}
+  delay: 0.3
   isDrag: 0
   isAni: 0
-  delay: 0.3
   moveIndex1: 0
   moveIndex2: 0
   totScoreText: {fileID: 2051093205}
@@ -1920,6 +1920,7 @@ MonoBehaviour:
   moveObj: {fileID: 781107437}
   cryObj: {fileID: 225965096}
   maxHp: 100
+  destX: 110
   curHp: 100
 --- !u!1 &1101046601
 GameObject:
@@ -2401,6 +2402,8 @@ MonoBehaviour:
   - {fileID: 166859352}
   - {fileID: 606442808}
   spawnTime: 30
+  firstHp: 100
+  firstTime: 60
   OnSpawn:
     value: 0
 --- !u!224 &1263680726

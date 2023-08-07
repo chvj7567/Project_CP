@@ -1,0 +1,121 @@
+[
+  {
+    "eSelect": "0",
+	"titleStr": "7",
+    "value": "5",
+	"frequency": "700",
+	"scoreCost": "50"
+  },
+  {
+    "eSelect": "0",
+	"titleStr": "7",
+    "value": "10",
+	"frequency": "200",
+	"scoreCost": "80"
+  },
+  {
+    "eSelect": "0",
+	"titleStr": "7",
+    "value": "15",
+	"frequency": "90",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "0",
+	"titleStr": "7",
+    "value": "50",
+	"frequency": "10",
+	"scoreCost": "300"
+  },
+  {
+    "eSelect": "1",
+	"titleStr": "8",
+    "value": "0.1",
+	"frequency": "700",
+	"scoreCost": "50"
+  },
+  {
+    "eSelect": "1",
+	"titleStr": "8",
+    "value": "0.2",
+	"frequency": "200",
+	"scoreCost": "80"
+  },
+  {
+    "eSelect": "1",
+	"titleStr": "8",
+    "value": "0.3",
+	"frequency": "90",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "1",
+	"titleStr": "8",
+    "value": "1",
+	"frequency": "10",
+	"scoreCost": "300"
+  },
+  {
+    "eSelect": "2",
+	"titleStr": "11",
+    "value": "0",
+	"frequency": "500",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "2",
+	"titleStr": "11",
+    "value": "100",
+	"frequency": "250",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "2",
+	"titleStr": "11",
+    "value": "120",
+	"frequency": "90",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "2",
+	"titleStr": "11",
+    "value": "150",
+	"frequency": "70",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "2",
+	"titleStr": "11",
+    "value": "200",
+	"frequency": "50",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "2",
+	"titleStr": "11",
+    "value": "300",
+	"frequency": "30",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "2",
+	"titleStr": "11",
+    "value": "500",
+	"frequency": "10",
+	"scoreCost": "100"
+  },
+  {
+    "eSelect": "3",
+	"titleStr": "9",
+    "value": "0",
+	"frequency": "1000",
+	"scoreCost": "500"
+  },
+  {
+    "eSelect": "4",
+	"titleStr": "10",
+    "value": "0",
+	"frequency": "1000",
+	"scoreCost": "1000"
+  }
+]

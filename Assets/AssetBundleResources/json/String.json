@@ -22,5 +22,33 @@
   {
     "stringID": "6",
     "value": "Delay\n{0}"
+  },
+  {
+    "stringID": "7",
+    "value": "Power\n{0} Up"
+  },
+  {
+    "stringID": "8",
+    "value": "Delay\n{0} Down"
+  },
+  {
+    "stringID": "9",
+    "value": "Plus\nCat"
+  },
+  {
+    "stringID": "10",
+    "value": "CatPang\nUpgrade"
+  },
+  {
+    "stringID": "11",
+	"value": "Score\nLotto"
+  },
+  {
+    "stringID": "12",
+	"value": "price\n{0}score"
+  },
+  {
+    "stringID": "13",
+	"value": "I Have No Money"
   }
 ]

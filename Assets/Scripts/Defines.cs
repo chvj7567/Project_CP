@@ -8,6 +8,7 @@ public class Defines
         None = -1,
 
         String,
+        Select,
 
         Max
     }
@@ -91,6 +92,19 @@ public class Defines
 
         Horizontal,
         Vertical,
+
+        Max
+    }
+
+    public enum ESelect
+    {
+        None = -1,
+
+        Power,
+        Delay,
+        Lotto,
+        AddCat,
+        CatPangUpgrade,
 
         Max
     }

@@ -81,8 +81,8 @@ public class Block : MonoBehaviour
                         
                         if (ret.Item1 != null)
                         {
-                            rectTransform.DOAnchorPosX(movePos.x, .5f);
-                            ret.Item1.DOAnchorPosX(originPos.x, .5f);
+                            rectTransform.DOAnchorPosX(movePos.x, game.delay);
+                            ret.Item1.DOAnchorPosX(originPos.x, game.delay);
 
                             ChangeBlock(ret.Item2);
                             game.AfterDrag(this, ret.Item2);
@@ -97,8 +97,8 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            rectTransform.DOAnchorPosY(movePos.y, .5f);
-                            ret.Item1.DOAnchorPosY(originPos.y, .5f);
+                            rectTransform.DOAnchorPosY(movePos.y, game.delay);
+                            ret.Item1.DOAnchorPosY(originPos.y, game.delay);
 
                             ChangeBlock(ret.Item2);
                             game.AfterDrag(this, ret.Item2);
@@ -113,8 +113,8 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            rectTransform.DOAnchorPosX(movePos.x, .5f);
-                            ret.Item1.DOAnchorPosX(originPos.x, .5f);
+                            rectTransform.DOAnchorPosX(movePos.x, game.delay);
+                            ret.Item1.DOAnchorPosX(originPos.x, game.delay);
 
                             ChangeBlock(ret.Item2);
                             game.AfterDrag(this, ret.Item2);
@@ -129,8 +129,8 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            rectTransform.DOAnchorPosY(movePos.y, .5f);
-                            ret.Item1.DOAnchorPosY(originPos.y, .5f);
+                            rectTransform.DOAnchorPosY(movePos.y, game.delay);
+                            ret.Item1.DOAnchorPosY(originPos.y, game.delay);
 
                             ChangeBlock(ret.Item2);
                             game.AfterDrag(this, ret.Item2);

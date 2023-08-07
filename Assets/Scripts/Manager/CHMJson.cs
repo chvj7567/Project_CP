@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Defines;
 using static Infomation;
 
 public class CHMJson
@@ -8,14 +9,17 @@ public class CHMJson
     [Serializable]
     public class JsonData
     {
-        public StringInfo[] stringInfoArray;
+        public StringInfo[] stringInfoArr;
+        public SelectInfo[] selectInfoArr;
     }
 
     int loadCompleteFileCount = 0;
     int loadingFileCount = 0;
 
     List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
+
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
+    List<SelectInfo> selectInfoList = new List<SelectInfo>();
 
     public void Init()
     {
@@ -26,6 +30,7 @@ public class CHMJson
     {
         actionList.Clear();
         stringInfoDic.Clear();
+        selectInfoList.Clear();
     }
 
     void LoadJsonData()
@@ -34,6 +39,7 @@ public class CHMJson
         actionList.Clear();
 
         actionList.Add(LoadStringData());
+        actionList.Add(LoadSelectData());
 
         loadingFileCount = actionList.Count;
     }
@@ -56,8 +62,8 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stringInfoArray\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.stringInfoArray)
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stringInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stringInfoArr)
             {
                 stringInfoDic.Add(data.stringID, data.value);
             }
@@ -68,7 +74,27 @@ public class CHMJson
         return callback;
     }
 
-    public string TryGetString(int _stringID)
+    Action<TextAsset> LoadSelectData()
+    {
+        Action<TextAsset> callback;
+
+        selectInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Select, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"selectInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.selectInfoArr)
+            {
+                selectInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
+    public string GetStringInfo(int _stringID)
     {
         if (stringInfoDic.TryGetValue(_stringID, out string result))
         {
@@ -76,5 +102,30 @@ public class CHMJson
         }
 
         return "";
+    }
+
+    public SelectInfo GetSelectInfo(ESelect _eSelect)
+    {
+        var selectList = selectInfoList.FindAll(_ => _.eSelect == _eSelect);
+
+        Int64 totFrequency = 0L;
+        for (int i = 0; i < selectList.Count; ++i)
+        {
+            totFrequency += selectList[i].frequency;
+        }
+
+        var selectFrequency = UnityEngine.Random.Range(0, totFrequency);
+
+        Int64 tempFrequency = 0L;
+        for (int i = 0; i < selectList.Count; ++i)
+        {
+            tempFrequency += selectList[i].frequency;
+            if (selectFrequency <= tempFrequency)
+            {
+                return selectList[i];
+            }
+        }
+
+        return new SelectInfo();
     }
 }

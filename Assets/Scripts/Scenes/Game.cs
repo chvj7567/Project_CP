@@ -24,12 +24,13 @@ public class Game : MonoBehaviour
     [SerializeField] CHInstantiateButton instBtn;
 
     [SerializeField] Spawner spawner;
+    [SerializeField] public float delay;
 
     [ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
     [ReadOnly] public bool isDrag = false;
     [ReadOnly] public bool isAni = false;
     [ReadOnly] bool isMatch = false;
-    [ReadOnly] public float delay;
+    
 
     [SerializeField, ReadOnly] int moveIndex1 = 0;
     [SerializeField, ReadOnly] int moveIndex2 = 0;
@@ -121,6 +122,7 @@ public class Game : MonoBehaviour
             if(_ == true)
             {
                 Time.timeScale = 0;
+                CHMMain.UI.CloseUI(Defines.EUI.UIChoice);
                 gameOverObj.transform.SetAsLastSibling();
                 gameOverObj.SetActive(true);
                 gameOverText.DOText("GameOver", 5f);
@@ -182,19 +184,24 @@ public class Game : MonoBehaviour
                     block1.rectTransform.DOAnchorPos(block2.originPos, delay);
                     block2.rectTransform.DOAnchorPos(block1.originPos, delay);
                     ChangeBlock(block1, block2);
+
+                    await Task.Delay((int)(delay * 1000));
                 }
             }
 
             first = true;
 
             await RemoveMatchBlock();
-            await DownBlock();
+            if (isMatch == true)
+            {
+                await DownBlock();
+            }
             await UpdateMap();
             CheckMap();
 
         } while (isMatch == true);
 
-        if (totScore.Value > 0 && oneTimeScore.Value > 0)
+        if (totScore.Value > 0 && oneTimeScore.Value > 5 && gameOver.Value == false)
         {
             CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
             {
@@ -210,8 +217,6 @@ public class Game : MonoBehaviour
         totScore.Value += bonusScore.Value;
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
-
-        
 
         isAni = false;
     }
@@ -564,13 +569,11 @@ public class Game : MonoBehaviour
 
             Block moveBlock = boardArr[row, col];
             Block targetBlock = null;
-            int targetRow = -1;
             for (int i = boardSize - 1; i > block.row; --i)
             {
                 if (boardArr[i, col].state == Defines.EState.Match)
                 {
                     targetBlock = boardArr[i, col];
-                    targetRow = i;
                     break;
                 }
             }

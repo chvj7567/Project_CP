@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using static Infomation;
 
 public class UIChoiceArg : CHUIArg
 {
@@ -20,19 +21,36 @@ public class UIChoice : UIBase
     UIChoiceArg arg;
 
     [SerializeField] Button backBtn;
-    [SerializeField] Button redBtn;
-    [SerializeField] Button blueBtn;
-    [SerializeField] Button greenBtn;
-    [SerializeField] Button yellowBtn;
+    [SerializeField] Button select1Btn;
+    [SerializeField] CHTMPro select1Text;
+    [SerializeField] CHTMPro select1PriceText;
+    [SerializeField] Button select2Btn;
+    [SerializeField] CHTMPro select2Text;
+    [SerializeField] CHTMPro select2PriceText;
+
+    SelectInfo select1Info;
+    SelectInfo select2Info;
 
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIChoiceArg;
     }
 
-    private async void Start()
+    private void Start()
     {
         Time.timeScale = 0;
+
+        var select1 = (Defines.ESelect)Random.Range(0, (int)Defines.ESelect.Max);
+        select1Info = CHMMain.Json.GetSelectInfo(select1);
+        select1Text.SetStringID(select1Info.titleStr);
+        select1Text.SetText(select1Info.value);
+        select1PriceText.SetText(select1Info.scoreCost);
+
+        var select2 = (Defines.ESelect)Random.Range(0, (int)Defines.ESelect.Max);
+        select2Info = CHMMain.Json.GetSelectInfo(select2);
+        select2Text.SetStringID(select2Info.titleStr);
+        select2Text.SetText(select2Info.value);
+        select2PriceText.SetText(select2Info.scoreCost);
 
         backBtn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -40,111 +58,78 @@ public class UIChoice : UIBase
             CHMMain.UI.CloseUI(gameObject);
         });
 
-        redBtn.OnClickAsObservable().Subscribe(_ =>
+        select1Btn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (arg.totScore.Value >= 10)
-            {
-                arg.totScore.Value -= 10;
-
-                foreach (var cat in arg.attackCatList)
-                {
-                    cat.attackPower += 5;
-                }
-
-                arg.power.Value = arg.attackCatList.First().attackPower;
-                Time.timeScale = 1;
-                CHMMain.UI.CloseUI(gameObject);
-            }
-            else
-            {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                {
-                    alarmText = "Not Enough Score"
-                });
-            }
+            SetSelectInfo(select1Info);
         });
 
-        blueBtn.OnClickAsObservable().Subscribe(_ =>
+        select2Btn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (arg.totScore.Value >= 20)
-            {
-                arg.totScore.Value -= 20;
-
-                foreach (var cat in arg.attackCatList)
-                {
-                    cat.attackDelay -= .1f;
-                }
-
-                arg.delay.Value = arg.attackCatList.First().attackDelay;
-                Time.timeScale = 1;
-                CHMMain.UI.CloseUI(gameObject);
-            }
-            else
-            {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                {
-                    alarmText = "Not Enough Score"
-                });
-            }
+            SetSelectInfo(select2Info);
         });
+    }
 
-        greenBtn.OnClickAsObservable().Subscribe(_ =>
+    void SetSelectInfo(SelectInfo _selectInfo)
+    {
+        if (arg.totScore.Value >= _selectInfo.scoreCost)
         {
-            if (arg.attackCatCount.Value == 9)
-            {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                {
-                    alarmText = "Max Cat"
-                });
-            }
-            else if (arg.totScore.Value >= 100)
-            {
-                arg.totScore.Value -= 100;
+            arg.totScore.Value -= _selectInfo.scoreCost;
 
-                foreach (var cat in arg.attackCatList)
-                {
-                    if (cat.gameObject.activeSelf == false)
+            switch (_selectInfo.eSelect)
+            {
+                case Defines.ESelect.Power:
                     {
-                        cat.gameObject.SetActive(true);
-                        break;
+                        foreach (var cat in arg.attackCatList)
+                        {
+                            cat.attackPower += (int)_selectInfo.value;
+                        }
+
+                        arg.power.Value = arg.attackCatList.First().attackPower;
                     }
-                }
+                    break;
+                case Defines.ESelect.Delay:
+                    {
+                        foreach (var cat in arg.attackCatList)
+                        {
+                            cat.attackDelay -= _selectInfo.value;
+                        }
 
-                arg.attackCatCount.Value += 1;
-                Time.timeScale = 1;
-                CHMMain.UI.CloseUI(gameObject);
-            }
-            else
-            {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                {
-                    alarmText = "Not Enough Score"
-                });
-            }
-        });
+                        arg.delay.Value = arg.attackCatList.First().attackDelay;
+                    }
+                    break;
+                case Defines.ESelect.Lotto:
+                    {
+                        arg.totScore.Value += (int)_selectInfo.value;
+                    }
+                    break;
+                case Defines.ESelect.AddCat:
+                    {
+                        foreach (var cat in arg.attackCatList)
+                        {
+                            if (cat.gameObject.activeSelf == false)
+                            {
+                                cat.gameObject.SetActive(true);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case Defines.ESelect.CatPangUpgrade:
+                    { 
 
-        yellowBtn.OnClickAsObservable().Subscribe(_ =>
+                    }
+                    break;
+            }
+
+            Time.timeScale = 1;
+            CHMMain.UI.CloseUI(gameObject);
+        }
+        else
         {
-            if (arg.totScore.Value >= 1000)
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
-                arg.totScore.Value -= 1000;
-
-                foreach (var cat in arg.attackCatList)
-                {
-                    cat.attackPower += 50;
-                }
-
-                arg.power.Value = arg.attackCatList.First().attackPower;
-                Time.timeScale = 1;
-                CHMMain.UI.CloseUI(gameObject);
-            }
-            else
-            {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                {
-                    alarmText = "Not Enough Score"
-                });
-            }
-        });
+                alarmText = "Not Enough Score"
+            });
+        }
     }
 }

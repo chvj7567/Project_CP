@@ -7,7 +7,7 @@ public class CHMString
 {
     public string GetString(int _stringID)
     {
-        return CHMMain.Json.TryGetString(_stringID);
+        return CHMMain.Json.GetStringInfo(_stringID);
     }
 
     public string GetString(int _stringID, params object[] _argArr)
