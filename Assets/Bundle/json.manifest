@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1918131410
+CRC: 4149614082
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ac669787b28307407c51cea5a54d0de8
+    Hash: 8ca96379975cc96b4377f99f68018ec1
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -14,4 +14,5 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/AssetBundleResources/json/String.json
+- Assets/AssetBundleResources/json/Select.json
 Dependencies: []

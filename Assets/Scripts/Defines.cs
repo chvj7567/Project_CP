@@ -31,6 +31,8 @@ public class Defines
         None = -1,
 
         CatPang1,
+        CatPang2,
+        CatPang3,
 
         Max
     }

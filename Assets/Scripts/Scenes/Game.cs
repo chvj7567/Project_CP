@@ -16,6 +16,7 @@ public class Game : MonoBehaviour
     [SerializeField] Image viewImg1;
     [SerializeField] Image viewImg2;
     [SerializeField] Button backBtn;
+    [SerializeField] Toggle selectTog;
     [SerializeField] GameObject origin;
     [SerializeField] float margin = 0f;
     [SerializeField, Range(1, MAX)] int boardSize = 1;
@@ -31,10 +32,11 @@ public class Game : MonoBehaviour
     [ReadOnly] public bool isAni = false;
     [ReadOnly] bool isMatch = false;
     
-
     [SerializeField, ReadOnly] int moveIndex1 = 0;
     [SerializeField, ReadOnly] int moveIndex2 = 0;
 
+    [SerializeField] int maxPower = 999;
+    [SerializeField] float minDelay = 1f;
     [SerializeField] CHTMPro totScoreText;
     [SerializeField] CHTMPro oneTimeScoreText;
     [SerializeField] CHTMPro killCountText;
@@ -201,14 +203,17 @@ public class Game : MonoBehaviour
 
         } while (isMatch == true);
 
-        if (totScore.Value > 0 && oneTimeScore.Value > 5 && gameOver.Value == false)
+        if (totScore.Value > 0 && oneTimeScore.Value > 5 && gameOver.Value == false && selectTog.isOn)
         {
             CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
             {
                 totScore = totScore,
                 power = power,
                 delay = attackDelay,
-                attackCatList = spawner.GetAttackCatList()
+                attackCatList = spawner.GetAttackCatList(),
+                maxPower = maxPower,
+                minDealy = minDelay,
+                catPangImgList = specialBlockSpriteList
             });
         }
 
@@ -217,6 +222,8 @@ public class Game : MonoBehaviour
         totScore.Value += bonusScore.Value;
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
+
+        await Task.Delay((int)(delay * 1000));
 
         isAni = false;
     }

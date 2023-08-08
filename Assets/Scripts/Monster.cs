@@ -51,6 +51,11 @@ public class Monster : MonoBehaviour
         curHp = _maxHp;
     }
 
+    public int GetMaxHp()
+    {
+        return maxHp;
+    }
+
     public int GetHp()
     {
         return curHp;

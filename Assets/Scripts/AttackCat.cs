@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class AttackCat : MonoBehaviour
 {
     [SerializeField] RectTransform myRectTransform;
-    [SerializeField] Image attackImg;
+    [SerializeField] public Image attackImg;
     [SerializeField] List<Monster> targetList;
     [SerializeField] public float attackDelay;
     [SerializeField] public int attackPower;

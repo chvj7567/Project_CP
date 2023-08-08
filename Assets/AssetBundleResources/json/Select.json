@@ -4,56 +4,56 @@
 	"titleStr": "7",
     "value": "5",
 	"frequency": "700",
-	"scoreCost": "50"
+	"scoreCost": "30"
   },
   {
     "eSelect": "0",
 	"titleStr": "7",
     "value": "10",
 	"frequency": "200",
-	"scoreCost": "80"
+	"scoreCost": "50"
   },
   {
     "eSelect": "0",
 	"titleStr": "7",
     "value": "15",
 	"frequency": "90",
-	"scoreCost": "100"
+	"scoreCost": "70"
   },
   {
     "eSelect": "0",
 	"titleStr": "7",
     "value": "50",
 	"frequency": "10",
-	"scoreCost": "300"
+	"scoreCost": "200"
   },
   {
     "eSelect": "1",
 	"titleStr": "8",
     "value": "0.1",
 	"frequency": "700",
-	"scoreCost": "50"
+	"scoreCost": "30"
   },
   {
     "eSelect": "1",
 	"titleStr": "8",
     "value": "0.2",
 	"frequency": "200",
-	"scoreCost": "80"
+	"scoreCost": "50"
   },
   {
     "eSelect": "1",
 	"titleStr": "8",
     "value": "0.3",
 	"frequency": "90",
-	"scoreCost": "100"
+	"scoreCost": "70"
   },
   {
     "eSelect": "1",
 	"titleStr": "8",
     "value": "1",
 	"frequency": "10",
-	"scoreCost": "300"
+	"scoreCost": "200"
   },
   {
     "eSelect": "2",
@@ -109,7 +109,7 @@
 	"titleStr": "9",
     "value": "0",
 	"frequency": "1000",
-	"scoreCost": "500"
+	"scoreCost": "300"
   },
   {
     "eSelect": "4",

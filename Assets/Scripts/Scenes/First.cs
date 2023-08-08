@@ -16,6 +16,7 @@ public class First : MonoBehaviour
 
     bool canStart = false;
     int downloadCount = 0;
+
     private void Start()
     {
         startBtn.gameObject.SetActive(true);
@@ -88,20 +89,5 @@ public class First : MonoBehaviour
             canStart = true;
             CHMAssetBundle.firstDownload = false;
         }
-
-        /*if (assetBundle != null)
-        {
-            // 바로 Sprite로 가져오지 못하고 Texture2D로 가져온다.
-            Texture2D guideCat = assetBundle.LoadAsset<Texture2D>("huchu1");
-
-            // 텍스쳐를 제대로 로드했으면 생성한다.
-            if (guideCat != null)
-            {
-                // Texture2D를 Sprite로 변환하여 이미지 소스에 대입한다.
-                Rect rect = new Rect(0, 0, guideCat.width, guideCat.height);
-                loadingBar.sprite = Sprite.Create(guideCat, rect, new Vector2(0.5f, 0.5f));
-
-            }
-        }*/
     }
 }

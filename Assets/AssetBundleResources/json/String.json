@@ -50,5 +50,9 @@
   {
     "stringID": "13",
 	"value": "I Have No Money"
+  },
+  {
+    "stringID": "14",
+	"value": "Select"
   }
 ]

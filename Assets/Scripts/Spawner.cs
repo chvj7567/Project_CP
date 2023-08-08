@@ -8,7 +8,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] Transform spawnParent;
     [SerializeField] GameObject spawnObj;
     [SerializeField] List<AttackCat> attackCatList = new List<AttackCat>();
-    [SerializeField] float spawnTime = 5f;
+    [SerializeField] float spawnTime = 15f;
     [SerializeField] int firstHp = 100;
     [SerializeField] float firstTime = 60f;
     [SerializeField, ReadOnly] public ReactiveProperty<bool> OnSpawn = new ReactiveProperty<bool>();
@@ -68,8 +68,19 @@ public class Spawner : MonoBehaviour
                     {
                         var pos = copyMonster.rectTransform.anchoredPosition;
                         copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y));
-                        copyMonster.SetHp(firstHp + (index * increaseHp));
+
+                        if (index >= 10)
+                        {
+                            copyMonster.SetHp(copyMonster.GetMaxHp() * 2);
+                            spawnTime = 10f;
+                        }
+                        else
+                        {
+                            copyMonster.SetHp(firstHp + (index * increaseHp));
+                        }
+
                         copyMonster.Move(firstTime + (index * decreaseTime));
+
                         for (int i = 0; i < attackCatList.Count; ++i)
                         {
                             attackCatList[i].SetTarget(copyMonster);
