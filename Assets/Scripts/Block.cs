@@ -42,7 +42,21 @@ public class Block : MonoBehaviour
 
         btn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (game.isDrag == false && game.isAni == false && specailType == Defines.ESpecailBlockType.CatPang1) game.Boom2(this);
+            if (game.isDrag == false && game.isAni == false)
+            {
+                switch (specailType)
+                {
+                    case Defines.ESpecailBlockType.CatPang1:
+                        game.Boom1(this);
+                        break;
+                    case Defines.ESpecailBlockType.CatPang2:
+                        game.Boom2(this);
+                        break;
+                    case Defines.ESpecailBlockType.CatPang3:
+                        game.BoomAll(this);
+                        break;
+                }
+            }
         });
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>

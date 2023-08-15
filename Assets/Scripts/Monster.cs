@@ -38,9 +38,16 @@ public class Monster : MonoBehaviour
     {
         if (rectTransform)
         {
-            if (rectTransform.anchoredPosition.x < destX && isDie == false)
+            if (rectTransform.anchoredPosition.x < destX)
             {
-                game.gameOver.Value = true;
+                if (isDie == false)
+                {
+                    game.gameOver.Value = true;
+                }
+                else
+                {
+                    CHMMain.Resource.Destroy(gameObject);
+                }
             }
         }
     }

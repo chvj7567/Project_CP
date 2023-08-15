@@ -6,9 +6,7 @@ public class Bullet : MonoBehaviour
     public AttackCat cat;
     public Image attackImg;
     public RectTransform targetRectTransform;
-    private RectTransform followerRectTransform;
-
-    public float followSpeed = 2f;
+    public RectTransform followerRectTransform;
 
     private void Awake()
     {
@@ -38,7 +36,7 @@ public class Bullet : MonoBehaviour
                 /*Vector2 newPosition = Vector2.Lerp(followerPosition, targetPosition, Time.deltaTime * followSpeed);
                 followerRectTransform.anchoredPosition = newPosition;*/
 
-                followerRectTransform.anchoredPosition += direction * followSpeed * Time.deltaTime * 100;
+                followerRectTransform.anchoredPosition += direction * cat.attackSpeed * Time.deltaTime * 100;
             }
             else
             {

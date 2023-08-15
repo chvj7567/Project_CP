@@ -37,11 +37,13 @@ public class Game : MonoBehaviour
 
     [SerializeField] int maxPower = 999;
     [SerializeField] float minDelay = 1f;
+    [SerializeField] float maxSpeed = 10f;
     [SerializeField] CHTMPro totScoreText;
     [SerializeField] CHTMPro oneTimeScoreText;
     [SerializeField] CHTMPro killCountText;
     [SerializeField] CHTMPro powerText;
     [SerializeField] CHTMPro delayText;
+    [SerializeField] CHTMPro speedText;
 
     [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> oneTimeScore = new ReactiveProperty<int>();
@@ -50,6 +52,7 @@ public class Game : MonoBehaviour
 
     [SerializeField, ReadOnly] ReactiveProperty<int> power = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<float> attackDelay = new ReactiveProperty<float>();
+    [SerializeField, ReadOnly] ReactiveProperty<float> attackSpeed = new ReactiveProperty<float>();
     [SerializeField, ReadOnly] ReactiveProperty<int> attackCatCount = new ReactiveProperty<int>();
 
     [SerializeField] GameObject gameOverObj;
@@ -117,6 +120,12 @@ public class Game : MonoBehaviour
             delayText.SetText(a);
         });
 
+        attackSpeed.Subscribe(_ =>
+        {
+            var a = Mathf.Round(_ * 10) / 10;
+            speedText.SetText(a);
+        });
+
         gameOverObj.SetActive(false);
 
         gameOver.Subscribe(_ =>
@@ -133,6 +142,7 @@ public class Game : MonoBehaviour
 
         power.Value = spawner.GetAttackCatList().First().attackPower;
         attackDelay.Value = spawner.GetAttackCatList().First().attackDelay;
+        attackSpeed.Value = spawner.GetAttackCatList().First().attackSpeed;
         attackCatCount.Value = 1;
 
         boardSize = PlayerPrefs.GetInt("size");
@@ -210,9 +220,11 @@ public class Game : MonoBehaviour
                 totScore = totScore,
                 power = power,
                 delay = attackDelay,
+                speed = attackSpeed,
                 attackCatList = spawner.GetAttackCatList(),
                 maxPower = maxPower,
                 minDealy = minDelay,
+                maxSpeed = maxSpeed,
                 catPangImgList = specialBlockSpriteList
             });
         }
@@ -319,13 +331,38 @@ public class Game : MonoBehaviour
                     oneTimeScore.Value += 1;
 
                     // 아이템이 연달아 터지는 경우
-                    if (block.GetSpecailType() == Defines.ESpecailBlockType.CatPang1)
+                    bool isSpecailType = false;
+
+                    switch (block.GetSpecailType())
                     {
-                        bonusScore.Value += 10;
-                        Boom2(block, false);
-                        i = -1;
-                        break;
+                        case Defines.ESpecailBlockType.CatPang1:
+                            {
+                                isSpecailType = true;
+                                bonusScore.Value += 10;
+                                Boom1(block, false);
+                                i = -1;
+                            }
+                            break;
+                        case Defines.ESpecailBlockType.CatPang2:
+                            {
+                                isSpecailType = true;
+                                bonusScore.Value += 20;
+                                Boom2(block, false);
+                                i = -1;
+                            }
+                            break;
+                        case Defines.ESpecailBlockType.CatPang3:
+                            {
+                                isSpecailType = true;
+                                bonusScore.Value += 30;
+                                BoomAll(block, false);
+                                i = -1;
+                            }
+                            break;
                     }
+
+                    if (isSpecailType == true)
+                        break;
 
                     removeDelay = true;
 
@@ -337,9 +374,9 @@ public class Game : MonoBehaviour
                         if (block.hScore >= 3 && block.vScore >= 3)
                         {
                             createBoomDelay = true;
-                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
+                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
                             block.state = Defines.EState.Normal;
-                            block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
+                            block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
                             block.ResetScore();
                             block.SetOriginPos();
                             block.rectTransform.DOScale(1f, delay);
@@ -451,10 +488,27 @@ public class Game : MonoBehaviour
                                 boardArr[tempRow, tempCol].index == moveIndex2)
                             {
                                 checkMoveBlock = true;
-                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang1);
-                                boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
-                                boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                if (tempScore == 4)
+                                {
+                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang1);
+                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
+                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                }
+                                else if (tempScore == 5)
+                                {
+                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang2);
+                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
+                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                }
+                                else
+                                {
+                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang3);
+                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
+                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                }
                             }
 
                             boardArr[tempRow, tempCol].ResetScore();
@@ -462,10 +516,27 @@ public class Game : MonoBehaviour
 
                         if (checkMoveBlock == false)
                         {
-                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
-                            block.state = Defines.EState.Normal;
-                            block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
-                            block.rectTransform.DOScale(1f, delay);
+                            if (tempScore == 4)
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
+                                block.rectTransform.DOScale(1f, delay);
+                            }
+                            else if (tempScore == 5)
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
+                                block.rectTransform.DOScale(1f, delay);
+                            }
+                            else
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
+                                block.rectTransform.DOScale(1f, delay);
+                            }
                         }
                     }
                     // 세로 3개 초과 매치 시 특수 블럭 생성
@@ -485,10 +556,27 @@ public class Game : MonoBehaviour
                                 boardArr[tempRow, tempCol].index == moveIndex2)
                             {
                                 checkMoveBlock = true;
-                                boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang1);
-                                boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
-                                boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                if (tempScore == 4)
+                                {
+                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang1);
+                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
+                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                }
+                                else if (tempScore == 5)
+                                {
+                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang2);
+                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
+                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                }
+                                else
+                                {
+                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang3);
+                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
+                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
+                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                }
                             }
 
                             boardArr[tempRow, tempCol].ResetScore();
@@ -496,10 +584,27 @@ public class Game : MonoBehaviour
 
                         if (checkMoveBlock == false)
                         {
-                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
-                            block.state = Defines.EState.Normal;
-                            block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
-                            block.rectTransform.DOScale(1f, delay);
+                            if (tempScore == 4)
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
+                                block.rectTransform.DOScale(1f, delay);
+                            }
+                            else if (tempScore == 5)
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
+                                block.rectTransform.DOScale(1f, delay);
+                            }
+                            else
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
+                                block.rectTransform.DOScale(1f, delay);
+                            }
                         }
                     }
                 }

@@ -12,6 +12,7 @@ public class AttackCat : MonoBehaviour
     [SerializeField] List<Monster> targetList;
     [SerializeField] public float attackDelay;
     [SerializeField] public int attackPower;
+    [SerializeField] public float attackSpeed;
     float timeSinceLastAttack = 0f;
 
     private void Awake()

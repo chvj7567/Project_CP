@@ -17,6 +17,8 @@ public class Spawner : MonoBehaviour
     int increaseHp = 100;
     float decreaseTime = -0.5f;
 
+    int curHp = 0;
+
     bool isSpawn = false;
     IEnumerator cor;
 
@@ -71,12 +73,13 @@ public class Spawner : MonoBehaviour
 
                         if (index >= 10)
                         {
-                            copyMonster.SetHp(copyMonster.GetMaxHp() * 2);
+                            copyMonster.SetHp(curHp * 2);
                             spawnTime = 10f;
                         }
                         else
                         {
-                            copyMonster.SetHp(firstHp + (index * increaseHp));
+                            curHp = firstHp + (index * increaseHp);
+                            copyMonster.SetHp(curHp);
                         }
 
                         copyMonster.Move(firstTime + (index * decreaseTime));

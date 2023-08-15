@@ -107,6 +107,7 @@ public class Defines
         Lotto,
         AddCat,
         CatPangUpgrade,
+        Speed,
 
         Max
     }

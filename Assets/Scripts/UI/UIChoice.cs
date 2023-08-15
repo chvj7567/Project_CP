@@ -12,10 +12,12 @@ public class UIChoiceArg : CHUIArg
     public ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     public ReactiveProperty<int> power = new ReactiveProperty<int>();
     public ReactiveProperty<float> delay = new ReactiveProperty<float>();
+    public ReactiveProperty<float> speed = new ReactiveProperty<float>();
     public ReactiveProperty<int> attackCatCount = new ReactiveProperty<int>();
     public List<AttackCat> attackCatList = new List<AttackCat>();
     public int maxPower;
     public float minDealy;
+    public float maxSpeed;
     public List<Sprite> catPangImgList = new List<Sprite>();
 }
 
@@ -76,8 +78,6 @@ public class UIChoice : UIBase
     {
         if (arg.totScore.Value >= _selectInfo.scoreCost)
         {
-            arg.totScore.Value -= _selectInfo.scoreCost;
-
             switch (_selectInfo.eSelect)
             {
                 case Defines.ESelect.Power:
@@ -96,6 +96,7 @@ public class UIChoice : UIBase
                             cat.attackPower += (int)_selectInfo.value;
                         }
 
+                        arg.totScore.Value -= _selectInfo.scoreCost;
                         arg.power.Value = arg.attackCatList.First().attackPower;
                     }
                     break;
@@ -115,11 +116,13 @@ public class UIChoice : UIBase
                             cat.attackDelay -= _selectInfo.value;
                         }
 
+                        arg.totScore.Value -= _selectInfo.scoreCost;
                         arg.delay.Value = arg.attackCatList.First().attackDelay;
                     }
                     break;
                 case Defines.ESelect.Lotto:
                     {
+                        arg.totScore.Value -= _selectInfo.scoreCost;
                         arg.totScore.Value += (int)_selectInfo.value;
 
                         CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
@@ -148,20 +151,28 @@ public class UIChoice : UIBase
                                 alarmText = $"Cat Is Max"
                             });
                         }
+                        else
+                        {
+                            arg.totScore.Value -= _selectInfo.scoreCost;
+                        }
                     }
                     break;
                 case Defines.ESelect.CatPangUpgrade:
                     {
+                        arg.totScore.Value -= _selectInfo.scoreCost;
+
                         foreach (var cat in arg.attackCatList)
                         {
                             if (cat.attackImg.sprite.name == Defines.ESpecailBlockType.CatPang1.ToString())
                             {
+                                
                                 cat.attackImg.sprite = arg.catPangImgList[(int)Defines.ESpecailBlockType.CatPang2];
                                 cat.attackPower += 100;
                                 cat.attackDelay -= 0.5f;
                             }
                             else if (cat.attackImg.sprite.name == Defines.ESpecailBlockType.CatPang2.ToString())
                             {
+                                arg.totScore.Value -= _selectInfo.scoreCost;
                                 cat.attackImg.sprite = arg.catPangImgList[(int)Defines.ESpecailBlockType.CatPang3];
                                 cat.attackPower += 300;
                                 cat.attackDelay -= 1f;
@@ -173,12 +184,34 @@ public class UIChoice : UIBase
                                     alarmText = $"CatPang3 Is Max"
                                 });
 
+                                arg.totScore.Value += _selectInfo.scoreCost;
+
                                 break;
                             }
 
                             arg.power.Value = arg.attackCatList.First().attackPower;
                             arg.delay.Value = arg.attackCatList.First().attackDelay;
                         }
+                    }
+                    break;
+                case Defines.ESelect.Speed:
+                    {
+                        if (arg.attackCatList.First().attackSpeed >= arg.maxSpeed)
+                        {
+                            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                            {
+                                alarmText = $"Speed Is Max"
+                            });
+                            break;
+                        }
+
+                        foreach (var cat in arg.attackCatList)
+                        {
+                            cat.attackSpeed += _selectInfo.value;
+                        }
+
+                        arg.totScore.Value -= _selectInfo.scoreCost;
+                        arg.speed.Value = arg.attackCatList.First().attackSpeed;
                     }
                     break;
             }

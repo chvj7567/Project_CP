@@ -54,5 +54,13 @@
   {
     "stringID": "14",
 	"value": "Select"
+  },
+  {
+    "stringID": "15",
+    "value": "Speed\n{0} Up"
+  },
+  {
+    "stringID": "16",
+    "value": "Speed\n{0}"
   }
 ]
