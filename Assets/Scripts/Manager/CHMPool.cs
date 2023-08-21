@@ -77,7 +77,7 @@ public class CHMPool
 
         if (Application.isPlaying)
         {
-            //Object.DontDestroyOnLoad(rootObject);
+            Object.DontDestroyOnLoad(rootObject);
         }
     }
 

@@ -158,6 +158,17 @@ public static class CHMAssetBundle
                 path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.png";
             }
         }
+        else if (typeof(T) == typeof(AudioClip))
+        {
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.wav";
+
+            T temp = AssetDatabase.LoadAssetAtPath<T>(path);
+
+            if (temp == null)
+            {
+                path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.mp3";
+            }
+        }
 
         T original = AssetDatabase.LoadAssetAtPath<T>(path);
 

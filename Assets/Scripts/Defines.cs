@@ -49,6 +49,7 @@ public class Defines
         Decal,
         Scriptable,
         Sprite,
+        Sound,
 
         Max
     }
@@ -108,6 +109,18 @@ public class Defines
         AddCat,
         CatPangUpgrade,
         Speed,
+
+        Max
+    }
+
+    public enum ESound
+    {
+        None = -1,
+
+        Bgm,
+        CryingCat,
+        Gold,
+        Button,
 
         Max
     }

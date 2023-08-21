@@ -92,6 +92,7 @@ public class Game : MonoBehaviour
             {
                 Time.timeScale = 1;
                 CHInstantiateButton.ResetBlockDict();
+                CHMMain.Pool.Clear();
                 SceneManager.LoadScene(0);
             });
         }
@@ -154,6 +155,8 @@ public class Game : MonoBehaviour
         await UpdateMap(true);
 
         AfterDrag(null, null);
+
+        CHMMain.Sound.Play(Defines.ESound.Bgm);
     }
 
     private void Update()
@@ -348,6 +351,7 @@ public class Game : MonoBehaviour
                             rect.anchoredPosition = block.rectTransform.anchoredPosition;
                             rect.DOAnchorPosY(rect.anchoredPosition.y + Random.Range(30f, 50f), .5f).OnComplete(() =>
                             {
+                                CHMMain.Sound.Play(Defines.ESound.Gold);
                                 rect.DOAnchorPos(goldImg.rectTransform.anchoredPosition, Random.Range(.2f, 1f)).OnComplete(() =>
                                 {
                                     CHMMain.Resource.Destroy(gold);

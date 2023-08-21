@@ -19,11 +19,6 @@ public class CHMResource
 #endif
     }
 
-    /*public void LoadJson(Defines.EJsonType _jsonType, Action<TextAsset> _callback)
-    {
-        LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_jsonType.ToString()}", _callback);
-    }*/
-
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
     {
         Action<T> _callbackTemp = original =>
@@ -63,6 +58,11 @@ public class CHMResource
     public void LoadSprite(Defines.ESpecailBlockType _spriteType, Action<Sprite> _callback)
     {
         LoadAsset<Sprite>($"{Defines.EResourceType.Sprite.ToString()}", $"{_spriteType.ToString()}", _callback);
+    }
+
+    public void LoadSound(Defines.ESound _soundType, Action<AudioClip> _callback)
+    {
+        LoadAsset<AudioClip>($"{Defines.EResourceType.Sound.ToString()}", $"{_soundType.ToString()}", _callback);
     }
 
     public void InstantiateUI(Defines.EUI _ui, Action<GameObject> _callback = null)

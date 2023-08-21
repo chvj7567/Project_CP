@@ -79,8 +79,11 @@ public class Monster : MonoBehaviour
     public void TakeDamage(int _damage)
     {
         curHp -= _damage;
+
+        CHMMain.Sound.Play(Defines.ESound.CryingCat);
         if (cryObj)
             cryObj.SetActive(true);
+
 
         gaugeBar.DOFillAmount((float)curHp / maxHp, .5f).OnComplete(() =>
         {

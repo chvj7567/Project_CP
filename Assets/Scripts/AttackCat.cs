@@ -72,7 +72,7 @@ public class AttackCat : MonoBehaviour
 
         var my2DPos = myRectTransform.anchoredPosition;
 
-        //attackImg.gameObject.GetOrAddComponent<CHPoolable>();
+        attackImg.gameObject.GetOrAddComponent<CHPoolable>();
         
         var attackImage = CHMMain.Resource.Instantiate(attackImg.gameObject, transform.parent);
         var rectTransform = attackImage.GetComponent<RectTransform>();
