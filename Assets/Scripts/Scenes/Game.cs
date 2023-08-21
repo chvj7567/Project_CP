@@ -13,6 +13,7 @@ public class Game : MonoBehaviour
 {
     const int MAX = 9;
 
+    [SerializeField] Image goldImg;
     [SerializeField] Image viewImg1;
     [SerializeField] Image viewImg2;
     [SerializeField] Button backBtn;
@@ -44,7 +45,8 @@ public class Game : MonoBehaviour
     [SerializeField] CHTMPro powerText;
     [SerializeField] CHTMPro delayText;
     [SerializeField] CHTMPro speedText;
-
+    [SerializeField] int selectScore;
+    [SerializeField] int selectCurScore;
     [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> oneTimeScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
@@ -213,27 +215,33 @@ public class Game : MonoBehaviour
 
         } while (isMatch == true);
 
-        if (totScore.Value > 0 && oneTimeScore.Value > 5 && gameOver.Value == false && selectTog.isOn)
-        {
-            CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
-            {
-                totScore = totScore,
-                power = power,
-                delay = attackDelay,
-                speed = attackSpeed,
-                attackCatList = spawner.GetAttackCatList(),
-                maxPower = maxPower,
-                minDealy = minDelay,
-                maxSpeed = maxSpeed,
-                catPangImgList = specialBlockSpriteList
-            });
-        }
-
         towerPoint.Add(oneTimeScore.Value);
         totScore.Value += oneTimeScore.Value;
         totScore.Value += bonusScore.Value;
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
+
+        if (totScore.Value > 0 && gameOver.Value == false && selectTog.isOn)
+        {
+            if (totScore.Value >= selectCurScore)
+            {
+                var temp = totScore.Value / selectScore;
+                selectCurScore = selectScore * temp;
+
+                CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
+                {
+                    totScore = totScore,
+                    power = power,
+                    delay = attackDelay,
+                    speed = attackSpeed,
+                    attackCatList = spawner.GetAttackCatList(),
+                    maxPower = maxPower,
+                    minDealy = minDelay,
+                    maxSpeed = maxSpeed,
+                    catPangImgList = specialBlockSpriteList
+                });
+            }
+        }
 
         await Task.Delay((int)(delay * 1000));
 
@@ -284,7 +292,8 @@ public class Game : MonoBehaviour
 
             foreach (var block in boardArr)
             {
-                if (block == null) continue;
+                if (block == null)
+                    continue;
 
                 if (block.row == i)
                 {
@@ -301,7 +310,8 @@ public class Game : MonoBehaviour
 
             foreach (var block in boardArr)
             {
-                if (block == null) continue;
+                if (block == null)
+                    continue;
 
                 if (block.col == i)
                 {
@@ -323,11 +333,29 @@ public class Game : MonoBehaviour
             for (int j = 0; j < MAX; ++j)
             {
                 var block = boardArr[i, j];
-                if (block == null) continue;
+                if (block == null)
+                    continue;
 
                 // 없어져야 할 블럭
                 if (block.state == Defines.EState.Match)
                 {
+                    var gold = CHMMain.Resource.Instantiate(goldImg.gameObject, transform.parent);
+                    if (gold != null)
+                    {
+                        var rect = gold.GetComponent<RectTransform>();
+                        if (rect != null)
+                        {
+                            rect.anchoredPosition = block.rectTransform.anchoredPosition;
+                            rect.DOAnchorPosY(rect.anchoredPosition.y + Random.Range(30f, 50f), .5f).OnComplete(() =>
+                            {
+                                rect.DOAnchorPos(goldImg.rectTransform.anchoredPosition, Random.Range(.2f, 1f)).OnComplete(() =>
+                                {
+                                    CHMMain.Resource.Destroy(gold);
+                                });
+                            });
+                        }
+                    }
+
                     oneTimeScore.Value += 1;
 
                     // 아이템이 연달아 터지는 경우
@@ -374,12 +402,24 @@ public class Game : MonoBehaviour
                         if (block.hScore >= 3 && block.vScore >= 3)
                         {
                             createBoomDelay = true;
-                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
-                            block.state = Defines.EState.Normal;
-                            block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
-                            block.ResetScore();
-                            block.SetOriginPos();
-                            block.rectTransform.DOScale(1f, delay);
+                            if (block.hScore > 3 || block.vScore > 3)
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
+                                block.ResetScore();
+                                block.SetOriginPos();
+                                block.rectTransform.DOScale(1f, delay);
+                            }
+                            else
+                            {
+                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
+                                block.state = Defines.EState.Normal;
+                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
+                                block.ResetScore();
+                                block.SetOriginPos();
+                                block.rectTransform.DOScale(1f, delay);
+                            }
 
                             for (int idx = 1; idx < MAX; ++idx)
                             {
@@ -495,7 +535,7 @@ public class Game : MonoBehaviour
                                     boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                     boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
                                 }
-                                else if (tempScore == 5)
+                                else if (tempScore >= 5 && tempScore <= 6)
                                 {
                                     boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                     boardArr[tempRow, tempCol].state = Defines.EState.Normal;
@@ -523,7 +563,7 @@ public class Game : MonoBehaviour
                                 block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                 block.rectTransform.DOScale(1f, delay);
                             }
-                            else if (tempScore == 5)
+                            else if (tempScore >= 5 && tempScore <= 6)
                             {
                                 block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                 block.state = Defines.EState.Normal;
@@ -563,7 +603,7 @@ public class Game : MonoBehaviour
                                     boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                     boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
                                 }
-                                else if (tempScore == 5)
+                                else if (tempScore >= 5 && tempScore <= 6)
                                 {
                                     boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                     boardArr[tempRow, tempCol].state = Defines.EState.Normal;
@@ -591,7 +631,7 @@ public class Game : MonoBehaviour
                                 block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                 block.rectTransform.DOScale(1f, delay);
                             }
-                            else if (tempScore == 5)
+                            else if (tempScore >= 5 && tempScore <= 6)
                             {
                                 block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                 block.state = Defines.EState.Normal;
