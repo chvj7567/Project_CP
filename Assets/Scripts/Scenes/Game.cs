@@ -36,10 +36,10 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] int moveIndex1 = 0;
     [SerializeField, ReadOnly] int moveIndex2 = 0;
 
-    [SerializeField] int maxPower = 999;
-    [SerializeField] float minDelay = 1f;
-    [SerializeField] float maxSpeed = 10f;
-    [SerializeField] CHTMPro totScoreText;
+    [SerializeField] int maxPower = 99999;
+    [SerializeField] float minDelay = .1f;
+    [SerializeField] float maxSpeed = 30f;
+    [SerializeField] CHTMPro curScoreText;
     [SerializeField] CHTMPro oneTimeScoreText;
     [SerializeField] CHTMPro killCountText;
     [SerializeField] CHTMPro powerText;
@@ -47,6 +47,7 @@ public class Game : MonoBehaviour
     [SerializeField] CHTMPro speedText;
     [SerializeField] int selectScore;
     [SerializeField] int selectCurScore;
+    [SerializeField, ReadOnly] ReactiveProperty<int> curScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> oneTimeScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
@@ -97,9 +98,9 @@ public class Game : MonoBehaviour
             });
         }
 
-        totScore.Subscribe(_ =>
+        curScore.Subscribe(_ =>
         {
-            totScoreText.SetText(_);
+            curScoreText.SetText(_);
         });
 
         oneTimeScore.Subscribe(_ =>
@@ -221,6 +222,8 @@ public class Game : MonoBehaviour
         towerPoint.Add(oneTimeScore.Value);
         totScore.Value += oneTimeScore.Value;
         totScore.Value += bonusScore.Value;
+        curScore.Value += oneTimeScore.Value;
+        curScore.Value += bonusScore.Value;
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
 
@@ -228,12 +231,12 @@ public class Game : MonoBehaviour
         {
             if (totScore.Value >= selectCurScore)
             {
-                var temp = totScore.Value / selectScore;
+                var temp = totScore.Value / selectScore + 1;
                 selectCurScore = selectScore * temp;
 
                 CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
                 {
-                    totScore = totScore,
+                    curScore = curScore,
                     power = power,
                     delay = attackDelay,
                     speed = attackSpeed,
@@ -528,6 +531,9 @@ public class Game : MonoBehaviour
                         {
                             int tempRow = i;
                             int tempCol = j + idx;
+                            if (boardArr[tempRow, tempCol] == null)
+                                continue;
+
                             if (boardArr[tempRow, tempCol].index == moveIndex1 ||
                                 boardArr[tempRow, tempCol].index == moveIndex2)
                             {
@@ -595,6 +601,9 @@ public class Game : MonoBehaviour
                         {
                             int tempRow = i + idx;
                             int tempCol = j;
+
+                            if (boardArr[tempRow, tempCol] == null)
+                                continue;
 
                             if (boardArr[tempRow, tempCol].index == moveIndex1 ||
                                 boardArr[tempRow, tempCol].index == moveIndex2)

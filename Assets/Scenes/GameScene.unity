@@ -214,9 +214,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 298313568}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!1 &158659798
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,9 +307,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 749372014}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!1 &167258817
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +466,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &253808581
 GameObject:
@@ -672,8 +672,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.9, y: 28.1}
-  m_SizeDelta: {x: 249.445, y: 32.7754}
+  m_AnchoredPosition: {x: -0.39997673, y: 15.100018}
+  m_SizeDelta: {x: 117.5865, y: 24.0814}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &313412097
 MonoBehaviour:
@@ -906,17 +906,19 @@ MonoBehaviour:
   isAni: 0
   moveIndex1: 0
   moveIndex2: 0
-  maxPower: 999
-  minDelay: 1
-  maxSpeed: 10
-  totScoreText: {fileID: 2051093205}
+  maxPower: 99999
+  minDelay: 0.5
+  maxSpeed: 30
+  curScoreText: {fileID: 2051093205}
   oneTimeScoreText: {fileID: 1926604862}
   killCountText: {fileID: 1200695279}
   powerText: {fileID: 1305728700}
   delayText: {fileID: 2133900842}
   speedText: {fileID: 643338127}
-  selectScore: 50
-  selectCurScore: 50
+  selectScore: 30
+  selectCurScore: 30
+  curScore:
+    value: 0
   totScore:
     value: 0
   oneTimeScore:
@@ -1064,8 +1066,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.899951, y: 28.099993}
-  m_SizeDelta: {x: 249.445, y: 32.7754}
+  m_AnchoredPosition: {x: -0.4, y: 15.1}
+  m_SizeDelta: {x: 117.5865, y: 24.0814}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &395370465
 MonoBehaviour:
@@ -1120,9 +1122,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 1527805540}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!224 &506072368
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1462,9 +1464,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 2030532717}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!1 &638039626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2051,7 +2053,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &884326217
 GameObject:
@@ -2257,9 +2259,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 2078561660}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!114 &1020021374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2273,13 +2275,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 379770515}
+  spawner: {fileID: 1208139740}
   rectTransform: {fileID: 2118636111}
   gaugeBarBack: {fileID: 313412097}
   gaugeBar: {fileID: 395370465}
   moveObj: {fileID: 781107437}
   cryObj: {fileID: 225965096}
   maxHp: 100
-  destX: 110
+  destX: 64
   curHp: 100
 --- !u!1 &1090470356
 GameObject:
@@ -2564,6 +2567,81 @@ RectTransform:
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 1138}
   m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1146541782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1146541785}
+  - component: {fileID: 1146541784}
+  - component: {fileID: 1146541783}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1146541783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146541782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1146541784
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146541782}
+  m_CullTransparentMesh: 1
+--- !u!224 &1146541785
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146541782}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1975192478}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1200695277
 GameObject:
@@ -2910,11 +2988,15 @@ MonoBehaviour:
   - {fileID: 1938412196}
   - {fileID: 166859352}
   - {fileID: 606442808}
-  spawnTime: 30
-  firstHp: 100
-  firstTime: 60
+  spawnTime: 7
+  firstHp: 10
+  firstTime: 50
   OnSpawn:
     value: 0
+  increaseHp: 10
+  decreaseTime: 0
+  index: 0
+  curHp: 0
 --- !u!224 &1263680726
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3175,9 +3257,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 386755761}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!1 &1468065043
 GameObject:
   m_ObjectHideFlags: 0
@@ -3790,6 +3872,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1668367968}
   m_CullTransparentMesh: 1
+--- !u!1 &1709301463
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1709301464}
+  - component: {fileID: 1709301466}
+  - component: {fileID: 1709301465}
+  m_Layer: 5
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1709301464
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709301463}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1975192478}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1709301465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709301463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300092, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1709301466
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709301463}
+  m_CullTransparentMesh: 1
 --- !u!1 &1793862281
 GameObject:
   m_ObjectHideFlags: 0
@@ -4216,9 +4373,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 158659800}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!224 &1939162239
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4254,9 +4411,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 1445003285}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!1 &1969956051
 GameObject:
   m_ObjectHideFlags: 0
@@ -4324,9 +4481,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1975192478}
   - component: {fileID: 1975192480}
-  - component: {fileID: 1975192479}
   - component: {fileID: 1975192481}
   - component: {fileID: 1975192482}
+  - component: {fileID: 1975192483}
   m_Layer: 5
   m_Name: Block
   m_TagString: Untagged
@@ -4344,7 +4501,9 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1709301464}
+  - {fileID: 1146541785}
   m_Father: {fileID: 2089328443}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4353,36 +4512,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 332}
   m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1975192479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1975192477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1196e728cbc6c25429f25431acabb4d1, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1975192480
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4431,7 +4560,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1975192479}
+  m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -4458,9 +4587,21 @@ MonoBehaviour:
   state: -1
   hScore: 0
   vScore: 0
-  img: {fileID: 1975192479}
+  img: {fileID: 1146541783}
   rectTransform: {fileID: 1975192478}
   originPos: {x: 0, y: 0}
+--- !u!114 &1975192483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975192477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4c41a1fd96324d468e00d7f32b0c217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2030532715
 GameObject:
   m_ObjectHideFlags: 0
@@ -4549,7 +4690,7 @@ GameObject:
   - component: {fileID: 2051093203}
   - component: {fileID: 2051093205}
   m_Layer: 5
-  m_Name: TotScoreText
+  m_Name: CurScoreText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4569,9 +4710,9 @@ RectTransform:
   m_Father: {fileID: 2089328443}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -254.726, y: 319}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -254.726, y: -819}
   m_SizeDelta: {x: 325.891, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2051093203
@@ -4743,7 +4884,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Game Over
+  m_text: 'Game Over
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9b54ea3303e1f7442ac70dd3df5860c7, type: 2}
   m_sharedMaterial: {fileID: 3606320079389574382, guid: 9b54ea3303e1f7442ac70dd3df5860c7, type: 2}
@@ -4835,9 +4978,9 @@ MonoBehaviour:
   myRectTransform: {fileID: 0}
   attackImg: {fileID: 2075775708}
   targetList: []
-  attackDelay: 5
+  attackDelay: 3
   attackPower: 20
-  attackSpeed: 1
+  attackSpeed: 5
 --- !u!1 &2075775706
 GameObject:
   m_ObjectHideFlags: 0
@@ -5139,8 +5282,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 513.00006, y: 824.0001}
-  m_SizeDelta: {x: 50, y: 50}
+  m_AnchoredPosition: {x: 567.7222, y: 850.4177}
+  m_SizeDelta: {x: 28.111, y: 39.433}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2133900840
 GameObject:

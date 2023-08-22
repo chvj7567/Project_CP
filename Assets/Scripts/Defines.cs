@@ -118,7 +118,6 @@ public class Defines
         None = -1,
 
         Bgm,
-        CryingCat,
         Gold,
         Button,
 

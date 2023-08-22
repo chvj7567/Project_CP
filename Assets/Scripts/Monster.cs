@@ -11,6 +11,7 @@ using UniRx;
 public class Monster : MonoBehaviour
 {
     [SerializeField] Game game;
+    [SerializeField] Spawner spawner;
     [SerializeField] public RectTransform rectTransform;
     [SerializeField] Image gaugeBarBack;
     [SerializeField] Image gaugeBar;
@@ -80,10 +81,8 @@ public class Monster : MonoBehaviour
     {
         curHp -= _damage;
 
-        CHMMain.Sound.Play(Defines.ESound.CryingCat);
         if (cryObj)
             cryObj.SetActive(true);
-
 
         gaugeBar.DOFillAmount((float)curHp / maxHp, .5f).OnComplete(() =>
         {
@@ -95,6 +94,9 @@ public class Monster : MonoBehaviour
                 isDie = true;
                 transform.DOScale(Vector3.zero, 1f);
                 game.killCount.Value += 1;
+
+                //spawner.Spawn2();
+                CHMMain.Resource.Destroy(gameObject);
             }
         });
 

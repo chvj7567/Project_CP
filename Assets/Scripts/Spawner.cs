@@ -11,13 +11,11 @@ public class Spawner : MonoBehaviour
     [SerializeField] float spawnTime = 15f;
     [SerializeField] int firstHp = 100;
     [SerializeField] float firstTime = 60f;
-    [SerializeField, ReadOnly] public ReactiveProperty<bool> OnSpawn = new ReactiveProperty<bool>();
-
-    int index = 0;
-    int increaseHp = 100;
-    float decreaseTime = -0.5f;
-
-    int curHp = 0;
+    [SerializeField] public ReactiveProperty<bool> OnSpawn = new ReactiveProperty<bool>();
+    [SerializeField] int increaseHp = 10;
+    [SerializeField] float decreaseTime = 0f;
+    [SerializeField, ReadOnly] int index = 0;
+    [SerializeField, ReadOnly] int curHp = 0;
 
     bool isSpawn = false;
     IEnumerator cor;
@@ -52,6 +50,7 @@ public class Spawner : MonoBehaviour
         });
 
         StartCoroutine(cor);
+        //Spawn2();
     }
 
     IEnumerator Spawn()
@@ -94,6 +93,42 @@ public class Spawner : MonoBehaviour
                 }
 
                 yield return new WaitForSeconds(spawnTime);
+            }
+        }
+    }
+
+    public void Spawn2()
+    {
+        var copyObj = CHMMain.Resource.Instantiate(spawnObj, spawnParent);
+        if (copyObj != null)
+        {
+            copyObj.SetActive(true);
+            var copyMonster = copyObj.GetComponent<Monster>();
+            if (copyMonster != null)
+            {
+                var pos = copyMonster.rectTransform.anchoredPosition;
+                copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y));
+
+                if (index >= 100)
+                {
+                    curHp *= 2;
+                    copyMonster.SetHp(curHp);
+                    spawnTime = 10f;
+                }
+                else
+                {
+                    curHp = firstHp + (index * increaseHp);
+                    copyMonster.SetHp(curHp);
+                }
+
+                copyMonster.Move(firstTime + (index * decreaseTime));
+
+                for (int i = 0; i < attackCatList.Count; ++i)
+                {
+                    attackCatList[i].SetTarget(copyMonster);
+                }
+
+                ++index;
             }
         }
     }

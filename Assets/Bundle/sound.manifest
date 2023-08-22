@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1443873770
+CRC: 3677581738
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1bf56954a7bad7aa1915cf719d20f30e
+    Hash: b20a4e73079df4a6bbb22aa9c2c9c0bb
   TypeTreeHash:
     serializedVersion: 2
     Hash: 9a2ca7bdbd1871f7131daf57de908e0c
@@ -14,7 +14,6 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/AssetBundleResources/sound/Bgm.wav
-- Assets/AssetBundleResources/sound/CryingCat.mp3
-- Assets/AssetBundleResources/sound/Gold.mp3
 - Assets/AssetBundleResources/sound/Button.mp3
+- Assets/AssetBundleResources/sound/Gold.mp3
 Dependencies: []

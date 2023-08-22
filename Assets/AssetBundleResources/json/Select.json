@@ -109,14 +109,14 @@
 	"titleStr": "9",
     "value": "0",
 	"frequency": "1000",
-	"scoreCost": "300"
+	"scoreCost": "200"
   },
   {
     "eSelect": "4",
 	"titleStr": "10",
     "value": "0",
 	"frequency": "1000",
-	"scoreCost": "1000"
+	"scoreCost": "500"
   },
   {
     "eSelect": "5",
