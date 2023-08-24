@@ -32,7 +32,11 @@ public class Game : MonoBehaviour
     [ReadOnly] public bool isDrag = false;
     [ReadOnly] public bool isAni = false;
     [ReadOnly] bool isMatch = false;
-    
+
+    [SerializeField, ReadOnly] float time;
+    [SerializeField, ReadOnly] int canMatchRow = -1;
+    [SerializeField, ReadOnly] int canMatchCol = -1;
+
     [SerializeField, ReadOnly] int moveIndex1 = 0;
     [SerializeField, ReadOnly] int moveIndex2 = 0;
 
@@ -66,6 +70,9 @@ public class Game : MonoBehaviour
 
     List<Sprite> normalBlockSpriteList = new List<Sprite>();
     List<Sprite> specialBlockSpriteList = new List<Sprite>();
+
+    bool createMap = false;
+    bool oneTimeAlarm = false;
 
     async void Start()
     {
@@ -153,16 +160,16 @@ public class Game : MonoBehaviour
 
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
-        await UpdateMap(true);
+        await UpdateMap();
 
-        AfterDrag(null, null);
+        await AfterDrag(null, null);
 
         CHMMain.Sound.Play(Defines.ESound.Bgm);
     }
 
-    private void Update()
+    private async void Update()
     {
-        if (isAni == true)
+        /*if (isAni == true)
         {
             viewImg1.color = Color.red;
         }
@@ -178,10 +185,31 @@ public class Game : MonoBehaviour
         else
         {
             viewImg2.color = Color.green;
+        }*/
+
+        if (isAni == true)
+        {
+            time = Time.time;
+        }
+        else
+        {
+            // 5초 동안 드래그를 안하면 알려줌
+            if (time + 5 < Time.time && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
+            {
+                oneTimeAlarm = true;
+
+                boardArr[canMatchRow, canMatchCol].transform.DOScale(1.5f, 0.25f).OnComplete(() =>
+                {
+                    boardArr[canMatchRow, canMatchCol].transform.DOScale(1f, 0.25f);
+                });
+
+                await Task.Delay(3000);
+                oneTimeAlarm = false;
+            }
         }
     }
 
-    public async void AfterDrag(Block block1, Block block2)
+    public async Task AfterDrag(Block block1, Block block2)
     {
         isAni = true;
         if (block1) moveIndex1 = block1.index;
@@ -252,41 +280,138 @@ public class Game : MonoBehaviour
         await Task.Delay((int)(delay * 1000));
 
         isAni = false;
+
+        if (CanMatch() == false)
+        {
+            await UpdateMap(true);
+        }
     }
 
-    async Task UpdateMap(bool first = false)
+    async Task UpdateMap(bool reupdate = false)
     // 맵생성
     {
-        foreach (var block in boardArr)
+        do
         {
-            if (block == null) continue;
-
-            if (first)
+            foreach (var block in boardArr)
             {
-                float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
-                block.originPos.x -= moveDis;
-                block.SetOriginPos();
-                block.rectTransform.DOScale(1f, delay);
-            }
+                if (block == null) continue;
 
-            if (first == true || block.state == Defines.EState.Match)
-            {
-                var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
-
-                block.SetNormalType((Defines.ENormalBlockType)random);
-                block.state = Defines.EState.Normal;
-                block.img.sprite = normalBlockSpriteList[random];
-
-                if (first == false)
+                if (createMap == false)
                 {
-                    block.ResetScore();
+                    float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
+                    block.originPos.x -= moveDis;
                     block.SetOriginPos();
                     block.rectTransform.DOScale(1f, delay);
+                }
+
+                if (createMap == false || reupdate == true || block.state == Defines.EState.Match)
+                {
+                    var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+
+                    block.SetNormalType((Defines.ENormalBlockType)random);
+                    block.state = Defines.EState.Normal;
+                    block.img.sprite = normalBlockSpriteList[random];
+
+                    if (createMap == true || reupdate == true)
+                    {
+                        block.ResetScore();
+                        block.SetOriginPos();
+                        block.rectTransform.DOScale(1f, delay);
+                    }
+                }
+            }
+
+            createMap = true;
+
+            await Task.Delay((int)(delay * 1000));
+
+            reupdate = CanMatch() == false;
+
+        } while (reupdate == true);
+
+        isMatch = false;
+    }
+
+    bool CanMatch()
+    // Match가 가능한 맵인지 검사
+    {
+        isMatch = false;
+
+        for (int i = 0; i < MAX; ++i)
+        {
+            for (int j = 0; j < MAX; ++j)
+            {
+                if (boardArr[i, j] == null)
+                    continue;
+
+                var curBlock = boardArr[i, j];
+                if (curBlock.GetSpecailType() != Defines.ESpecailBlockType.None)
+                {
+                    canMatchRow = curBlock.row;
+                    canMatchCol = curBlock.col;
+                    return true;
+                }
+
+                var upBlock = IsValidIndex(i - 1, j) == true ? boardArr[i - 1, j] : null;
+                var downBlock = IsValidIndex(i + 1, j) == true ? boardArr[i + 1, j] : null;
+                var leftBlock = IsValidIndex(i, j - 1) == true ? boardArr[i, j - 1] : null;
+                var rightBlock = IsValidIndex(i, j + 1) == true ? boardArr[i, j + 1] : null;
+
+                if (upBlock != null)
+                {
+                    ChangeBlock(curBlock, upBlock);
+                    CheckMap();
+                    ChangeBlock(curBlock, upBlock);
+                    if (isMatch == true)
+                    {
+                        canMatchRow = curBlock.row;
+                        canMatchCol = curBlock.col;
+                        return true;
+                    }
+                }
+
+                if (downBlock != null)
+                {
+                    ChangeBlock(curBlock, downBlock);
+                    CheckMap();
+                    ChangeBlock(curBlock, downBlock);
+                    if (isMatch == true)
+                    {
+                        canMatchRow = curBlock.row;
+                        canMatchCol = curBlock.col;
+                        return true;
+                    }
+                }
+
+                if (leftBlock != null)
+                {
+                    ChangeBlock(curBlock, leftBlock);
+                    CheckMap();
+                    ChangeBlock(curBlock, leftBlock);
+                    if (isMatch == true)
+                    {
+                        canMatchRow = curBlock.row;
+                        canMatchCol = curBlock.col;
+                        return true;
+                    }
+                }
+
+                if (rightBlock != null)
+                {
+                    ChangeBlock(curBlock, rightBlock);
+                    CheckMap();
+                    ChangeBlock(curBlock, rightBlock);
+                    if (isMatch == true)
+                    {
+                        canMatchRow = curBlock.row;
+                        canMatchCol = curBlock.col;
+                        return true;
+                    }
                 }
             }
         }
 
-        await Task.Delay((int)(delay * 1000));
+        return false;
     }
 
     void CheckMap()
@@ -670,7 +795,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    void CheckMatch(List<Block> blockList, Defines.EDirection direction)
+    void CheckMatch(List<Block> blockList, Defines.EDirection direction, bool test = false)
     {
         Defines.ENormalBlockType matchType = Defines.ENormalBlockType.None;
         List<int> tempIndex = new List<int>();
@@ -691,14 +816,19 @@ public class Game : MonoBehaviour
 
                 if (matchCount >= 3)
                 {
-                    int temp = i;
-                    for (int j = 0; j < matchCount; ++j)
+                    if (test == false)
                     {
-                        var block = blockList[temp--];
-                        block.SetScore(matchCount, direction);
-                        block.state = Defines.EState.Match;
-                        isMatch = true;
+                        int temp = i;
+                        for (int j = 0; j < matchCount; ++j)
+                        {
+                            var block = blockList[temp--];
+                            block.SetScore(matchCount, direction);
+                            block.state = Defines.EState.Match;
+                            
+                        }
                     }
+
+                    isMatch = true;
                 }
             }
             else
