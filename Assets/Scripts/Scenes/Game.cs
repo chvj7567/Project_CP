@@ -248,10 +248,7 @@ public class Game : MonoBehaviour
             first = true;
 
             await RemoveMatchBlock();
-            if (isMatch == true)
-            {
-                await DownBlock();
-            }
+            await DownBlock();
             await UpdateMap();
             CheckMap();
 
@@ -287,14 +284,14 @@ public class Game : MonoBehaviour
             }
         }
 
+        /*if (CanMatch() == false)
+        {
+            await UpdateMap(true);
+        }*/
+
         await Task.Delay((int)(delay * 1000));
 
         isAni = false;
-
-        if (CanMatch() == false)
-        {
-            await UpdateMap(true);
-        }
     }
 
     async Task UpdateMap(bool reupdate = false)
@@ -509,7 +506,7 @@ public class Game : MonoBehaviour
                             {
                                 isSpecailType = true;
                                 bonusScore.Value += 10;
-                                Boom1(block, false);
+                                await Boom1(block, false);
                                 i = -1;
                             }
                             break;
@@ -517,7 +514,7 @@ public class Game : MonoBehaviour
                             {
                                 isSpecailType = true;
                                 bonusScore.Value += 20;
-                                Boom2(block, false);
+                                await Boom2(block, false);
                                 i = -1;
                             }
                             break;
@@ -525,7 +522,7 @@ public class Game : MonoBehaviour
                             {
                                 isSpecailType = true;
                                 bonusScore.Value += 30;
-                                BoomAll(block, false);
+                                await BoomAll(block, false);
                                 i = -1;
                             }
                             break;
@@ -538,6 +535,7 @@ public class Game : MonoBehaviour
 
                     int row = i;
                     int col = j;
+
                     block.rectTransform.DOScale(0f, delay).OnComplete(() =>
                     {
                         // 블럭 제거 후 + 매치 특수 블럭 생성
@@ -895,10 +893,10 @@ public class Game : MonoBehaviour
         return row >= 0 && row < MAX && column >= 0 && column < MAX;
     }
 
-    public void BoomAll(Block block, bool ani = true)
+    public async Task BoomAll(Block block, bool ani = true)
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.None);
+        block.SetNormalType(Defines.ENormalBlockType.Max);
         block.state = Defines.EState.Match;
 
         for (int i = 0; i < MAX; ++i)
@@ -917,14 +915,14 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            AfterDrag(null, null);
+            await AfterDrag(null, null);
         }
     }
 
-    public void Boom1(Block block, bool ani = true)
+    public async Task Boom1(Block block, bool ani = true)
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.None);
+        block.SetNormalType(Defines.ENormalBlockType.Max);
         block.state = Defines.EState.Match;
 
         if (IsValidIndex(block.row - 1, block.col - 1))
@@ -977,14 +975,14 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            AfterDrag(null, null);
+            await AfterDrag(null, null);
         }
     }
 
-    public void Boom2(Block block, bool ani = true)
+    public async Task Boom2(Block block, bool ani = true)
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.None);
+        block.SetNormalType(Defines.ENormalBlockType.Max);
         block.state = Defines.EState.Match;
 
         for (int i = 0; i < MAX; ++i)
@@ -1007,7 +1005,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            AfterDrag(null, null);
+            await AfterDrag(null, null);
         }
     }
 }

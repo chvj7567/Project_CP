@@ -901,9 +901,12 @@ MonoBehaviour:
   parent: {fileID: 2089328443}
   instBtn: {fileID: 2089328444}
   spawner: {fileID: 1208139740}
-  delay: 0.3
+  delay: 0.35
   isDrag: 0
   isAni: 0
+  time: 0
+  canMatchRow: -1
+  canMatchCol: -1
   moveIndex1: 0
   moveIndex2: 0
   maxPower: 99999

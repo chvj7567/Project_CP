@@ -40,20 +40,20 @@ public class Block : MonoBehaviour
     {
         originPos = rectTransform.anchoredPosition;
 
-        btn.OnClickAsObservable().Subscribe(_ =>
+        btn.OnClickAsObservable().Subscribe(async _ =>
         {
             if (game.isDrag == false && game.isAni == false)
             {
                 switch (specailType)
                 {
                     case Defines.ESpecailBlockType.CatPang1:
-                        game.Boom1(this);
+                        await game.Boom1(this);
                         break;
                     case Defines.ESpecailBlockType.CatPang2:
-                        game.Boom2(this);
+                        await game.Boom2(this);
                         break;
                     case Defines.ESpecailBlockType.CatPang3:
-                        game.BoomAll(this);
+                        await game.BoomAll(this);
                         break;
                 }
             }
