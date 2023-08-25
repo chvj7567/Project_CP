@@ -360,7 +360,7 @@ public class Game : MonoBehaviour
                 if (upBlock != null)
                 {
                     ChangeBlock(curBlock, upBlock);
-                    CheckMap();
+                    CheckMap(true);
                     ChangeBlock(curBlock, upBlock);
                     if (isMatch == true)
                     {
@@ -373,7 +373,7 @@ public class Game : MonoBehaviour
                 if (downBlock != null)
                 {
                     ChangeBlock(curBlock, downBlock);
-                    CheckMap();
+                    CheckMap(true);
                     ChangeBlock(curBlock, downBlock);
                     if (isMatch == true)
                     {
@@ -386,7 +386,7 @@ public class Game : MonoBehaviour
                 if (leftBlock != null)
                 {
                     ChangeBlock(curBlock, leftBlock);
-                    CheckMap();
+                    CheckMap(true);
                     ChangeBlock(curBlock, leftBlock);
                     if (isMatch == true)
                     {
@@ -399,7 +399,7 @@ public class Game : MonoBehaviour
                 if (rightBlock != null)
                 {
                     ChangeBlock(curBlock, rightBlock);
-                    CheckMap();
+                    CheckMap(true);
                     ChangeBlock(curBlock, rightBlock);
                     if (isMatch == true)
                     {
@@ -414,7 +414,7 @@ public class Game : MonoBehaviour
         return false;
     }
 
-    void CheckMap()
+    void CheckMap(bool _test = false)
     // 3Match 블럭 제거
     {
         for (int i = 0; i < boardSize; ++i)
@@ -432,7 +432,7 @@ public class Game : MonoBehaviour
                 }
             }
 
-            CheckMatch(hBlockList, Defines.EDirection.Horizontal);
+            CheckMatch(hBlockList, Defines.EDirection.Horizontal, _test);
         }
 
         for (int i = 0; i < boardSize; ++i)
@@ -450,7 +450,7 @@ public class Game : MonoBehaviour
                 }
             }
 
-            CheckMatch(vBlockList, Defines.EDirection.Vertical);
+            CheckMatch(vBlockList, Defines.EDirection.Vertical, _test);
         }
     }
 
