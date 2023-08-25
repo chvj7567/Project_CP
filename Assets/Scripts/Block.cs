@@ -42,6 +42,9 @@ public class Block : MonoBehaviour
 
         btn.OnClickAsObservable().Subscribe(async _ =>
         {
+            if (state == Defines.EState.Wall)
+                return;
+
             if (game.isDrag == false && game.isAni == false)
             {
                 switch (specailType)
@@ -61,7 +64,8 @@ public class Block : MonoBehaviour
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
         {
-            if (game.isDrag == true) return;
+            if (game.isDrag == true || state == Defines.EState.Wall)
+                return;
 
             game.isDrag = true;
         });
@@ -71,11 +75,12 @@ public class Block : MonoBehaviour
             // 있어야 BeginDrag, EndDrag 작동함
         });
 
-        btn.OnEndDragAsObservable().Subscribe(_ =>
+        btn.OnEndDragAsObservable().Subscribe(async _ =>
         {
             game.isDrag = false;
 
-            if (game.isAni == true) return;
+            if (game.isAni == true || state == Defines.EState.Wall)
+                return;
 
             Vector2 rectPosition;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(backRect, _.position, _.pressEventCamera, out rectPosition);
@@ -95,11 +100,14 @@ public class Block : MonoBehaviour
                         
                         if (ret.Item1 != null)
                         {
+                            if (ret.Item2.state == Defines.EState.Wall)
+                                break;
+
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
                             ret.Item1.DOAnchorPosX(originPos.x, game.delay);
 
                             ChangeBlock(ret.Item2);
-                            game.AfterDrag(this, ret.Item2);
+                            await game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;
@@ -111,11 +119,14 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
+                            if (ret.Item2.state == Defines.EState.Wall)
+                                break;
+
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
                             ret.Item1.DOAnchorPosY(originPos.y, game.delay);
 
                             ChangeBlock(ret.Item2);
-                            game.AfterDrag(this, ret.Item2);
+                            await game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;
@@ -127,11 +138,14 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
+                            if (ret.Item2.state == Defines.EState.Wall)
+                                break;
+
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
                             ret.Item1.DOAnchorPosX(originPos.x, game.delay);
 
                             ChangeBlock(ret.Item2);
-                            game.AfterDrag(this, ret.Item2);
+                            await game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;
@@ -143,11 +157,14 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
+                            if (ret.Item2.state == Defines.EState.Wall)
+                                break;
+
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
                             ret.Item1.DOAnchorPosY(originPos.y, game.delay);
 
                             ChangeBlock(ret.Item2);
-                            game.AfterDrag(this, ret.Item2);
+                            await game.AfterDrag(this, ret.Item2);
                         }
                     }
                     break;

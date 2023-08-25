@@ -85,6 +85,7 @@ public class Defines
 
         Normal = 0,
         Match = 1,
+        Wall = 2,
 
         Max
     }
