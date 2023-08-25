@@ -212,8 +212,18 @@ public class Game : MonoBehaviour
     public async Task AfterDrag(Block block1, Block block2)
     {
         isAni = true;
-        if (block1) moveIndex1 = block1.index;
-        if (block2) moveIndex2 = block2.index;
+        if (block1 && block2)
+        {
+            moveIndex1 = block1.index;
+            moveIndex2 = block2.index;
+
+            if (block1.GetSpecailType() != Defines.ESpecailBlockType.None &&
+                block2.GetSpecailType() != Defines.ESpecailBlockType.None)
+            {
+                BoomAll(block1);
+                return;
+            }
+        }
 
         bool first = false;
 
@@ -534,24 +544,12 @@ public class Game : MonoBehaviour
                         if (block.hScore >= 3 && block.vScore >= 3)
                         {
                             createBoomDelay = true;
-                            if (block.hScore > 3 || block.vScore > 3)
-                            {
-                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
-                                block.ResetScore();
-                                block.SetOriginPos();
-                                block.rectTransform.DOScale(1f, delay);
-                            }
-                            else
-                            {
-                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
-                                block.ResetScore();
-                                block.SetOriginPos();
-                                block.rectTransform.DOScale(1f, delay);
-                            }
+                            block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
+                            block.state = Defines.EState.Normal;
+                            block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
+                            block.ResetScore();
+                            block.SetOriginPos();
+                            block.rectTransform.DOScale(1f, delay);
 
                             for (int idx = 1; idx < MAX; ++idx)
                             {
@@ -670,18 +668,11 @@ public class Game : MonoBehaviour
                                     boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                     boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
                                 }
-                                else if (tempScore >= 5 && tempScore <= 6)
+                                else if (tempScore >= 5)
                                 {
                                     boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                     boardArr[tempRow, tempCol].state = Defines.EState.Normal;
                                     boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
-                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
-                                }
-                                else
-                                {
-                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang3);
-                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
                                     boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
                                 }
                             }
@@ -698,18 +689,11 @@ public class Game : MonoBehaviour
                                 block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                 block.rectTransform.DOScale(1f, delay);
                             }
-                            else if (tempScore >= 5 && tempScore <= 6)
+                            else if (tempScore >= 5)
                             {
                                 block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                 block.state = Defines.EState.Normal;
                                 block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
-                                block.rectTransform.DOScale(1f, delay);
-                            }
-                            else
-                            {
-                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
                                 block.rectTransform.DOScale(1f, delay);
                             }
                         }
@@ -741,18 +725,11 @@ public class Game : MonoBehaviour
                                     boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                     boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
                                 }
-                                else if (tempScore >= 5 && tempScore <= 6)
+                                else if (tempScore >= 5)
                                 {
                                     boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                     boardArr[tempRow, tempCol].state = Defines.EState.Normal;
                                     boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
-                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
-                                }
-                                else
-                                {
-                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang3);
-                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
                                     boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
                                 }
                             }
@@ -769,18 +746,11 @@ public class Game : MonoBehaviour
                                 block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
                                 block.rectTransform.DOScale(1f, delay);
                             }
-                            else if (tempScore >= 5 && tempScore <= 6)
+                            else if (tempScore >= 5)
                             {
                                 block.SetSpecailType(Defines.ESpecailBlockType.CatPang2);
                                 block.state = Defines.EState.Normal;
                                 block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang2];
-                                block.rectTransform.DOScale(1f, delay);
-                            }
-                            else
-                            {
-                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang3);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang3];
                                 block.rectTransform.DOScale(1f, delay);
                             }
                         }
