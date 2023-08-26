@@ -23,7 +23,9 @@ public class Game : MonoBehaviour
     [SerializeField] float margin = 0f;
     [SerializeField, Range(1, MAX)] int boardSize = 1;
     [SerializeField] Transform parent;
-
+    [SerializeField] ReactiveProperty<int> boomAllChance = new ReactiveProperty<int>();
+    [SerializeField] Button boomAllBtn;
+    [SerializeField] CHTMPro boomAllChanceText;
     [SerializeField] CHInstantiateButton instBtn;
 
     [SerializeField] Spawner spawner;
@@ -71,6 +73,7 @@ public class Game : MonoBehaviour
 
     List<Sprite> normalBlockSpriteList = new List<Sprite>();
     List<Sprite> specialBlockSpriteList = new List<Sprite>();
+    public List<Sprite> wallBlockSpriteList = new List<Sprite>();
 
     bool oneTimeAlarm = false;
 
@@ -91,6 +94,15 @@ public class Game : MonoBehaviour
             {
                 if (sprite != null)
                     specialBlockSpriteList.Add(sprite);
+            });
+        }
+
+        for (int i = 0; i < (int)Defines.EWallBlockType.Max; ++i)
+        {
+            CHMMain.Resource.LoadSprite((Defines.EWallBlockType)i, (sprite) =>
+            {
+                if (sprite != null)
+                    wallBlockSpriteList.Add(sprite);
             });
         }
 
@@ -155,6 +167,20 @@ public class Game : MonoBehaviour
         attackDelay.Value = spawner.GetAttackCatList().First().attackDelay;
         attackSpeed.Value = spawner.GetAttackCatList().First().attackSpeed;
         attackCatCount.Value = 1;
+
+        boomAllBtn.OnClickAsObservable().Subscribe(async _ =>
+        {
+            if (isAni == false && boomAllChance.Value > 0)
+            {
+                await BoomAll(boardArr[0, 0]);
+                boomAllChance.Value -= 1;
+            }
+        });
+
+        boomAllChance.Subscribe(_ =>
+        {
+            boomAllChanceText.SetText(_);
+        });
 
         boardSize = PlayerPrefs.GetInt("size");
 
@@ -317,6 +343,8 @@ public class Game : MonoBehaviour
             {
                 block.SetNormalType(Defines.ENormalBlockType.None);
                 block.state = Defines.EState.Wall;
+                block.img.sprite = wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
+                block.SetWallHp(3);
             }
         }
     }
@@ -493,6 +521,7 @@ public class Game : MonoBehaviour
                 // 없어져야 할 블럭
                 if (block.state == Defines.EState.Match)
                 {
+                    CheckArroundWall(block.row, block.col);
                     var gold = CHMMain.Resource.Instantiate(goldImg.gameObject, transform.parent);
                     if (gold != null)
                     {
@@ -653,6 +682,8 @@ public class Game : MonoBehaviour
             {
                 var block = boardArr[i, j];
                 if (block == null) continue;
+
+                block.ResetCheckWallDamage();
 
                 if (block.state == Defines.EState.Match)
                 {
@@ -1022,11 +1053,33 @@ public class Game : MonoBehaviour
 
     void changeMatchState(int row, int col)
     {
-        if (boardArr[row, col] != null)
+        if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
+            return;
+
+        if (boardArr[row, col].state != Defines.EState.Wall)
         {
-            if (boardArr[row, col].state != Defines.EState.Wall)
+            boardArr[row, col].state = Defines.EState.Match;
+        }
+    }
+
+    void CheckArroundWall(int row, int col)
+    {
+        if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
+            return;
+
+        DamageArroundWall(row - 1, col);
+        DamageArroundWall(row, col + 1);
+        DamageArroundWall(row, col - 1);
+        DamageArroundWall(row + 1, col);
+    }
+
+    void DamageArroundWall(int row, int col)
+    {
+        if (IsValidIndex(row, col) && boardArr[row, col] != null)
+        {
+            if (boardArr[row, col].state == Defines.EState.Wall)
             {
-                boardArr[row, col].state = Defines.EState.Match;
+                boardArr[row, col].DamageWall();
             }
         }
     }

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 144979432
+CRC: 4140984617
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 675778d1206ddff82fe67ca4299d4f82
+    Hash: 7c32feb58e351331806d4db3e99a8ba9
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4df8c69f2c8a6ad9e3cbf82bb83e4dc3
@@ -25,13 +25,16 @@ Assets:
 - Assets/AssetBundleResources/sprite/CatPang2.png
 - Assets/AssetBundleResources/sprite/Mouse_Move.png
 - Assets/AssetBundleResources/sprite/GUI.png
+- Assets/AssetBundleResources/sprite/Wall1.png
 - Assets/AssetBundleResources/sprite/CatPang1.png
 - Assets/AssetBundleResources/sprite/Cat5.png
 - Assets/AssetBundleResources/sprite/Background3.png
+- Assets/AssetBundleResources/sprite/Wall2.png
 - Assets/AssetBundleResources/sprite/Logo.png
 - Assets/AssetBundleResources/sprite/Logo2.png
 - Assets/AssetBundleResources/sprite/Background2.png
 - Assets/AssetBundleResources/sprite/Cat3.png
 - Assets/AssetBundleResources/sprite/ButtonBackground.png
 - Assets/AssetBundleResources/sprite/Cat1.png
+- Assets/AssetBundleResources/sprite/Wall3.png
 Dependencies: []

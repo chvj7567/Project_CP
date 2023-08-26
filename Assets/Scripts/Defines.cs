@@ -37,6 +37,17 @@ public class Defines
         Max
     }
 
+    public enum EWallBlockType
+    {
+        None = -1,
+
+        Wall1,
+        Wall2,
+        Wall3,
+
+        Max
+    }
+
     public enum EResourceType
     {
         None = -1,

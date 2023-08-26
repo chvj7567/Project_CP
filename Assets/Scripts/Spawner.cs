@@ -72,7 +72,8 @@ public class Spawner : MonoBehaviour
 
                         if (index >= 10)
                         {
-                            copyMonster.SetHp(curHp * 2);
+                            curHp *= 2;
+                            copyMonster.SetHp(curHp);
                             spawnTime = 10f;
                         }
                         else

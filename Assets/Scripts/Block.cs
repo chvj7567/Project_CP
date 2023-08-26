@@ -36,6 +36,11 @@ public class Block : MonoBehaviour
     public RectTransform rectTransform;
     public Vector2 originPos;
 
+    // 벽HP
+    [SerializeField, ReadOnly] int wallHp = 0;
+    // 벽은 한 턴에 한 번만 데미지를 입음
+    [SerializeField, ReadOnly] bool checkWallDamage = false;
+
     private void Start()
     {
         originPos = rectTransform.anchoredPosition;
@@ -236,5 +241,41 @@ public class Block : MonoBehaviour
     {
         this.normalType = Defines.ENormalBlockType.None;
         this.specailType = specailType;
+    }
+
+    public void SetWallHp(int _hp)
+    {
+        wallHp = _hp;
+    }
+
+    public void DamageWall()
+    {
+        if (checkWallDamage == false && wallHp >= 1)
+        {
+            checkWallDamage = true;
+            wallHp -= 1;
+
+            if (wallHp >= 3)
+            {
+                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
+            }
+            else if (wallHp == 2)
+            {
+                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall2];
+            }
+            else if (wallHp == 1)
+            {
+                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall1];
+            }
+            else
+            {
+                state = Defines.EState.Match;
+            }
+        }
+    }
+
+    public void ResetCheckWallDamage()
+    {
+        checkWallDamage = false;
     }
 }
