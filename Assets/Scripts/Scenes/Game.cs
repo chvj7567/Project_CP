@@ -280,8 +280,6 @@ public class Game : MonoBehaviour
 
         } while (isMatch == true);
 
-        oneTimeScore.Value *= 100;
-
         towerPoint.Add(oneTimeScore.Value);
         totScore.Value += oneTimeScore.Value;
         totScore.Value += bonusScore.Value;
