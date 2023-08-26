@@ -37,7 +37,7 @@ public class Block : MonoBehaviour
     public Vector2 originPos;
 
     // 벽HP
-    [SerializeField, ReadOnly] int wallHp = 0;
+    [SerializeField, ReadOnly] int hp = 0;
     // 벽은 한 턴에 한 번만 데미지를 입음
     [SerializeField, ReadOnly] bool checkWallDamage = false;
 
@@ -47,7 +47,7 @@ public class Block : MonoBehaviour
 
         btn.OnClickAsObservable().Subscribe(async _ =>
         {
-            if (state == Defines.EState.Wall)
+            if (state == Defines.EState.Potal)
                 return;
 
             if (game.isDrag == false && game.isAni == false)
@@ -69,7 +69,7 @@ public class Block : MonoBehaviour
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
         {
-            if (game.isDrag == true || state == Defines.EState.Wall)
+            if (game.isDrag == true || state == Defines.EState.Potal)
                 return;
 
             game.isDrag = true;
@@ -84,7 +84,7 @@ public class Block : MonoBehaviour
         {
             game.isDrag = false;
 
-            if (game.isAni == true || state == Defines.EState.Wall)
+            if (game.isAni == true || state == Defines.EState.Potal)
                 return;
 
             Vector2 rectPosition;
@@ -105,7 +105,7 @@ public class Block : MonoBehaviour
                         
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.state == Defines.EState.Wall)
+                            if (ret.Item2.state == Defines.EState.Potal)
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -124,7 +124,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.state == Defines.EState.Wall)
+                            if (ret.Item2.state == Defines.EState.Potal)
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -143,7 +143,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.state == Defines.EState.Wall)
+                            if (ret.Item2.state == Defines.EState.Potal)
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -162,7 +162,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.state == Defines.EState.Wall)
+                            if (ret.Item2.state == Defines.EState.Potal)
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -245,25 +245,51 @@ public class Block : MonoBehaviour
 
     public void SetWallHp(int _hp)
     {
-        wallHp = _hp;
+        hp = _hp;
     }
 
     public void DamageWall()
     {
-        if (checkWallDamage == false && wallHp >= 1)
+        if (checkWallDamage == false && hp >= 1)
         {
             checkWallDamage = true;
-            wallHp -= 1;
+            hp -= 1;
 
-            if (wallHp >= 3)
+            if (hp >= 3)
             {
                 img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
             }
-            else if (wallHp == 2)
+            else if (hp == 2)
             {
                 img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall2];
             }
-            else if (wallHp == 1)
+            else if (hp == 1)
+            {
+                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall1];
+            }
+            else
+            {
+                state = Defines.EState.Match;
+            }
+        }
+    }
+
+    public void DamagePotal()
+    {
+        if (checkWallDamage == false && hp >= 1)
+        {
+            checkWallDamage = true;
+            hp -= 1;
+
+            if (hp >= 3)
+            {
+                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
+            }
+            else if (hp == 2)
+            {
+                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall2];
+            }
+            else if (hp == 1)
             {
                 img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall1];
             }

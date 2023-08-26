@@ -11,6 +11,7 @@ public class CHMJson
     {
         public StringInfo[] stringInfoArr;
         public SelectInfo[] selectInfoArr;
+        public MonsterInfo[] monsterInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -20,6 +21,7 @@ public class CHMJson
 
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
     List<SelectInfo> selectInfoList = new List<SelectInfo>();
+    List<MonsterInfo> monsterInfoList = new List<MonsterInfo>();
 
     public void Init()
     {
@@ -31,6 +33,7 @@ public class CHMJson
         actionList.Clear();
         stringInfoDic.Clear();
         selectInfoList.Clear();
+        monsterInfoList.Clear();
     }
 
     void LoadJsonData()
@@ -40,6 +43,7 @@ public class CHMJson
 
         actionList.Add(LoadStringData());
         actionList.Add(LoadSelectData());
+        actionList.Add(LoadMonsterData());
 
         loadingFileCount = actionList.Count;
     }
@@ -94,6 +98,26 @@ public class CHMJson
         return callback;
     }
 
+    Action<TextAsset> LoadMonsterData()
+    {
+        Action<TextAsset> callback;
+
+        monsterInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"monsterInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.monsterInfoArr)
+            {
+                monsterInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
     public string GetStringInfo(int _stringID)
     {
         if (stringInfoDic.TryGetValue(_stringID, out string result))
@@ -127,5 +151,10 @@ public class CHMJson
         }
 
         return new SelectInfo();
+    }
+
+    public MonsterInfo GetMonsterInfo(int _stage, int _index)
+    {
+        return monsterInfoList.Find(_ => _.stage == _stage && _.index == _index);
     }
 }

@@ -1074,7 +1074,7 @@ MonoBehaviour:
     value: 0
   attackSpeed:
     value: 0
-  attackCatCount:
+  catPangLevel:
     value: 0
   gameOverObj: {fileID: 1122812489}
   gameOverText: {fileID: 2051715108}
@@ -3253,14 +3253,9 @@ MonoBehaviour:
   - {fileID: 166859352}
   - {fileID: 606442808}
   spawnTime: 7
-  firstHp: 10
-  firstTime: 50
   OnSpawn:
     value: 0
-  increaseHp: 10
-  decreaseTime: 0
   index: 0
-  curHp: 0
 --- !u!224 &1263680726
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5006,7 +5001,7 @@ MonoBehaviour:
   img: {fileID: 1146541783}
   rectTransform: {fileID: 1975192478}
   originPos: {x: 0, y: 0}
-  wallHp: 0
+  hp: 0
   checkWallDamage: 0
 --- !u!114 &1975192483
 MonoBehaviour:

@@ -8,14 +8,9 @@ public class Spawner : MonoBehaviour
     [SerializeField] Transform spawnParent;
     [SerializeField] GameObject spawnObj;
     [SerializeField] List<AttackCat> attackCatList = new List<AttackCat>();
-    [SerializeField] float spawnTime = 15f;
-    [SerializeField] int firstHp = 100;
-    [SerializeField] float firstTime = 60f;
+    [SerializeField] float spawnTime;
     [SerializeField] public ReactiveProperty<bool> OnSpawn = new ReactiveProperty<bool>();
-    [SerializeField] int increaseHp = 10;
-    [SerializeField] float decreaseTime = 0f;
     [SerializeField, ReadOnly] int index = 0;
-    [SerializeField, ReadOnly] int curHp = 0;
 
     bool isSpawn = false;
     IEnumerator cor;
@@ -56,8 +51,12 @@ public class Spawner : MonoBehaviour
     IEnumerator Spawn()
     {
         isSpawn = true;
+
         if (spawnObj != null)
         {
+            var stage = PlayerPrefs.GetInt("stage");
+            Debug.Log($"Start {stage}Stage");
+
             while (true)
             {
                 var copyObj = CHMMain.Resource.Instantiate(spawnObj, spawnParent);
@@ -69,27 +68,21 @@ public class Spawner : MonoBehaviour
                     {
                         var pos = copyMonster.rectTransform.anchoredPosition;
                         copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y));
+                        ++index;
 
-                        if (index >= 10)
-                        {
-                            curHp *= 2;
-                            copyMonster.SetHp(curHp);
-                            spawnTime = 10f;
-                        }
-                        else
-                        {
-                            curHp = firstHp + (index * increaseHp);
-                            copyMonster.SetHp(curHp);
-                        }
+                        var monsterInfo = CHMMain.Json.GetMonsterInfo(stage, index);
+                        if (monsterInfo == null)
+                            break;
 
-                        copyMonster.Move(firstTime + (index * decreaseTime));
+                        copyMonster.SetHp(monsterInfo.hp);
+                        copyMonster.Move(monsterInfo.moveTime);
+
+                        Debug.Log($"Index:{index}, Hp:{monsterInfo.hp}, MoveTime:{monsterInfo.moveTime}");
 
                         for (int i = 0; i < attackCatList.Count; ++i)
                         {
                             attackCatList[i].SetTarget(copyMonster);
                         }
-
-                        ++index;
                     }
                 }
 
@@ -110,26 +103,19 @@ public class Spawner : MonoBehaviour
                 var pos = copyMonster.rectTransform.anchoredPosition;
                 copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y));
 
-                if (index >= 100)
-                {
-                    curHp *= 2;
-                    copyMonster.SetHp(curHp);
-                    spawnTime = 10f;
-                }
-                else
-                {
-                    curHp = firstHp + (index * increaseHp);
-                    copyMonster.SetHp(curHp);
-                }
+                ++index;
 
-                copyMonster.Move(firstTime + (index * decreaseTime));
+                var monsterInfo = CHMMain.Json.GetMonsterInfo(1, index);
+                if (monsterInfo == null)
+                    return;
+
+                copyMonster.SetHp(monsterInfo.hp);
+                copyMonster.Move(monsterInfo.moveTime);
 
                 for (int i = 0; i < attackCatList.Count; ++i)
                 {
                     attackCatList[i].SetTarget(copyMonster);
                 }
-
-                ++index;
             }
         }
     }

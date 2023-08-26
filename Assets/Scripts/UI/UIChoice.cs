@@ -14,7 +14,7 @@ public class UIChoiceArg : CHUIArg
     public ReactiveProperty<int> power = new ReactiveProperty<int>();
     public ReactiveProperty<float> delay = new ReactiveProperty<float>();
     public ReactiveProperty<float> speed = new ReactiveProperty<float>();
-    public ReactiveProperty<int> attackCatCount = new ReactiveProperty<int>();
+    public ReactiveProperty<int> catPangLevel = new ReactiveProperty<int>();
     public List<AttackCat> attackCatList = new List<AttackCat>();
     public int maxPower;
     public float minDealy;
@@ -209,39 +209,37 @@ public class UIChoice : UIBase
                     break;
                 case Defines.ESelect.CatPangUpgrade:
                     {
+                        if (arg.catPangLevel.Value >= 3)
+                        {
+                            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                            {
+                                alarmText = $"CatPang3 Is Max"
+                            });
+
+                            break;
+                        }
+
                         arg.curScore.Value -= _selectInfo.scoreCost;
+                        arg.catPangLevel.Value += 1;
 
                         foreach (var cat in arg.attackCatList)
                         {
-                            if (cat.attackImg.sprite.name == Defines.ESpecailBlockType.CatPang1.ToString())
+                            if (arg.catPangLevel.Value == 2)
                             {
-                                
                                 cat.attackImg.sprite = arg.catPangImgList[(int)Defines.ESpecailBlockType.CatPang2];
                                 cat.attackPower += 500;
                                 cat.attackSpeed += 5;
                             }
-                            else if (cat.attackImg.sprite.name == Defines.ESpecailBlockType.CatPang2.ToString())
+                            else if (arg.catPangLevel.Value == 3)
                             {
-                                arg.curScore.Value -= _selectInfo.scoreCost;
                                 cat.attackImg.sprite = arg.catPangImgList[(int)Defines.ESpecailBlockType.CatPang3];
                                 cat.attackPower += 1000;
                                 cat.attackSpeed += 10;
                             }
-                            else if (cat.attackImg.sprite.name == Defines.ESpecailBlockType.CatPang3.ToString())
-                            {
-                                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                                {
-                                    alarmText = $"CatPang3 Is Max"
-                                });
-
-                                arg.curScore.Value += _selectInfo.scoreCost;
-
-                                break;
-                            }
-
-                            arg.power.Value = arg.attackCatList.First().attackPower;
-                            arg.delay.Value = arg.attackCatList.First().attackDelay;
                         }
+
+                        arg.power.Value = arg.attackCatList.First().attackPower;
+                        arg.delay.Value = arg.attackCatList.First().attackDelay;
                     }
                     break;
                 case Defines.ESelect.Speed:

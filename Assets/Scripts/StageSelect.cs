@@ -12,7 +12,8 @@ public class StageSelect : MonoBehaviour
     List<Button> btnList = new List<Button>();
     [SerializeField]
     List<TMP_Text> textList = new List<TMP_Text>();
-
+    [SerializeField]
+    List<TMP_Text> sizeList = new List<TMP_Text>();
     void Start()
     {
         for (int i = 0; i < btnList.Count; i++)
@@ -20,7 +21,8 @@ public class StageSelect : MonoBehaviour
             int index = i;
             btnList[index].OnClickAsObservable().Subscribe(_ =>
             {
-                PlayerPrefs.SetInt("size", int.Parse(textList[index].text));
+                PlayerPrefs.SetInt("stage", int.Parse(textList[index].text));
+                PlayerPrefs.SetInt("size", 9);
                 SceneManager.LoadScene(1);
             });
         }

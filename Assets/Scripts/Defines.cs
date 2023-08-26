@@ -9,6 +9,7 @@ public class Defines
 
         String,
         Select,
+        Stage,
 
         Max
     }
@@ -41,9 +42,22 @@ public class Defines
     {
         None = -1,
 
+        Wall0,
         Wall1,
         Wall2,
         Wall3,
+
+        Max
+    }
+
+    public enum EPotalBlockType
+    {
+        None = -1,
+
+        Potal0,
+        Potal1,
+        Potal2,
+        Potal3,
 
         Max
     }
@@ -96,7 +110,8 @@ public class Defines
 
         Normal = 0,
         Match = 1,
-        Wall = 2,
+        Potal = 2,
+        Wall = 3,
 
         Max
     }

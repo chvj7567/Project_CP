@@ -63,7 +63,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<int> power = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<float> attackDelay = new ReactiveProperty<float>();
     [SerializeField, ReadOnly] ReactiveProperty<float> attackSpeed = new ReactiveProperty<float>();
-    [SerializeField, ReadOnly] ReactiveProperty<int> attackCatCount = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] ReactiveProperty<int> catPangLevel = new ReactiveProperty<int>();
 
     [SerializeField] GameObject gameOverObj;
     [SerializeField] TMP_Text gameOverText;
@@ -166,7 +166,7 @@ public class Game : MonoBehaviour
         power.Value = spawner.GetAttackCatList().First().attackPower;
         attackDelay.Value = spawner.GetAttackCatList().First().attackDelay;
         attackSpeed.Value = spawner.GetAttackCatList().First().attackSpeed;
-        attackCatCount.Value = 1;
+        catPangLevel.Value = 1;
 
         boomAllBtn.OnClickAsObservable().Subscribe(async _ =>
         {
@@ -186,7 +186,7 @@ public class Game : MonoBehaviour
 
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
-        CreateMap();
+        CreateMap(PlayerPrefs.GetInt("stage"));
 
         await AfterDrag(null, null);
 
@@ -280,6 +280,8 @@ public class Game : MonoBehaviour
 
         } while (isMatch == true);
 
+        oneTimeScore.Value *= 100;
+
         towerPoint.Add(oneTimeScore.Value);
         totScore.Value += oneTimeScore.Value;
         totScore.Value += bonusScore.Value;
@@ -287,6 +289,8 @@ public class Game : MonoBehaviour
         curScore.Value += bonusScore.Value;
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
+
+        await Task.Delay((int)(delay * 1000));
 
         if (totScore.Value > 0 && gameOver.Value == false && selectTog.isOn)
         {
@@ -301,6 +305,7 @@ public class Game : MonoBehaviour
                     power = power,
                     delay = attackDelay,
                     speed = attackSpeed,
+                    catPangLevel = catPangLevel,
                     attackCatList = spawner.GetAttackCatList(),
                     maxPower = maxPower,
                     minDealy = minDelay,
@@ -310,42 +315,92 @@ public class Game : MonoBehaviour
             }
         }
 
-        /*if (CanMatch() == false)
-        {
-            await UpdateMap(true);
-        }*/
-
-        await Task.Delay((int)(delay * 1000));
-
         isAni = false;
     }
 
-    void CreateMap()
+    void CreateMap(int _stage)
     {
-        foreach (var block in boardArr)
+        switch (_stage)
         {
-            if (block == null) continue;
+            case 1:
+                {
+                    foreach (var block in boardArr)
+                    {
+                        if (block == null) continue;
 
-            float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
-            block.originPos.x -= moveDis;
-            block.SetOriginPos();
-            block.rectTransform.DOScale(1f, delay);
+                        float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
+                        block.originPos.x -= moveDis;
+                        block.SetOriginPos();
+                        block.rectTransform.DOScale(1f, delay);
 
-            if (block.row != 5)
-            {
-                var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+                        var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
 
-                block.SetNormalType((Defines.ENormalBlockType)random);
-                block.state = Defines.EState.Normal;
-                block.img.sprite = normalBlockSpriteList[random];
-            }
-            else
-            {
-                block.SetNormalType(Defines.ENormalBlockType.None);
-                block.state = Defines.EState.Wall;
-                block.img.sprite = wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
-                block.SetWallHp(3);
-            }
+                        block.SetNormalType((Defines.ENormalBlockType)random);
+                        block.state = Defines.EState.Normal;
+                        block.img.sprite = normalBlockSpriteList[random];
+                    }
+                }
+                break;
+            case 2:
+                {
+                    foreach (var block in boardArr)
+                    {
+                        if (block == null) continue;
+
+                        float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
+                        block.originPos.x -= moveDis;
+                        block.SetOriginPos();
+                        block.rectTransform.DOScale(1f, delay);
+
+
+                        if (block.row != 4)
+                        {
+                            var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+
+                            block.SetNormalType((Defines.ENormalBlockType)random);
+                            block.state = Defines.EState.Normal;
+                            block.img.sprite = normalBlockSpriteList[random];
+                        }
+                        else
+                        {
+                            block.SetNormalType(Defines.ENormalBlockType.None);
+                            block.state = Defines.EState.Potal;
+                            block.img.sprite = wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
+                            block.SetWallHp(3);
+                        }
+                    }
+                }
+                break;
+            case 3:
+                {
+                    foreach (var block in boardArr)
+                    {
+                        if (block == null) continue;
+
+                        float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
+                        block.originPos.x -= moveDis;
+                        block.SetOriginPos();
+                        block.rectTransform.DOScale(1f, delay);
+
+
+                        if (block.row != 4)
+                        {
+                            var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+
+                            block.SetNormalType((Defines.ENormalBlockType)random);
+                            block.state = Defines.EState.Normal;
+                            block.img.sprite = normalBlockSpriteList[random];
+                        }
+                        else
+                        {
+                            block.SetNormalType(Defines.ENormalBlockType.None);
+                            block.state = Defines.EState.Wall;
+                            block.img.sprite = wallBlockSpriteList[(int)Defines.EWallBlockType.Wall0];
+                            block.SetWallHp(-1);
+                        }
+                    }
+                }
+                break;
         }
     }
 
@@ -521,7 +576,7 @@ public class Game : MonoBehaviour
                 // 없어져야 할 블럭
                 if (block.state == Defines.EState.Match)
                 {
-                    CheckArroundWall(block.row, block.col);
+                    CheckArround(block.row, block.col);
                     var gold = CHMMain.Resource.Instantiate(goldImg.gameObject, transform.parent);
                     if (gold != null)
                     {
@@ -699,7 +754,7 @@ public class Game : MonoBehaviour
                         {
                             int tempRow = i;
                             int tempCol = j + idx;
-                            if (boardArr[tempRow, tempCol] == null)
+                            if (IsValidIndex(tempRow, tempCol) == false || boardArr[tempRow, tempCol] == null)
                                 continue;
 
                             if (boardArr[tempRow, tempCol].index == moveIndex1 ||
@@ -756,7 +811,7 @@ public class Game : MonoBehaviour
                             int tempRow = i + idx;
                             int tempCol = j;
 
-                            if (boardArr[tempRow, tempCol] == null)
+                            if (IsValidIndex(tempRow, tempCol) == false || boardArr[tempRow, tempCol] == null)
                                 continue;
 
                             if (boardArr[tempRow, tempCol].index == moveIndex1 ||
@@ -818,7 +873,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].state == Defines.EState.Wall)
+            if (blockList[i].state == Defines.EState.Potal)
             {
                 matchType = Defines.ENormalBlockType.None;
                 matchCount = 0;
@@ -887,12 +942,36 @@ public class Game : MonoBehaviour
 
             Block moveBlock = boardArr[row, col];
             Block targetBlock = null;
+
+            int wallRow = -1;
             for (int i = boardSize - 1; i > row; --i)
             {
-                if (boardArr[i, col].state == Defines.EState.Match)
+                if (boardArr[i, col].state == Defines.EState.Wall)
                 {
-                    targetBlock = boardArr[i, col];
-                    break;
+                    wallRow = i;
+                }
+            }
+
+            if (wallRow == -1)
+            {
+                for (int i = boardSize - 1; i > row; --i)
+                {
+                    if (boardArr[i, col].state == Defines.EState.Match)
+                    {
+                        targetBlock = boardArr[i, col];
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = wallRow; i > row; --i)
+                {
+                    if (boardArr[i, col].state == Defines.EState.Match)
+                    {
+                        targetBlock = boardArr[i, col];
+                        break;
+                    }
                 }
             }
 
@@ -1056,28 +1135,32 @@ public class Game : MonoBehaviour
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return;
 
-        if (boardArr[row, col].state != Defines.EState.Wall)
+        if (boardArr[row, col].state != Defines.EState.Potal && boardArr[row, col].state != Defines.EState.Wall)
         {
             boardArr[row, col].state = Defines.EState.Match;
         }
     }
 
-    void CheckArroundWall(int row, int col)
+    void CheckArround(int row, int col)
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return;
 
-        DamageArroundWall(row - 1, col);
-        DamageArroundWall(row, col + 1);
-        DamageArroundWall(row, col - 1);
-        DamageArroundWall(row + 1, col);
+        DamageArround(row - 1, col);
+        DamageArround(row, col + 1);
+        DamageArround(row, col - 1);
+        DamageArround(row + 1, col);
     }
 
-    void DamageArroundWall(int row, int col)
+    void DamageArround(int row, int col)
     {
         if (IsValidIndex(row, col) && boardArr[row, col] != null)
         {
-            if (boardArr[row, col].state == Defines.EState.Wall)
+            if (boardArr[row, col].state == Defines.EState.Potal)
+            {
+                boardArr[row, col].DamagePotal();
+            }
+            else if (boardArr[row, col].state == Defines.EState.Wall)
             {
                 boardArr[row, col].DamageWall();
             }

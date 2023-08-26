@@ -18,4 +18,13 @@ public class Infomation
         public Int64 frequency = -1L;
         public int scoreCost = -1;
     }
+
+    [Serializable]
+    public class MonsterInfo
+    {
+        public int stage = -1;
+        public int index = -1;
+        public int hp = -1;
+        public float moveTime = -1f;
+    }
 }
