@@ -75,6 +75,11 @@ public class CHMResource
         InstantiateAsObservable<GameObject>($"{Defines.EResourceType.UI.ToString()}", $"{_ui.ToString()}", _callback);
     }
 
+    public void InstantiateEffect(Defines.EEffect _effectType, Action<GameObject> _callback = null)
+    {
+        InstantiateAsObservable<GameObject>($"{Defines.EResourceType.Effect.ToString()}", $"{_effectType.ToString()}", _callback);
+    }
+
     public GameObject Instantiate(GameObject _object, Transform _parent = null)
     {
         if (_object == null) return null;

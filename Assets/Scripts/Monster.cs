@@ -19,6 +19,7 @@ public class Monster : MonoBehaviour
     [SerializeField] GameObject cryObj;
     [SerializeField] int maxHp;
     [SerializeField] float destX = 110f;
+    [SerializeField] ParticleSystem hitParticle;
     [SerializeField, ReadOnly] int curHp;
 
     bool isDie = false;
@@ -27,6 +28,9 @@ public class Monster : MonoBehaviour
     {
         if (cryObj)
             cryObj.SetActive(false);
+
+        if (hitParticle)
+            hitParticle.gameObject.SetActive(false);
 
         SetHp(maxHp);
 
@@ -83,6 +87,12 @@ public class Monster : MonoBehaviour
 
         if (cryObj)
             cryObj.SetActive(true);
+
+        if (hitParticle)
+        {
+            hitParticle.gameObject.SetActive(true);
+            hitParticle.Play();
+        }
 
         gaugeBar.DOFillAmount((float)curHp / maxHp, .5f).OnComplete(() =>
         {

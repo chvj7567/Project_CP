@@ -69,7 +69,7 @@ public class Block : MonoBehaviour
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
         {
-            if (game.isDrag == true || state == Defines.EState.Potal)
+            if (game.isDrag == true || state == Defines.EState.Potal || state == Defines.EState.Wall)
                 return;
 
             game.isDrag = true;
@@ -84,7 +84,7 @@ public class Block : MonoBehaviour
         {
             game.isDrag = false;
 
-            if (game.isAni == true || state == Defines.EState.Potal)
+            if (game.isAni == true || state == Defines.EState.Potal || state == Defines.EState.Wall)
                 return;
 
             Vector2 rectPosition;

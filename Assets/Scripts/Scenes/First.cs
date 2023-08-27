@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class First : MonoBehaviour
 {
+    [SerializeField] Canvas canvas;
     [SerializeField] Image loadingBar;
     [SerializeField] TMP_Text loadingText;
     [SerializeField] GameObject stageGroupObj;
@@ -33,6 +34,14 @@ public class First : MonoBehaviour
                 stageGroupObj.SetActive(true);
                 loadingBar.gameObject.SetActive(false);
                 loadingText.gameObject.SetActive(false);
+
+                CHMMain.Resource.InstantiateEffect(Defines.EEffect.FireCracker, (effect) =>
+                {
+                    effect.transform.SetParent(canvas.transform);
+                    var rectTransform = effect.GetComponent<RectTransform>();
+                    rectTransform.anchoredPosition3D = new Vector3(0, 0, -100);
+                    rectTransform.localScale = Vector3.one;
+                });
             });
         }
 

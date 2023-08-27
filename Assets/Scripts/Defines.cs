@@ -104,6 +104,17 @@ public class Defines
         Max
     }
 
+    public enum EEffect
+    {
+        None = -1,
+
+        FireCracker,
+        Damage,
+        BlueBall,
+
+        Max
+    }
+
     public enum EState
     {
         None = -1,

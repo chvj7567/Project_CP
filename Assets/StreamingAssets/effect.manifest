@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 1844809324
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b88016b440e51eb60d9bd5a4ceb4596f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 84abb3ca0f036401516280b4e19ee5f9
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleResources/effect/Damage.prefab
+- Assets/AssetBundleResources/effect/FireCracker.prefab
+- Assets/AssetBundleResources/effect/DarkBall.prefab
+Dependencies:
+- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/material

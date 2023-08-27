@@ -26,6 +26,7 @@ public class Game : MonoBehaviour
     [SerializeField] ReactiveProperty<int> boomAllChance = new ReactiveProperty<int>();
     [SerializeField] Button boomAllBtn;
     [SerializeField] CHTMPro boomAllChanceText;
+    [SerializeField] RectTransform darkBall;
     [SerializeField] CHInstantiateButton instBtn;
 
     [SerializeField] Spawner spawner;
@@ -249,6 +250,13 @@ public class Game : MonoBehaviour
                 await BoomAll(block1);
                 return;
             }
+
+            if (block1.GetSpecailType() != Defines.ESpecailBlockType.None &&
+                block2.GetNormalType() != Defines.ENormalBlockType.None)
+            {
+                await Boom3(block1, block2.GetNormalType());
+                return;
+            }
         }
 
         bool first = false;
@@ -381,7 +389,7 @@ public class Game : MonoBehaviour
                         block.rectTransform.DOScale(1f, delay);
 
 
-                        if (block.row != 4)
+                        if (block.row != 4 || block.col % 2 == 0)
                         {
                             var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
 
@@ -1125,6 +1133,51 @@ public class Game : MonoBehaviour
         if (ani)
         {
             await AfterDrag(null, null);
+        }
+    }
+
+    public async Task Boom3(Block specialBlock, Defines.ENormalBlockType normalBlockType, bool ani = true)
+    {
+        bonusScore.Value += 5;
+        specialBlock.SetNormalType(Defines.ENormalBlockType.Max);
+        specialBlock.state = Defines.EState.Match;
+
+        List<GameObject> blueHoleList = new List<GameObject>();
+
+        for (int i = 0; i < boardSize; ++i)
+        {
+            for (int j = 0; j < boardSize; ++j)
+            {
+                var block = boardArr[i, j];
+                if (block == null)
+                    continue;
+
+                if (block.GetNormalType() == normalBlockType)
+                {
+                    block.state = Defines.EState.Match;
+
+                    var blueHoleObj = CHMMain.Resource.Instantiate(darkBall.gameObject, transform.parent);
+                    blueHoleObj.SetActive(true);
+                    var rt = blueHoleObj.GetComponent<RectTransform>();
+                    rt.anchoredPosition = specialBlock.rectTransform.anchoredPosition;
+                    rt.DOAnchorPos(block.rectTransform.anchoredPosition, .2f);
+                    blueHoleList.Add(blueHoleObj);
+
+                    await Task.Delay(200);
+                }
+            }
+        }
+
+        if (ani)
+        {
+            AfterDrag(null, null);
+        }
+
+        await Task.Delay(1000);
+
+        for (int i = 0; i < blueHoleList.Count; ++i)
+        {
+            CHMMain.Resource.Destroy(blueHoleList[i]);
         }
     }
 
