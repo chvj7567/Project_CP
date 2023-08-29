@@ -527,7 +527,7 @@ public class Game : MonoBehaviour
     }
 
     void CheckMap(bool _test = false)
-    // 3Match 블럭 제거
+    // 3Match 블럭 확인
     {
         for (int i = 0; i < boardSize; ++i)
         {
@@ -567,6 +567,7 @@ public class Game : MonoBehaviour
     }
 
     async Task RemoveMatchBlock()
+    // Match된 블럭 제거, 특수 블럭 생성
     {
         bool removeDelay = false;
         bool createBoomDelay = false;
@@ -925,6 +926,7 @@ public class Game : MonoBehaviour
     }
 
     async Task DownBlock()
+    // 블럭 아래로 이동
     {
         List<Block> order = new List<Block>();
         for (int i = boardSize - 1; i >= 0; --i)
