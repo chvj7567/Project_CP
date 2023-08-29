@@ -257,6 +257,13 @@ public class Game : MonoBehaviour
                 await Boom3(block1, block2.GetNormalType());
                 return;
             }
+
+            if (block2.GetSpecailType() != Defines.ESpecailBlockType.None &&
+                block1.GetNormalType() != Defines.ENormalBlockType.None)
+            {
+                await Boom3(block2, block1.GetNormalType());
+                return;
+            }
         }
 
         bool first = false;
@@ -1035,7 +1042,48 @@ public class Game : MonoBehaviour
         return row >= 0 && row < MAX && column >= 0 && column < MAX;
     }
 
+    bool changeMatchState(int row, int col)
+    {
+        if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
+            return false;
+
+        if (boardArr[row, col].state != Defines.EState.Potal && boardArr[row, col].state != Defines.EState.Wall)
+        {
+            boardArr[row, col].state = Defines.EState.Match;
+            return true;
+        }
+
+        return false;
+    }
+
+    void CheckArround(int row, int col)
+    {
+        if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
+            return;
+
+        DamageArround(row - 1, col);
+        DamageArround(row, col + 1);
+        DamageArround(row, col - 1);
+        DamageArround(row + 1, col);
+    }
+
+    void DamageArround(int row, int col)
+    {
+        if (IsValidIndex(row, col) && boardArr[row, col] != null)
+        {
+            if (boardArr[row, col].state == Defines.EState.Potal)
+            {
+                boardArr[row, col].DamagePotal();
+            }
+            else if (boardArr[row, col].state == Defines.EState.Wall)
+            {
+                boardArr[row, col].DamageWall();
+            }
+        }
+    }
+
     public async Task BoomAll(Block block, bool ani = true)
+    // ¸Ê ÀüÃ¼ ÆøÅº
     {
         bonusScore.Value += 5;
         block.SetNormalType(Defines.ENormalBlockType.Max);
@@ -1045,10 +1093,7 @@ public class Game : MonoBehaviour
         {
             for (int j = 0; j < MAX; ++j)
             {
-                if (IsValidIndex(i, j))
-                {
-                    changeMatchState(i, j);
-                }
+                changeMatchState(i, j);
             }
         }
 
@@ -1059,50 +1104,20 @@ public class Game : MonoBehaviour
     }
 
     public async Task Boom1(Block block, bool ani = true)
+    // ÀÚ±â ÁÖº¯ 1Ä­ ÆøÅº
     {
         bonusScore.Value += 5;
         block.SetNormalType(Defines.ENormalBlockType.Max);
         block.state = Defines.EState.Match;
 
-        if (IsValidIndex(block.row - 1, block.col - 1))
-        {
-            changeMatchState(block.row - 1, block.col - 1);
-        }
-
-        if (IsValidIndex(block.row - 1, block.col))
-        {
-            changeMatchState(block.row - 1, block.col);
-        }
-
-        if (IsValidIndex(block.row - 1, block.col + 1))
-        {
-            changeMatchState(block.row - 1, block.col + 1);
-        }
-
-        if (IsValidIndex(block.row, block.col - 1))
-        {
-            changeMatchState(block.row, block.col - 1);
-        }
-
-        if (IsValidIndex(block.row, block.col + 1))
-        {
-            changeMatchState(block.row, block.col + 1);
-        }
-
-        if (IsValidIndex(block.row + 1, block.col - 1))
-        {
-            changeMatchState(block.row + 1, block.col - 1);
-        }
-
-        if (IsValidIndex(block.row + 1, block.col))
-        {
-            changeMatchState(block.row + 1, block.col);
-        }
-
-        if (IsValidIndex(block.row + 1, block.col + 1))
-        {
-            changeMatchState(block.row + 1, block.col + 1);
-        }
+        changeMatchState(block.row - 1, block.col - 1);
+        changeMatchState(block.row - 1, block.col);
+        changeMatchState(block.row - 1, block.col + 1);
+        changeMatchState(block.row, block.col - 1);
+        changeMatchState(block.row, block.col + 1);
+        changeMatchState(block.row + 1, block.col - 1);
+        changeMatchState(block.row + 1, block.col);
+        changeMatchState(block.row + 1, block.col + 1);
 
         if (ani)
         {
@@ -1111,6 +1126,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Boom2(Block block, bool ani = true)
+    // ½ÊÀÚ°¡ ÆøÅº
     {
         bonusScore.Value += 5;
         block.SetNormalType(Defines.ENormalBlockType.Max);
@@ -1118,18 +1134,12 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < MAX; ++i)
         {
-            if (IsValidIndex(i, block.col))
-            {
-                changeMatchState(i, block.col);
-            }
+            changeMatchState(i, block.col);
         }
 
         for (int i = 0; i < MAX; ++i)
         {
-            if (IsValidIndex(block.row, i))
-            {
-                changeMatchState(block.row, i);
-            }
+            changeMatchState(block.row, i);
         }
 
         if (ani)
@@ -1139,6 +1149,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Boom3(Block specialBlock, Defines.ENormalBlockType normalBlockType, bool ani = true)
+    // °°Àº ºí·° ÆøÅº
     {
         bonusScore.Value += 5;
         specialBlock.SetNormalType(Defines.ENormalBlockType.Max);
@@ -1183,40 +1194,60 @@ public class Game : MonoBehaviour
         }
     }
 
-    void changeMatchState(int row, int col)
+    public async Task Boom4(Block block, bool ani = true)
+    // °¡·Î ÁÙ ÆøÅº
     {
-        if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
-            return;
+        bonusScore.Value += 5;
+        block.SetNormalType(Defines.ENormalBlockType.Max);
+        block.state = Defines.EState.Match;
 
-        if (boardArr[row, col].state != Defines.EState.Potal && boardArr[row, col].state != Defines.EState.Wall)
+        for (int i = 0; i < MAX; ++i)
         {
-            boardArr[row, col].state = Defines.EState.Match;
+            changeMatchState(i, block.col);
+        }
+
+        if (ani)
+        {
+            await AfterDrag(null, null);
         }
     }
 
-    void CheckArround(int row, int col)
+    public async Task Boom5(Block block, bool ani = true)
+    // ¼¼·Î ÁÙ ÆøÅº
     {
-        if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
-            return;
+        bonusScore.Value += 5;
+        block.SetNormalType(Defines.ENormalBlockType.Max);
+        block.state = Defines.EState.Match;
 
-        DamageArround(row - 1, col);
-        DamageArround(row, col + 1);
-        DamageArround(row, col - 1);
-        DamageArround(row + 1, col);
+        for (int i = 0; i < MAX; ++i)
+        {
+            changeMatchState(block.row, i);
+        }
+
+        if (ani)
+        {
+            await AfterDrag(null, null);
+        }
     }
 
-    void DamageArround(int row, int col)
+    public async Task Boom6(Block block, bool ani = true)
+    // XÀÚ ÆøÅº
     {
-        if (IsValidIndex(row, col) && boardArr[row, col] != null)
+        bonusScore.Value += 5;
+        block.SetNormalType(Defines.ENormalBlockType.Max);
+        block.state = Defines.EState.Match;
+
+        for (int i = 0; i < MAX; ++i)
         {
-            if (boardArr[row, col].state == Defines.EState.Potal)
-            {
-                boardArr[row, col].DamagePotal();
-            }
-            else if (boardArr[row, col].state == Defines.EState.Wall)
-            {
-                boardArr[row, col].DamageWall();
-            }
+            changeMatchState(block.row - i, block.col - i);
+            changeMatchState(block.row - i, block.col + i);
+            changeMatchState(block.row + i, block.col - i);
+            changeMatchState(block.row + i, block.col + i);
+        }
+
+        if (ani)
+        {
+            await AfterDrag(null, null);
         }
     }
 }
