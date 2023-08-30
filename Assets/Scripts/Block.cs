@@ -61,7 +61,16 @@ public class Block : MonoBehaviour
                         await game.Boom2(this);
                         break;
                     case Defines.ESpecailBlockType.CatPang3:
-                        await game.BoomAll(this);
+                        // 드래그 해야 함
+                        break;
+                    case Defines.ESpecailBlockType.CatPang4:
+                        await game.Boom4(this);
+                        break;
+                    case Defines.ESpecailBlockType.CatPang5:
+                        await game.Boom5(this);
+                        break;
+                    case Defines.ESpecailBlockType.CatPang6:
+                        await game.Boom6(this);
                         break;
                 }
             }

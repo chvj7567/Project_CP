@@ -34,6 +34,9 @@ public class Defines
         CatPang1,
         CatPang2,
         CatPang3,
+        CatPang4,
+        CatPang5,
+        CatPang6,
 
         Max
     }
