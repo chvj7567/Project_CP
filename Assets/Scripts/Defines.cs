@@ -9,6 +9,7 @@ public class Defines
 
         String,
         Select,
+        Monster,
         Stage,
 
         Max

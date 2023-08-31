@@ -14,6 +14,7 @@ public class Game : MonoBehaviour
 {
     const int MAX = 9;
 
+    [SerializeField] bool addDefense;
     [SerializeField] Image goldImg;
     [SerializeField] Image viewImg1;
     [SerializeField] Image viewImg2;
@@ -74,7 +75,10 @@ public class Game : MonoBehaviour
 
     List<Sprite> normalBlockSpriteList = new List<Sprite>();
     List<Sprite> specialBlockSpriteList = new List<Sprite>();
+    public List<Sprite> potalBlockSpriteList = new List<Sprite>();
     public List<Sprite> wallBlockSpriteList = new List<Sprite>();
+
+    List<Infomation.StageInfo> stageInfoList = new List<Infomation.StageInfo>();
 
     bool oneTimeAlarm = false;
 
@@ -104,6 +108,15 @@ public class Game : MonoBehaviour
             {
                 if (sprite != null)
                     wallBlockSpriteList.Add(sprite);
+            });
+        }
+
+        for (int i = 0; i < (int)Defines.EPotalBlockType.Max; ++i)
+        {
+            CHMMain.Resource.LoadSprite((Defines.EPotalBlockType)i, (sprite) =>
+            {
+                if (sprite != null)
+                    potalBlockSpriteList.Add(sprite);
             });
         }
 
@@ -193,6 +206,7 @@ public class Game : MonoBehaviour
             stage = 1;
         }
 
+        stageInfoList = CHMMain.Json.GetStageInfoList(stage);
         CreateMap(stage);
 
         await AfterDrag(null, null);
@@ -313,26 +327,29 @@ public class Game : MonoBehaviour
 
         await Task.Delay((int)(delay * 1000));
 
-        if (totScore.Value > 0 && gameOver.Value == false && selectTog.isOn)
+        if (addDefense == true)
         {
-            if (totScore.Value >= selectCurScore)
+            if (totScore.Value > 0 && gameOver.Value == false && selectTog.isOn)
             {
-                var temp = totScore.Value / selectScore + 1;
-                selectCurScore = selectScore * temp;
-
-                CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
+                if (totScore.Value >= selectCurScore)
                 {
-                    curScore = curScore,
-                    power = power,
-                    delay = attackDelay,
-                    speed = attackSpeed,
-                    catPangLevel = catPangLevel,
-                    attackCatList = spawner.GetAttackCatList(),
-                    maxPower = maxPower,
-                    minDealy = minDelay,
-                    maxSpeed = maxSpeed,
-                    catPangImgList = specialBlockSpriteList
-                });
+                    var temp = totScore.Value / selectScore + 1;
+                    selectCurScore = selectScore * temp;
+
+                    CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
+                    {
+                        curScore = curScore,
+                        power = power,
+                        delay = attackDelay,
+                        speed = attackSpeed,
+                        catPangLevel = catPangLevel,
+                        attackCatList = spawner.GetAttackCatList(),
+                        maxPower = maxPower,
+                        minDealy = minDelay,
+                        maxSpeed = maxSpeed,
+                        catPangImgList = specialBlockSpriteList
+                    });
+                }
             }
         }
 
@@ -341,87 +358,54 @@ public class Game : MonoBehaviour
 
     void CreateMap(int _stage)
     {
-        switch (_stage)
+        foreach (var block in boardArr)
         {
-            case 1:
+            if (block == null) continue;
+            float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
+            block.originPos.x -= moveDis;
+            block.SetOriginPos();
+            block.rectTransform.DOScale(1f, delay);
+
+            var stageInfo = stageInfoList.Find(_ => _.row == block.row && _.col == block.col);
+            if (stageInfo == null)
+            {
+                var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+
+                block.SetNormalType((Defines.ENormalBlockType)random);
+                block.state = Defines.EState.Normal;
+                block.img.sprite = normalBlockSpriteList[random];
+                block.SetHp(-1);
+            }
+            else
+            {
+                block.state = stageInfo.blockState;
+
+                if (block.state == Defines.EState.Normal)
                 {
-                    foreach (var block in boardArr)
+                    block.SetNormalType((Defines.ENormalBlockType)stageInfo.index);
+                    block.img.sprite = normalBlockSpriteList[stageInfo.index];
+                    block.SetHp(-1);
+                }
+                else
+                {
+                    block.SetNormalType(Defines.ENormalBlockType.None);
+                    block.SetHp(stageInfo.hp);
+
+                    switch (block.state)
                     {
-                        if (block == null) continue;
-
-                        float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
-                        block.originPos.x -= moveDis;
-                        block.SetOriginPos();
-                        block.rectTransform.DOScale(1f, delay);
-
-                        var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
-
-                        block.SetNormalType((Defines.ENormalBlockType)random);
-                        block.state = Defines.EState.Normal;
-                        block.img.sprite = normalBlockSpriteList[random];
+                        case Defines.EState.Potal:
+                            {
+                                block.img.sprite = potalBlockSpriteList[stageInfo.index];
+                            }
+                            break;
+                        case Defines.EState.Wall:
+                            {
+                                block.img.sprite = wallBlockSpriteList[stageInfo.index];
+                            }
+                            break;
                     }
                 }
-                break;
-            case 2:
-                {
-                    foreach (var block in boardArr)
-                    {
-                        if (block == null) continue;
-
-                        float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
-                        block.originPos.x -= moveDis;
-                        block.SetOriginPos();
-                        block.rectTransform.DOScale(1f, delay);
-
-
-                        if (block.row != 4)
-                        {
-                            var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
-
-                            block.SetNormalType((Defines.ENormalBlockType)random);
-                            block.state = Defines.EState.Normal;
-                            block.img.sprite = normalBlockSpriteList[random];
-                        }
-                        else
-                        {
-                            block.SetNormalType(Defines.ENormalBlockType.None);
-                            block.state = Defines.EState.Potal;
-                            block.img.sprite = wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
-                            block.SetWallHp(3);
-                        }
-                    }
-                }
-                break;
-            case 3:
-                {
-                    foreach (var block in boardArr)
-                    {
-                        if (block == null) continue;
-
-                        float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
-                        block.originPos.x -= moveDis;
-                        block.SetOriginPos();
-                        block.rectTransform.DOScale(1f, delay);
-
-
-                        if (block.row != 4 || block.col % 2 == 0)
-                        {
-                            var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
-
-                            block.SetNormalType((Defines.ENormalBlockType)random);
-                            block.state = Defines.EState.Normal;
-                            block.img.sprite = normalBlockSpriteList[random];
-                        }
-                        else
-                        {
-                            block.SetNormalType(Defines.ENormalBlockType.None);
-                            block.state = Defines.EState.Wall;
-                            block.img.sprite = wallBlockSpriteList[(int)Defines.EWallBlockType.Wall0];
-                            block.SetWallHp(-1);
-                        }
-                    }
-                }
-                break;
+            }
         }
     }
 
@@ -434,7 +418,10 @@ public class Game : MonoBehaviour
         {
             foreach (var block in boardArr)
             {
-                if (block == null) continue;
+                if (block == null ||
+                    block.state == Defines.EState.Wall ||
+                    block.state == Defines.EState.Potal)
+                    continue;
 
                 if (reupdate == true || block.state == Defines.EState.Match)
                 {
@@ -443,7 +430,7 @@ public class Game : MonoBehaviour
                     block.SetNormalType((Defines.ENormalBlockType)random);
                     block.state = Defines.EState.Normal;
                     block.img.sprite = normalBlockSpriteList[random];
-
+                    block.SetHp(-1);
                     block.ResetScore();
                     block.SetOriginPos();
                     block.rectTransform.DOScale(1f, delay);

@@ -14,6 +14,8 @@ public class Block : MonoBehaviour
     Button btn;
     [SerializeField]
     RectTransform backRect;
+    [SerializeField]
+    CHTMPro hpText;
 
     [ReadOnly]
     public int index;
@@ -252,9 +254,19 @@ public class Block : MonoBehaviour
         this.specailType = specailType;
     }
 
-    public void SetWallHp(int _hp)
+    public void SetHp(int _hp)
     {
+        if (_hp < 0)
+        {
+            hpText.gameObject.SetActive(false);
+        }
+        else
+        {
+            hpText.gameObject.SetActive(true);
+        }
+
         hp = _hp;
+        hpText.SetText(hp);
     }
 
     public void DamageWall()
@@ -264,17 +276,9 @@ public class Block : MonoBehaviour
             checkWallDamage = true;
             hp -= 1;
 
-            if (hp >= 3)
+            if (hp > 0)
             {
-                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
-            }
-            else if (hp == 2)
-            {
-                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall2];
-            }
-            else if (hp == 1)
-            {
-                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall1];
+                hpText.SetText(hp);
             }
             else
             {
@@ -290,17 +294,9 @@ public class Block : MonoBehaviour
             checkWallDamage = true;
             hp -= 1;
 
-            if (hp >= 3)
+            if (hp > 0)
             {
-                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall3];
-            }
-            else if (hp == 2)
-            {
-                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall2];
-            }
-            else if (hp == 1)
-            {
-                img.sprite = game.wallBlockSpriteList[(int)Defines.EWallBlockType.Wall1];
+                hpText.SetText(hp);
             }
             else
             {

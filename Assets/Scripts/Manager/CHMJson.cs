@@ -12,6 +12,7 @@ public class CHMJson
         public StringInfo[] stringInfoArr;
         public SelectInfo[] selectInfoArr;
         public MonsterInfo[] monsterInfoArr;
+        public StageInfo[] stageInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -22,6 +23,7 @@ public class CHMJson
     Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
     List<SelectInfo> selectInfoList = new List<SelectInfo>();
     List<MonsterInfo> monsterInfoList = new List<MonsterInfo>();
+    List<StageInfo> stageInfoList = new List<StageInfo>();
 
     public void Init()
     {
@@ -34,6 +36,7 @@ public class CHMJson
         stringInfoDic.Clear();
         selectInfoList.Clear();
         monsterInfoList.Clear();
+        stageInfoList.Clear();
     }
 
     void LoadJsonData()
@@ -41,9 +44,10 @@ public class CHMJson
         loadCompleteFileCount = 0;
         actionList.Clear();
 
-        actionList.Add(LoadStringData());
-        actionList.Add(LoadSelectData());
-        actionList.Add(LoadMonsterData());
+        actionList.Add(LoadStringInfo());
+        actionList.Add(LoadSelectInfo());
+        actionList.Add(LoadMonsterInfo());
+        actionList.Add(LoadStageInfo());
 
         loadingFileCount = actionList.Count;
     }
@@ -58,7 +62,7 @@ public class CHMJson
         return ((float)loadCompleteFileCount) / loadingFileCount * 100f;
     }
 
-    Action<TextAsset> LoadStringData()
+    Action<TextAsset> LoadStringInfo()
     {
         Action<TextAsset> callback;
 
@@ -78,7 +82,7 @@ public class CHMJson
         return callback;
     }
 
-    Action<TextAsset> LoadSelectData()
+    Action<TextAsset> LoadSelectInfo()
     {
         Action<TextAsset> callback;
 
@@ -98,18 +102,38 @@ public class CHMJson
         return callback;
     }
 
-    Action<TextAsset> LoadMonsterData()
+    Action<TextAsset> LoadMonsterInfo()
     {
         Action<TextAsset> callback;
 
         monsterInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Monster, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"monsterInfoArr\":" + textAsset.text + "}"));
             foreach (var data in jsonData.monsterInfoArr)
             {
                 monsterInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
+    Action<TextAsset> LoadStageInfo()
+    {
+        Action<TextAsset> callback;
+
+        stageInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stageInfoArr)
+            {
+                stageInfoList.Add(data);
             }
 
             ++loadCompleteFileCount;
@@ -156,5 +180,10 @@ public class CHMJson
     public MonsterInfo GetMonsterInfo(int _stage, int _index)
     {
         return monsterInfoList.Find(_ => _.stage == _stage && _.index == _index);
+    }
+
+    public List<StageInfo> GetStageInfoList(int _stage)
+    {
+        return stageInfoList.FindAll(_ => _.stage == _stage);
     }
 }

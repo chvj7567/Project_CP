@@ -65,6 +65,11 @@ public class CHMResource
         LoadAsset<Sprite>($"{Defines.EResourceType.Sprite.ToString()}", $"{_spriteType.ToString()}", _callback);
     }
 
+    public void LoadSprite(Defines.EPotalBlockType _spriteType, Action<Sprite> _callback)
+    {
+        LoadAsset<Sprite>($"{Defines.EResourceType.Sprite.ToString()}", $"{_spriteType.ToString()}", _callback);
+    }
+
     public void LoadSound(Defines.ESound _soundType, Action<AudioClip> _callback)
     {
         LoadAsset<AudioClip>($"{Defines.EResourceType.Sound.ToString()}", $"{_soundType.ToString()}", _callback);

@@ -27,4 +27,15 @@ public class Infomation
         public int hp = -1;
         public float moveTime = -1f;
     }
+
+    [Serializable]
+    public class StageInfo
+    {
+        public int stage = -1;
+        public Defines.EState blockState;
+        public int index = -1;
+        public int hp = -1;
+        public int row = -1;
+        public int col = -1;
+    }
 }
