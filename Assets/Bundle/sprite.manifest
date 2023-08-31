@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1040929311
+CRC: 4169531066
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 187048ebc5813bb613b87584e7fd2701
+    Hash: 6576192f309ccd55f3060c490df57c69
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4df8c69f2c8a6ad9e3cbf82bb83e4dc3
@@ -20,22 +20,29 @@ Assets:
 - Assets/AssetBundleResources/sprite/BackGround4.png
 - Assets/AssetBundleResources/sprite/Background1.png
 - Assets/AssetBundleResources/sprite/HpBar.png
+- Assets/AssetBundleResources/sprite/CatPang4.png
 - Assets/AssetBundleResources/sprite/Cat2.png
 - Assets/AssetBundleResources/sprite/CatPang3.png
 - Assets/AssetBundleResources/sprite/Mouse_Cry.png
 - Assets/AssetBundleResources/sprite/CatPang2.png
 - Assets/AssetBundleResources/sprite/Mouse_Move.png
+- Assets/AssetBundleResources/sprite/CatPang6.png
+- Assets/AssetBundleResources/sprite/Potal3.png
 - Assets/AssetBundleResources/sprite/GUI.png
 - Assets/AssetBundleResources/sprite/Wall1.png
 - Assets/AssetBundleResources/sprite/CatPang1.png
 - Assets/AssetBundleResources/sprite/Cat5.png
+- Assets/AssetBundleResources/sprite/Potal1.png
 - Assets/AssetBundleResources/sprite/Background3.png
 - Assets/AssetBundleResources/sprite/Wall2.png
-- Assets/AssetBundleResources/sprite/Logo.png
+- Assets/AssetBundleResources/sprite/Potal0.png
 - Assets/AssetBundleResources/sprite/Logo2.png
+- Assets/AssetBundleResources/sprite/Potal2.png
 - Assets/AssetBundleResources/sprite/Background2.png
+- Assets/AssetBundleResources/sprite/Logo.png
 - Assets/AssetBundleResources/sprite/Cat3.png
 - Assets/AssetBundleResources/sprite/ButtonBackground.png
 - Assets/AssetBundleResources/sprite/Cat1.png
+- Assets/AssetBundleResources/sprite/CatPang5.png
 - Assets/AssetBundleResources/sprite/Wall3.png
 Dependencies: []
