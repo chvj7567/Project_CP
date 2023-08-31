@@ -198,8 +198,6 @@ public class Game : MonoBehaviour
         await AfterDrag(null, null);
 
         CHMMain.Sound.Play(Defines.ESound.Bgm);
-
-        selectTog.isOn = false;
     }
 
     private async void Update()
@@ -1242,7 +1240,6 @@ public class Game : MonoBehaviour
     {
         bonusScore.Value += 5;
         block.SetNormalType(Defines.ENormalBlockType.Max);
-        block.state = Defines.EState.Match;
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1260,7 +1257,6 @@ public class Game : MonoBehaviour
     {
         bonusScore.Value += 5;
         block.SetNormalType(Defines.ENormalBlockType.Max);
-        block.state = Defines.EState.Match;
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1277,14 +1273,49 @@ public class Game : MonoBehaviour
     // XÀÚ ÆøÅº
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.Max);
-        block.state = Defines.EState.Match;
+        block.SetNormalType(Defines.ENormalBlockType.None);
 
         for (int i = 0; i < MAX; ++i)
         {
             changeMatchState(block.row - i, block.col - i);
             changeMatchState(block.row - i, block.col + i);
             changeMatchState(block.row + i, block.col - i);
+            changeMatchState(block.row + i, block.col + i);
+        }
+
+        if (ani)
+        {
+            await AfterDrag(null, null);
+        }
+    }
+
+    public async Task Boom7(Block block, bool ani = true)
+    // ÁÂÇÏ¿ì»ó ´ë°¢¼± ÁÙ ÆøÅº
+    {
+        bonusScore.Value += 5;
+        block.SetNormalType(Defines.ENormalBlockType.Max);
+
+        for (int i = 0; i < MAX; ++i)
+        {
+            changeMatchState(block.row - i, block.col + i);
+            changeMatchState(block.row + i, block.col - i);
+        }
+
+        if (ani)
+        {
+            await AfterDrag(null, null);
+        }
+    }
+
+    public async Task Boom8(Block block, bool ani = true)
+    // ÁÂ»ó¿ìÇÏ ´ë°¢¼± ÁÙ ÆøÅº
+    {
+        bonusScore.Value += 5;
+        block.SetNormalType(Defines.ENormalBlockType.Max);
+
+        for (int i = 0; i < MAX; ++i)
+        {
+            changeMatchState(block.row - i, block.col - i);
             changeMatchState(block.row + i, block.col + i);
         }
 
