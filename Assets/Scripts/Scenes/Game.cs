@@ -208,10 +208,9 @@ public class Game : MonoBehaviour
 
         stageInfoList = CHMMain.Json.GetStageInfoList(stage);
         CreateMap(stage);
+        CHMMain.Sound.Play(Defines.ESound.Bgm);
 
         await AfterDrag(null, null);
-
-        CHMMain.Sound.Play(Defines.ESound.Bgm);
     }
 
     private async void Update()
@@ -778,6 +777,7 @@ public class Game : MonoBehaviour
 
         if (removeDelay)
         {
+            CHMMain.Sound.Play(Defines.ESound.Cat);
             await Task.Delay((int)(delay * 1000));
         }
 

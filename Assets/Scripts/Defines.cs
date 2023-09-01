@@ -59,9 +59,6 @@ public class Defines
         None = -1,
 
         Potal0,
-        Potal1,
-        Potal2,
-        Potal3,
 
         Max
     }
@@ -161,7 +158,7 @@ public class Defines
 
         Bgm,
         Gold,
-        Button,
+        Cat,
 
         Max
     }
