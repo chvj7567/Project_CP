@@ -459,6 +459,9 @@ public class Game : MonoBehaviour
                     continue;
 
                 var curBlock = boardArr[i, j];
+                if (curBlock.CheckMoveBlock() == false)
+                    continue;
+
                 if (curBlock.GetSpecailType() != Defines.ESpecailBlockType.None)
                 {
                     canMatchRow = curBlock.row;
@@ -471,7 +474,8 @@ public class Game : MonoBehaviour
                 var leftBlock = IsValidIndex(i, j - 1) == true ? boardArr[i, j - 1] : null;
                 var rightBlock = IsValidIndex(i, j + 1) == true ? boardArr[i, j + 1] : null;
 
-                if (upBlock != null)
+                if (upBlock != null &&
+                    upBlock.CheckMoveBlock())
                 {
                     ChangeBlock(curBlock, upBlock);
                     CheckMap(true);
@@ -484,7 +488,8 @@ public class Game : MonoBehaviour
                     }
                 }
 
-                if (downBlock != null)
+                if (downBlock != null &&
+                    downBlock.CheckMoveBlock())
                 {
                     ChangeBlock(curBlock, downBlock);
                     CheckMap(true);
@@ -497,7 +502,8 @@ public class Game : MonoBehaviour
                     }
                 }
 
-                if (leftBlock != null)
+                if (leftBlock != null &&
+                    leftBlock.CheckMoveBlock())
                 {
                     ChangeBlock(curBlock, leftBlock);
                     CheckMap(true);
@@ -510,7 +516,8 @@ public class Game : MonoBehaviour
                     }
                 }
 
-                if (rightBlock != null)
+                if (rightBlock != null &&
+                    rightBlock.CheckMoveBlock())
                 {
                     ChangeBlock(curBlock, rightBlock);
                     CheckMap(true);
