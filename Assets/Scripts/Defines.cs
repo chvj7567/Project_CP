@@ -32,12 +32,12 @@ public class Defines
     {
         None = -1,
 
-        CatPang1,
-        CatPang2,
-        CatPang3,
-        CatPang4,
-        CatPang5,
-        CatPang6,
+        CatPang1, // ÀÚ±â ÁÖº¯ 1Ä­ ÆøÅº
+        CatPang2, // ½ÊÀÚ°¡ ÆøÅº
+        CatPang3, // °°Àº ºí·° ÆøÅº
+        CatPang4, // °¡·Î ÁÙ ÆøÅº
+        CatPang5, // ¼¼·Î ÁÙ ÆøÅº
+        CatPang6, // X ÀÚ ÆøÅº
 
         Max
     }

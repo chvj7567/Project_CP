@@ -27,6 +27,8 @@ public class Block : MonoBehaviour
     Defines.ENormalBlockType normalType;
     [SerializeField, ReadOnly]
     Defines.ESpecailBlockType specailType;
+    [SerializeField, ReadOnly]
+    public Defines.ESpecailBlockType changeSpecialType;
     [ReadOnly]
     public Defines.EState state = Defines.EState.None;
     [ReadOnly]
@@ -45,6 +47,8 @@ public class Block : MonoBehaviour
 
     private void Start()
     {
+        changeSpecialType = Defines.ESpecailBlockType.None;
+
         originPos = rectTransform.anchoredPosition;
 
         btn.OnClickAsObservable().Subscribe(async _ =>
@@ -54,27 +58,7 @@ public class Block : MonoBehaviour
 
             if (game.isDrag == false && game.isAni == false)
             {
-                switch (specailType)
-                {
-                    case Defines.ESpecailBlockType.CatPang1:
-                        await game.Boom1(this);
-                        break;
-                    case Defines.ESpecailBlockType.CatPang2:
-                        await game.Boom2(this);
-                        break;
-                    case Defines.ESpecailBlockType.CatPang3:
-                        // 드래그 해야 함
-                        break;
-                    case Defines.ESpecailBlockType.CatPang4:
-                        await game.Boom4(this);
-                        break;
-                    case Defines.ESpecailBlockType.CatPang5:
-                        await game.Boom5(this);
-                        break;
-                    case Defines.ESpecailBlockType.CatPang6:
-                        await game.Boom6(this);
-                        break;
-                }
+                await Boom();
             }
         });
 
@@ -319,6 +303,31 @@ public class Block : MonoBehaviour
                 return false;
             default:
                 return true;
+        }
+    }
+
+    public async Task Boom()
+    {
+        switch (specailType)
+        {
+            case Defines.ESpecailBlockType.CatPang1:
+                await game.Boom1(this);
+                break;
+            case Defines.ESpecailBlockType.CatPang2:
+                await game.Boom2(this);
+                break;
+            case Defines.ESpecailBlockType.CatPang3:
+                // 드래그 해야 함
+                break;
+            case Defines.ESpecailBlockType.CatPang4:
+                await game.Boom4(this);
+                break;
+            case Defines.ESpecailBlockType.CatPang5:
+                await game.Boom5(this);
+                break;
+            case Defines.ESpecailBlockType.CatPang6:
+                await game.Boom6(this);
+                break;
         }
     }
 }

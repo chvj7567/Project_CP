@@ -258,36 +258,62 @@ public class Game : MonoBehaviour
     public async Task AfterDrag(Block block1, Block block2)
     {
         isAni = true;
+        bool first = false;
+
         if (block1 && block2)
         {
             moveIndex1 = block1.index;
             moveIndex2 = block2.index;
 
-            if ((block1.GetSpecailType() == Defines.ESpecailBlockType.CatPang4 &&
-                block2.GetSpecailType() == Defines.ESpecailBlockType.CatPang5) ||
-                (block1.GetSpecailType() == Defines.ESpecailBlockType.CatPang5 &&
-                block2.GetSpecailType() == Defines.ESpecailBlockType.CatPang4))
-            {
-                await Boom2(block1);
-                return;
-            }
-
-            if (block1.GetSpecailType() != Defines.ESpecailBlockType.None &&
+            if (block1.GetSpecailType() == Defines.ESpecailBlockType.CatPang3 &&
                 block2.GetNormalType() != Defines.ENormalBlockType.None)
             {
                 await Boom3(block1, block2.GetNormalType());
                 return;
             }
-
-            if (block2.GetSpecailType() != Defines.ESpecailBlockType.None &&
+            else if (block2.GetSpecailType() == Defines.ESpecailBlockType.CatPang3 &&
                 block1.GetNormalType() != Defines.ENormalBlockType.None)
             {
                 await Boom3(block2, block1.GetNormalType());
                 return;
             }
+            else if (block1.GetSpecailType() == Defines.ESpecailBlockType.CatPang3 &&
+                block2.GetNormalType() != Defines.ENormalBlockType.None)
+            {
+                await Boom3(block1, block2.GetNormalType());
+                return;
+            }
+            else if (block1.GetSpecailType() != Defines.ESpecailBlockType.None &&
+                block2.GetSpecailType() != Defines.ESpecailBlockType.None)
+            {
+                first = true;
+                block2.SetNormalType(Defines.ENormalBlockType.None);
+                block2.state = Defines.EState.Match;
+                block1.changeSpecialType = Defines.ESpecailBlockType.CatPang3;
+                //await Boom3(block1, block2.GetNormalType());
+                //return;
+            }
+            else if (block2.GetSpecailType() != Defines.ESpecailBlockType.None &&
+                block1.GetSpecailType() != Defines.ESpecailBlockType.None)
+            {
+                first = true;
+                block1.SetNormalType(Defines.ENormalBlockType.None);
+                block1.state = Defines.EState.Match;
+                block2.changeSpecialType = Defines.ESpecailBlockType.CatPang3;
+                //await Boom3(block2, block1.GetNormalType());
+                //return;
+            }
+            else if (block1.GetSpecailType() != Defines.ESpecailBlockType.None)
+            {
+                await block1.Boom();
+                return;
+            }
+            else if (block2.GetSpecailType() != Defines.ESpecailBlockType.None)
+            {
+                await block2.Boom();
+                return;
+            }
         }
-
-        bool first = false;
 
         await Task.Delay((int)(delay * 1000));
 
@@ -418,8 +444,7 @@ public class Game : MonoBehaviour
             foreach (var block in boardArr)
             {
                 if (block == null ||
-                    block.state == Defines.EState.Wall ||
-                    block.state == Defines.EState.Potal)
+                    block.CheckMoveBlock() == false)
                     continue;
 
                 if (reupdate == true || block.state == Defines.EState.Match)
@@ -433,6 +458,20 @@ public class Game : MonoBehaviour
                     block.ResetScore();
                     block.SetOriginPos();
                     block.rectTransform.DOScale(1f, delay);
+                }
+                else
+                {
+                    if (block.changeSpecialType != Defines.ESpecailBlockType.None)
+                    {
+                        block.SetSpecailType(block.changeSpecialType);
+                        block.state = Defines.EState.Normal;
+                        block.img.sprite = specialBlockSpriteList[(int)block.changeSpecialType];
+                        block.SetHp(-1);
+                        block.ResetScore();
+                        block.SetOriginPos();
+                        block.rectTransform.DOScale(1f, delay);
+                        block.changeSpecialType = Defines.ESpecailBlockType.None;
+                    }
                 }
             }
 
