@@ -258,7 +258,15 @@ public class Game : MonoBehaviour
                 }
                 else
                 {
-                    if (stageInfo.targetScore <= 0)
+                    if (stageInfo.targetScore > 0)
+                    {
+                        if (totScore.Value >= stageInfo.targetScore)
+                        {
+                            gameOverText.text = "Game Clear";
+                            gameOver.Value = true;
+                        }
+                    }
+                    else
                     {
                         bool clear = true;
 
