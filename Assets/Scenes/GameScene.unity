@@ -1037,7 +1037,7 @@ MonoBehaviour:
   boardSize: 9
   parent: {fileID: 2089328443}
   boomAllChance:
-    value: 3
+    value: 10
   boomAllBtn: {fileID: 756169201}
   boomAllChanceText: {fileID: 1760365287}
   darkBall: {fileID: 390423387}

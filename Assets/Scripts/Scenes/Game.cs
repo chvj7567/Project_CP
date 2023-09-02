@@ -8,8 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using TMPro;
-using Unity.Jobs;
-using static Infomation;
+using System;
+using UniRx.Triggers;
 
 public class Game : MonoBehaviour
 {
@@ -41,7 +41,7 @@ public class Game : MonoBehaviour
     [ReadOnly] public bool isAni = false;
     [ReadOnly] bool isMatch = false;
 
-    [SerializeField, ReadOnly] float time;
+    [SerializeField, ReadOnly] float teachTime;
     [SerializeField, ReadOnly] int canMatchRow = -1;
     [SerializeField, ReadOnly] int canMatchCol = -1;
 
@@ -215,6 +215,70 @@ public class Game : MonoBehaviour
         CreateMap(stage);
         CHMMain.Sound.Play(Defines.ESound.Bgm);
 
+        this.UpdateAsObservable()
+            .ThrottleFirst(TimeSpan.FromSeconds(1))
+            .Subscribe(_ =>
+            {
+                if (timerImg.fillAmount >= 1)
+                {
+                    if (stageInfo.targetScore > 0)
+                    {
+                        if (totScore.Value < stageInfo.targetScore)
+                        {
+                            gameOverText.text = "Game Over";
+                        }
+                        else
+                        {
+                            gameOverText.text = "Game Clear";
+                        }
+                    }
+                    else
+                    {
+                        bool clear = true;
+
+                        foreach (var block in boardArr)
+                        {
+                            if (block.GetHp() > 0)
+                            {
+                                clear = false;
+                            }
+                        }
+
+                        if (clear == false)
+                        {
+                            gameOverText.text = "Game Over";
+                        }
+                        else
+                        {
+                            gameOverText.text = "Game Clear";
+                        }
+                    }
+
+                    gameOver.Value = true;
+                }
+                else
+                {
+                    if (stageInfo.targetScore <= 0)
+                    {
+                        bool clear = true;
+
+                        foreach (var block in boardArr)
+                        {
+                            if (block.GetHp() > 0)
+                            {
+                                clear = false;
+                            }
+                        }
+
+                        if (clear)
+                        {
+                            gameOverText.text = "Game Clear";
+                            gameOver.Value = true;
+                        }
+                    }
+                }
+            });
+
         await AfterDrag(null, null);
     }
 
@@ -240,52 +304,15 @@ public class Game : MonoBehaviour
 
         curTimer += Time.deltaTime;
         timerImg.fillAmount = curTimer / stageInfo.time;  
-        if (timerImg.fillAmount >= 1)
-        {
-            if (stageInfo.targetScore > 0)
-            {
-                if (totScore.Value < stageInfo.targetScore)
-                {
-                    gameOverText.text = "Game Over";
-                }
-                else
-                {
-                    gameOverText.text = "Game Clear";
-                }
-            }
-            else
-            {
-                bool clear = true;
-
-                foreach (var block in boardArr)
-                {
-                    if (block.GetHp() > 0)
-                    {
-                        clear = false;
-                    }
-                }
-
-                if (clear == false)
-                {
-                    gameOverText.text = "Game Over";
-                }
-                else
-                {
-                    gameOverText.text = "Game Clear";
-                }
-            }
-
-            gameOver.Value = true;
-        }
 
         if (isAni == true)
         {
-            time = Time.time;
+            teachTime = Time.time;
         }
         else
         {
             // 5초 동안 드래그를 안하면 알려줌
-            if (time + 5 < Time.time && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
+            if (teachTime + 5 < Time.time && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
             {
                 oneTimeAlarm = true;
 
@@ -439,7 +466,7 @@ public class Game : MonoBehaviour
             var stageInfo = stageInfoList.Find(_ => _.row == block.row && _.col == block.col);
             if (stageInfo == null)
             {
-                var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+                var random = UnityEngine.Random.Range(0, (int)Defines.ENormalBlockType.Max);
 
                 block.SetNormalType((Defines.ENormalBlockType)random);
                 block.state = Defines.EState.Normal;
@@ -494,7 +521,7 @@ public class Game : MonoBehaviour
 
                 if (reupdate == true || block.state == Defines.EState.Match)
                 {
-                    var random = Random.Range(0, (int)Defines.ENormalBlockType.Max);
+                    var random = UnityEngine.Random.Range(0, (int)Defines.ENormalBlockType.Max);
 
                     block.SetNormalType((Defines.ENormalBlockType)random);
                     block.state = Defines.EState.Normal;
@@ -683,10 +710,10 @@ public class Game : MonoBehaviour
                         if (rect != null)
                         {
                             rect.anchoredPosition = block.rectTransform.anchoredPosition;
-                            rect.DOAnchorPosY(rect.anchoredPosition.y + Random.Range(30f, 50f), .5f).OnComplete(() =>
+                            rect.DOAnchorPosY(rect.anchoredPosition.y + UnityEngine.Random.Range(30f, 50f), .5f).OnComplete(() =>
                             {
                                 CHMMain.Sound.Play(Defines.ESound.Gold);
-                                rect.DOAnchorPos(goldImg.rectTransform.anchoredPosition, Random.Range(.2f, 1f)).OnComplete(() =>
+                                rect.DOAnchorPos(goldImg.rectTransform.anchoredPosition, UnityEngine.Random.Range(.2f, 1f)).OnComplete(() =>
                                 {
                                     CHMMain.Resource.Destroy(gold);
                                 });
