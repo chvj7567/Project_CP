@@ -1026,7 +1026,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addDefense: 0
   timerImg: {fileID: 957118122}
-  totTimer: 60
   curTimer: 0
   goldImg: {fileID: 1903877011}
   viewImg1: {fileID: 1897689331}
@@ -6272,7 +6271,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Game Over
+  m_text: 'A
 
 '
   m_isRightToLeft: 0

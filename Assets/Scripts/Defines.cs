@@ -11,6 +11,7 @@ public class Defines
         Select,
         Monster,
         Stage,
+        StageBlock,
 
         Max
     }

@@ -32,6 +32,15 @@ public class Infomation
     public class StageInfo
     {
         public int stage = -1;
+        public int boardSize = -1;
+        public float time = -1;
+        public int targetScore = -1;
+    }
+
+    [Serializable]
+    public class StageBlockInfo
+    {
+        public int stage = -1;
         public Defines.EState blockState;
         public int index = -1;
         public int hp = -1;

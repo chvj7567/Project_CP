@@ -253,6 +253,11 @@ public class Block : MonoBehaviour
         hpText.SetText(hp);
     }
 
+    public int GetHp()
+    {
+        return hp;
+    }
+
     public void DamageWall()
     {
         if (checkWallDamage == false && hp >= 1)

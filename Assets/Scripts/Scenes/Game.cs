@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Unity.Jobs;
+using static Infomation;
 
 public class Game : MonoBehaviour
 {
@@ -16,7 +17,6 @@ public class Game : MonoBehaviour
 
     [SerializeField] bool addDefense;
     [SerializeField] Image timerImg;
-    [SerializeField] float totTimer;
     [SerializeField, ReadOnly] float curTimer;
     [SerializeField] Image goldImg;
     [SerializeField] Image viewImg1;
@@ -81,7 +81,8 @@ public class Game : MonoBehaviour
     public List<Sprite> potalBlockSpriteList = new List<Sprite>();
     public List<Sprite> wallBlockSpriteList = new List<Sprite>();
 
-    List<Infomation.StageInfo> stageInfoList = new List<Infomation.StageInfo>();
+    Infomation.StageInfo stageInfo;
+    List<Infomation.StageBlockInfo> stageInfoList = new List<Infomation.StageBlockInfo>();
 
     bool oneTimeAlarm = false;
 
@@ -199,17 +200,18 @@ public class Game : MonoBehaviour
             boomAllChanceText.SetText(_);
         });
 
-        boardSize = PlayerPrefs.GetInt("size");
-
-        instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
-
         var stage = PlayerPrefs.GetInt("stage");
         if (stage <= 0)
         {
             stage = 1;
         }
 
-        stageInfoList = CHMMain.Json.GetStageInfoList(stage);
+        stageInfo = CHMMain.Json.GetStageInfo(stage);
+        stageInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+
+        boardSize = stageInfo.boardSize;
+        instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
+
         CreateMap(stage);
         CHMMain.Sound.Play(Defines.ESound.Bgm);
 
@@ -237,9 +239,42 @@ public class Game : MonoBehaviour
         }*/
 
         curTimer += Time.deltaTime;
-        timerImg.fillAmount = curTimer / totTimer;  
+        timerImg.fillAmount = curTimer / stageInfo.time;  
         if (timerImg.fillAmount >= 1)
         {
+            if (stageInfo.targetScore > 0)
+            {
+                if (totScore.Value < stageInfo.targetScore)
+                {
+                    gameOverText.text = "Game Over";
+                }
+                else
+                {
+                    gameOverText.text = "Game Clear";
+                }
+            }
+            else
+            {
+                bool clear = true;
+
+                foreach (var block in boardArr)
+                {
+                    if (block.GetHp() > 0)
+                    {
+                        clear = false;
+                    }
+                }
+
+                if (clear == false)
+                {
+                    gameOverText.text = "Game Over";
+                }
+                else
+                {
+                    gameOverText.text = "Game Clear";
+                }
+            }
+
             gameOver.Value = true;
         }
 

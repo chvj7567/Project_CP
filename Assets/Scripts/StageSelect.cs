@@ -22,7 +22,6 @@ public class StageSelect : MonoBehaviour
             btnList[index].OnClickAsObservable().Subscribe(_ =>
             {
                 PlayerPrefs.SetInt("stage", int.Parse(textList[index].text));
-                PlayerPrefs.SetInt("size", 9);
                 SceneManager.LoadScene(1);
             });
         }

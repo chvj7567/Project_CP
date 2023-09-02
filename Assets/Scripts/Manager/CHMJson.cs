@@ -13,6 +13,7 @@ public class CHMJson
         public SelectInfo[] selectInfoArr;
         public MonsterInfo[] monsterInfoArr;
         public StageInfo[] stageInfoArr;
+        public StageBlockInfo[] stageBlockInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -24,6 +25,7 @@ public class CHMJson
     List<SelectInfo> selectInfoList = new List<SelectInfo>();
     List<MonsterInfo> monsterInfoList = new List<MonsterInfo>();
     List<StageInfo> stageInfoList = new List<StageInfo>();
+    List<StageBlockInfo> stageBlockInfoList = new List<StageBlockInfo>();
 
     public void Init()
     {
@@ -37,6 +39,7 @@ public class CHMJson
         selectInfoList.Clear();
         monsterInfoList.Clear();
         stageInfoList.Clear();
+        stageBlockInfoList.Clear();
     }
 
     void LoadJsonData()
@@ -48,6 +51,7 @@ public class CHMJson
         actionList.Add(LoadSelectInfo());
         actionList.Add(LoadMonsterInfo());
         actionList.Add(LoadStageInfo());
+        actionList.Add(LoadStageBlockInfo());
 
         loadingFileCount = actionList.Count;
     }
@@ -142,6 +146,26 @@ public class CHMJson
         return callback;
     }
 
+    Action<TextAsset> LoadStageBlockInfo()
+    {
+        Action<TextAsset> callback;
+
+        stageBlockInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.StageBlock, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageBlockInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.stageBlockInfoArr)
+            {
+                stageBlockInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
     public string GetStringInfo(int _stringID)
     {
         if (stringInfoDic.TryGetValue(_stringID, out string result))
@@ -182,8 +206,13 @@ public class CHMJson
         return monsterInfoList.Find(_ => _.stage == _stage && _.index == _index);
     }
 
-    public List<StageInfo> GetStageInfoList(int _stage)
+    public StageInfo GetStageInfo(int _stage)
     {
-        return stageInfoList.FindAll(_ => _.stage == _stage);
+        return stageInfoList.Find(_ => _.stage == _stage);
+    }
+
+    public List<StageBlockInfo> GetStageBlockInfoList(int _stage)
+    {
+        return stageBlockInfoList.FindAll(_ => _.stage == _stage);
     }
 }
