@@ -15,6 +15,9 @@ public class Game : MonoBehaviour
     const int MAX = 9;
 
     [SerializeField] bool addDefense;
+    [SerializeField] Image timerImg;
+    [SerializeField] float totTimer;
+    [SerializeField, ReadOnly] float curTimer;
     [SerializeField] Image goldImg;
     [SerializeField] Image viewImg1;
     [SerializeField] Image viewImg2;
@@ -232,6 +235,13 @@ public class Game : MonoBehaviour
         {
             viewImg2.color = Color.green;
         }*/
+
+        curTimer += Time.deltaTime;
+        timerImg.fillAmount = curTimer / totTimer;  
+        if (timerImg.fillAmount >= 1)
+        {
+            gameOver.Value = true;
+        }
 
         if (isAni == true)
         {
