@@ -57,6 +57,9 @@ public class First : MonoBehaviour
             canStart = true;
             loadingBar.gameObject.SetActive(false);
             loadingText.gameObject.SetActive(false);
+
+            startBtn.gameObject.SetActive(false);
+            stageGroupObj.SetActive(true);
         }
     }
 

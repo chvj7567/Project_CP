@@ -163,4 +163,13 @@ public class Defines
 
         Max
     }
+
+    public enum EData
+    {
+        None = -1,
+
+        Stage,
+
+        Max
+    }
 }

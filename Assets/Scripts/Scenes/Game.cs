@@ -51,6 +51,7 @@ public class Game : MonoBehaviour
     [SerializeField] int maxPower = 99999;
     [SerializeField] float minDelay = .1f;
     [SerializeField] float maxSpeed = 30f;
+    [SerializeField] CHTMPro targetScoreText;
     [SerializeField] CHTMPro curScoreText;
     [SerializeField] CHTMPro oneTimeScoreText;
     [SerializeField] CHTMPro killCountText;
@@ -209,6 +210,12 @@ public class Game : MonoBehaviour
         stageInfo = CHMMain.Json.GetStageInfo(stage);
         stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
 
+        targetScoreText.SetText(stageInfo.targetScore);
+        if (stageInfo.targetScore < 0)
+        {
+            targetScoreText.gameObject.SetActive(false);
+        }
+
         boardSize = stageInfo.boardSize;
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
@@ -219,69 +226,76 @@ public class Game : MonoBehaviour
             .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
-                if (timerImg.fillAmount >= 1)
+                if (gameOver.Value == false)
                 {
-                    if (stageInfo.targetScore > 0)
+                    if (timerImg.fillAmount >= 1)
                     {
-                        if (totScore.Value < stageInfo.targetScore)
+                        if (stageInfo.targetScore > 0)
                         {
-                            gameOverText.text = "Game Over";
+                            if (totScore.Value < stageInfo.targetScore)
+                            {
+                                gameOverText.text = "Game Over";
+                            }
+                            else
+                            {
+                                gameOverText.text = "Game Clear";
+                                SaveData();
+                            }
                         }
                         else
                         {
-                            gameOverText.text = "Game Clear";
-                        }
-                    }
-                    else
-                    {
-                        bool clear = true;
+                            bool clear = true;
 
-                        foreach (var block in boardArr)
-                        {
-                            if (block.GetHp() > 0)
+                            foreach (var block in boardArr)
                             {
-                                clear = false;
+                                if (block.GetHp() > 0)
+                                {
+                                    clear = false;
+                                }
+                            }
+
+                            if (clear == false)
+                            {
+                                gameOverText.text = "Game Over";
+                            }
+                            else
+                            {
+                                gameOverText.text = "Game Clear";
+                                SaveData();
                             }
                         }
 
-                        if (clear == false)
+                        gameOver.Value = true;
+                    }
+                    else
+                    {
+                        if (stageInfo.targetScore > 0)
                         {
-                            gameOverText.text = "Game Over";
+                            if (totScore.Value >= stageInfo.targetScore)
+                            {
+                                gameOverText.text = "Game Clear";
+                                gameOver.Value = true;
+                                SaveData();
+                            }
                         }
                         else
                         {
-                            gameOverText.text = "Game Clear";
-                        }
-                    }
+                            bool clear = true;
 
-                    gameOver.Value = true;
-                }
-                else
-                {
-                    if (stageInfo.targetScore > 0)
-                    {
-                        if (totScore.Value >= stageInfo.targetScore)
-                        {
-                            gameOverText.text = "Game Clear";
-                            gameOver.Value = true;
-                        }
-                    }
-                    else
-                    {
-                        bool clear = true;
-
-                        foreach (var block in boardArr)
-                        {
-                            if (block.GetHp() > 0)
+                            foreach (var block in boardArr)
                             {
-                                clear = false;
+                                if (block.GetHp() > 0)
+                                {
+                                    clear = false;
+                                }
                             }
-                        }
 
-                        if (clear)
-                        {
-                            gameOverText.text = "Game Clear";
-                            gameOver.Value = true;
+                            if (clear)
+                            {
+                                gameOverText.text = "Game Clear";
+                                gameOver.Value = true;
+                                SaveData();
+                            }
                         }
                     }
                 }
@@ -333,6 +347,16 @@ public class Game : MonoBehaviour
                 oneTimeAlarm = false;
             }
         }
+    }
+
+    void SaveData()
+    {
+        if (CHMMain.Data.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var data))
+        {
+            data.clear = true;
+        }
+
+        CHMMain.Data.SaveJson();
     }
 
     public async Task AfterDrag(Block block1, Block block2)

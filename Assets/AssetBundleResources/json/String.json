@@ -62,5 +62,9 @@
   {
     "stringID": "16",
     "value": "Speed\n{0}"
+  },
+  {
+    "stringID": "17",
+    "value": "Target Score:{0}"
   }
 ]

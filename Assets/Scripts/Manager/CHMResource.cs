@@ -19,6 +19,11 @@ public class CHMResource
 #endif
     }
 
+    public void LoadStageData(Action<TextAsset> _callback)
+    {
+        LoadAsset<TextAsset>($"data", $"Stage", _callback);
+    }
+
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
     {
         Action<T> _callbackTemp = original =>

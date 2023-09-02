@@ -74,7 +74,7 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stringInfoArr\":" + textAsset.text + "}"));
+            var jsonData = JsonUtility.FromJson<JsonData>("{\"stringInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.stringInfoArr)
             {
                 stringInfoDic.Add(data.stringID, data.value);
@@ -94,7 +94,7 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.Select, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"selectInfoArr\":" + textAsset.text + "}"));
+            var jsonData = JsonUtility.FromJson<JsonData>("{\"selectInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.selectInfoArr)
             {
                 selectInfoList.Add(data);
@@ -114,7 +114,7 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.Monster, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"monsterInfoArr\":" + textAsset.text + "}"));
+            var jsonData = JsonUtility.FromJson<JsonData>("{\"monsterInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.monsterInfoArr)
             {
                 monsterInfoList.Add(data);
@@ -134,7 +134,7 @@ public class CHMJson
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageInfoArr\":" + textAsset.text + "}"));
+            var jsonData = JsonUtility.FromJson<JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.stageInfoArr)
             {
                 stageInfoList.Add(data);

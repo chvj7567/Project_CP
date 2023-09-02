@@ -1,5 +1,11 @@
 [
-  {"stage":"1","blockTypeCount":"3","boardSize":"6","time":"10","targetScore":"100"},
-  {"stage":"2","blockTypeCount":"5","boardSize":"9","time":"10","targetScore":"100"},
-  {"stage":"3","blockTypeCount":"2","boardSize":"9","time":"60","targetScore":"-1"}
+  {"stage":"1","blockTypeCount":"3","boardSize":"9","time":"180","targetScore":"500"},
+  {"stage":"2","blockTypeCount":"3","boardSize":"9","time":"180","targetScore":"1000"},
+  {"stage":"3","blockTypeCount":"4","boardSize":"9","time":"180","targetScore":"850"},
+  {"stage":"4","blockTypeCount":"4","boardSize":"8","time":"180","targetScore":"-1"},
+  {"stage":"5","blockTypeCount":"5","boardSize":"8","time":"180","targetScore":"750"},
+  {"stage":"6","blockTypeCount":"5","boardSize":"8","time":"180","targetScore":"750"},
+  {"stage":"7","blockTypeCount":"5","boardSize":"7","time":"180","targetScore":"700"},
+  {"stage":"8","blockTypeCount":"5","boardSize":"9","time":"180","targetScore":"700"},
+  {"stage":"9","blockTypeCount":"5","boardSize":"9","time":"180","targetScore":"-1"}
 ]
