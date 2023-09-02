@@ -32,6 +32,7 @@ public class Infomation
     public class StageInfo
     {
         public int stage = -1;
+        public int blockTypeCount = -1;
         public int boardSize = -1;
         public float time = -1;
         public int targetScore = -1;

@@ -82,7 +82,7 @@ public class Game : MonoBehaviour
     public List<Sprite> wallBlockSpriteList = new List<Sprite>();
 
     Infomation.StageInfo stageInfo;
-    List<Infomation.StageBlockInfo> stageInfoList = new List<Infomation.StageBlockInfo>();
+    List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
 
     bool oneTimeAlarm = false;
 
@@ -207,7 +207,7 @@ public class Game : MonoBehaviour
         }
 
         stageInfo = CHMMain.Json.GetStageInfo(stage);
-        stageInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
 
         boardSize = stageInfo.boardSize;
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
@@ -471,10 +471,10 @@ public class Game : MonoBehaviour
             block.SetOriginPos();
             block.rectTransform.DOScale(1f, delay);
 
-            var stageInfo = stageInfoList.Find(_ => _.row == block.row && _.col == block.col);
-            if (stageInfo == null)
+            var stageBlockInfo = stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
+            if (stageBlockInfo == null)
             {
-                var random = UnityEngine.Random.Range(0, (int)Defines.ENormalBlockType.Max);
+                var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
                 block.SetNormalType((Defines.ENormalBlockType)random);
                 block.state = Defines.EState.Normal;
@@ -483,29 +483,29 @@ public class Game : MonoBehaviour
             }
             else
             {
-                block.state = stageInfo.blockState;
+                block.state = stageBlockInfo.blockState;
 
                 if (block.state == Defines.EState.Normal)
                 {
-                    block.SetNormalType((Defines.ENormalBlockType)stageInfo.index);
-                    block.img.sprite = normalBlockSpriteList[stageInfo.index];
+                    block.SetNormalType((Defines.ENormalBlockType)stageBlockInfo.index);
+                    block.img.sprite = normalBlockSpriteList[stageBlockInfo.index];
                     block.SetHp(-1);
                 }
                 else
                 {
                     block.SetNormalType(Defines.ENormalBlockType.None);
-                    block.SetHp(stageInfo.hp);
+                    block.SetHp(stageBlockInfo.hp);
 
                     switch (block.state)
                     {
                         case Defines.EState.Potal:
                             {
-                                block.img.sprite = potalBlockSpriteList[stageInfo.index];
+                                block.img.sprite = potalBlockSpriteList[stageBlockInfo.index];
                             }
                             break;
                         case Defines.EState.Wall:
                             {
-                                block.img.sprite = wallBlockSpriteList[stageInfo.index];
+                                block.img.sprite = wallBlockSpriteList[stageBlockInfo.index];
                             }
                             break;
                     }
@@ -529,7 +529,7 @@ public class Game : MonoBehaviour
 
                 if (reupdate == true || block.state == Defines.EState.Match)
                 {
-                    var random = UnityEngine.Random.Range(0, (int)Defines.ENormalBlockType.Max);
+                    var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
                     block.SetNormalType((Defines.ENormalBlockType)random);
                     block.state = Defines.EState.Normal;
