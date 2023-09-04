@@ -1,11 +1,11 @@
 [
-  {"stage":"1","blockTypeCount":"3","boardSize":"9","time":"180","targetScore":"500"},
-  {"stage":"2","blockTypeCount":"3","boardSize":"9","time":"180","targetScore":"1000"},
-  {"stage":"3","blockTypeCount":"4","boardSize":"9","time":"180","targetScore":"850"},
-  {"stage":"4","blockTypeCount":"4","boardSize":"8","time":"180","targetScore":"-1"},
-  {"stage":"5","blockTypeCount":"5","boardSize":"8","time":"180","targetScore":"750"},
-  {"stage":"6","blockTypeCount":"5","boardSize":"8","time":"180","targetScore":"750"},
-  {"stage":"7","blockTypeCount":"5","boardSize":"7","time":"180","targetScore":"700"},
-  {"stage":"8","blockTypeCount":"5","boardSize":"9","time":"180","targetScore":"700"},
-  {"stage":"9","blockTypeCount":"5","boardSize":"9","time":"180","targetScore":"-1"}
+  {"stage":"1","blockTypeCount":"3","boardSize":"5","time":"180","targetScore":"300"},
+  {"stage":"2","blockTypeCount":"4","boardSize":"7","time":"180","targetScore":"500"},
+  {"stage":"3","blockTypeCount":"5","boardSize":"9","time":"180","targetScore":"1000"},
+  {"stage":"4","blockTypeCount":"5","boardSize":"8","time":"150","targetScore":"-1"},
+  {"stage":"5","blockTypeCount":"5","boardSize":"8","time":"150","targetScore":"200"},
+  {"stage":"6","blockTypeCount":"5","boardSize":"8","time":"120","targetScore":"350"},
+  {"stage":"7","blockTypeCount":"5","boardSize":"7","time":"120","targetScore":"400"},
+  {"stage":"8","blockTypeCount":"5","boardSize":"9","time":"120","targetScore":"500"},
+  {"stage":"9","blockTypeCount":"5","boardSize":"9","time":"120","targetScore":"-1"}
 ]

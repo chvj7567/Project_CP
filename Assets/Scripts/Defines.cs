@@ -33,12 +33,20 @@ public class Defines
     {
         None = -1,
 
-        CatPang1, // 磊扁 林函 1沫 气藕
-        CatPang2, // 绞磊啊 气藕
-        CatPang3, // 鞍篮 喉钒 气藕
-        CatPang4, // 啊肺 临 气藕
-        CatPang5, // 技肺 临 气藕
-        CatPang6, // X 磊 气藕
+        CatPang1,
+        CatPang2,
+        CatPang3,
+        CatPang4,
+        CatPang5,
+        
+        Arrow1,
+        Arrow2,
+        Arrow3,
+        Arrow4,
+        Arrow5,
+        Arrow6,
+
+        Bomb,
 
         Max
     }

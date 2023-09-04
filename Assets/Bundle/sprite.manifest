@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 404615284
+CRC: 4270721012
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3574705fbe408c70b5672602e1b80507
+    Hash: 0ce552103d1ef07bab987a4c48a1b4c2
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4df8c69f2c8a6ad9e3cbf82bb83e4dc3
@@ -15,6 +15,7 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/AssetBundleResources/sprite/Arrow6.png
 - Assets/AssetBundleResources/sprite/Cat4.png
 - Assets/AssetBundleResources/sprite/Wall0.png
 - Assets/AssetBundleResources/sprite/BackGround4.png
@@ -24,9 +25,10 @@ Assets:
 - Assets/AssetBundleResources/sprite/Cat2.png
 - Assets/AssetBundleResources/sprite/CatPang3.png
 - Assets/AssetBundleResources/sprite/Mouse_Cry.png
+- Assets/AssetBundleResources/sprite/Bomb.png
 - Assets/AssetBundleResources/sprite/CatPang2.png
 - Assets/AssetBundleResources/sprite/Mouse_Move.png
-- Assets/AssetBundleResources/sprite/CatPang6.png
+- Assets/AssetBundleResources/sprite/Arrow1.png
 - Assets/AssetBundleResources/sprite/GUI.png
 - Assets/AssetBundleResources/sprite/Wall1.png
 - Assets/AssetBundleResources/sprite/CatPang1.png
@@ -34,12 +36,15 @@ Assets:
 - Assets/AssetBundleResources/sprite/Background3.png
 - Assets/AssetBundleResources/sprite/Wall2.png
 - Assets/AssetBundleResources/sprite/Potal0.png
-- Assets/AssetBundleResources/sprite/Logo2.png
 - Assets/AssetBundleResources/sprite/Logo.png
+- Assets/AssetBundleResources/sprite/Arrow5.png
 - Assets/AssetBundleResources/sprite/Background2.png
 - Assets/AssetBundleResources/sprite/Cat3.png
+- Assets/AssetBundleResources/sprite/Arrow2.png
+- Assets/AssetBundleResources/sprite/Arrow3.png
 - Assets/AssetBundleResources/sprite/ButtonBackground.png
 - Assets/AssetBundleResources/sprite/Cat1.png
 - Assets/AssetBundleResources/sprite/CatPang5.png
 - Assets/AssetBundleResources/sprite/Wall3.png
+- Assets/AssetBundleResources/sprite/Arrow4.png
 Dependencies: []

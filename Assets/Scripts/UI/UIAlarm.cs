@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -20,12 +21,34 @@ public class UIAlarm : UIBase
         arg = _uiArg as UIAlarmArg;
     }
 
+    CancellationTokenSource delayTokenSource;
+
     private async void Start()
     {
         alarmText.text.text = arg.alarmText;
 
-        await Task.Delay((int)(arg.closeTime * 1000));
+        delayTokenSource = new CancellationTokenSource();
 
-        CHMMain.UI.CloseUI(gameObject);
+        try
+        {
+            await Task.Delay((int)(arg.closeTime * 1000), delayTokenSource.Token);
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
+        if (gameObject != null)
+        {
+            CHMMain.UI.CloseUI(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (delayTokenSource != null && !delayTokenSource.IsCancellationRequested)
+        {
+            delayTokenSource.Cancel();
+        }
     }
 }

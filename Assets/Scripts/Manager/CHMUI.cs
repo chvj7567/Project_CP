@@ -156,7 +156,7 @@ public class CHMUI
 
     public void CloseUI(GameObject _uiObj)
     {
-        if (_uiObj)
+        if (_uiObj != null)
         {
             var popup = _uiObj.GetComponent<UIBase>();
             popup.CloseUI();

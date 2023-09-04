@@ -39,6 +39,7 @@ public class Block : MonoBehaviour
     public Image img;
     public RectTransform rectTransform;
     public Vector2 originPos;
+    public bool squareMatch = false;
 
     // 벽HP
     [SerializeField, ReadOnly] int hp = 0;
@@ -311,28 +312,57 @@ public class Block : MonoBehaviour
         }
     }
 
-    public async Task Boom()
+    public async Task Boom(bool ani = true)
     {
         switch (specailType)
         {
             case Defines.ESpecailBlockType.CatPang1:
-                await game.Boom1(this);
-                break;
             case Defines.ESpecailBlockType.CatPang2:
-                await game.Boom2(this);
-                break;
             case Defines.ESpecailBlockType.CatPang3:
+            case Defines.ESpecailBlockType.CatPang4:
+            case Defines.ESpecailBlockType.CatPang5:
+                await game.Boom1(this, ani);
+                break;
+            case Defines.ESpecailBlockType.Arrow1:
+                await game.Boom4(this, ani);
+                break;
+            case Defines.ESpecailBlockType.Arrow2:
+                await game.Boom7(this, ani);
+                break;
+            case Defines.ESpecailBlockType.Arrow3:
+                await game.Boom5(this, ani);
+                break;
+            case Defines.ESpecailBlockType.Arrow4:
+                await game.Boom8(this, ani);
+                break;
+            case Defines.ESpecailBlockType.Arrow5:
+                await game.Boom2(this, ani);
+                break;
+            case Defines.ESpecailBlockType.Arrow6:
+                await game.Boom6(this, ani);
+                break;
+            case Defines.ESpecailBlockType.Bomb:
                 // 드래그 해야 함
                 break;
-            case Defines.ESpecailBlockType.CatPang4:
-                await game.Boom4(this);
-                break;
-            case Defines.ESpecailBlockType.CatPang5:
-                await game.Boom5(this);
-                break;
-            case Defines.ESpecailBlockType.CatPang6:
-                await game.Boom6(this);
-                break;
+        }
+    }
+
+    public Defines.ESpecailBlockType GetPangType()
+    {
+        switch (normalType)
+        {
+            case Defines.ENormalBlockType.Cat1:
+                return Defines.ESpecailBlockType.CatPang1;
+            case Defines.ENormalBlockType.Cat2:
+                return Defines.ESpecailBlockType.CatPang2;
+            case Defines.ENormalBlockType.Cat3:
+                return Defines.ESpecailBlockType.CatPang3;
+            case Defines.ENormalBlockType.Cat4:
+                return Defines.ESpecailBlockType.CatPang4;
+            case Defines.ENormalBlockType.Cat5:
+                return Defines.ESpecailBlockType.CatPang5;
+            default:
+                return Defines.ESpecailBlockType.None;
         }
     }
 }

@@ -28,7 +28,7 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
         return buttonHeight + margin;
     }
 
-    public static Dictionary<RectTransform, Block> GetBlockAll()
+    public static Dictionary<RectTransform, Block> GetBlockDict()
     {
         return blockDict;
     }
