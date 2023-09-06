@@ -180,4 +180,16 @@ public class Defines
 
         Max
     }
+
+    public enum EBackground
+    {
+        None = -1,
+
+        Background1,
+        Background2,
+        Background3,
+        Background4,
+
+        Max
+    }
 }
