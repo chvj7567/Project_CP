@@ -1157,7 +1157,7 @@ MonoBehaviour:
   - {fileID: 1420461829}
   backgroundIndex: 0
   spawner: {fileID: 1208139740}
-  delay: 0.7
+  delay: 0.35
   isDrag: 0
   isAni: 0
   teachTime: 0
@@ -1200,6 +1200,7 @@ MonoBehaviour:
   gameOver:
     value: 0
   towerPoint: 
+  delayMillisecond: 1000
 --- !u!1 &386755759
 GameObject:
   m_ObjectHideFlags: 0
@@ -6453,6 +6454,8 @@ MonoBehaviour:
   match: 0
   boom: 0
   squareMatch: 0
+  changeUpScale: 0
+  changeDownScale: 0
   hp: 0
   checkDamage: 0
 --- !u!114 &1975192483

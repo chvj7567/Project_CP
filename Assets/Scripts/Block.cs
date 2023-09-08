@@ -37,12 +37,14 @@ public class Block : MonoBehaviour
     public RectTransform rectTransform;
     public Vector2 originPos;
 
+    // 매치되었는지 확인
     public bool match = false;
+    // 폭탄 블럭일 경우 터졌는지 확인
     public bool boom = false;
+    // 사각형 매치되었는지 확인(폭탄 블럭 생성되는 곳에만 true)
     public bool squareMatch = false;
-
-    public bool changeUpScale = false;
-    public bool changeDownScale = false;
+    // 없어진 블럭인지 확인
+    public bool remove = false;
 
     // 벽HP
     [SerializeField, ReadOnly] int hp = 0;

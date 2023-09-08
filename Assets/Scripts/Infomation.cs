@@ -43,7 +43,6 @@ public class Infomation
     {
         public int stage = -1;
         public Defines.EBlockState blockState;
-        public int index = -1;
         public int hp = -1;
         public int row = -1;
         public int col = -1;

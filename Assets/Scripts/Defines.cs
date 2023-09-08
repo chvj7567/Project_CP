@@ -167,6 +167,7 @@ public class Defines
         CheckMap,
         CheckSquareMatch,
         RemoveMatchBlock,
+        CreateBoomBlock,
         Check3Match,
         DownBlock,
         ChangeBlock,

@@ -83,9 +83,10 @@ public class Game : MonoBehaviour
 
     Infomation.StageInfo stageInfo;
     List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
-
+    [SerializeField] int delayMillisecond;
     bool oneTimeAlarm = false;
 
+    
     CancellationTokenSource tokenSource;
 
     async void Start()
@@ -411,6 +412,9 @@ public class Game : MonoBehaviour
     public async Task AfterDrag(Block block1, Block block2)
     {
         isAni = true;
+
+        await Task.Delay((int)(delay * delayMillisecond));
+
         bool first = false;
 
         if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)
@@ -453,8 +457,6 @@ public class Game : MonoBehaviour
             }
         }
 
-        await Task.Delay((int)(delay * 1000));
-
         do
         {
             isMatch = false;
@@ -463,17 +465,18 @@ public class Game : MonoBehaviour
             {
                 if (first == false && isMatch == false)
                 {
-                    block1.rectTransform.DOAnchorPos(block2.originPos, delay);
-                    block2.rectTransform.DOAnchorPos(block1.originPos, delay);
                     ChangeBlock(block1, block2);
+                    block1.rectTransform.DOAnchorPos(block1.originPos, delay);
+                    block2.rectTransform.DOAnchorPos(block2.originPos, delay);
 
-                    await Task.Delay((int)(delay * 1000));
+                    await Task.Delay((int)(delay * delayMillisecond));
                 }
             }
 
             first = true;
 
-            await RemoveMatchBlockAndCreateBoomBlock();
+            await RemoveMatchBlock();
+            await CreateBoomBlock();
             await DownBlock();
             await UpdateMap();
             CheckMap();
@@ -487,7 +490,7 @@ public class Game : MonoBehaviour
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
 
-        await Task.Delay((int)(delay * 1000));
+        await Task.Delay((int)(delay * delayMillisecond));
 
         if (addDefense == true)
         {
@@ -527,8 +530,7 @@ public class Game : MonoBehaviour
             block.originPos.x -= moveDis;
             block.SetOriginPos();
 
-            block.changeUpScale = true;
-            block.rectTransform.DOScale(1f, delay).OnComplete(() => { block.changeUpScale = false; });
+            block.rectTransform.DOScale(1f, delay);
 
             var stageBlockInfo = stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
             if (stageBlockInfo == null)
@@ -542,7 +544,7 @@ public class Game : MonoBehaviour
             else
             {
                 block.SetBlockState(Defines.ELog.CreateMap, 2, stageBlockInfo.blockState);
-                block.img.sprite = blockSpriteList[stageBlockInfo.index];
+                block.img.sprite = blockSpriteList[(int)stageBlockInfo.blockState];
 
                 if (block.IsNormalBlock() == true)
                 {
@@ -555,7 +557,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        await Task.Delay((int)(delay * 1000));
+        await Task.Delay((int)(delay * delayMillisecond));
     }
 
     async Task UpdateMap()
@@ -564,7 +566,7 @@ public class Game : MonoBehaviour
         try
         {
             bool reupdate = false;
-
+            bool createDelay = false;
             do
             {
                 foreach (var block in boardArr)
@@ -577,7 +579,8 @@ public class Game : MonoBehaviour
                     {
                         var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
-                        CreateBlock(block, Defines.ELog.UpdateMap, 1, (Defines.EBlockState)random);
+                        createDelay = true;
+                        CreateNewBlock(block, Defines.ELog.UpdateMap, 1, (Defines.EBlockState)random);
                         block.SetHp(-1);
                         block.ResetScore();
                         block.SetOriginPos();
@@ -586,7 +589,8 @@ public class Game : MonoBehaviour
                     {
                         if (block.changeBlockState != Defines.EBlockState.None)
                         {
-                            CreateBlock(block, Defines.ELog.UpdateMap, 2, block.changeBlockState);
+                            createDelay = true;
+                            CreateNewBlock(block, Defines.ELog.UpdateMap, 2, block.changeBlockState);
                             block.SetHp(-1);
                             block.ResetScore();
                             block.SetOriginPos();
@@ -605,7 +609,10 @@ public class Game : MonoBehaviour
                     });
                 }
 
-                await Task.Delay((int)(delay * 1000), tokenSource.Token);
+                if (createDelay == true)
+                {
+                    await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+                }
 
             } while (reupdate == true);
 
@@ -754,8 +761,7 @@ public class Game : MonoBehaviour
     }
 
     bool CheckSquareMatch(int row, int col, bool _test = false)
-    // 스퀘어 Match 확인
-    // 좌측 상단부터 확인
+    // 스퀘어 Match 좌측 상단부터 확인
     {
         if (IsNormalBlock(row, col) == false || IsNormalBlock(row + 1, col) == false ||
             IsNormalBlock(row, col + 1) == false || IsNormalBlock(row + 1, col + 1) == false)
@@ -817,12 +823,11 @@ public class Game : MonoBehaviour
         return true;
     }
 
-    async Task RemoveMatchBlockAndCreateBoomBlock()
-    // Match된 블럭 제거, 폭탄 블럭 생성
+    async Task RemoveMatchBlock()
+    // Match된 블럭 제거
     {
         bool removeDelay = false;
-        bool createBoomDelay = false;
-
+        
         for (int i = 0; i < boardSize; ++i)
         {
             for (int j = 0; j < boardSize; ++j)
@@ -832,9 +837,17 @@ public class Game : MonoBehaviour
                     continue;
 
                 // 없어져야 할 블럭
-                if (block.IsMatch() == true)
+                if (block.IsMatch() == true && block.remove == false)
                 {
+                    // 주변에 hp가 있는 블럭은 데미지 줌
                     CheckArround(block.row, block.col);
+
+                    oneTimeScore.Value += 1;
+
+                    removeDelay = true;
+                    block.remove = true;
+                    block.rectTransform.DOScale(0f, delay);
+
                     var gold = CHMMain.Resource.Instantiate(goldImg.gameObject, transform.parent);
                     if (gold != null)
                     {
@@ -853,8 +866,6 @@ public class Game : MonoBehaviour
                         }
                     }
 
-                    oneTimeScore.Value += 1;
-
                     // 아이템이 연달아 터지는 경우
                     if (block.IsBoomBlock() == true && block.boom == false)
                     {
@@ -865,127 +876,6 @@ public class Game : MonoBehaviour
                         i = -1;
                         break;
                     }
-
-                    removeDelay = true;
-
-                    int row = i;
-                    int col = j;
-
-                    if (block.changeUpScale == true)
-                    {
-                        Debug.Log($"Not Remove Up Sclae {row}/{col}");
-                    }
-                    else if (block.changeDownScale == true)
-                    {
-                        Debug.Log($"Not Remove Down Sclae {row}/{col}");
-                    }
-                    else
-                    {
-                        block.changeDownScale = true;
-                        block.rectTransform.DOScale(0f, delay).OnComplete(() =>
-                        {
-                            block.changeDownScale = false;
-                            // 스퀘어 매치 블럭 생성
-                            if (block.squareMatch == true)
-                            {
-                                var pangType = block.GetPangType();
-                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 1, pangType);
-                                block.ResetScore();
-                                block.SetOriginPos();
-                                block.squareMatch = false;
-                            }
-
-                            // 십자가 매치 블럭 생성
-                            if (block.hScore >= 3 && block.vScore >= 3)
-                            {
-                                createBoomDelay = true;
-
-                                if (block.hScore >= 4 || block.vScore >= 4)
-                                {
-                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 2, Defines.EBlockState.Arrow5);
-                                }
-                                else
-                                {
-                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 3, Defines.EBlockState.Arrow6);
-                                }
-
-                                block.ResetScore();
-                                block.SetOriginPos();
-
-                                for (int idx = 1; idx < MAX; ++idx)
-                                {
-                                    int tempRow = row + idx;
-                                    int tempCol = col;
-                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
-                                    {
-                                        if (boardArr[tempRow, tempCol].hScore > 0
-                                        || boardArr[tempRow, tempCol].vScore > 0)
-                                        {
-                                            boardArr[tempRow, tempCol].ResetScore();
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                for (int idx = 1; idx < MAX; ++idx)
-                                {
-                                    int tempRow = row - idx;
-                                    int tempCol = col;
-                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
-                                    {
-                                        if (boardArr[tempRow, tempCol].hScore > 0
-                                        || boardArr[tempRow, tempCol].vScore > 0)
-                                        {
-                                            boardArr[tempRow, tempCol].ResetScore();
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                for (int idx = 1; idx < MAX; ++idx)
-                                {
-                                    int tempRow = row;
-                                    int tempCol = col + idx;
-                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
-                                    {
-                                        if (boardArr[tempRow, tempCol].hScore > 0
-                                        || boardArr[tempRow, tempCol].vScore > 0)
-                                        {
-                                            boardArr[tempRow, tempCol].ResetScore();
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                for (int idx = 1; idx < MAX; ++idx)
-                                {
-                                    int tempRow = row;
-                                    int tempCol = col - idx;
-                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
-                                    {
-                                        if (boardArr[tempRow, tempCol].hScore > 0
-                                        || boardArr[tempRow, tempCol].vScore > 0)
-                                        {
-                                            boardArr[tempRow, tempCol].ResetScore();
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
                 }
             }
         }
@@ -993,106 +883,138 @@ public class Game : MonoBehaviour
         if (removeDelay)
         {
             CHMMain.Sound.Play(Defines.ESound.Cat);
-            await Task.Delay((int)(delay * 1000));
+            await Task.Delay((int)(delay * delayMillisecond));
         }
+
+        // match 되어 scale이 0이 되어야하는데 안된 경우 즉시 0으로 변경
+        for (int i = 0; i < boardSize; ++i)
+        {
+            for (int j = 0; j < boardSize; ++j)
+            {
+                var block = boardArr[i, j];
+                if (block.match == true && block.rectTransform.localScale.x > 0.01f)
+                {
+                    Debug.Log($"Why {block.row}/{block.col}:{i}/{j} {block.rectTransform.localScale.x}");
+                    block.rectTransform.localScale = Vector3.zero;
+                }
+            }
+        }
+    }
+
+    async Task CreateBoomBlock()
+    // 폭탄 블럭 생성
+    {
+        bool createDelay = false;
 
         for (int i = 0; i < boardSize; ++i)
         {
             for (int j = 0; j < boardSize; ++j)
             {
                 var block = boardArr[i, j];
-                if (block == null) continue;
+                if (block == null)
+                    continue;
 
-                block.ResetCheckWallDamage();
+                int row = i;
+                int col = j;
 
-                if (block.IsMatch() == true)
+                // 스퀘어 매치 블럭 생성
+                if (block.squareMatch == true)
                 {
-                    // 가로 3개 초과 매치 시 특수 블럭 생성
-                    if (block.hScore > 3)
+                    createDelay = true;
+                    var pangType = block.GetPangType();
+                    CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 1, pangType);
+                    block.ResetScore();
+                    block.SetOriginPos();
+                    block.squareMatch = false;
+                }
+
+                // 십자가 매치 블럭 생성
+                if (block.hScore >= 3 && block.vScore >= 3)
+                {
+                    createDelay = true;
+
+                    if (block.hScore >= 4 || block.vScore >= 4)
                     {
-                        createBoomDelay = true;
+                        createDelay = true;
+                        CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 2, Defines.EBlockState.Arrow5);
+                    }
+                    else
+                    {
+                        createDelay = true;
+                        CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 3, Defines.EBlockState.Arrow6);
+                    }
 
-                        bool checkMoveBlock = false;
+                    block.ResetScore();
+                    block.SetOriginPos();
 
-                        int tempScore = block.hScore;
-                        for (int idx = 0; idx < tempScore; ++idx)
+                    for (int idx = 1; idx < MAX; ++idx)
+                    {
+                        int tempRow = row + idx;
+                        int tempCol = col;
+                        if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
                         {
-                            int tempRow = i;
-                            int tempCol = j + idx;
-                            if (IsValidIndex(tempRow, tempCol) == false || boardArr[tempRow, tempCol] == null)
-                                continue;
-
-                            if (boardArr[tempRow, tempCol].index == moveIndex1 ||
-                                boardArr[tempRow, tempCol].index == moveIndex2)
+                            if (boardArr[tempRow, tempCol].hScore > 0
+                            || boardArr[tempRow, tempCol].vScore > 0)
                             {
-                                checkMoveBlock = true;
-                                if (tempScore >= 5)
-                                {
-                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 4, Defines.EBlockState.Arrow1);
-                                }
-                                else
-                                {
-                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 5, Defines.EBlockState.Arrow4);
-                                }
-                            }
-
-                            boardArr[tempRow, tempCol].ResetScore();
-                        }
-
-                        if (checkMoveBlock == false)
-                        {
-                            if (tempScore >= 5)
-                            {
-                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 6, Defines.EBlockState.Arrow2);
+                                boardArr[tempRow, tempCol].ResetScore();
                             }
                             else
                             {
-                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 7, Defines.EBlockState.Arrow3);
+                                break;
                             }
                         }
                     }
-                    // 세로 3개 초과 매치 시 특수 블럭 생성
-                    else if (block.vScore > 3)
+
+                    for (int idx = 1; idx < MAX; ++idx)
                     {
-                        createBoomDelay = true;
-
-                        bool checkMoveBlock = false;
-
-                        int tempScore = block.vScore;
-                        for (int idx = 0; idx < tempScore; ++idx)
+                        int tempRow = row - idx;
+                        int tempCol = col;
+                        if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
                         {
-                            int tempRow = i + idx;
-                            int tempCol = j;
-
-                            if (IsValidIndex(tempRow, tempCol) == false || boardArr[tempRow, tempCol] == null)
-                                continue;
-
-                            if (boardArr[tempRow, tempCol].index == moveIndex1 ||
-                                boardArr[tempRow, tempCol].index == moveIndex2)
+                            if (boardArr[tempRow, tempCol].hScore > 0
+                            || boardArr[tempRow, tempCol].vScore > 0)
                             {
-                                checkMoveBlock = true;
-                                if (tempScore >= 5)
-                                {
-                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 8, Defines.EBlockState.CatPang5);
-                                }
-                                else
-                                {
-                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 9, Defines.EBlockState.CatPang1);
-                                }
-                            }
-
-                            boardArr[tempRow, tempCol].ResetScore();
-                        }
-
-                        if (checkMoveBlock == false)
-                        {
-                            if (tempScore >= 5)
-                            {
-                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 10, Defines.EBlockState.CatPang5);
+                                boardArr[tempRow, tempCol].ResetScore();
                             }
                             else
                             {
-                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 11, Defines.EBlockState.CatPang1);
+                                break;
+                            }
+                        }
+                    }
+
+                    for (int idx = 1; idx < MAX; ++idx)
+                    {
+                        int tempRow = row;
+                        int tempCol = col + idx;
+                        if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                        {
+                            if (boardArr[tempRow, tempCol].hScore > 0
+                            || boardArr[tempRow, tempCol].vScore > 0)
+                            {
+                                boardArr[tempRow, tempCol].ResetScore();
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    for (int idx = 1; idx < MAX; ++idx)
+                    {
+                        int tempRow = row;
+                        int tempCol = col - idx;
+                        if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                        {
+                            if (boardArr[tempRow, tempCol].hScore > 0
+                            || boardArr[tempRow, tempCol].vScore > 0)
+                            {
+                                boardArr[tempRow, tempCol].ResetScore();
+                            }
+                            else
+                            {
+                                break;
                             }
                         }
                     }
@@ -1100,32 +1022,125 @@ public class Game : MonoBehaviour
             }
         }
 
-        if (createBoomDelay)
+        for (int i = 0; i < boardSize; ++i)
         {
-            await Task.Delay((int)(delay * 1000));
+            for (int j = 0; j < boardSize; ++j)
+            {
+                var block = boardArr[i, j];
+                if (block == null)
+                    continue;
+
+                block.ResetCheckWallDamage();
+
+                // 가로 3개 초과 매치 시 특수 블럭 생성
+                if (block.hScore > 3)
+                {
+                    createDelay = true;
+
+                    bool checkMoveBlock = false;
+
+                    int tempScore = block.hScore;
+                    for (int idx = 0; idx < tempScore; ++idx)
+                    {
+                        int tempRow = i;
+                        int tempCol = j + idx;
+                        if (IsValidIndex(tempRow, tempCol) == false || boardArr[tempRow, tempCol] == null)
+                            continue;
+
+                        var tempBlock = boardArr[tempRow, tempCol];
+                        if (tempBlock.index == moveIndex1 ||
+                            tempBlock.index == moveIndex2)
+                        {
+                            checkMoveBlock = true;
+                            if (tempScore >= 5)
+                            {
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 4, Defines.EBlockState.Arrow1);
+                            }
+                            else
+                            {
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 5, Defines.EBlockState.Arrow4);
+                            }
+                        }
+
+                        boardArr[tempRow, tempCol].ResetScore();
+                    }
+
+                    if (checkMoveBlock == false)
+                    {
+                        if (tempScore >= 5)
+                        {
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 6, Defines.EBlockState.Arrow2);
+                        }
+                        else
+                        {
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 7, Defines.EBlockState.Arrow3);
+                        }
+                    }
+                }
+                // 세로 3개 초과 매치 시 특수 블럭 생성
+                else if (block.vScore > 3)
+                {
+                    createDelay = true;
+
+                    bool checkMoveBlock = false;
+
+                    int tempScore = block.vScore;
+                    for (int idx = 0; idx < tempScore; ++idx)
+                    {
+                        int tempRow = i + idx;
+                        int tempCol = j;
+
+                        if (IsValidIndex(tempRow, tempCol) == false || boardArr[tempRow, tempCol] == null)
+                            continue;
+
+                        var tempBlock = boardArr[tempRow, tempCol];
+                        if (tempBlock.index == moveIndex1 ||
+                            tempBlock.index == moveIndex2)
+                        {
+                            checkMoveBlock = true;
+                            if (tempScore >= 5)
+                            {
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 8, Defines.EBlockState.CatPang5);
+                            }
+                            else
+                            {
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 9, Defines.EBlockState.CatPang1);
+                            }
+                        }
+
+                        boardArr[tempRow, tempCol].ResetScore();
+                    }
+
+                    if (checkMoveBlock == false)
+                    {
+                        if (tempScore >= 5)
+                        {
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 10, Defines.EBlockState.CatPang5);
+                        }
+                        else
+                        {
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 11, Defines.EBlockState.CatPang1);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (createDelay)
+        {
+            await Task.Delay((int)(delay * delayMillisecond));
         }
     }
 
-    void CreateBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _boomBlock)
+    void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _boomBlock)
     {
         _block.SetBlockState(_log, _key, _boomBlock);
         _block.img.sprite = blockSpriteList[(int)_boomBlock];
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;
-        if (_block.changeUpScale == true)
-        {
-            Debug.Log($"Not Create Up Scale {_block.row}/{_block.col}");
-        }
-        else if (_block.changeDownScale == true)
-        {
-            Debug.Log($"Not Create Down Scale {_block.row}/{_block.col}");
-        }
-        else
-        {
-            _block.changeUpScale = true;
-            _block.rectTransform.DOScale(1f, delay).OnComplete(() => { _block.changeUpScale = false; });
-        }
+        _block.remove = false;
+        _block.rectTransform.DOScale(1f, delay);
     }
 
     void Check3Match(List<Block> blockList, Defines.EDirection direction, bool test = false)
@@ -1261,7 +1276,7 @@ public class Game : MonoBehaviour
 
         if (downDelay)
         {
-            await Task.Delay((int)(delay * 1000));
+            await Task.Delay((int)(delay * delayMillisecond));
         }
     }
 

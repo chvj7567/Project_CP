@@ -17,12 +17,12 @@ public class CHButton : MonoBehaviour
 
         button.OnPointerEnterAsObservable().Subscribe(_ =>
         {
-            button.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), .5f);
+            //button.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), .5f);
         });
 
         button.OnPointerExitAsObservable().Subscribe(_ =>
         {
-            button.transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
+            //button.transform.DOScale(new Vector3(1f, 1f, 1f), .5f);
         });
 
         button.OnClickAsObservable().Subscribe(_ =>
