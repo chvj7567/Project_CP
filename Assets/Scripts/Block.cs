@@ -4,6 +4,7 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
+using static Defines;
 
 [RequireComponent(typeof(RectTransform))]
 public class Block : MonoBehaviour
@@ -24,13 +25,9 @@ public class Block : MonoBehaviour
     [ReadOnly]
     public int col;
     [SerializeField, ReadOnly]
-    Defines.ENormalBlockType normalType;
+    public Defines.EBlockState changeBlockState;
     [SerializeField, ReadOnly]
-    Defines.ESpecailBlockType specailType;
-    [SerializeField, ReadOnly]
-    public Defines.ESpecailBlockType changeSpecialType;
-    [ReadOnly]
-    public Defines.EState state = Defines.EState.None;
+    Defines.EBlockState blockState = Defines.EBlockState.None;
     [ReadOnly]
     public int hScore;
     [ReadOnly]
@@ -39,22 +36,28 @@ public class Block : MonoBehaviour
     public Image img;
     public RectTransform rectTransform;
     public Vector2 originPos;
+
+    public bool match = false;
+    public bool boom = false;
     public bool squareMatch = false;
+
+    public bool changeUpScale = false;
+    public bool changeDownScale = false;
 
     // 벽HP
     [SerializeField, ReadOnly] int hp = 0;
     // 벽은 한 턴에 한 번만 데미지를 입음
-    [SerializeField, ReadOnly] bool checkWallDamage = false;
+    [SerializeField, ReadOnly] bool checkDamage = false;
 
     private void Start()
     {
-        changeSpecialType = Defines.ESpecailBlockType.None;
+        changeBlockState = Defines.EBlockState.None;
 
         originPos = rectTransform.anchoredPosition;
 
         btn.OnClickAsObservable().Subscribe(async _ =>
         {
-            if (CheckMoveBlock() == false)
+            if (IsFixdBlock() == true)
                 return;
 
             if (game.isDrag == false && game.isAni == false)
@@ -65,7 +68,7 @@ public class Block : MonoBehaviour
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
         {
-            if (game.isDrag == true || CheckMoveBlock() == false)
+            if (game.isDrag == true || IsFixdBlock() == true)
                 return;
 
             game.isDrag = true;
@@ -80,7 +83,7 @@ public class Block : MonoBehaviour
         {
             game.isDrag = false;
 
-            if (game.isAni == true || CheckMoveBlock() == false)
+            if (game.isAni == true || IsFixdBlock() == true)
                 return;
 
             Vector2 rectPosition;
@@ -101,7 +104,7 @@ public class Block : MonoBehaviour
                         
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.CheckMoveBlock() == false)
+                            if (ret.Item2.IsFixdBlock() == true)
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -120,7 +123,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.CheckMoveBlock() == false)
+                            if (ret.Item2.IsFixdBlock() == true)
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -139,7 +142,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.CheckMoveBlock() == false)
+                            if (ret.Item2.IsFixdBlock() == true)
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -158,7 +161,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.CheckMoveBlock() == false)
+                            if (ret.Item2.IsFixdBlock() == true)
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -217,28 +220,6 @@ public class Block : MonoBehaviour
         vScore = 0;
     }
 
-    public Defines.ENormalBlockType GetNormalType()
-    {
-        return normalType;
-    }
-
-    public Defines.ESpecailBlockType GetSpecailType()
-    {
-        return specailType;
-    }
-
-    public void SetNormalType(Defines.ENormalBlockType normalType)
-    {
-        this.specailType = Defines.ESpecailBlockType.None;
-        this.normalType = normalType;
-    }
-
-    public void SetSpecailType(Defines.ESpecailBlockType specailType)
-    {
-        this.normalType = Defines.ENormalBlockType.None;
-        this.specailType = specailType;
-    }
-
     public void SetHp(int _hp)
     {
         if (_hp < 0)
@@ -259,29 +240,32 @@ public class Block : MonoBehaviour
         return hp;
     }
 
-    public void DamageWall()
+    public void SetBlockState(Defines.ELog _log, int _key, Defines.EBlockState _blockState)
     {
-        if (checkWallDamage == false && hp >= 1)
-        {
-            checkWallDamage = true;
-            hp -= 1;
+        blockState = _blockState;
+        match = false;
 
-            if (hp > 0)
-            {
-                hpText.SetText(hp);
-            }
-            else
-            {
-                state = Defines.EState.Match;
-            }
+        CheckNoneBlockLog(_log, _key);
+    }
+
+    public Defines.EBlockState GetBlockState()
+    {
+        return blockState;
+    }
+
+    public void CheckNoneBlockLog(Defines.ELog _log, int _key)
+    {
+        if (blockState == Defines.EBlockState.None)
+        {
+            Debug.Log($"Function: {_log.ToString()} {_key} Block{row}/{col} state is None");
         }
     }
 
-    public void DamagePotal()
+    public void Damage()
     {
-        if (checkWallDamage == false && hp >= 1)
+        if (checkDamage == false && hp >= 1)
         {
-            checkWallDamage = true;
+            checkDamage = true;
             hp -= 1;
 
             if (hp > 0)
@@ -290,79 +274,136 @@ public class Block : MonoBehaviour
             }
             else
             {
-                state = Defines.EState.Match;
+                match = true;
             }
         }
     }
 
     public void ResetCheckWallDamage()
     {
-        checkWallDamage = false;
-    }
-
-    public bool CheckMoveBlock()
-    {
-        switch (state)
-        {
-            case Defines.EState.Potal:
-            case Defines.EState.Wall:
-                return false;
-            default:
-                return true;
-        }
+        checkDamage = false;
     }
 
     public async Task Boom(bool ani = true)
     {
-        switch (specailType)
+        switch (blockState)
         {
-            case Defines.ESpecailBlockType.CatPang1:
-            case Defines.ESpecailBlockType.CatPang2:
-            case Defines.ESpecailBlockType.CatPang3:
-            case Defines.ESpecailBlockType.CatPang4:
-            case Defines.ESpecailBlockType.CatPang5:
+            case Defines.EBlockState.CatPang1:
+            case Defines.EBlockState.CatPang2:
+            case Defines.EBlockState.CatPang3:
+            case Defines.EBlockState.CatPang4:
+            case Defines.EBlockState.CatPang5:
                 await game.Boom1(this, ani);
                 break;
-            case Defines.ESpecailBlockType.Arrow1:
+            case Defines.EBlockState.Arrow1:
                 await game.Boom4(this, ani);
                 break;
-            case Defines.ESpecailBlockType.Arrow2:
+            case Defines.EBlockState.Arrow2:
                 await game.Boom7(this, ani);
                 break;
-            case Defines.ESpecailBlockType.Arrow3:
+            case Defines.EBlockState.Arrow3:
                 await game.Boom5(this, ani);
                 break;
-            case Defines.ESpecailBlockType.Arrow4:
+            case Defines.EBlockState.Arrow4:
                 await game.Boom8(this, ani);
                 break;
-            case Defines.ESpecailBlockType.Arrow5:
+            case Defines.EBlockState.Arrow5:
                 await game.Boom2(this, ani);
                 break;
-            case Defines.ESpecailBlockType.Arrow6:
+            case Defines.EBlockState.Arrow6:
                 await game.Boom6(this, ani);
                 break;
-            case Defines.ESpecailBlockType.Bomb:
+            case Defines.EBlockState.Bomb:
                 // 드래그 해야 함
                 break;
         }
     }
 
-    public Defines.ESpecailBlockType GetPangType()
+    public Defines.EBlockState GetPangType()
     {
-        switch (normalType)
+        switch (blockState)
         {
-            case Defines.ENormalBlockType.Cat1:
-                return Defines.ESpecailBlockType.CatPang1;
-            case Defines.ENormalBlockType.Cat2:
-                return Defines.ESpecailBlockType.CatPang2;
-            case Defines.ENormalBlockType.Cat3:
-                return Defines.ESpecailBlockType.CatPang3;
-            case Defines.ENormalBlockType.Cat4:
-                return Defines.ESpecailBlockType.CatPang4;
-            case Defines.ENormalBlockType.Cat5:
-                return Defines.ESpecailBlockType.CatPang5;
+            case Defines.EBlockState.Cat1:
+                return Defines.EBlockState.CatPang1;
+            case Defines.EBlockState.Cat2:
+                return Defines.EBlockState.CatPang2;
+            case Defines.EBlockState.Cat3:
+                return Defines.EBlockState.CatPang3;
+            case Defines.EBlockState.Cat4:
+                return Defines.EBlockState.CatPang4;
+            case Defines.EBlockState.Cat5:
+                return Defines.EBlockState.CatPang5;
             default:
-                return Defines.ESpecailBlockType.None;
+                return Defines.EBlockState.None;
         }
+    }
+
+    public bool IsNormalBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.Cat1:
+            case Defines.EBlockState.Cat2:
+            case Defines.EBlockState.Cat3:
+            case Defines.EBlockState.Cat4:
+            case Defines.EBlockState.Cat5:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool IsBoomBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.CatPang1:
+            case Defines.EBlockState.CatPang2:
+            case Defines.EBlockState.CatPang3:
+            case Defines.EBlockState.CatPang4:
+            case Defines.EBlockState.CatPang5:
+            case Defines.EBlockState.Arrow1:
+            case Defines.EBlockState.Arrow2:
+            case Defines.EBlockState.Arrow3:
+            case Defines.EBlockState.Arrow4:
+            case Defines.EBlockState.Arrow5:
+            case Defines.EBlockState.Arrow6:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool IsFixdBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.Wall:
+            case Defines.EBlockState.Potal:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool IsSpecialBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.Bomb:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool IsMatch()
+    {
+        return match == true;
+    }
+
+    public bool IsBlock()
+    {
+        return blockState != Defines.EBlockState.None;
     }
 }

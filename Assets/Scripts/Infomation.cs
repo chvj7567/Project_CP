@@ -42,7 +42,7 @@ public class Infomation
     public class StageBlockInfo
     {
         public int stage = -1;
-        public Defines.EState blockState;
+        public Defines.EBlockState blockState;
         public int index = -1;
         public int hp = -1;
         public int row = -1;

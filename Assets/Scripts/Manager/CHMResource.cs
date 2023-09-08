@@ -55,22 +55,7 @@ public class CHMResource
         LoadAsset<TextAsset>($"{Defines.EResourceType.Json.ToString()}", $"{_jsonType.ToString()}", _callback);
     }
 
-    public void LoadSprite(Defines.ENormalBlockType _spriteType, Action<Sprite> _callback)
-    {
-        LoadAsset<Sprite>($"{Defines.EResourceType.Sprite.ToString()}", $"{_spriteType.ToString()}", _callback);
-    }
-
-    public void LoadSprite(Defines.ESpecailBlockType _spriteType, Action<Sprite> _callback)
-    {
-        LoadAsset<Sprite>($"{Defines.EResourceType.Sprite.ToString()}", $"{_spriteType.ToString()}", _callback);
-    }
-
-    public void LoadSprite(Defines.EWallBlockType _spriteType, Action<Sprite> _callback)
-    {
-        LoadAsset<Sprite>($"{Defines.EResourceType.Sprite.ToString()}", $"{_spriteType.ToString()}", _callback);
-    }
-
-    public void LoadSprite(Defines.EPotalBlockType _spriteType, Action<Sprite> _callback)
+    public void LoadSprite(Defines.EBlockState _spriteType, Action<Sprite> _callback)
     {
         LoadAsset<Sprite>($"{Defines.EResourceType.Sprite.ToString()}", $"{_spriteType.ToString()}", _callback);
     }

@@ -16,62 +16,6 @@ public class Defines
         Max
     }
 
-    public enum ENormalBlockType
-    {
-        None = -1,
-
-        Cat1,
-        Cat2,
-        Cat3,
-        Cat4,
-        Cat5,
-
-        Max
-    }
-
-    public enum ESpecailBlockType
-    {
-        None = -1,
-
-        CatPang1,
-        CatPang2,
-        CatPang3,
-        CatPang4,
-        CatPang5,
-        
-        Arrow1,
-        Arrow2,
-        Arrow3,
-        Arrow4,
-        Arrow5,
-        Arrow6,
-
-        Bomb,
-
-        Max
-    }
-
-    public enum EWallBlockType
-    {
-        None = -1,
-
-        Wall0,
-        Wall1,
-        Wall2,
-        Wall3,
-
-        Max
-    }
-
-    public enum EPotalBlockType
-    {
-        None = -1,
-
-        Potal0,
-
-        Max
-    }
-
     public enum EResourceType
     {
         None = -1,
@@ -125,14 +69,34 @@ public class Defines
         Max
     }
 
-    public enum EState
+    public enum EBlockState
     {
         None = -1,
 
-        Normal = 0,
-        Match = 1,
-        Potal = 2,
-        Wall = 3,
+        // 일반 블럭은 앞에서 처리
+        Cat1,
+        Cat2,
+        Cat3,
+        Cat4,
+        Cat5,
+
+        CatPang1,
+        CatPang2,
+        CatPang3,
+        CatPang4,
+        CatPang5,
+
+        Arrow1,
+        Arrow2,
+        Arrow3,
+        Arrow4,
+        Arrow5,
+        Arrow6,
+
+        Bomb,
+
+        Wall,
+        Potal,
 
         Max
     }
@@ -189,6 +153,24 @@ public class Defines
         Background2,
         Background3,
         Background4,
+
+        Max
+    }
+
+    public enum ELog
+    {
+        None = -1,
+
+        CreateMap,
+        UpdateMap,
+        CanMatch,
+        CheckMap,
+        CheckSquareMatch,
+        RemoveMatchBlock,
+        Check3Match,
+        DownBlock,
+        ChangeBlock,
+        AfterDrag,
 
         Max
     }

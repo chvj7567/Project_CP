@@ -94,7 +94,6 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
             block.row = (int)pos.Key.x;
             block.col = (int)pos.Key.y;
             block.index = index++;
-            block.state = Defines.EState.Normal;
             block.originPos = pos.Value;
 
             _boardArr[block.row, block.col] = block;

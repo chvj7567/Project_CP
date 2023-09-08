@@ -1,16 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UniRx;
 using DG.Tweening;
-using UnityEngine.UI;
-using System.Linq;
-using System.Threading.Tasks;
-using UnityEngine.SceneManagement;
-using TMPro;
 using System;
-using UniRx.Triggers;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using TMPro;
+using UniRx;
+using UniRx.Triggers;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -80,10 +79,7 @@ public class Game : MonoBehaviour
 
     [SerializeField, ReadOnly] List<int> towerPoint = new List<int>();
 
-    List<Sprite> normalBlockSpriteList = new List<Sprite>();
-    List<Sprite> specialBlockSpriteList = new List<Sprite>();
-    public List<Sprite> potalBlockSpriteList = new List<Sprite>();
-    public List<Sprite> wallBlockSpriteList = new List<Sprite>();
+    List<Sprite> blockSpriteList = new List<Sprite>();
 
     Infomation.StageInfo stageInfo;
     List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
@@ -97,42 +93,15 @@ public class Game : MonoBehaviour
         tokenSource = new CancellationTokenSource();
 
         backgroundIndex = PlayerPrefs.GetInt("background");
-        Debug.Log(backgroundIndex);
+
         ChangeBackgroundLoop();
 
-        for (int i = 0; i < (int)Defines.ENormalBlockType.Max; ++i)
+        for (int i = 0; i < (int)Defines.EBlockState.Max; ++i)
         {
-            CHMMain.Resource.LoadSprite((Defines.ENormalBlockType)i, (sprite) =>
+            CHMMain.Resource.LoadSprite((Defines.EBlockState)i, (sprite) =>
             {
                 if (sprite != null)
-                    normalBlockSpriteList.Add(sprite);
-            });
-        }
-
-        for (int i = 0; i < (int)Defines.ESpecailBlockType.Max; ++i)
-        {
-            CHMMain.Resource.LoadSprite((Defines.ESpecailBlockType)i, (sprite) =>
-            {
-                if (sprite != null)
-                    specialBlockSpriteList.Add(sprite);
-            });
-        }
-
-        for (int i = 0; i < (int)Defines.EWallBlockType.Max; ++i)
-        {
-            CHMMain.Resource.LoadSprite((Defines.EWallBlockType)i, (sprite) =>
-            {
-                if (sprite != null)
-                    wallBlockSpriteList.Add(sprite);
-            });
-        }
-
-        for (int i = 0; i < (int)Defines.EPotalBlockType.Max; ++i)
-        {
-            CHMMain.Resource.LoadSprite((Defines.EPotalBlockType)i, (sprite) =>
-            {
-                if (sprite != null)
-                    potalBlockSpriteList.Add(sprite);
+                    blockSpriteList.Add(sprite);
             });
         }
 
@@ -185,7 +154,7 @@ public class Game : MonoBehaviour
 
         gameOver.Subscribe(_ =>
         {
-            if(_ == true)
+            if (_ == true)
             {
                 Time.timeScale = 0;
                 CHMMain.UI.CloseUI(Defines.EUI.UIChoice);
@@ -232,7 +201,7 @@ public class Game : MonoBehaviour
         boardSize = stageInfo.boardSize;
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
-        CreateMap(stage);
+        await CreateMap(stage);
         CHMMain.Sound.Play(Defines.ESound.Bgm);
 
         this.UpdateAsObservable()
@@ -344,9 +313,9 @@ public class Game : MonoBehaviour
         }*/
 
         curTimer += Time.deltaTime;
-        timerImg.fillAmount = curTimer / stageInfo.time;  
+        timerImg.fillAmount = curTimer / stageInfo.time;
 
-        if (isAni == true)
+        /*if (isAni == true)
         {
             teachTime = Time.time;
         }
@@ -357,15 +326,16 @@ public class Game : MonoBehaviour
             {
                 oneTimeAlarm = true;
 
-                boardArr[canMatchRow, canMatchCol].transform.DOScale(1.5f, 0.25f).OnComplete(() =>
+                var block = boardArr[canMatchRow, canMatchCol];
+                block.transform.DOScale(1.5f, 0.25f).OnComplete(() =>
                 {
-                    boardArr[canMatchRow, canMatchCol].transform.DOScale(1f, 0.25f);
+                    block.transform.DOScale(1f, 0.25f);
                 });
 
                 await Task.Delay(3000);
                 oneTimeAlarm = false;
             }
-        }
+        }*/
     }
 
     void OnDestroy()
@@ -443,45 +413,40 @@ public class Game : MonoBehaviour
         isAni = true;
         bool first = false;
 
-        if (block1 && block2)
+        if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)
         {
             moveIndex1 = block1.index;
             moveIndex2 = block2.index;
 
-            if (block1.GetSpecailType() == Defines.ESpecailBlockType.Bomb &&
-                block2.GetNormalType() != Defines.ENormalBlockType.None)
+            if (block1.IsSpecialBlock() == true)
             {
-                await Boom3(block1, block2.GetNormalType());
-                return;
+                if (block1.GetBlockState() == Defines.EBlockState.Bomb)
+                {
+                    await Boom3(block1, block2.GetBlockState());
+                    return;
+                }
             }
-            else if (block2.GetSpecailType() == Defines.ESpecailBlockType.Bomb &&
-                block1.GetNormalType() != Defines.ENormalBlockType.None)
+            else if (block2.IsSpecialBlock() == true)
             {
-                await Boom3(block2, block1.GetNormalType());
-                return;
+                if (block2.GetBlockState() == Defines.EBlockState.Bomb)
+                {
+                    await Boom3(block2, block1.GetBlockState());
+                    return;
+                }
             }
-            else if (block1.GetSpecailType() != Defines.ESpecailBlockType.None &&
-                block2.GetSpecailType() != Defines.ESpecailBlockType.None)
-            {
-                first = true;
-                block2.SetNormalType(Defines.ENormalBlockType.None);
-                block2.state = Defines.EState.Match;
-                block1.changeSpecialType = Defines.ESpecailBlockType.Bomb;
-            }
-            else if (block2.GetSpecailType() != Defines.ESpecailBlockType.None &&
-                block1.GetSpecailType() != Defines.ESpecailBlockType.None)
+            else if (block1.IsBoomBlock() == true && block2.IsBoomBlock() == true)
             {
                 first = true;
-                block1.SetNormalType(Defines.ENormalBlockType.None);
-                block1.state = Defines.EState.Match;
-                block2.changeSpecialType = Defines.ESpecailBlockType.Bomb;
+                bonusScore.Value += 30;
+                block2.match = true;
+                block1.changeBlockState = Defines.EBlockState.Bomb;
             }
-            else if (block1.GetSpecailType() != Defines.ESpecailBlockType.None)
+            else if (block1.IsBoomBlock() == true)
             {
                 await block1.Boom();
                 return;
             }
-            else if (block2.GetSpecailType() != Defines.ESpecailBlockType.None)
+            else if (block2.IsBoomBlock() == true)
             {
                 await block2.Boom();
                 return;
@@ -508,7 +473,7 @@ public class Game : MonoBehaviour
 
             first = true;
 
-            await RemoveMatchBlock();
+            await RemoveMatchBlockAndCreateBoomBlock();
             await DownBlock();
             await UpdateMap();
             CheckMap();
@@ -544,7 +509,7 @@ public class Game : MonoBehaviour
                         maxPower = maxPower,
                         minDealy = minDelay,
                         maxSpeed = maxSpeed,
-                        catPangImgList = specialBlockSpriteList
+                        catPangImgList = blockSpriteList,
                     });
                 }
             }
@@ -553,7 +518,7 @@ public class Game : MonoBehaviour
         isAni = false;
     }
 
-    void CreateMap(int _stage)
+    async Task CreateMap(int _stage)
     {
         foreach (var block in boardArr)
         {
@@ -561,49 +526,36 @@ public class Game : MonoBehaviour
             float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
             block.originPos.x -= moveDis;
             block.SetOriginPos();
-            block.rectTransform.DOScale(1f, delay);
+
+            block.changeUpScale = true;
+            block.rectTransform.DOScale(1f, delay).OnComplete(() => { block.changeUpScale = false; });
 
             var stageBlockInfo = stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
             if (stageBlockInfo == null)
             {
                 var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
-                block.SetNormalType((Defines.ENormalBlockType)random);
-                block.state = Defines.EState.Normal;
-                block.img.sprite = normalBlockSpriteList[random];
+                block.SetBlockState(Defines.ELog.CreateMap, 1, (Defines.EBlockState)random);
+                block.img.sprite = blockSpriteList[random];
                 block.SetHp(-1);
             }
             else
             {
-                block.state = stageBlockInfo.blockState;
+                block.SetBlockState(Defines.ELog.CreateMap, 2, stageBlockInfo.blockState);
+                block.img.sprite = blockSpriteList[stageBlockInfo.index];
 
-                if (block.state == Defines.EState.Normal)
+                if (block.IsNormalBlock() == true)
                 {
-                    block.SetNormalType((Defines.ENormalBlockType)stageBlockInfo.index);
-                    block.img.sprite = normalBlockSpriteList[stageBlockInfo.index];
                     block.SetHp(-1);
                 }
                 else
                 {
-                    block.SetNormalType(Defines.ENormalBlockType.None);
                     block.SetHp(stageBlockInfo.hp);
-
-                    switch (block.state)
-                    {
-                        case Defines.EState.Potal:
-                            {
-                                block.img.sprite = potalBlockSpriteList[stageBlockInfo.index];
-                            }
-                            break;
-                        case Defines.EState.Wall:
-                            {
-                                block.img.sprite = wallBlockSpriteList[stageBlockInfo.index];
-                            }
-                            break;
-                    }
                 }
             }
         }
+
+        await Task.Delay((int)(delay * 1000));
     }
 
     async Task UpdateMap()
@@ -618,33 +570,27 @@ public class Game : MonoBehaviour
                 foreach (var block in boardArr)
                 {
                     if (block == null ||
-                        block.CheckMoveBlock() == false)
+                        (block.IsFixdBlock() == true && block.IsMatch() == false))
                         continue;
 
-                    if (reupdate == true || block.state == Defines.EState.Match)
+                    if (reupdate == true || block.IsMatch() == true)
                     {
                         var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
-                        block.SetNormalType((Defines.ENormalBlockType)random);
-                        block.state = Defines.EState.Normal;
-                        block.img.sprite = normalBlockSpriteList[random];
+                        CreateBlock(block, Defines.ELog.UpdateMap, 1, (Defines.EBlockState)random);
                         block.SetHp(-1);
                         block.ResetScore();
                         block.SetOriginPos();
-                        block.rectTransform.DOScale(1f, delay);
                     }
                     else
                     {
-                        if (block.changeSpecialType != Defines.ESpecailBlockType.None)
+                        if (block.changeBlockState != Defines.EBlockState.None)
                         {
-                            block.SetSpecailType(block.changeSpecialType);
-                            block.state = Defines.EState.Normal;
-                            block.img.sprite = specialBlockSpriteList[(int)block.changeSpecialType];
+                            CreateBlock(block, Defines.ELog.UpdateMap, 2, block.changeBlockState);
                             block.SetHp(-1);
                             block.ResetScore();
                             block.SetOriginPos();
-                            block.rectTransform.DOScale(1f, delay);
-                            block.changeSpecialType = Defines.ESpecailBlockType.None;
+                            block.changeBlockState = Defines.EBlockState.None;
                         }
                     }
                 }
@@ -684,10 +630,10 @@ public class Game : MonoBehaviour
                     continue;
 
                 var curBlock = boardArr[i, j];
-                if (curBlock.CheckMoveBlock() == false)
+                if (curBlock.IsFixdBlock() == true)
                     continue;
 
-                if (curBlock.GetSpecailType() != Defines.ESpecailBlockType.None)
+                if (curBlock.IsBlock() == true)
                 {
                     canMatchRow = curBlock.row;
                     canMatchCol = curBlock.col;
@@ -700,7 +646,7 @@ public class Game : MonoBehaviour
                 var rightBlock = IsValidIndex(i, j + 1) == true ? boardArr[i, j + 1] : null;
 
                 if (upBlock != null &&
-                    upBlock.CheckMoveBlock())
+                    upBlock.IsFixdBlock() == false)
                 {
                     ChangeBlock(curBlock, upBlock);
                     CheckMap(true);
@@ -714,7 +660,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (downBlock != null &&
-                    downBlock.CheckMoveBlock())
+                    downBlock.IsFixdBlock() == false)
                 {
                     ChangeBlock(curBlock, downBlock);
                     CheckMap(true);
@@ -728,7 +674,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (leftBlock != null &&
-                    leftBlock.CheckMoveBlock())
+                    leftBlock.IsFixdBlock() == false)
                 {
                     ChangeBlock(curBlock, leftBlock);
                     CheckMap(true);
@@ -742,7 +688,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (rightBlock != null &&
-                    rightBlock.CheckMoveBlock())
+                    rightBlock.IsFixdBlock() == false)
                 {
                     ChangeBlock(curBlock, rightBlock);
                     CheckMap(true);
@@ -815,21 +761,21 @@ public class Game : MonoBehaviour
             IsNormalBlock(row, col + 1) == false || IsNormalBlock(row + 1, col + 1) == false)
             return false;
 
-        if (boardArr[row, col].state == Defines.EState.Match ||
-            boardArr[row + 1, col].state == Defines.EState.Match ||
-            boardArr[row, col + 1].state == Defines.EState.Match ||
-            boardArr[row + 1, col + 1].state == Defines.EState.Match)
+        if (boardArr[row, col].IsMatch() == true ||
+            boardArr[row + 1, col].IsMatch() == true ||
+            boardArr[row, col + 1].IsMatch() == true ||
+            boardArr[row + 1, col + 1].IsMatch() == true)
             return false;
 
-        Defines.ENormalBlockType normalBlockType = boardArr[row, col].GetNormalType();
+        Defines.EBlockState normalBlockType = boardArr[row, col].GetBlockState();
 
-        if (normalBlockType != boardArr[row + 1, col].GetNormalType())
+        if (normalBlockType != boardArr[row + 1, col].GetBlockState())
             return false;
 
-        if (normalBlockType != boardArr[row, col + 1].GetNormalType())
+        if (normalBlockType != boardArr[row, col + 1].GetBlockState())
             return false;
 
-        if (normalBlockType != boardArr[row + 1, col + 1].GetNormalType())
+        if (normalBlockType != boardArr[row + 1, col + 1].GetBlockState())
             return false;
 
         // 여기서부터는 스퀘어 매치 확정
@@ -837,10 +783,10 @@ public class Game : MonoBehaviour
 
         if (_test == false)
         {
-            boardArr[row, col].state = Defines.EState.Match;
-            boardArr[row + 1, col].state = Defines.EState.Match;
-            boardArr[row, col + 1].state = Defines.EState.Match;
-            boardArr[row + 1, col + 1].state = Defines.EState.Match;
+            boardArr[row, col].match = true;
+            boardArr[row + 1, col].match = true;
+            boardArr[row, col + 1].match = true;
+            boardArr[row + 1, col + 1].match = true;
 
             if (moveIndex1 == boardArr[row, col].index ||
                 moveIndex2 == boardArr[row, col].index)
@@ -871,22 +817,22 @@ public class Game : MonoBehaviour
         return true;
     }
 
-    async Task RemoveMatchBlock()
-    // Match된 블럭 제거, 특수 블럭 생성
+    async Task RemoveMatchBlockAndCreateBoomBlock()
+    // Match된 블럭 제거, 폭탄 블럭 생성
     {
         bool removeDelay = false;
         bool createBoomDelay = false;
 
-        for (int i = 0; i < MAX; ++i)
+        for (int i = 0; i < boardSize; ++i)
         {
-            for (int j = 0; j < MAX; ++j)
+            for (int j = 0; j < boardSize; ++j)
             {
                 var block = boardArr[i, j];
                 if (block == null)
                     continue;
 
                 // 없어져야 할 블럭
-                if (block.state == Defines.EState.Match)
+                if (block.IsMatch() == true)
                 {
                     CheckArround(block.row, block.col);
                     var gold = CHMMain.Resource.Instantiate(goldImg.gameObject, transform.parent);
@@ -910,148 +856,156 @@ public class Game : MonoBehaviour
                     oneTimeScore.Value += 1;
 
                     // 아이템이 연달아 터지는 경우
-                    bool isSpecailType = false;
-
-                    if (block.GetSpecailType() != Defines.ESpecailBlockType.None)
+                    if (block.IsBoomBlock() == true && block.boom == false)
                     {
                         bonusScore.Value += 20;
-                        isSpecailType = true;
                         await block.Boom(false);
-                        i = -1;
-                    }
 
-                    if (isSpecailType == true)
+                        // Match 검사를 다시 해야함
+                        i = -1;
                         break;
+                    }
 
                     removeDelay = true;
 
                     int row = i;
                     int col = j;
 
-                    block.rectTransform.DOScale(0f, delay).OnComplete(() =>
+                    if (block.changeUpScale == true)
                     {
-                        // 스퀘어 매치 블럭 생성
-                        if (block.squareMatch == true)
+                        Debug.Log($"Not Remove Up Sclae {row}/{col}");
+                    }
+                    else if (block.changeDownScale == true)
+                    {
+                        Debug.Log($"Not Remove Down Sclae {row}/{col}");
+                    }
+                    else
+                    {
+                        block.changeDownScale = true;
+                        block.rectTransform.DOScale(0f, delay).OnComplete(() =>
                         {
-                            var pangType = block.GetPangType();
-                            block.SetSpecailType(pangType);
-                            block.state = Defines.EState.Normal;
-                            block.img.sprite = specialBlockSpriteList[(int)pangType];
-                            block.ResetScore();
-                            block.SetOriginPos();
-                            block.rectTransform.DOScale(1f, delay);
-                            block.squareMatch = false;
-                        }
-
-                        // 십자가 매치 블럭 생성
-                        if (block.hScore >= 3 && block.vScore >= 3)
-                        {
-                            createBoomDelay = true;
-                            
-                            if (block.hScore >= 4 || block.vScore >= 4)
+                            block.changeDownScale = false;
+                            // 스퀘어 매치 블럭 생성
+                            if (block.squareMatch == true)
                             {
-                                block.SetSpecailType(Defines.ESpecailBlockType.Arrow5);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.Arrow5];
-                            }
-                            else
-                            {
-                                block.SetSpecailType(Defines.ESpecailBlockType.Arrow6);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.Arrow6];
+                                var pangType = block.GetPangType();
+                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 1, pangType);
+                                block.ResetScore();
+                                block.SetOriginPos();
+                                block.squareMatch = false;
                             }
 
-                            block.ResetScore();
-                            block.SetOriginPos();
-                            block.rectTransform.DOScale(1f, delay);
-
-                            for (int idx = 1; idx < MAX; ++idx)
+                            // 십자가 매치 블럭 생성
+                            if (block.hScore >= 3 && block.vScore >= 3)
                             {
-                                int tempRow = row + idx;
-                                int tempCol = col;
-                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                                createBoomDelay = true;
+
+                                if (block.hScore >= 4 || block.vScore >= 4)
                                 {
-                                    if (boardArr[tempRow, tempCol].hScore > 0
-                                    || boardArr[tempRow, tempCol].vScore > 0)
+                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 2, Defines.EBlockState.Arrow5);
+                                }
+                                else
+                                {
+                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 3, Defines.EBlockState.Arrow6);
+                                }
+
+                                block.ResetScore();
+                                block.SetOriginPos();
+
+                                for (int idx = 1; idx < MAX; ++idx)
+                                {
+                                    int tempRow = row + idx;
+                                    int tempCol = col;
+                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
                                     {
-                                        boardArr[tempRow, tempCol].ResetScore();
+                                        if (boardArr[tempRow, tempCol].hScore > 0
+                                        || boardArr[tempRow, tempCol].vScore > 0)
+                                        {
+                                            boardArr[tempRow, tempCol].ResetScore();
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
-                                    else
+                                }
+
+                                for (int idx = 1; idx < MAX; ++idx)
+                                {
+                                    int tempRow = row - idx;
+                                    int tempCol = col;
+                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
                                     {
-                                        break;
+                                        if (boardArr[tempRow, tempCol].hScore > 0
+                                        || boardArr[tempRow, tempCol].vScore > 0)
+                                        {
+                                            boardArr[tempRow, tempCol].ResetScore();
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                for (int idx = 1; idx < MAX; ++idx)
+                                {
+                                    int tempRow = row;
+                                    int tempCol = col + idx;
+                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                                    {
+                                        if (boardArr[tempRow, tempCol].hScore > 0
+                                        || boardArr[tempRow, tempCol].vScore > 0)
+                                        {
+                                            boardArr[tempRow, tempCol].ResetScore();
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                for (int idx = 1; idx < MAX; ++idx)
+                                {
+                                    int tempRow = row;
+                                    int tempCol = col - idx;
+                                    if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
+                                    {
+                                        if (boardArr[tempRow, tempCol].hScore > 0
+                                        || boardArr[tempRow, tempCol].vScore > 0)
+                                        {
+                                            boardArr[tempRow, tempCol].ResetScore();
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
                                 }
                             }
-
-                            for (int idx = 1; idx < MAX; ++idx)
-                            {
-                                int tempRow = row - idx;
-                                int tempCol = col;
-                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
-                                {
-                                    if (boardArr[tempRow, tempCol].hScore > 0
-                                    || boardArr[tempRow, tempCol].vScore > 0)
-                                    {
-                                        boardArr[tempRow, tempCol].ResetScore();
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-
-                            for (int idx = 1; idx < MAX; ++idx)
-                            {
-                                int tempRow = row;
-                                int tempCol = col + idx;
-                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
-                                {
-                                    if (boardArr[tempRow, tempCol].hScore > 0
-                                    || boardArr[tempRow, tempCol].vScore > 0)
-                                    {
-                                        boardArr[tempRow, tempCol].ResetScore();
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-
-                            for (int idx = 1; idx < MAX; ++idx)
-                            {
-                                int tempRow = row;
-                                int tempCol = col - idx;
-                                if (IsValidIndex(tempRow, tempCol) && boardArr[tempRow, tempCol] != null)
-                                {
-                                    if (boardArr[tempRow, tempCol].hScore > 0
-                                    || boardArr[tempRow, tempCol].vScore > 0)
-                                    {
-                                        boardArr[tempRow, tempCol].ResetScore();
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         }
 
-        for (int i = 0; i < MAX; ++i)
+        if (removeDelay)
         {
-            for (int j = 0; j < MAX; ++j)
+            CHMMain.Sound.Play(Defines.ESound.Cat);
+            await Task.Delay((int)(delay * 1000));
+        }
+
+        for (int i = 0; i < boardSize; ++i)
+        {
+            for (int j = 0; j < boardSize; ++j)
             {
                 var block = boardArr[i, j];
                 if (block == null) continue;
 
                 block.ResetCheckWallDamage();
 
-                if (block.state == Defines.EState.Match)
+                if (block.IsMatch() == true)
                 {
                     // 가로 3개 초과 매치 시 특수 블럭 생성
                     if (block.hScore > 3)
@@ -1074,17 +1028,11 @@ public class Game : MonoBehaviour
                                 checkMoveBlock = true;
                                 if (tempScore >= 5)
                                 {
-                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.Arrow1);
-                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.Arrow1];
-                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 4, Defines.EBlockState.Arrow1);
                                 }
                                 else
                                 {
-                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.Arrow4);
-                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.Arrow4];
-                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 5, Defines.EBlockState.Arrow4);
                                 }
                             }
 
@@ -1095,17 +1043,11 @@ public class Game : MonoBehaviour
                         {
                             if (tempScore >= 5)
                             {
-                                block.SetSpecailType(Defines.ESpecailBlockType.Arrow2);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.Arrow2];
-                                block.rectTransform.DOScale(1f, delay);
+                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 6, Defines.EBlockState.Arrow2);
                             }
                             else
                             {
-                                block.SetSpecailType(Defines.ESpecailBlockType.Arrow3);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.Arrow3];
-                                block.rectTransform.DOScale(1f, delay);
+                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 7, Defines.EBlockState.Arrow3);
                             }
                         }
                     }
@@ -1131,17 +1073,11 @@ public class Game : MonoBehaviour
                                 checkMoveBlock = true;
                                 if (tempScore >= 5)
                                 {
-                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang5);
-                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang5];
-                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 8, Defines.EBlockState.CatPang5);
                                 }
                                 else
                                 {
-                                    boardArr[tempRow, tempCol].SetSpecailType(Defines.ESpecailBlockType.CatPang1);
-                                    boardArr[tempRow, tempCol].state = Defines.EState.Normal;
-                                    boardArr[tempRow, tempCol].img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
-                                    boardArr[tempRow, tempCol].rectTransform.DOScale(1f, delay);
+                                    CreateBlock(block, Defines.ELog.RemoveMatchBlock, 9, Defines.EBlockState.CatPang1);
                                 }
                             }
 
@@ -1152,28 +1088,16 @@ public class Game : MonoBehaviour
                         {
                             if (tempScore >= 5)
                             {
-                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang5);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang5];
-                                block.rectTransform.DOScale(1f, delay);
+                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 10, Defines.EBlockState.CatPang5);
                             }
                             else
                             {
-                                block.SetSpecailType(Defines.ESpecailBlockType.CatPang1);
-                                block.state = Defines.EState.Normal;
-                                block.img.sprite = specialBlockSpriteList[(int)Defines.ESpecailBlockType.CatPang1];
-                                block.rectTransform.DOScale(1f, delay);
+                                CreateBlock(block, Defines.ELog.RemoveMatchBlock, 11, Defines.EBlockState.CatPang1);
                             }
                         }
                     }
                 }
             }
-        }
-
-        if (removeDelay)
-        {
-            CHMMain.Sound.Play(Defines.ESound.Cat);
-            await Task.Delay((int)(delay * 1000));
         }
 
         if (createBoomDelay)
@@ -1182,29 +1106,51 @@ public class Game : MonoBehaviour
         }
     }
 
+    void CreateBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _boomBlock)
+    {
+        _block.SetBlockState(_log, _key, _boomBlock);
+        _block.img.sprite = blockSpriteList[(int)_boomBlock];
+        _block.match = false;
+        _block.boom = false;
+        _block.squareMatch = false;
+        if (_block.changeUpScale == true)
+        {
+            Debug.Log($"Not Create Up Scale {_block.row}/{_block.col}");
+        }
+        else if (_block.changeDownScale == true)
+        {
+            Debug.Log($"Not Create Down Scale {_block.row}/{_block.col}");
+        }
+        else
+        {
+            _block.changeUpScale = true;
+            _block.rectTransform.DOScale(1f, delay).OnComplete(() => { _block.changeUpScale = false; });
+        }
+    }
+
     void Check3Match(List<Block> blockList, Defines.EDirection direction, bool test = false)
     // 3Match 블럭 확인
     {
-        Defines.ENormalBlockType matchType = Defines.ENormalBlockType.None;
+        Defines.EBlockState blockState = Defines.EBlockState.None;
         List<int> tempIndex = new List<int>();
         int matchCount = 0;
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].CheckMoveBlock() == false)
+            if (blockList[i].IsFixdBlock() == true)
             {
-                matchType = Defines.ENormalBlockType.None;
+                blockState = Defines.EBlockState.None;
                 matchCount = 0;
                 continue;
             }
 
-            if (matchType == Defines.ENormalBlockType.None)
+            if (blockState == Defines.EBlockState.None)
             {
-                matchType = blockList[i].GetNormalType();
+                blockState = blockList[i].GetBlockState();
                 matchCount = 1;
                 tempIndex.Add(blockList[i].index);
             }
-            else if (matchType == blockList[i].GetNormalType())
+            else if (blockState == blockList[i].GetBlockState())
             {
                 ++matchCount;
                 tempIndex.Add(blockList[i].index);
@@ -1218,8 +1164,7 @@ public class Game : MonoBehaviour
                         {
                             var block = blockList[temp--];
                             block.SetScore(matchCount, direction);
-                            block.state = Defines.EState.Match;
-                            
+                            block.match = true;
                         }
                     }
 
@@ -1228,7 +1173,7 @@ public class Game : MonoBehaviour
             }
             else
             {
-                matchType = blockList[i].GetNormalType();
+                blockState = blockList[i].GetBlockState();
                 matchCount = 1;
                 tempIndex.Clear();
                 tempIndex.Add(blockList[i].index);
@@ -1244,10 +1189,10 @@ public class Game : MonoBehaviour
         {
             for (int j = boardSize - 1; j >= 0; --j)
             {
-                var temp = boardArr[i, j];
-                if (temp != null)
+                var block = boardArr[i, j];
+                if (block != null)
                 {
-                    order.Add(temp);
+                    order.Add(block);
                 }
             }
         }
@@ -1256,7 +1201,8 @@ public class Game : MonoBehaviour
         {
             int row = block.row;
             int col = block.col;
-            if (boardArr[row, col].state != Defines.EState.Normal)
+
+            if (boardArr[row, col].IsMatch() == true || boardArr[row, col].IsFixdBlock() == true)
                 continue;
 
             Block moveBlock = boardArr[row, col];
@@ -1265,7 +1211,7 @@ public class Game : MonoBehaviour
             int wallRow = -1;
             for (int i = boardSize - 1; i > row; --i)
             {
-                if (boardArr[i, col].state == Defines.EState.Wall)
+                if (boardArr[i, col].GetBlockState() == Defines.EBlockState.Wall)
                 {
                     wallRow = i;
                 }
@@ -1275,7 +1221,7 @@ public class Game : MonoBehaviour
             {
                 for (int i = boardSize - 1; i > row; --i)
                 {
-                    if (boardArr[i, col].state == Defines.EState.Match)
+                    if (boardArr[i, col].IsMatch() == true)
                     {
                         targetBlock = boardArr[i, col];
                         break;
@@ -1286,7 +1232,7 @@ public class Game : MonoBehaviour
             {
                 for (int i = wallRow; i > row; --i)
                 {
-                    if (boardArr[i, col].state == Defines.EState.Match)
+                    if (boardArr[i, col].IsMatch() == true)
                     {
                         targetBlock = boardArr[i, col];
                         break;
@@ -1306,7 +1252,7 @@ public class Game : MonoBehaviour
         {
             if (block == null) continue;
 
-            if (block.state == Defines.EState.Normal)
+            if (block.IsFixdBlock() == false)
             {
                 downDelay = true;
                 block.rectTransform.DOAnchorPos(block.originPos, delay);
@@ -1344,7 +1290,7 @@ public class Game : MonoBehaviour
     bool IsNormalBlock(int row, int col)
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
-            boardArr[row, col].CheckMoveBlock() == false || boardArr[row, col].GetNormalType() == Defines.ENormalBlockType.None)
+            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBlock() == false)
             return false;
 
         return true;
@@ -1360,9 +1306,9 @@ public class Game : MonoBehaviour
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return false;
 
-        if (boardArr[row, col].state != Defines.EState.Potal && boardArr[row, col].state != Defines.EState.Wall)
+        if (boardArr[row, col].IsFixdBlock() == false && boardArr[row, col].match == false)
         {
-            boardArr[row, col].state = Defines.EState.Match;
+            boardArr[row, col].match = true;
             return true;
         }
 
@@ -1384,13 +1330,9 @@ public class Game : MonoBehaviour
     {
         if (IsValidIndex(row, col) && boardArr[row, col] != null)
         {
-            if (boardArr[row, col].state == Defines.EState.Potal)
+            if (boardArr[row, col].IsFixdBlock() == true)
             {
-                boardArr[row, col].DamagePotal();
-            }
-            else if (boardArr[row, col].state == Defines.EState.Wall)
-            {
-                boardArr[row, col].DamageWall();
+                boardArr[row, col].Damage();
             }
         }
     }
@@ -1418,8 +1360,8 @@ public class Game : MonoBehaviour
     // 자기 주변 1칸 폭탄
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.Max);
-        block.state = Defines.EState.Match;
+        block.match = true;
+        block.boom = true;
 
         changeMatchState(block.row - 1, block.col - 1);
         changeMatchState(block.row - 1, block.col);
@@ -1440,8 +1382,8 @@ public class Game : MonoBehaviour
     // 십자가 폭탄
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.Max);
-        block.state = Defines.EState.Match;
+        block.match = true;
+        block.boom = true;
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1459,12 +1401,12 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom3(Block specialBlock, Defines.ENormalBlockType normalBlockType, bool ani = true)
+    public async Task Boom3(Block _specialBlock, Defines.EBlockState _blockState, bool _ani = true)
     // 같은 블럭 폭탄
     {
         bonusScore.Value += 5;
-        specialBlock.SetNormalType(Defines.ENormalBlockType.Max);
-        specialBlock.state = Defines.EState.Match;
+        _specialBlock.match = true;
+        _specialBlock.boom = true;
 
         List<GameObject> blueHoleList = new List<GameObject>();
 
@@ -1476,14 +1418,14 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                if (block.GetNormalType() == normalBlockType)
+                if (block.GetBlockState() == _blockState)
                 {
-                    block.state = Defines.EState.Match;
+                    block.match = true;
 
                     var blueHoleObj = CHMMain.Resource.Instantiate(darkBall.gameObject, transform.parent);
                     blueHoleObj.SetActive(true);
                     var rt = blueHoleObj.GetComponent<RectTransform>();
-                    rt.anchoredPosition = specialBlock.rectTransform.anchoredPosition;
+                    rt.anchoredPosition = _specialBlock.rectTransform.anchoredPosition;
                     rt.DOAnchorPos(block.rectTransform.anchoredPosition, .2f);
                     blueHoleList.Add(blueHoleObj);
 
@@ -1492,7 +1434,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        if (ani)
+        if (_ani)
         {
             AfterDrag(null, null);
         }
@@ -1509,7 +1451,8 @@ public class Game : MonoBehaviour
     // 가로 줄 폭탄
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.Max);
+        block.match = true;
+        block.boom = true;
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1526,7 +1469,8 @@ public class Game : MonoBehaviour
     // 세로 줄 폭탄
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.Max);
+        block.match = true;
+        block.boom = true;
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1543,7 +1487,8 @@ public class Game : MonoBehaviour
     // X자 폭탄
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.None);
+        block.match = true;
+        block.boom = true;
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1563,7 +1508,8 @@ public class Game : MonoBehaviour
     // 좌하우상 대각선 줄 폭탄
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.Max);
+        block.match = true;
+        block.boom = true;
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1581,7 +1527,8 @@ public class Game : MonoBehaviour
     // 좌상우하 대각선 줄 폭탄
     {
         bonusScore.Value += 5;
-        block.SetNormalType(Defines.ENormalBlockType.Max);
+        block.match = true;
+        block.boom = true;
 
         for (int i = 0; i < MAX; ++i)
         {

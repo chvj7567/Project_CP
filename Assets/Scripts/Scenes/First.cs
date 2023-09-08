@@ -49,7 +49,7 @@ public class First : MonoBehaviour
             startBtn.gameObject.SetActive(false);
             stageGroupObj.SetActive(true);
         }
-        Debug.Log(backgroundIndex);
+
         ChangeBackgroundLoop();
 
         startBtn.gameObject.SetActive(true);
