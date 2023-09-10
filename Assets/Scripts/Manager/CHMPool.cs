@@ -75,10 +75,7 @@ public class CHMPool
             rootObject = new GameObject { name = "@CHMPool" };
         }
 
-        if (Application.isPlaying)
-        {
-            Object.DontDestroyOnLoad(rootObject);
-        }
+        Object.DontDestroyOnLoad(rootObject);
     }
 
     public void CreatePool(GameObject _original, int _count = 5)

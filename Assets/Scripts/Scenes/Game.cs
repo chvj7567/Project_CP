@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GoogleMobileAds.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ public class Game : MonoBehaviour
     [SerializeField] Transform parent;
     [SerializeField] ReactiveProperty<int> boomAllChance = new ReactiveProperty<int>();
     [SerializeField] Button boomAllBtn;
+    [SerializeField] Image adLoading;
+    [SerializeField] Button plusBoomAllChance;
     [SerializeField] CHTMPro boomAllChanceText;
     [SerializeField] RectTransform darkBall;
     [SerializeField] CHInstantiateButton instBtn;
@@ -94,6 +97,8 @@ public class Game : MonoBehaviour
         tokenSource = new CancellationTokenSource();
 
         backgroundIndex = PlayerPrefs.GetInt("background");
+
+        CHMAdmob.ShowBanner(AdPosition.Top);
 
         ChangeBackgroundLoop();
 
@@ -183,6 +188,14 @@ public class Game : MonoBehaviour
         {
             boomAllChanceText.SetText(_);
         });
+
+        plusBoomAllChance.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMAdmob.ShowRewardedAd();
+        });
+
+        boomAllChance.Value = 0;
+        PlayerPrefs.SetInt("boomAllChance", 0);
 
         var stage = PlayerPrefs.GetInt("stage");
         if (stage <= 0)
@@ -313,6 +326,16 @@ public class Game : MonoBehaviour
             viewImg2.color = Color.green;
         }*/
 
+        if (CHMAdmob.GetAdvertise() == true)
+        {
+            adLoading.gameObject.SetActive(true);
+        }
+        else
+        {
+            adLoading.gameObject.SetActive(false);
+            boomAllChance.Value = PlayerPrefs.GetInt("boomAllChance");
+        }
+
         curTimer += Time.deltaTime;
         timerImg.fillAmount = curTimer / stageInfo.time;
 
@@ -333,7 +356,7 @@ public class Game : MonoBehaviour
                     block.transform.DOScale(1f, 0.25f);
                 });
 
-                await Task.Delay(3000);
+                await Task.Delay(3000, tokenSource.Token);
                 oneTimeAlarm = false;
             }
         }
@@ -413,7 +436,7 @@ public class Game : MonoBehaviour
     {
         isAni = true;
 
-        await Task.Delay((int)(delay * delayMillisecond));
+        await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
 
         bool first = false;
 
@@ -469,7 +492,7 @@ public class Game : MonoBehaviour
                     block1.rectTransform.DOAnchorPos(block1.originPos, delay);
                     block2.rectTransform.DOAnchorPos(block2.originPos, delay);
 
-                    await Task.Delay((int)(delay * delayMillisecond));
+                    await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
                 }
             }
 
@@ -555,7 +578,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        await Task.Delay((int)(delay * delayMillisecond));
+        await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
     }
 
     async Task UpdateMap()
@@ -881,11 +904,11 @@ public class Game : MonoBehaviour
         if (removeDelay)
         {
             CHMMain.Sound.Play(Defines.ESound.Cat);
-            await Task.Delay((int)(delay * delayMillisecond));
+            await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
         }
 
         // match 되어 scale이 0이 되어야하는데 안된 경우 즉시 0으로 변경
-        for (int i = 0; i < boardSize; ++i)
+        /*for (int i = 0; i < boardSize; ++i)
         {
             for (int j = 0; j < boardSize; ++j)
             {
@@ -896,7 +919,7 @@ public class Game : MonoBehaviour
                     block.rectTransform.localScale = Vector3.zero;
                 }
             }
-        }
+        }*/
     }
 
     async Task CreateBoomBlock()
@@ -1126,7 +1149,7 @@ public class Game : MonoBehaviour
 
         if (createDelay)
         {
-            await Task.Delay((int)(delay * delayMillisecond));
+            await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
         }
     }
 
@@ -1274,7 +1297,7 @@ public class Game : MonoBehaviour
 
         if (downDelay)
         {
-            await Task.Delay((int)(delay * delayMillisecond));
+            await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
         }
     }
 
@@ -1442,7 +1465,7 @@ public class Game : MonoBehaviour
                     rt.DOAnchorPos(block.rectTransform.anchoredPosition, .2f);
                     blueHoleList.Add(blueHoleObj);
 
-                    await Task.Delay(200);
+                    await Task.Delay(200, tokenSource.Token);
                 }
             }
         }
@@ -1452,7 +1475,7 @@ public class Game : MonoBehaviour
             AfterDrag(null, null);
         }
 
-        await Task.Delay(1000);
+        await Task.Delay(1000, tokenSource.Token);
 
         for (int i = 0; i < blueHoleList.Count; ++i)
         {

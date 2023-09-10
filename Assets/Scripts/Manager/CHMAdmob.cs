@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
-using System;
 
 public static class CHMAdmob
 {
@@ -16,11 +13,28 @@ public static class CHMAdmob
 
     static AdRequest adRequest;
 
+    static bool advertise = false;
+
+    static bool checkInit = false;
+
+    static public bool GetAdvertise()
+    {
+        return advertise;
+    }
+
     static public void Init()
     {
+        if (checkInit == true)
+            return;
+
+        checkInit = true;
+
         MobileAds.Initialize(initStatus => { });
 
         adRequest = new AdRequest.Builder().Build();
+
+        LoadInterstitialAd();
+        LoadRewardedAd();
     }
 
     static public void ShowBanner(AdPosition _position)
@@ -30,7 +44,7 @@ public static class CHMAdmob
         bannerView.Show();
     }
 
-    static public void ShowInterstitialAd()
+    static void LoadInterstitialAd(bool _show = false)
     {
         if (interstitialAd != null)
         {
@@ -53,12 +67,30 @@ public static class CHMAdmob
                               + ad.GetResponseInfo());
 
                     interstitialAd = ad;
+                    RegisterEventHandlers(interstitialAd);
 
-                    interstitialAd.Show();
+                    if (_show == true)
+                    {
+                        interstitialAd.Show();
+                    }
                 });
     }
 
-    static public void ShowRewardedAd()
+    static void ShowInterstitialAd()
+    {
+        advertise = true;
+
+        if (interstitialAd != null && interstitialAd.CanShowAd() == true)
+        {
+            interstitialAd.Show();
+        }
+        else
+        {
+            LoadInterstitialAd(true);
+        }
+    }
+
+    static void LoadRewardedAd(bool _show = false)
     {
         if (rewardedAd != null)
         {
@@ -81,16 +113,95 @@ public static class CHMAdmob
                               + ad.GetResponseInfo());
 
                     rewardedAd = ad;
+                    RegisterEventHandlers(rewardedAd);
 
-                    rewardedAd.Show(HandleReward);
+                    if (_show == true)
+                    {
+                        rewardedAd.Show(RewardHandler);
+                    }
                 });
     }
 
-    static void HandleReward(Reward _reward)
+    static public void ShowRewardedAd()
+    {
+        advertise = true;
+
+        if (rewardedAd.CanShowAd() == true)
+        {
+            rewardedAd.Show(RewardHandler);
+        }
+        else
+        {
+            LoadRewardedAd(true);
+        }
+    }
+
+    static void RewardHandler(Reward _reward)
     {
         double currencyAmount = _reward.Amount;
         string currencyType = _reward.Type;
 
-        Debug.Log("광고로 받은 보상: " + currencyAmount + " " + currencyType);
+        var boomAllChance = PlayerPrefs.GetInt("boomAllChance");
+        PlayerPrefs.SetInt("boomAllChance", boomAllChance + 1);
+
+        Debug.Log("광고로 받은 보상: " + boomAllChance + " => " + boomAllChance + 1);
+    }
+
+    static void RegisterEventHandlers(RewardedAd ad)
+    {
+        ad.OnAdImpressionRecorded += () =>
+        {
+            Debug.Log("Interstitial ad recorded an impression.");
+        };
+        ad.OnAdClicked += () =>
+        {
+            Debug.Log("Interstitial ad was clicked.");
+        };
+        ad.OnAdFullScreenContentOpened += () =>
+        {
+            Debug.Log("Interstitial ad full screen content opened.");
+        };
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+            Debug.Log("Interstitial ad full screen content closed.");
+
+            advertise = false;
+
+            LoadRewardedAd();
+        };
+        ad.OnAdFullScreenContentFailed += (AdError error) =>
+        {
+            Debug.LogError("Interstitial ad failed to open full screen content " +
+                           "with error : " + error);
+        };
+    }
+
+    static void RegisterEventHandlers(InterstitialAd ad)
+    {
+        ad.OnAdImpressionRecorded += () =>
+        {
+            Debug.Log("Interstitial ad recorded an impression.");
+        };
+        ad.OnAdClicked += () =>
+        {
+            Debug.Log("Interstitial ad was clicked.");
+        };
+        ad.OnAdFullScreenContentOpened += () =>
+        {
+            Debug.Log("Interstitial ad full screen content opened.");
+        };
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+            Debug.Log("Interstitial ad full screen content closed.");
+
+            advertise = false;
+
+            LoadInterstitialAd();
+        };
+        ad.OnAdFullScreenContentFailed += (AdError error) =>
+        {
+            Debug.LogError("Interstitial ad failed to open full screen content " +
+                           "with error : " + error);
+        };
     }
 }

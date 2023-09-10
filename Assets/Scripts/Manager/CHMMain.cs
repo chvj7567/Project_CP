@@ -43,10 +43,7 @@ public class CHMMain : MonoBehaviour
                 go = new GameObject { name = "@CHMMain" };
             }
 
-            if (Application.isPlaying)
-            {
-                Object.DontDestroyOnLoad(go);
-            }
+            Object.DontDestroyOnLoad(go);
 
             m_instance = go.GetOrAddComponent<CHMMain>();
 
@@ -63,7 +60,7 @@ public class CHMMain : MonoBehaviour
         {
             m_instance.m_pool.Clear();
             m_instance.m_json.Clear();
-            
+
             Destroy(this);
         }
     }

@@ -14,10 +14,10 @@ public class CHMSound
 
     public void Init()
     {
-        GameObject root = GameObject.Find("@Audio");
+        GameObject root = GameObject.Find("@CHMSound");
         if (root == null)
         {
-            root = new GameObject { name = "@Audio" };
+            root = new GameObject { name = "@CHMSound" };
 
             string[] soundNames = Enum.GetNames(typeof(Defines.ESound));
             for (int i = 0; i < (int)Defines.ESound.Max; i++)

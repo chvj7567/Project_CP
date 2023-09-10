@@ -31,6 +31,8 @@ public class First : MonoBehaviour
 
         if (CHMAssetBundle.firstDownload == true)
         {
+            CHMAdmob.Init();
+
             backgroundIndex = 0;
 
             foreach (var key in liDownloadKey)
@@ -68,14 +70,6 @@ public class First : MonoBehaviour
                 loadingText.gameObject.SetActive(false);
 
                 PlayerPrefs.SetInt("background", backgroundIndex);
-
-                CHMMain.Resource.InstantiateEffect(Defines.EEffect.FireCracker, (effect) =>
-                {
-                    effect.transform.SetParent(canvas.transform);
-                    var rectTransform = effect.GetComponent<RectTransform>();
-                    rectTransform.anchoredPosition3D = new Vector3(0, 0, -100);
-                    rectTransform.localScale = Vector3.one;
-                });
             });
         }
     }
