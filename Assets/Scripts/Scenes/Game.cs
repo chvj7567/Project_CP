@@ -316,7 +316,7 @@ public class Game : MonoBehaviour
         curTimer += Time.deltaTime;
         timerImg.fillAmount = curTimer / stageInfo.time;
 
-        /*if (isAni == true)
+        if (isAni == true)
         {
             teachTime = Time.time;
         }
@@ -336,7 +336,7 @@ public class Game : MonoBehaviour
                 await Task.Delay(3000);
                 oneTimeAlarm = false;
             }
-        }*/
+        }
     }
 
     void OnDestroy()
@@ -489,8 +489,6 @@ public class Game : MonoBehaviour
         curScore.Value += bonusScore.Value;
         oneTimeScore.Value = 0;
         bonusScore.Value = 0;
-
-        await Task.Delay((int)(delay * delayMillisecond));
 
         if (addDefense == true)
         {
