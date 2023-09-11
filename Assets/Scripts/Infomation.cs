@@ -31,6 +31,7 @@ public class Infomation
     [Serializable]
     public class StageInfo
     {
+        public int group = -1;
         public int stage = -1;
         public int blockTypeCount = -1;
         public int boardSize = -1;

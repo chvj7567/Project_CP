@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Defines;
 using static Infomation;
@@ -209,6 +210,16 @@ public class CHMJson
     public StageInfo GetStageInfo(int _stage)
     {
         return stageInfoList.Find(_ => _.stage == _stage);
+    }
+
+    public List<StageInfo> GetStageInfoList(int _group)
+    {
+        return stageInfoList.FindAll(_ => _.group == _group);
+    }
+
+    public int GetMaxStageGroup()
+    {
+        return stageInfoList.Max(_ => _.group);
     }
 
     public List<StageBlockInfo> GetStageBlockInfoList(int _stage)

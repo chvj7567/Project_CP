@@ -16,6 +16,7 @@ public class First : MonoBehaviour
     [SerializeField] Image loadingBar;
     [SerializeField] TMP_Text loadingText;
     [SerializeField] GameObject stageGroupObj;
+    [SerializeField] PageMove pageMove;
     [SerializeField] Button startBtn;
     [SerializeField] List<string> liDownloadKey = new List<string>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
@@ -54,16 +55,18 @@ public class First : MonoBehaviour
 
         ChangeBackgroundLoop();
 
-        startBtn.gameObject.SetActive(true);
         stageGroupObj.SetActive(false);
 
         if (loadingBar) loadingBar.fillAmount = 0f;
         if (startBtn)
         {
+            startBtn.gameObject.SetActive(true);
+
             startBtn.OnClickAsObservable().Subscribe(_ =>
             {
                 if (canStart == false) return;
 
+                pageMove.Init();
                 startBtn.gameObject.SetActive(false);
                 stageGroupObj.SetActive(true);
                 loadingBar.gameObject.SetActive(false);
@@ -77,8 +80,6 @@ public class First : MonoBehaviour
     IEnumerator LoadAssetBundle(string _bundleName)
     {
         string bundlePath = Path.Combine(Application.streamingAssetsPath, _bundleName);
-
-        Debug.Log(bundlePath);
 
         // 에셋 번들 로드
         AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);

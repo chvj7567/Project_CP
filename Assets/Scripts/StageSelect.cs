@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -14,7 +15,8 @@ public class StageSelect : MonoBehaviour
     List<TMP_Text> textList = new List<TMP_Text>();
     [SerializeField]
     List<GameObject> clearObjList = new List<GameObject>();
-    void Start()
+
+    public void Init()
     {
         for (int i = 0; i < btnList.Count; i++)
         {
@@ -25,21 +27,52 @@ public class StageSelect : MonoBehaviour
                 SceneManager.LoadScene(1);
             });
 
-            if (CHMMain.Data.stageDataDic.TryGetValue(textList[index].text, out var data))
+            SetClearObj(index);
+        }
+    }
+
+    public bool SetPage(int _page)
+    {
+        var stageList = CHMMain.Json.GetStageInfoList(_page);
+        if (stageList == null || stageList.Count == 0)
+            return false;
+
+        var stageCount = stageList.Count;
+
+        for (int i = 0; i < textList.Count; ++i)
+        {
+            if (i >= stageCount)
             {
-                if (data.clear)
-                {
-                    clearObjList[int.Parse(textList[index].text) - 1].SetActive(true);
-                }
-                else
-                {
-                    clearObjList[int.Parse(textList[index].text) - 1].SetActive(false);
-                }
+                btnList[i].gameObject.SetActive(false);
+                clearObjList[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            btnList[i].gameObject.SetActive(true);
+            textList[i].text = stageList[i].stage.ToString();
+
+            SetClearObj(i);
+        }
+
+        return true;
+    }
+
+    void SetClearObj(int _index)
+    {
+        if (CHMMain.Data.stageDataDic.TryGetValue(textList[_index].text, out var data))
+        {
+            if (data.clear)
+            {
+                clearObjList[_index].SetActive(true);
             }
             else
             {
-                clearObjList[int.Parse(textList[index].text) - 1].SetActive(false);
+                clearObjList[_index].SetActive(false);
             }
+        }
+        else
+        {
+            clearObjList[_index].SetActive(false);
         }
     }
 }
