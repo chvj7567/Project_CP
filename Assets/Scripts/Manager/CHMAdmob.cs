@@ -155,6 +155,8 @@ public static class CHMAdmob
             Debug.Log("Interstitial ad full screen content closed.");
 
             LoadRewardedAd();
+
+            CloseAD.Invoke();
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
