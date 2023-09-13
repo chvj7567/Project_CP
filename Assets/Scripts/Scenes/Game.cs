@@ -98,8 +98,6 @@ public class Game : MonoBehaviour
 
         backgroundIndex = PlayerPrefs.GetInt("background");
 
-        CHMAdmob.ShowBanner(AdPosition.Top);
-
         ChangeBackgroundLoop();
 
         for (int i = 0; i < (int)Defines.EBlockState.Max; ++i)
@@ -197,14 +195,16 @@ public class Game : MonoBehaviour
             CHMAdmob.ShowRewardedAd();
         });
 
-        CHMAdmob.AcquireReward += (_) =>
+        CHMAdmob.AcquireReward += () =>
         {
-            if (_ == true)
-            {
-                boomAllChance.Value += 1;
-                adLoadingObj.SetActive(false);
-            }
+            boomAllChance.Value += 1;
+            adLoadingObj.SetActive(false);
+            isLock = false;
+        };
 
+        CHMAdmob.AcquireReward += () =>
+        {
+            adLoadingObj.SetActive(false);
             isLock = false;
         };
 

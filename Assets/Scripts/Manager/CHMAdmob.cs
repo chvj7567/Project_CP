@@ -16,8 +16,8 @@ public static class CHMAdmob
 
     static bool checkInit = false;
 
-    public static Action<bool> AcquireReward;
-
+    public static Action AcquireReward;
+    public static Action CloseAD;
     static public void Init()
     {
         if (checkInit == true)
@@ -31,6 +31,7 @@ public static class CHMAdmob
 
         LoadInterstitialAd();
         LoadRewardedAd();
+        ShowBanner(AdPosition.Top);
     }
 
     static public void ShowBanner(AdPosition _position)
@@ -132,7 +133,7 @@ public static class CHMAdmob
         double currencyAmount = _reward.Amount;
         string currencyType = _reward.Type;
 
-        AcquireReward.Invoke(true);
+        AcquireReward.Invoke();
     }
 
     static void RegisterEventHandlers(RewardedAd ad)
@@ -181,6 +182,8 @@ public static class CHMAdmob
             Debug.Log("Interstitial ad full screen content closed.");
 
             LoadInterstitialAd();
+
+            CloseAD.Invoke();
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
