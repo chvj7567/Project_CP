@@ -204,6 +204,8 @@ public class Game : MonoBehaviour
                 boomAllChance.Value += 1;
                 adLoadingObj.SetActive(false);
             }
+
+            isLock = false;
         };
 
         boomAllChance.Value = 0;
