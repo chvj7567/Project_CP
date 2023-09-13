@@ -133,7 +133,10 @@ public static class CHMAdmob
         double currencyAmount = _reward.Amount;
         string currencyType = _reward.Type;
 
-        AcquireReward.Invoke();
+        if (AcquireReward != null)
+        {
+            AcquireReward.Invoke();
+        }
     }
 
     static void RegisterEventHandlers(RewardedAd ad)
@@ -156,7 +159,10 @@ public static class CHMAdmob
 
             LoadRewardedAd();
 
-            CloseAD.Invoke();
+            if (CloseAD != null)
+            {
+                CloseAD.Invoke();
+            }
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
@@ -185,7 +191,10 @@ public static class CHMAdmob
 
             LoadInterstitialAd();
 
-            CloseAD.Invoke();
+            if (CloseAD != null)
+            {
+                CloseAD.Invoke();
+            }
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {

@@ -202,7 +202,7 @@ public class Game : MonoBehaviour
             isLock = false;
         };
 
-        CHMAdmob.AcquireReward += () =>
+        CHMAdmob.CloseAD += () =>
         {
             adLoadingObj.SetActive(false);
             isLock = false;
