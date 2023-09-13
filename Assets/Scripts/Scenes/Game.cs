@@ -30,7 +30,7 @@ public class Game : MonoBehaviour
     [SerializeField] Transform parent;
     [SerializeField] ReactiveProperty<int> boomAllChance = new ReactiveProperty<int>();
     [SerializeField] Button boomAllBtn;
-    [SerializeField] Image adLoading;
+    [SerializeField] GameObject adLoadingObj;
     [SerializeField] Button plusBoomAllChance;
     [SerializeField] CHTMPro boomAllChanceText;
     [SerializeField] RectTransform darkBall;
@@ -43,7 +43,7 @@ public class Game : MonoBehaviour
 
     [ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
     [ReadOnly] public bool isDrag = false;
-    [ReadOnly] public bool isAni = false;
+    [ReadOnly] public bool isLock = false;
     [ReadOnly] bool isMatch = false;
 
     [SerializeField, ReadOnly] float teachTime;
@@ -177,10 +177,10 @@ public class Game : MonoBehaviour
 
         boomAllBtn.OnClickAsObservable().Subscribe(async _ =>
         {
-            if (isAni == false && boomAllChance.Value > 0)
+             if (isLock == false && boomAllChance.Value > 0)
             {
-                await BoomAll();
                 boomAllChance.Value -= 1;
+                await BoomAll();
             }
         });
 
@@ -191,11 +191,22 @@ public class Game : MonoBehaviour
 
         plusBoomAllChance.OnClickAsObservable().Subscribe(_ =>
         {
+            isLock = true;
+            adLoadingObj.SetActive(true);
+            adLoadingObj.transform.SetAsLastSibling();
             CHMAdmob.ShowRewardedAd();
         });
 
+        CHMAdmob.AcquireReward += (_) =>
+        {
+            if (_ == true)
+            {
+                boomAllChance.Value += 1;
+                adLoadingObj.SetActive(false);
+            }
+        };
+
         boomAllChance.Value = 0;
-        PlayerPrefs.SetInt("boomAllChance", 0);
 
         var stage = PlayerPrefs.GetInt("stage");
         if (stage <= 0)
@@ -326,20 +337,10 @@ public class Game : MonoBehaviour
             viewImg2.color = Color.green;
         }*/
 
-        if (CHMAdmob.GetAdvertise() == true)
-        {
-            adLoading.gameObject.SetActive(true);
-        }
-        else
-        {
-            adLoading.gameObject.SetActive(false);
-            boomAllChance.Value = PlayerPrefs.GetInt("boomAllChance");
-        }
-
         curTimer += Time.deltaTime;
         timerImg.fillAmount = curTimer / stageInfo.time;
 
-        if (isAni == true)
+        if (isLock == true)
         {
             teachTime = Time.time;
         }
@@ -434,7 +435,7 @@ public class Game : MonoBehaviour
 
     public async Task AfterDrag(Block block1, Block block2)
     {
-        isAni = true;
+        isLock = true;
 
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
 
@@ -539,7 +540,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        isAni = false;
+        isLock = false;
     }
 
     async Task CreateMap(int _stage)

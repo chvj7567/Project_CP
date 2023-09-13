@@ -1114,7 +1114,7 @@ MonoBehaviour:
   boomAllChance:
     value: 1
   boomAllBtn: {fileID: 756169201}
-  adLoading: {fileID: 656704869}
+  adLoadingObj: {fileID: 656704867}
   plusBoomAllChance: {fileID: 513557891}
   boomAllChanceText: {fileID: 1760365287}
   darkBall: {fileID: 390423387}
@@ -1128,7 +1128,7 @@ MonoBehaviour:
   spawner: {fileID: 1208139740}
   delay: 0.35
   isDrag: 0
-  isAni: 0
+  isLock: 0
   teachTime: 0
   canMatchRow: -1
   canMatchCol: -1

@@ -62,7 +62,7 @@ public class Block : MonoBehaviour
             if (IsFixdBlock() == true)
                 return;
 
-            if (game.isDrag == false && game.isAni == false)
+            if (game.isDrag == false && game.isLock == false)
             {
                 await Boom();
             }
@@ -85,7 +85,7 @@ public class Block : MonoBehaviour
         {
             game.isDrag = false;
 
-            if (game.isAni == true || IsFixdBlock() == true)
+            if (game.isLock == true || IsFixdBlock() == true)
                 return;
 
             Vector2 rectPosition;

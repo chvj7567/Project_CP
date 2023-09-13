@@ -1,5 +1,6 @@
 using UnityEngine;
 using GoogleMobileAds.Api;
+using System;
 
 public static class CHMAdmob
 {
@@ -13,14 +14,9 @@ public static class CHMAdmob
 
     static AdRequest adRequest;
 
-    static bool advertise = false;
-
     static bool checkInit = false;
 
-    static public bool GetAdvertise()
-    {
-        return advertise;
-    }
+    public static Action<bool> AcquireReward;
 
     static public void Init()
     {
@@ -41,7 +37,6 @@ public static class CHMAdmob
     {
         bannerView = new BannerView(bannerAdUnitId, AdSize.Banner, _position);
         bannerView.LoadAd(adRequest);
-        bannerView.Show();
     }
 
     static void LoadInterstitialAd(bool _show = false)
@@ -78,8 +73,6 @@ public static class CHMAdmob
 
     static void ShowInterstitialAd()
     {
-        advertise = true;
-
         if (interstitialAd != null && interstitialAd.CanShowAd() == true)
         {
             interstitialAd.Show();
@@ -124,8 +117,6 @@ public static class CHMAdmob
 
     static public void ShowRewardedAd()
     {
-        advertise = true;
-
         if (rewardedAd.CanShowAd() == true)
         {
             rewardedAd.Show(RewardHandler);
@@ -141,10 +132,7 @@ public static class CHMAdmob
         double currencyAmount = _reward.Amount;
         string currencyType = _reward.Type;
 
-        var boomAllChance = PlayerPrefs.GetInt("boomAllChance");
-        PlayerPrefs.SetInt("boomAllChance", boomAllChance + 1);
-
-        Debug.Log("광고로 받은 보상: " + boomAllChance + " => " + boomAllChance + 1);
+        AcquireReward.Invoke(true);
     }
 
     static void RegisterEventHandlers(RewardedAd ad)
@@ -164,8 +152,6 @@ public static class CHMAdmob
         ad.OnAdFullScreenContentClosed += () =>
         {
             Debug.Log("Interstitial ad full screen content closed.");
-
-            advertise = false;
 
             LoadRewardedAd();
         };
@@ -193,8 +179,6 @@ public static class CHMAdmob
         ad.OnAdFullScreenContentClosed += () =>
         {
             Debug.Log("Interstitial ad full screen content closed.");
-
-            advertise = false;
 
             LoadInterstitialAd();
         };
