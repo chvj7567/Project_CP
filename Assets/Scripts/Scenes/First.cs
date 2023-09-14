@@ -30,9 +30,9 @@ public class First : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
-        if (CHMAssetBundle.firstDownload == true)
+        if (CHMAssetBundle.Instance.firstDownload == true)
         {
-            CHMAdmob.Init();
+            CHMAdmob.Instance.Init();
 
             backgroundIndex = 0;
 
@@ -106,12 +106,12 @@ public class First : MonoBehaviour
 
         AssetBundle assetBundle = bundleRequest.assetBundle;
 
-        CHMAssetBundle.LoadAssetBundle(_bundleName, assetBundle);
+        CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
 
         if (downloadCount == liDownloadKey.Count)
         {
             canStart = true;
-            CHMAssetBundle.firstDownload = false;
+            CHMAssetBundle.Instance.firstDownload = false;
         }
     }
 

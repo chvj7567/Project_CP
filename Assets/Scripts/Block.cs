@@ -100,9 +100,9 @@ public class Block : MonoBehaviour
                 // Right
                 case 0:
                     {
-                        var addDis = CHInstantiateButton.GetHorizontalDistance();
+                        var addDis = CHInstantiateButton.Instance.GetHorizontalDistance();
                         var movePos = new Vector2(originPos.x + addDis, originPos.y);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                        var ret = CHInstantiateButton.Instance.GetBlockInfo(movePos);
                         
                         if (ret.Item1 != null)
                         {
@@ -120,9 +120,9 @@ public class Block : MonoBehaviour
                 // Up
                 case 1:
                     {
-                        var addDis = CHInstantiateButton.GetVerticalDistance();
+                        var addDis = CHInstantiateButton.Instance.GetVerticalDistance();
                         var movePos = new Vector2(originPos.x, originPos.y + addDis);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                        var ret = CHInstantiateButton.Instance.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
                             if (ret.Item2.IsFixdBlock() == true)
@@ -139,9 +139,9 @@ public class Block : MonoBehaviour
                 // Left
                 case 2:
                     {
-                        var addDis = CHInstantiateButton.GetHorizontalDistance();
+                        var addDis = CHInstantiateButton.Instance.GetHorizontalDistance();
                         var movePos = new Vector2(originPos.x - addDis, originPos.y);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                        var ret = CHInstantiateButton.Instance.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
                             if (ret.Item2.IsFixdBlock() == true)
@@ -158,9 +158,9 @@ public class Block : MonoBehaviour
                 // Down
                 case 3:
                     {
-                        var addDis = CHInstantiateButton.GetVerticalDistance();
+                        var addDis = CHInstantiateButton.Instance.GetVerticalDistance();
                         var movePos = new Vector2(originPos.x, originPos.y - addDis);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                        var ret = CHInstantiateButton.Instance.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
                             if (ret.Item2.IsFixdBlock() == true)

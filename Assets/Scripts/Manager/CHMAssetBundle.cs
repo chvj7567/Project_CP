@@ -98,18 +98,18 @@ public partial class ObjectPool
     }
 }
 
-public static class CHMAssetBundle
+public class CHMAssetBundle : CHSingleton<CHMAssetBundle>
 {
-    public static bool firstDownload = true;
-    static AssetBundlePool assetBundlePool = new AssetBundlePool();
-    static ObjectPool objectPool = new ObjectPool();
+    public bool firstDownload = true;
+    AssetBundlePool assetBundlePool = new AssetBundlePool();
+    ObjectPool objectPool = new ObjectPool();
 
-    public static void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
+    public void LoadAssetBundle(string _bundleName, AssetBundle _assetBundle)
     {
         assetBundlePool.LoadAssetBundle(_bundleName, _assetBundle);
     }
 
-    public static void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         var obj = objectPool.GetItem(_bundleName, _assetName);
         if (obj == null)
@@ -135,7 +135,7 @@ public static class CHMAssetBundle
     }
 
 #if UNITY_EDITOR
-    public static void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
+    public void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         string path = null;
 

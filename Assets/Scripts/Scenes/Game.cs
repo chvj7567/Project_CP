@@ -34,7 +34,6 @@ public class Game : MonoBehaviour
     [SerializeField] Button plusBoomAllChance;
     [SerializeField] CHTMPro boomAllChanceText;
     [SerializeField] RectTransform darkBall;
-    [SerializeField] CHInstantiateButton instBtn;
     [SerializeField] List<Image> backgroundList = new List<Image>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
@@ -114,7 +113,7 @@ public class Game : MonoBehaviour
             backBtn.OnClickAsObservable().Subscribe(_ =>
             {
                 Time.timeScale = 1;
-                CHInstantiateButton.ResetBlockDict();
+                CHInstantiateButton.Instance.ResetBlockDict();
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
                 CHMMain.Pool.Clear();
                 PlayerPrefs.SetInt("background", backgroundIndex);
@@ -192,17 +191,17 @@ public class Game : MonoBehaviour
             isLock = true;
             adLoadingObj.SetActive(true);
             adLoadingObj.transform.SetAsLastSibling();
-            CHMAdmob.ShowRewardedAd();
+            CHMAdmob.Instance.ShowRewardedAd();
         });
 
-        CHMAdmob.AcquireReward += () =>
+        CHMAdmob.Instance.AcquireReward += () =>
         {
             boomAllChance.Value += 1;
             adLoadingObj.SetActive(false);
             isLock = false;
         };
 
-        CHMAdmob.CloseAD += () =>
+        CHMAdmob.Instance.CloseAD += () =>
         {
             adLoadingObj.SetActive(false);
             isLock = false;
@@ -226,7 +225,7 @@ public class Game : MonoBehaviour
         }
 
         boardSize = stageInfo.boardSize;
-        instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
+        CHInstantiateButton.Instance.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
         await CreateMap(stage);
         CHMMain.Sound.Play(Defines.ESound.Bgm);
@@ -550,7 +549,7 @@ public class Game : MonoBehaviour
         foreach (var block in boardArr)
         {
             if (block == null) continue;
-            float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
+            float moveDis = CHInstantiateButton.Instance.GetHorizontalDistance() * (boardSize - 1) / 2;
             block.originPos.x -= moveDis;
             block.SetOriginPos();
 

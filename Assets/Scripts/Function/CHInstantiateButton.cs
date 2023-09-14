@@ -6,39 +6,39 @@ using UniRx;
 
 public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
 {
-    [SerializeField] static GameObject origin;
-    [SerializeField] static float margin = 0f;
-    [SerializeField] static int horizontalCount = 1;
-    [SerializeField] static int verticalCount = 1;
-    [SerializeField] static List<string> buttonValue = new List<string>();
+    [SerializeField] GameObject origin;
+    [SerializeField] float margin = 0f;
+    [SerializeField] int horizontalCount = 1;
+    [SerializeField] int verticalCount = 1;
+    [SerializeField] List<string> buttonValue = new List<string>();
 
-    [SerializeField, ReadOnly] static int index = 0;
-    [SerializeField, ReadOnly] static Dictionary<RectTransform, Block> blockDict = new Dictionary<RectTransform, Block>();
+    [SerializeField, ReadOnly] int index = 0;
+    [SerializeField, ReadOnly] Dictionary<RectTransform, Block> blockDict = new Dictionary<RectTransform, Block>();
     
-    static float buttonWidth;
-    static float buttonHeight;
+    float buttonWidth;
+    float buttonHeight;
 
-    public static float GetHorizontalDistance()
+    public float GetHorizontalDistance()
     {
         return buttonWidth + margin;
     }
 
-    public static float GetVerticalDistance()
+    public float GetVerticalDistance()
     {
         return buttonHeight + margin;
     }
 
-    public static Dictionary<RectTransform, Block> GetBlockDict()
+    public Dictionary<RectTransform, Block> GetBlockDict()
     {
         return blockDict;
     }
 
-    public static void ResetBlockDict()
+    public void ResetBlockDict()
     {
         blockDict.Clear();
     }
 
-    public static (RectTransform, Block) GetBlockInfo(Vector2 pos)
+    public (RectTransform, Block) GetBlockInfo(Vector2 pos)
     {
         foreach (var block in blockDict)
         {

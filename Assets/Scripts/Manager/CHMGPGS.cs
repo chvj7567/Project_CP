@@ -8,15 +8,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public static class CHMGPGS
+public class CHMGPGS : CHSingleton<CHMGPGS>
 {
     [SerializeField]
-    static TMP_Text googleLog;
+    TMP_Text googleLog;
 
     [SerializeField]
-    static TMP_Text saveLog;
+    TMP_Text saveLog;
 
-    static void Init()
+    void Init()
     {
         PlayGamesPlatform.InitializeInstance(new PlayGamesClientConfiguration.Builder()
             .RequestIdToken()
@@ -27,7 +27,7 @@ public static class CHMGPGS
     }
 
 
-    static public void Login(Action<bool, UnityEngine.SocialPlatforms.ILocalUser> onLoginSuccess = null)
+    public void Login(Action<bool, UnityEngine.SocialPlatforms.ILocalUser> onLoginSuccess = null)
     {
         Init();
         PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptAlways, (success) =>
@@ -36,7 +36,7 @@ public static class CHMGPGS
         });
     }
 
-    static public void Logout()
+    public void Logout()
     {
         if (Social.localUser.authenticated)
 
@@ -45,7 +45,7 @@ public static class CHMGPGS
         }
     }
 
-    static public void SaveCloud(string fileName, string saveData, Action<bool> onCloudSaved = null)
+    public void SaveCloud(string fileName, string saveData, Action<bool> onCloudSaved = null)
     {
         PlayGamesPlatform.Instance.SavedGame.OpenWithAutomaticConflictResolution(fileName, DataSource.ReadCacheOrNetwork,
             ConflictResolutionStrategy.UseLastKnownGood, (status, game) =>
@@ -62,7 +62,7 @@ public static class CHMGPGS
             });
     }
 
-    static public void LoadCloud(string fileName, Action<bool, string> onCloudLoaded = null)
+    public void LoadCloud(string fileName, Action<bool, string> onCloudLoaded = null)
     {
         PlayGamesPlatform.Instance.SavedGame.OpenWithAutomaticConflictResolution(fileName, DataSource.ReadCacheOrNetwork,
             ConflictResolutionStrategy.UseLastKnownGood, (status, game) =>
@@ -85,7 +85,7 @@ public static class CHMGPGS
             });
     }
 
-    static public void DeleteCloud(string fileName, Action<bool> onCloudDeleted = null)
+    public void DeleteCloud(string fileName, Action<bool> onCloudDeleted = null)
     {
         PlayGamesPlatform.Instance.SavedGame.OpenWithAutomaticConflictResolution(fileName,
             DataSource.ReadCacheOrNetwork, ConflictResolutionStrategy.UseLongestPlaytime, (status, game) =>
@@ -103,29 +103,29 @@ public static class CHMGPGS
     }
 
 
-    static public void ShowAchievementUI() =>
+    public void ShowAchievementUI() =>
         Social.ShowAchievementsUI();
 
-    static public void UnlockAchievement(string gpgsId, Action<bool> onUnlocked = null) =>
+    public void UnlockAchievement(string gpgsId, Action<bool> onUnlocked = null) =>
         Social.ReportProgress(gpgsId, 100, success => onUnlocked?.Invoke(success));
 
-    static public void IncrementAchievement(string gpgsId, int steps, Action<bool> onUnlocked = null) =>
+    public void IncrementAchievement(string gpgsId, int steps, Action<bool> onUnlocked = null) =>
         PlayGamesPlatform.Instance.IncrementAchievement(gpgsId, steps, success => onUnlocked?.Invoke(success));
 
 
-    static public void ShowAllLeaderboardUI() =>
+    public void ShowAllLeaderboardUI() =>
         Social.ShowLeaderboardUI();
 
-    static public void ShowTargetLeaderboardUI(string gpgsId) =>
+    public void ShowTargetLeaderboardUI(string gpgsId) =>
         ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(gpgsId);
 
-    static public void ReportLeaderboard(string gpgsId, long score, Action<bool> onReported = null) =>
+    public void ReportLeaderboard(string gpgsId, long score, Action<bool> onReported = null) =>
         Social.ReportScore(score, gpgsId, success => onReported?.Invoke(success));
 
-    static public void LoadAllLeaderboardArray(string gpgsId, Action<UnityEngine.SocialPlatforms.IScore[]> onloaded = null) =>
+    public void LoadAllLeaderboardArray(string gpgsId, Action<UnityEngine.SocialPlatforms.IScore[]> onloaded = null) =>
         Social.LoadScores(gpgsId, onloaded);
 
-    static public void LoadCustomLeaderboardArray(string gpgsId, int rowCount, LeaderboardStart leaderboardStart,
+    public void LoadCustomLeaderboardArray(string gpgsId, int rowCount, LeaderboardStart leaderboardStart,
         LeaderboardTimeSpan leaderboardTimeSpan, Action<bool, LeaderboardScoreData> onloaded = null)
     {
         PlayGamesPlatform.Instance.LoadScores(gpgsId, leaderboardStart, rowCount, LeaderboardCollection.Public, leaderboardTimeSpan, data =>
@@ -135,12 +135,12 @@ public static class CHMGPGS
     }
 
 
-    static public void IncrementEvent(string gpgsId, uint steps)
+    public void IncrementEvent(string gpgsId, uint steps)
     {
         PlayGamesPlatform.Instance.Events.IncrementEvent(gpgsId, steps);
     }
 
-    static public void LoadEvent(string gpgsId, Action<bool, IEvent> onEventLoaded = null)
+    public void LoadEvent(string gpgsId, Action<bool, IEvent> onEventLoaded = null)
     {
         PlayGamesPlatform.Instance.Events.FetchEvent(DataSource.ReadCacheOrNetwork, gpgsId, (status, iEvent) =>
         {
@@ -148,7 +148,7 @@ public static class CHMGPGS
         });
     }
 
-    static public void LoadAllEvent(Action<bool, List<IEvent>> onEventsLoaded = null)
+    public void LoadAllEvent(Action<bool, List<IEvent>> onEventsLoaded = null)
     {
         PlayGamesPlatform.Instance.Events.FetchAllEvents(DataSource.ReadCacheOrNetwork, (status, events) =>
         {

@@ -2,23 +2,23 @@ using UnityEngine;
 using GoogleMobileAds.Api;
 using System;
 
-public static class CHMAdmob
+public class CHMAdmob : CHSingleton<CHMAdmob>
 {
-    static string bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111";
-    static string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
-    static string rewardedAdUnitId = "ca-app-pub-3940256099942544/5224354917";
+    string bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111";
+    string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
+    string rewardedAdUnitId = "ca-app-pub-3940256099942544/5224354917";
 
-    static BannerView bannerView;
-    static InterstitialAd interstitialAd;
-    static RewardedAd rewardedAd;
+    BannerView bannerView;
+    InterstitialAd interstitialAd;
+    RewardedAd rewardedAd;
 
-    static AdRequest adRequest;
+    AdRequest adRequest;
 
-    static bool checkInit = false;
+    bool checkInit = false;
 
-    public static Action AcquireReward;
-    public static Action CloseAD;
-    static public void Init()
+    public Action AcquireReward;
+    public Action CloseAD;
+    public void Init()
     {
         if (checkInit == true)
             return;
@@ -34,13 +34,13 @@ public static class CHMAdmob
         ShowBanner(AdPosition.Top);
     }
 
-    static public void ShowBanner(AdPosition _position)
+    public void ShowBanner(AdPosition _position)
     {
         bannerView = new BannerView(bannerAdUnitId, AdSize.Banner, _position);
         bannerView.LoadAd(adRequest);
     }
 
-    static void LoadInterstitialAd(bool _show = false)
+    void LoadInterstitialAd(bool _show = false)
     {
         if (interstitialAd != null)
         {
@@ -72,7 +72,7 @@ public static class CHMAdmob
                 });
     }
 
-    static void ShowInterstitialAd()
+    void ShowInterstitialAd()
     {
         if (interstitialAd != null && interstitialAd.CanShowAd() == true)
         {
@@ -84,7 +84,7 @@ public static class CHMAdmob
         }
     }
 
-    static void LoadRewardedAd(bool _show = false)
+    void LoadRewardedAd(bool _show = false)
     {
         if (rewardedAd != null)
         {
@@ -116,7 +116,7 @@ public static class CHMAdmob
                 });
     }
 
-    static public void ShowRewardedAd()
+    public void ShowRewardedAd()
     {
         if (rewardedAd.CanShowAd() == true)
         {
@@ -128,7 +128,7 @@ public static class CHMAdmob
         }
     }
 
-    static void RewardHandler(Reward _reward)
+    void RewardHandler(Reward _reward)
     {
         double currencyAmount = _reward.Amount;
         string currencyType = _reward.Type;
@@ -139,7 +139,7 @@ public static class CHMAdmob
         }
     }
 
-    static void RegisterEventHandlers(RewardedAd ad)
+    void RegisterEventHandlers(RewardedAd ad)
     {
         ad.OnAdImpressionRecorded += () =>
         {
@@ -171,7 +171,7 @@ public static class CHMAdmob
         };
     }
 
-    static void RegisterEventHandlers(InterstitialAd ad)
+    void RegisterEventHandlers(InterstitialAd ad)
     {
         ad.OnAdImpressionRecorded += () =>
         {

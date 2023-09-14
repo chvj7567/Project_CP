@@ -16,44 +16,44 @@ public class Test : MonoBehaviour
             log = "";
 
         if (GUILayout.Button("Login"))
-            CHMGPGS.Login((success, localUser) =>
+            CHMGPGS.Instance.Login((success, localUser) =>
             log = $"{success}, {localUser.userName}, {localUser.id}, {localUser.state}, {localUser.underage}");
 
         if (GUILayout.Button("Logout"))
-            CHMGPGS.Logout();
+            CHMGPGS.Instance.Logout();
 
         if (GUILayout.Button("SaveCloud"))
-            CHMGPGS.SaveCloud("mysave", "want data", success => log = $"{success}");
+            CHMGPGS.Instance.SaveCloud("mysave", "want data", success => log = $"{success}");
 
         if (GUILayout.Button("LoadCloud"))
-            CHMGPGS.LoadCloud("mysave", (success, data) => log = $"{success}, {data}");
+            CHMGPGS.Instance.LoadCloud("mysave", (success, data) => log = $"{success}, {data}");
 
         if (GUILayout.Button("DeleteCloud"))
-            CHMGPGS.DeleteCloud("mysave", success => log = $"{success}");
+            CHMGPGS.Instance.DeleteCloud("mysave", success => log = $"{success}");
 
         if (GUILayout.Button("ShowAchievementUI"))
-            CHMGPGS.ShowAchievementUI();
+            CHMGPGS.Instance.ShowAchievementUI();
 
         /*if (GUILayout.Button("UnlockAchievement_one"))
-            CHMGPGS.UnlockAchievement(GPGSIds.achievement_one, success => log = $"{success}");
+            CHMGPGS.Instance.UnlockAchievement(GPGSIds.achievement_one, success => log = $"{success}");
 
         if (GUILayout.Button("UnlockAchievement_two"))
-            CHMGPGS.UnlockAchievement(GPGSIds.achievement_two, success => log = $"{success}");
+            CHMGPGS.Instance.UnlockAchievement(GPGSIds.achievement_two, success => log = $"{success}");
 
         if (GUILayout.Button("IncrementAchievement_three"))
-            CHMGPGS.IncrementAchievement(GPGSIds.achievement_three, 1, success => log = $"{success}");
+            CHMGPGS.Instance.IncrementAchievement(GPGSIds.achievement_three, 1, success => log = $"{success}");
 
         if (GUILayout.Button("ShowAllLeaderboardUI"))
-            CHMGPGS.ShowAllLeaderboardUI();
+            CHMGPGS.Instance.ShowAllLeaderboardUI();
 
         if (GUILayout.Button("ShowTargetLeaderboardUI_num"))
-            CHMGPGS.ShowTargetLeaderboardUI(GPGSIds.leaderboard_num);
+            CHMGPGS.Instance.ShowTargetLeaderboardUI(GPGSIds.leaderboard_num);
 
         if (GUILayout.Button("ReportLeaderboard_num"))
-            CHMGPGS.ReportLeaderboard(GPGSIds.leaderboard_num, 1000, success => log = $"{success}");
+            CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_num, 1000, success => log = $"{success}");
 
         if (GUILayout.Button("LoadAllLeaderboardArray_num"))
-            CHMGPGS.LoadAllLeaderboardArray(GPGSIds.leaderboard_num, scores =>
+            CHMGPGS.Instance.LoadAllLeaderboardArray(GPGSIds.leaderboard_num, scores =>
             {
                 log = "";
                 for (int i = 0; i < scores.Length; i++)
@@ -61,7 +61,7 @@ public class Test : MonoBehaviour
             });
 
         if (GUILayout.Button("LoadCustomLeaderboardArray_num"))
-            CHMGPGS.LoadCustomLeaderboardArray(GPGSIds.leaderboard_num, 10,
+            CHMGPGS.Instance.LoadCustomLeaderboardArray(GPGSIds.leaderboard_num, 10,
                 GooglePlayGames.BasicApi.LeaderboardStart.PlayerCentered, GooglePlayGames.BasicApi.LeaderboardTimeSpan.Daily, (success, scoreData) =>
                 {
                     log = $"{success}\n";
@@ -71,16 +71,16 @@ public class Test : MonoBehaviour
                 });
 
         if (GUILayout.Button("IncrementEvent_event"))
-            CHMGPGS.IncrementEvent(GPGSIds.event_event, 1);
+            CHMGPGS.Instance.IncrementEvent(GPGSIds.event_event, 1);
 
         if (GUILayout.Button("LoadEvent_event"))
-            CHMGPGS.LoadEvent(GPGSIds.event_event, (success, iEvent) =>
+            CHMGPGS.Instance.LoadEvent(GPGSIds.event_event, (success, iEvent) =>
             {
                 log = $"{success}, {iEvent.Name}, {iEvent.CurrentCount}";
             });
 
         if (GUILayout.Button("LoadAllEvent"))
-            CHMGPGS.LoadAllEvent((success, iEvents) =>
+            CHMGPGS.Instance.LoadAllEvent((success, iEvents) =>
             {
                 log = $"{success}\n";
                 foreach (var iEvent in iEvents)
