@@ -1,44 +1,41 @@
-using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UniRx;
 
 public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
 {
-    [SerializeField] GameObject origin;
-    [SerializeField] float margin = 0f;
-    [SerializeField] int horizontalCount = 1;
-    [SerializeField] int verticalCount = 1;
-    [SerializeField] List<string> buttonValue = new List<string>();
+    [SerializeField] static GameObject origin;
+    [SerializeField] static float margin = 0f;
+    [SerializeField] static int horizontalCount = 1;
+    [SerializeField] static int verticalCount = 1;
+    [SerializeField] static List<string> buttonValue = new List<string>();
 
-    [SerializeField, ReadOnly] int index = 0;
-    [SerializeField, ReadOnly] Dictionary<RectTransform, Block> blockDict = new Dictionary<RectTransform, Block>();
-    
-    float buttonWidth;
-    float buttonHeight;
+    [SerializeField, ReadOnly] static int index = 0;
+    [SerializeField, ReadOnly] static Dictionary<RectTransform, Block> blockDict = new Dictionary<RectTransform, Block>();
 
-    public float GetHorizontalDistance()
+    static float buttonWidth;
+    static float buttonHeight;
+
+    static public float GetHorizontalDistance()
     {
         return buttonWidth + margin;
     }
 
-    public float GetVerticalDistance()
+    static public float GetVerticalDistance()
     {
         return buttonHeight + margin;
     }
 
-    public Dictionary<RectTransform, Block> GetBlockDict()
+    static public Dictionary<RectTransform, Block> GetBlockDict()
     {
         return blockDict;
     }
 
-    public void ResetBlockDict()
+    static public void ResetBlockDict()
     {
         blockDict.Clear();
     }
 
-    public (RectTransform, Block) GetBlockInfo(Vector2 pos)
+    static public (RectTransform, Block) GetBlockInfo(Vector2 pos)
     {
         foreach (var block in blockDict)
         {

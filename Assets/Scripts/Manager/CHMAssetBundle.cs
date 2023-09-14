@@ -172,6 +172,11 @@ public class CHMAssetBundle : CHSingleton<CHMAssetBundle>
 
         T original = AssetDatabase.LoadAssetAtPath<T>(path);
 
+        if (original == null)
+        {
+            Debug.Log($"Null : {_assetName}");
+        }
+
         _callback(original);
     }
 #endif

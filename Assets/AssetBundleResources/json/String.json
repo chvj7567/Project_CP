@@ -65,6 +65,10 @@
   },
   {
     "stringID": "17",
-    "value": "Target Score:{0}"
+    "value": "Target"
+  },
+  {
+    "stringID": "18",
+    "value": "Move"
   }
 ]

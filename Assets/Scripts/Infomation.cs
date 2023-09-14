@@ -37,6 +37,7 @@ public class Infomation
         public int boardSize = -1;
         public float time = -1;
         public int targetScore = -1;
+        public int moveCount = -1;
     }
 
     [Serializable]

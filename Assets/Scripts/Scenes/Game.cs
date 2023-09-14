@@ -39,6 +39,7 @@ public class Game : MonoBehaviour
 
     [SerializeField] Spawner spawner;
     [SerializeField] public float delay;
+    [SerializeField] CHInstantiateButton instBtn;
 
     [ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
     [ReadOnly] public bool isDrag = false;
@@ -56,6 +57,7 @@ public class Game : MonoBehaviour
     [SerializeField] float minDelay = .1f;
     [SerializeField] float maxSpeed = 30f;
     [SerializeField] CHTMPro targetScoreText;
+    [SerializeField] CHTMPro moveCountText;
     [SerializeField] CHTMPro curScoreText;
     [SerializeField] CHTMPro oneTimeScoreText;
     [SerializeField] CHTMPro killCountText;
@@ -68,6 +70,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> oneTimeScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] public ReactiveProperty<int> killCount = new ReactiveProperty<int>();
 
     [SerializeField, ReadOnly] ReactiveProperty<int> power = new ReactiveProperty<int>();
@@ -113,7 +116,7 @@ public class Game : MonoBehaviour
             backBtn.OnClickAsObservable().Subscribe(_ =>
             {
                 Time.timeScale = 1;
-                CHInstantiateButton.Instance.ResetBlockDict();
+                CHInstantiateButton.ResetBlockDict();
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
                 CHMMain.Pool.Clear();
                 PlayerPrefs.SetInt("background", backgroundIndex);
@@ -224,8 +227,23 @@ public class Game : MonoBehaviour
             targetScoreText.gameObject.SetActive(false);
         }
 
+        if (stageInfo.moveCount > 0)
+        {
+            moveCount.Value = stageInfo.moveCount;
+        }
+        else
+        {
+            moveCount.Value = 9999;
+        }
+
         boardSize = stageInfo.boardSize;
-        CHInstantiateButton.Instance.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
+
+        moveCount.Subscribe(_ =>
+        {
+            moveCountText.SetText(_);
+        });
+
+        instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
         await CreateMap(stage);
         CHMMain.Sound.Play(Defines.ESound.Bgm);
@@ -234,7 +252,7 @@ public class Game : MonoBehaviour
             .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
-                if (gameOver.Value == false)
+                if (isLock == false && gameOver.Value == false)
                 {
                     if (timerImg.fillAmount >= 1)
                     {
@@ -247,7 +265,7 @@ public class Game : MonoBehaviour
                             else
                             {
                                 gameOverText.text = "Game Clear";
-                                SaveData();
+                                SaveClearData();
                             }
                         }
                         else
@@ -272,7 +290,7 @@ public class Game : MonoBehaviour
                             else
                             {
                                 gameOverText.text = "Game Clear";
-                                SaveData();
+                                SaveClearData();
                             }
                         }
 
@@ -286,7 +304,7 @@ public class Game : MonoBehaviour
                             {
                                 gameOverText.text = "Game Clear";
                                 gameOver.Value = true;
-                                SaveData();
+                                SaveClearData();
                             }
                         }
                         else
@@ -308,8 +326,14 @@ public class Game : MonoBehaviour
                             {
                                 gameOverText.text = "Game Clear";
                                 gameOver.Value = true;
-                                SaveData();
+                                SaveClearData();
                             }
+                        }
+
+                        if (moveCount.Value <= 0)
+                        {
+                            gameOverText.text = "Game Over";
+                            gameOver.Value = true;
                         }
                     }
                 }
@@ -424,7 +448,7 @@ public class Game : MonoBehaviour
         return nextIndex;
     }
 
-    void SaveData()
+    void SaveClearData()
     {
         if (CHMMain.Data.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var data))
         {
@@ -434,13 +458,13 @@ public class Game : MonoBehaviour
         CHMMain.Data.SaveJson();
     }
 
-    public async Task AfterDrag(Block block1, Block block2)
+    public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
     {
         isLock = true;
 
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
 
-        bool first = false;
+        bool checkFirst = false;
 
         if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)
         {
@@ -465,7 +489,7 @@ public class Game : MonoBehaviour
             }
             else if (block1.IsBoomBlock() == true && block2.IsBoomBlock() == true)
             {
-                first = true;
+                checkFirst = true;
                 bonusScore.Value += 30;
                 block2.match = true;
                 block1.changeBlockState = Defines.EBlockState.Bomb;
@@ -482,23 +506,27 @@ public class Game : MonoBehaviour
             }
         }
 
+        bool back = false;
+
         do
         {
             isMatch = false;
             CheckMap();
             if (block1 != null && block2 != null)
             {
-                if (first == false && isMatch == false)
+                if (checkFirst == false && isMatch == false)
                 {
                     ChangeBlock(block1, block2);
                     block1.rectTransform.DOAnchorPos(block1.originPos, delay);
                     block2.rectTransform.DOAnchorPos(block2.originPos, delay);
 
                     await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+                    back = true;
+                    break;
                 }
             }
 
-            first = true;
+            checkFirst = true;
 
             await RemoveMatchBlock();
             await CreateBoomBlock();
@@ -506,6 +534,11 @@ public class Game : MonoBehaviour
             await UpdateMap();
             CheckMap();
         } while (isMatch == true);
+
+        if ((block1 != null && block2 != null && back == false) || isBoom == true)
+        {
+            moveCount.Value -= 1;
+        }
 
         towerPoint.Add(oneTimeScore.Value);
         totScore.Value += oneTimeScore.Value;
@@ -549,7 +582,7 @@ public class Game : MonoBehaviour
         foreach (var block in boardArr)
         {
             if (block == null) continue;
-            float moveDis = CHInstantiateButton.Instance.GetHorizontalDistance() * (boardSize - 1) / 2;
+            float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
             block.originPos.x -= moveDis;
             block.SetOriginPos();
 
@@ -1390,7 +1423,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 
@@ -1412,7 +1445,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 
@@ -1435,7 +1468,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 
@@ -1474,7 +1507,7 @@ public class Game : MonoBehaviour
 
         if (_ani)
         {
-            AfterDrag(null, null);
+            AfterDrag(null, null, true);
         }
 
         await Task.Delay(1000, tokenSource.Token);
@@ -1499,7 +1532,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 
@@ -1538,7 +1571,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 
@@ -1557,7 +1590,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 
@@ -1576,7 +1609,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 }
