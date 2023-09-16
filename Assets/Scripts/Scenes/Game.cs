@@ -180,8 +180,9 @@ public class Game : MonoBehaviour
         {
             if (isLock == false && boomAllChance.Value > 0)
             {
-                boomAllChance.Value -= 1;
                 await BoomAll();
+                boomAllChance.Value -= 1;
+                AddBoomAllCount();
             }
         });
 
@@ -212,14 +213,12 @@ public class Game : MonoBehaviour
 
         isAD.Subscribe(_ =>
         {
-            Debug.Log("11");
             adLoadingObj.SetActive(_);
 
             if (_ == true)
             {
                 adLoadingObj.transform.SetAsLastSibling();
             }
-            Debug.Log("22");
         });
 
         boomAllChance.Value = 0;
@@ -458,6 +457,14 @@ public class Game : MonoBehaviour
         backgroundList[nextIndex].DOFade(1f, 5f);
 
         return nextIndex;
+    }
+
+    void AddBoomAllCount()
+    {
+        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var data))
+        {
+            data.boomAllCount += 1;
+        }
     }
 
     void SaveClearData()

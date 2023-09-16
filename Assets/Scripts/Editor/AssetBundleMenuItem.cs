@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using static Infomation;
 
 public class AssetBundleMenuItem
 {
@@ -48,5 +49,54 @@ public class AssetBundleMenuItem
         }
 
         BuildPipeline.BuildAssetBundles(directory, BuildAssetBundleOptions.None, BuildTarget.Android);
+    }
+
+    [Serializable]
+    public class Temp
+    {
+        public List<StageInfo> stageList = new List<StageInfo>();
+    }
+
+    public static Temp stageData = new Temp();
+
+    [MenuItem("CHTools/StageJson")]
+    public static void CreateStageJson()
+    {
+        GenerateStageData();
+        SaveStageDataToJson();
+    }
+
+    public static void GenerateStageData()
+    {
+        int group = 1;
+        for (int stage = 1; stage <= 100; stage++)
+        {
+            StageInfo data = new StageInfo
+            {
+                group = group,
+                stage = stage,
+                blockTypeCount = 5,
+                boardSize = 9,
+                time = 180,
+                targetScore = 100,
+                moveCount = -1
+            };
+
+            stageData.stageList.Add(data);
+
+            if (stage % 9 == 0)
+                group++;
+        }
+    }
+
+    public static void SaveStageDataToJson()
+    {
+        string jsonData = JsonUtility.ToJson(stageData, true);
+
+        // JSON 파일로 저장 (Assets 폴더 내에 저장됨)
+        string filePath = Path.Combine(Application.dataPath + "/AssetBundleResources/json", "stages.json");
+        File.WriteAllText(filePath, jsonData);
+
+        Debug.Log("JSON 데이터 생성이 완료되었습니다.");
     }
 }

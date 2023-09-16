@@ -46,6 +46,8 @@ public class CHMData : CHSingleton<CHMData>
 
                 var task = await taskCompletionSource.Task;
 
+                Debug.Log($"Load Local Data is {task.text}");
+
                 return JsonUtility.FromJson<Loader>("{\"stageList\":" + task.text + "}");
             }
             else
@@ -64,6 +66,9 @@ public class CHMData : CHSingleton<CHMData>
         stageData.stageList = stageData.MakeList(stageDataDic);
 
         string json = JsonUtility.ToJson(stageData);
+
+        Debug.Log($"Save Data is {json}");
+
         File.WriteAllText(stagePath, json);;
     }
 
