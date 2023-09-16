@@ -15,23 +15,53 @@ public class First : MonoBehaviour
     [SerializeField] List<Image> backgroundList = new List<Image>();
     [SerializeField] Image loadingBar;
     [SerializeField] TMP_Text loadingText;
-    [SerializeField] GameObject stageGroupObj;
+    [SerializeField] GameObject stageSelect1;
+    [SerializeField] GameObject stageSelect2;
     [SerializeField] PageMove pageMove;
     [SerializeField] Button startBtn;
     [SerializeField] List<string> liDownloadKey = new List<string>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
-    bool canStart = false;
+    bool dataDownload = false;
+    bool bundleDownload = false;
     int downloadCount = 0;
 
     CancellationTokenSource tokenSource;
 
+    int i = 1;
     private void Start()
     {
         tokenSource = new CancellationTokenSource();
 
+        loadingBar.gameObject.SetActive(false);
+        loadingText.gameObject.SetActive(false);
+        stageSelect1.SetActive(false);
+        stageSelect2.SetActive(false);
+        startBtn.gameObject.SetActive(false);
+
         if (CHMAssetBundle.Instance.firstDownload == true)
         {
+            pageMove.ActiveMoveBtn(false);
+            loadingBar.gameObject.SetActive(true);
+            loadingText.gameObject.SetActive(true);
+            startBtn.gameObject.SetActive(true);
+
+            CHMGPGS.Instance.Login(async (success, localUser) =>
+            {
+                if (success)
+                {
+                    Debug.Log("GPGS Login Success");
+                    await CHMData.Instance.LoadCloudData();
+                    dataDownload = true;
+                }
+                else
+                {
+                    Debug.Log("GPGS Login Failed");
+                    await CHMData.Instance.LoadLocalData();
+                    dataDownload = true;
+                }
+            });
+
             CHMAdmob.Instance.Init();
 
             backgroundIndex = 0;
@@ -45,36 +75,31 @@ public class First : MonoBehaviour
         {
             backgroundIndex = PlayerPrefs.GetInt("background");
 
-            canStart = true;
-            loadingBar.gameObject.SetActive(false);
-            loadingText.gameObject.SetActive(false);
+            bundleDownload = true;
+            dataDownload = true;
 
-            startBtn.gameObject.SetActive(false);
-            stageGroupObj.SetActive(true);
+            pageMove.Init();
+            stageSelect1.SetActive(true);
+            stageSelect2.SetActive(true);
         }
 
         ChangeBackgroundLoop();
 
-        stageGroupObj.SetActive(false);
+        loadingBar.fillAmount = 0f;
 
-        if (loadingBar) loadingBar.fillAmount = 0f;
-        if (startBtn)
+        startBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            startBtn.gameObject.SetActive(true);
+            if (bundleDownload == false || dataDownload == false) return;
 
-            startBtn.OnClickAsObservable().Subscribe(_ =>
-            {
-                if (canStart == false) return;
+            pageMove.Init();
+            startBtn.gameObject.SetActive(false);
+            stageSelect1.SetActive(true);
+            stageSelect2.SetActive(true);
+            loadingBar.gameObject.SetActive(false);
+            loadingText.gameObject.SetActive(false);
 
-                pageMove.Init();
-                startBtn.gameObject.SetActive(false);
-                stageGroupObj.SetActive(true);
-                loadingBar.gameObject.SetActive(false);
-                loadingText.gameObject.SetActive(false);
-
-                PlayerPrefs.SetInt("background", backgroundIndex);
-            });
-        }
+            PlayerPrefs.SetInt("background", backgroundIndex);
+        });
     }
 
     IEnumerator LoadAssetBundle(string _bundleName)
@@ -87,31 +112,43 @@ public class First : MonoBehaviour
         // 다운로드 표시
         float downloadProgress = 0;
 
-        ++downloadCount;
-
         while (!bundleRequest.isDone)
         {
             downloadProgress = bundleRequest.progress;
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress;
+            if (loadingBar) loadingBar.fillAmount = downloadProgress / liDownloadKey.Count * downloadCount;
             if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f+ "%";
 
             yield return null;
         }
 
-        downloadProgress = bundleRequest.progress;
-
-        if (loadingBar) loadingBar.fillAmount = downloadProgress;
-        if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
-
-        AssetBundle assetBundle = bundleRequest.assetBundle;
-
-        CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
-
-        if (downloadCount == liDownloadKey.Count)
+        if (bundleRequest.assetBundle == null)
         {
-            canStart = true;
-            CHMAssetBundle.Instance.firstDownload = false;
+            Debug.LogError($"{_bundleName} is Null");
+
+            LoadAssetBundle(_bundleName);
+        }
+        else
+        {
+            downloadProgress = bundleRequest.progress;
+
+            AssetBundle assetBundle = bundleRequest.assetBundle;
+
+            CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
+
+            ++downloadCount;
+
+            if (loadingBar) loadingBar.fillAmount = downloadProgress / liDownloadKey.Count * downloadCount;
+            if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
+
+            Debug.Log($"{_bundleName} download");
+
+            if (downloadCount == liDownloadKey.Count)
+            {
+                Debug.Log($"Bundle download Success");
+                bundleDownload = true;
+                CHMAssetBundle.Instance.firstDownload = false;
+            }
         }
     }
 

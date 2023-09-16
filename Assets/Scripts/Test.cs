@@ -31,10 +31,10 @@ public class Test : MonoBehaviour
         if (GUILayout.Button("DeleteCloud"))
             CHMGPGS.Instance.DeleteCloud("mysave", success => log = $"{success}");
 
-        if (GUILayout.Button("ShowAchievementUI"))
+        /*if (GUILayout.Button("ShowAchievementUI"))
             CHMGPGS.Instance.ShowAchievementUI();
 
-        /*if (GUILayout.Button("UnlockAchievement_one"))
+        if (GUILayout.Button("UnlockAchievement_one"))
             CHMGPGS.Instance.UnlockAchievement(GPGSIds.achievement_one, success => log = $"{success}");
 
         if (GUILayout.Button("UnlockAchievement_two"))

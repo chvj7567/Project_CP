@@ -177,7 +177,7 @@ public class Game : MonoBehaviour
 
         boomAllBtn.OnClickAsObservable().Subscribe(async _ =>
         {
-             if (isLock == false && boomAllChance.Value > 0)
+            if (isLock == false && boomAllChance.Value > 0)
             {
                 boomAllChance.Value -= 1;
                 await BoomAll();
@@ -206,7 +206,9 @@ public class Game : MonoBehaviour
 
         CHMAdmob.Instance.CloseAD += () =>
         {
+            Debug.Log("11");
             adLoadingObj.SetActive(false);
+            Debug.Log("22");
             isLock = false;
         };
 
@@ -450,12 +452,16 @@ public class Game : MonoBehaviour
 
     void SaveClearData()
     {
-        if (CHMMain.Data.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var data))
+        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var data))
         {
             data.clear = true;
         }
 
-        CHMMain.Data.SaveJson();
+#if UNITY_EDITOR
+        CHMData.Instance.SaveJsonToLocal();
+#else
+        CHMData.Instance.SaveJsonToGPGSCloud();
+#endif
     }
 
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)

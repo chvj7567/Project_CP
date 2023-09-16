@@ -25,7 +25,6 @@ public class PageMove : MonoBehaviour
 
     private void Start()
     {
-        page = 0;
         width = standard.rect.width;
         index = 1;
 
@@ -41,9 +40,6 @@ public class PageMove : MonoBehaviour
         {
             MoveRight();
         });
-
-        leftBtn.gameObject.SetActive(false);
-        rightBtn.gameObject.SetActive(false);
     }
 
     public void Init()
@@ -56,17 +52,21 @@ public class PageMove : MonoBehaviour
         CheckCurrentPage();
     }
 
+    public void ActiveMoveBtn(bool active)
+    {
+        leftBtn.gameObject.SetActive(active);
+        rightBtn.gameObject.SetActive(active);
+    }
+
     void CheckCurrentPage()
     {
         if (page == 0)
         {
-            leftBtn.gameObject.SetActive(false);
-            rightBtn.gameObject.SetActive(false);
+            ActiveMoveBtn(false);
             return;
         }
 
-        leftBtn.gameObject.SetActive(true);
-        rightBtn.gameObject.SetActive(true);
+        ActiveMoveBtn(true);
 
         if (page == 1)
         {

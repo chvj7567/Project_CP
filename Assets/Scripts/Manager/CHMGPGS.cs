@@ -21,6 +21,7 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
         PlayGamesPlatform.InitializeInstance(new PlayGamesClientConfiguration.Builder()
             .RequestIdToken()
             .RequestEmail()
+            .EnableSavedGames()
             .Build());
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
@@ -59,6 +60,10 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
                         onCloudSaved?.Invoke(status2 == SavedGameRequestStatus.Success);
                     });
                 }
+                else
+                {
+                    onCloudSaved?.Invoke(false);
+                }
             });
     }
 
@@ -81,6 +86,10 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
                             onCloudLoaded?.Invoke(false, null);
                         }
                     });
+                }
+                else
+                {
+                    onCloudLoaded?.Invoke(false, null);
                 }
             });
     }

@@ -59,7 +59,7 @@ public class StageSelect : MonoBehaviour
 
     void SetClearObj(int _index)
     {
-        if (CHMMain.Data.stageDataDic.TryGetValue(textList[_index].text, out var data))
+        if (CHMData.Instance.stageDataDic.TryGetValue(textList[_index].text, out var data))
         {
             if (data.clear)
             {

@@ -31,7 +31,7 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
 
         LoadInterstitialAd();
         LoadRewardedAd();
-        ShowBanner(AdPosition.Top);
+        //ShowBanner(AdPosition.Top);
     }
 
     public void ShowBanner(AdPosition _position)
@@ -157,12 +157,12 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
         {
             Debug.Log("Interstitial ad full screen content closed.");
 
-            LoadRewardedAd();
-
             if (CloseAD != null)
             {
                 CloseAD.Invoke();
             }
+
+            LoadRewardedAd();
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
@@ -189,12 +189,12 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
         {
             Debug.Log("Interstitial ad full screen content closed.");
 
-            LoadInterstitialAd();
-
             if (CloseAD != null)
             {
                 CloseAD.Invoke();
             }
+
+            LoadInterstitialAd();
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {

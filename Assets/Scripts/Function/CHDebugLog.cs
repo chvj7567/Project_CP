@@ -23,7 +23,7 @@ public class CHDebugLog : MonoBehaviour
         {
             case LogType.Log:
                 style.normal.textColor = Color.white;
-                return;
+                break;
             case LogType.Warning:
                 return;
             case LogType.Error:
@@ -33,7 +33,7 @@ public class CHDebugLog : MonoBehaviour
                 break;
         }
 
-        logString = $"<{++logCount}>[{type}] : {logString} {stackTrace}";
+        logString = $"<{++logCount}>[{type}] : {logString}";
 
         dicLogInfo.Add(logString, style);
 

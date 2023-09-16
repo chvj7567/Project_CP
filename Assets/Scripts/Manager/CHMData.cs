@@ -9,26 +9,31 @@ public interface ILoader<Key, Value>
     List<Value> MakeList(Dictionary<Key, Value> dict);
 }
 
-public class CHMData
+public class CHMData : CHSingleton<CHMData>
 {
     public Dictionary<string, Data.Stage> stageDataDic = new Dictionary<string, Data.Stage>();
 
     string stagePath;
 
-    public async void Init()
+    public async Task LoadLocalData()
     {
         stagePath = $"{Application.persistentDataPath}/{Defines.EData.Stage.ToString()}.json";
 
         Debug.Log($"Path:{stagePath}");
 
-        var playerData = await LoadJson<Data.ExtractData<Data.Stage>, string, Data.Stage>(Defines.EData.Stage.ToString());
-
-        stageDataDic = playerData.MakeDict();
+        var stageData = await LoadJsonToLocal<Data.ExtractData<Data.Stage>, string, Data.Stage>(Defines.EData.Stage.ToString());
+        stageDataDic = stageData.MakeDict();
     }
 
-    async Task<Loader> LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
+    public async Task LoadCloudData()
     {
-        if (path == Defines.EData.Stage.ToString())
+        var stageData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(Defines.EData.Stage.ToString());
+        stageDataDic = stageData.MakeDict();
+    }
+
+    async Task<Loader> LoadJsonToLocal<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
+    {
+        if (name == Defines.EData.Stage.ToString())
         {
             if (File.Exists(stagePath) == false)
             {
@@ -39,9 +44,9 @@ public class CHMData
                     taskCompletionSource.SetResult(data);
                 });
 
-                var textAsset = await taskCompletionSource.Task;
+                var task = await taskCompletionSource.Task;
 
-                return JsonUtility.FromJson<Loader>("{\"stageList\":" + textAsset.text + "}");
+                return JsonUtility.FromJson<Loader>("{\"stageList\":" + task.text + "}");
             }
             else
             {
@@ -52,13 +57,58 @@ public class CHMData
         return default(Loader);
     }
 
-    public void SaveJson()
+    public void SaveJsonToLocal()
     {
         Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
 
         stageData.stageList = stageData.MakeList(stageDataDic);
 
         string json = JsonUtility.ToJson(stageData);
-        File.WriteAllText(stagePath, json);
+        File.WriteAllText(stagePath, json);;
+    }
+
+    public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
+    {
+        TaskCompletionSource<string> taskCompletionSource = new TaskCompletionSource<string>();
+
+        CHMGPGS.Instance.LoadCloud(name, (success, data) =>
+        {
+            Debug.Log($"Load Cloud Data is {success} : {data}");
+            taskCompletionSource.SetResult(data);
+        });
+
+        var stringTask = await taskCompletionSource.Task;
+
+        // 데이터가 없을 경우 디폴트 데이터 저장
+        if (stringTask == "")
+        {
+            TaskCompletionSource<TextAsset> taskCompletionSource2 = new TaskCompletionSource<TextAsset>();
+
+            CHMMain.Resource.LoadStageData((data) =>
+            {
+                Debug.Log($"Load Game Data : {data}");
+                taskCompletionSource2.SetResult(data);
+            });
+
+            var task = await taskCompletionSource2.Task;
+
+            return JsonUtility.FromJson<Loader>("{\"stageList\":" + task.text + "}");
+        }
+
+        return JsonUtility.FromJson<Loader>(stringTask);
+    }
+
+    public void SaveJsonToGPGSCloud()
+    {
+        Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
+
+        stageData.stageList = stageData.MakeList(stageDataDic);
+
+        string data = JsonUtility.ToJson(stageData);
+
+        CHMGPGS.Instance.SaveCloud(Defines.EData.Stage.ToString(), data, success =>
+        {
+            Debug.Log($"Save Data is {success} : {data}");
+        });
     }
 }
