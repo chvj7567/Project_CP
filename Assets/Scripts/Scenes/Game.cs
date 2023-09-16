@@ -77,6 +77,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<float> attackDelay = new ReactiveProperty<float>();
     [SerializeField, ReadOnly] ReactiveProperty<float> attackSpeed = new ReactiveProperty<float>();
     [SerializeField, ReadOnly] ReactiveProperty<int> catPangLevel = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] ReactiveProperty<bool> isAD = new ReactiveProperty<bool>();
 
     [SerializeField] GameObject gameOverObj;
     [SerializeField] TMP_Text gameOverText;
@@ -191,26 +192,35 @@ public class Game : MonoBehaviour
 
         plusBoomAllChance.OnClickAsObservable().Subscribe(_ =>
         {
-            isLock = true;
-            adLoadingObj.SetActive(true);
-            adLoadingObj.transform.SetAsLastSibling();
             CHMAdmob.Instance.ShowRewardedAd();
+            isLock = true;
+            isAD.Value = true;
         });
 
         CHMAdmob.Instance.AcquireReward += () =>
         {
             boomAllChance.Value += 1;
-            adLoadingObj.SetActive(false);
+            isAD.Value = false;
             isLock = false;
         };
 
         CHMAdmob.Instance.CloseAD += () =>
         {
-            Debug.Log("11");
-            adLoadingObj.SetActive(false);
-            Debug.Log("22");
+            isAD.Value = false;
             isLock = false;
         };
+
+        isAD.Subscribe(_ =>
+        {
+            Debug.Log("11");
+            adLoadingObj.SetActive(_);
+
+            if (_ == true)
+            {
+                adLoadingObj.transform.SetAsLastSibling();
+            }
+            Debug.Log("22");
+        });
 
         boomAllChance.Value = 0;
 

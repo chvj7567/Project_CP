@@ -118,7 +118,7 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
 
     public void ShowRewardedAd()
     {
-        if (rewardedAd.CanShowAd() == true)
+        if (rewardedAd != null && rewardedAd.CanShowAd() == true)
         {
             rewardedAd.Show(RewardHandler);
         }
