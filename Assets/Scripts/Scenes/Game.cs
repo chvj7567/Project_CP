@@ -11,6 +11,7 @@ using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static Defines;
 
 public class Game : MonoBehaviour
 {
@@ -81,7 +82,7 @@ public class Game : MonoBehaviour
 
     [SerializeField] GameObject gameOverObj;
     [SerializeField] TMP_Text gameOverText;
-    [SerializeField, ReadOnly] public ReactiveProperty<bool> gameOver = new ReactiveProperty<bool>();
+    [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
 
     [SerializeField, ReadOnly] List<int> towerPoint = new List<int>();
 
@@ -159,9 +160,11 @@ public class Game : MonoBehaviour
 
         gameOverObj.SetActive(false);
 
-        gameOver.Subscribe(_ =>
+        gameResult.Value = EGameResult.None;
+
+        gameResult.Subscribe(_ =>
         {
-            if (_ == true)
+            if (_ == EGameResult.GameOver || _ == EGameResult.GameClear)
             {
                 Time.timeScale = 0;
                 CHMMain.UI.CloseUI(Defines.EUI.UIChoice);
@@ -263,7 +266,7 @@ public class Game : MonoBehaviour
             .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
-                if (isLock == false && gameOver.Value == false)
+                if (isLock == false && gameResult.Value == EGameResult.None)
                 {
                     if (timerImg.fillAmount >= 1)
                     {
@@ -272,10 +275,12 @@ public class Game : MonoBehaviour
                             if (totScore.Value < stageInfo.targetScore)
                             {
                                 gameOverText.text = "Game Over";
+                                gameResult.Value = EGameResult.GameOver;
                             }
                             else
                             {
                                 gameOverText.text = "Game Clear";
+                                gameResult.Value = EGameResult.GameClear;
                                 SaveClearData();
                             }
                         }
@@ -297,15 +302,15 @@ public class Game : MonoBehaviour
                             if (clear == false)
                             {
                                 gameOverText.text = "Game Over";
+                                gameResult.Value = EGameResult.GameOver;
                             }
                             else
                             {
                                 gameOverText.text = "Game Clear";
+                                gameResult.Value = EGameResult.GameClear;
                                 SaveClearData();
                             }
                         }
-
-                        gameOver.Value = true;
                     }
                     else
                     {
@@ -314,7 +319,7 @@ public class Game : MonoBehaviour
                             if (totScore.Value >= stageInfo.targetScore)
                             {
                                 gameOverText.text = "Game Clear";
-                                gameOver.Value = true;
+                                gameResult.Value = EGameResult.GameClear;
                                 SaveClearData();
                             }
                         }
@@ -336,7 +341,7 @@ public class Game : MonoBehaviour
                             if (clear)
                             {
                                 gameOverText.text = "Game Clear";
-                                gameOver.Value = true;
+                                gameResult.Value = EGameResult.GameClear;
                                 SaveClearData();
                             }
                         }
@@ -344,7 +349,7 @@ public class Game : MonoBehaviour
                         if (moveCount.Value <= 0)
                         {
                             gameOverText.text = "Game Over";
-                            gameOver.Value = true;
+                            gameResult.Value = EGameResult.GameOver;
                         }
                     }
                 }
@@ -573,7 +578,7 @@ public class Game : MonoBehaviour
 
         if (addDefense == true)
         {
-            if (totScore.Value > 0 && gameOver.Value == false && selectTog.isOn)
+            if (totScore.Value > 0 && gameResult.Value == EGameResult.None && selectTog.isOn)
             {
                 if (totScore.Value >= selectCurScore)
                 {

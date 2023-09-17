@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -10,24 +12,21 @@ using UnityEngine.UI;
 public class StageSelect : MonoBehaviour
 {
     [SerializeField]
-    List<Button> btnList = new List<Button>();
-    [SerializeField]
-    List<TMP_Text> textList = new List<TMP_Text>();
-    [SerializeField]
-    List<GameObject> clearObjList = new List<GameObject>();
+    List<CHButton> btnList = new List<CHButton>();
 
     public void Init()
     {
         for (int i = 0; i < btnList.Count; i++)
         {
             int index = i;
-            btnList[index].OnClickAsObservable().Subscribe(_ =>
+            btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
-                PlayerPrefs.SetInt("stage", int.Parse(textList[index].text));
+                PlayerPrefs.SetInt("stage", int.Parse(btnList[index].text.text));
                 SceneManager.LoadScene(1);
             });
 
             SetClearObj(index);
+            SetLockObj(index);
         }
     }
 
@@ -39,19 +38,19 @@ public class StageSelect : MonoBehaviour
 
         var stageCount = stageList.Count;
 
-        for (int i = 0; i < textList.Count; ++i)
+        for (int i = 0; i < btnList.Count; ++i)
         {
             if (i >= stageCount)
             {
                 btnList[i].gameObject.SetActive(false);
-                clearObjList[i].gameObject.SetActive(false);
                 continue;
             }
 
             btnList[i].gameObject.SetActive(true);
-            textList[i].text = stageList[i].stage.ToString();
+            btnList[i].text.text = stageList[i].stage.ToString();
 
             SetClearObj(i);
+            SetLockObj(i);
         }
 
         return true;
@@ -59,20 +58,80 @@ public class StageSelect : MonoBehaviour
 
     void SetClearObj(int _index)
     {
-        if (CHMData.Instance.stageDataDic.TryGetValue(textList[_index].text, out var data))
+        if (int.TryParse(btnList[_index].text.text, out int stage) == false)
+            return;
+
+        if (CHMData.Instance.stageDataDic.TryGetValue(stage.ToString(), out var data))
         {
             if (data.clear)
             {
-                clearObjList[_index].SetActive(true);
+                btnList[_index].clearObj.SetActive(true);
             }
             else
             {
-                clearObjList[_index].SetActive(false);
+                btnList[_index].clearObj.SetActive(false);
             }
         }
         else
         {
-            clearObjList[_index].SetActive(false);
+            btnList[_index].clearObj.SetActive(false);
+        }
+    }
+
+    async void SetLockObj(int _index)
+    {
+        if (int.TryParse(btnList[_index].text.text, out int stage) == false)
+            return;
+
+        btnList[_index].button.interactable = false;
+
+        if (stage == 1)
+        {
+            btnList[_index].button.interactable = true;
+            btnList[_index].lockObj.SetActive(false);
+            btnList[_index].unlockObj.SetActive(false);
+            return;
+        }
+
+        if (CHMData.Instance.stageDataDic.TryGetValue((stage - 1).ToString(), out var data))
+        {
+            if (data.clear)
+            {
+                if (CHMData.Instance.stageDataDic.TryGetValue(stage.ToString(), out var data2) == false)
+                {
+                    return;
+                }
+
+                if (PlayerPrefs.GetInt("stage") == stage - 1 && data2.clear == false)
+                {
+                    btnList[_index].lockObj.SetActive(true);
+                    await Task.Delay(1000);
+                    btnList[_index].lockObj.SetActive(false);
+                    btnList[_index].unlockObj.SetActive(true);
+                    var rectTransform = btnList[_index].unlockObj.GetComponent<RectTransform>();
+                    if (rectTransform != null)
+                    {
+                        rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + 30f, 1f).OnComplete(() =>
+                        {
+                            btnList[_index].button.interactable = true;
+                            btnList[_index].unlockObj.SetActive(false);
+                        });
+                    }
+                }
+                else
+                {
+                    btnList[_index].button.interactable = true;
+                    btnList[_index].lockObj.SetActive(false);
+                }
+            }
+            else
+            {
+                btnList[_index].lockObj.SetActive(true);
+            }
+        }
+        else
+        {
+            btnList[_index].lockObj.SetActive(true);
         }
     }
 }

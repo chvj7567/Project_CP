@@ -47,7 +47,7 @@ public class Monster : MonoBehaviour
             {
                 if (isDie == false)
                 {
-                    game.gameOver.Value = true;
+                    game.gameResult.Value = Defines.EGameResult.GameOver;
                 }
                 else
                 {

@@ -78,7 +78,7 @@ public class First : MonoBehaviour
             bundleDownload = true;
             dataDownload = true;
 
-            pageMove.Init();
+            pageMove.Init(PlayerPrefs.GetInt("stage"));
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
         }
@@ -91,7 +91,7 @@ public class First : MonoBehaviour
         {
             if (bundleDownload == false || dataDownload == false) return;
 
-            pageMove.Init();
+            pageMove.Init(PlayerPrefs.GetInt("Stage"));
             startBtn.gameObject.SetActive(false);
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);

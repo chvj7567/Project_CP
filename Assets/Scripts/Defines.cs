@@ -175,4 +175,14 @@ public class Defines
 
         Max
     }
+
+    public enum EGameResult
+    {
+        None = -1,
+
+        GameOver,
+        GameClear,
+
+        Max
+    }
 }

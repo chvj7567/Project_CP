@@ -42,20 +42,29 @@ public class PageMove : MonoBehaviour
         });
     }
 
-    public void Init()
+    public void Init(int _stage)
     {
-        page = 1;
+        if (_stage <= 1)
+        {
+            page = 1;
+        }    
+        else
+        {
+            page = (_stage - 1) / 9 + 1;
+        }
 
         stageSelect1.Init();
         stageSelect2.Init();
 
+        stageSelect1.SetPage(page);
+
         CheckCurrentPage();
     }
 
-    public void ActiveMoveBtn(bool active)
+    public void ActiveMoveBtn(bool _active)
     {
-        leftBtn.gameObject.SetActive(active);
-        rightBtn.gameObject.SetActive(active);
+        leftBtn.gameObject.SetActive(_active);
+        rightBtn.gameObject.SetActive(_active);
     }
 
     void CheckCurrentPage()
