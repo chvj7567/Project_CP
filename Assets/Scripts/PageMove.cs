@@ -20,6 +20,7 @@ public class PageMove : MonoBehaviour
     [SerializeField, ReadOnly] int page;
     [SerializeField, ReadOnly] float width;
 
+    bool moving = false;
     // stageSelectÀÇ index;
     int index;
 
@@ -92,26 +93,34 @@ public class PageMove : MonoBehaviour
     {
         if (index == 1)
         {
-            if (stageSelect2.SetPage(page - 1) == true)
+            if (moving == false && stageSelect2.SetPage(page - 1) == true)
             {
                 index = 2;
                 stageSelect2RectTransform.anchoredPosition = new Vector2(-width, 0);
 
+                moving = true;
                 stageSelect1RectTransform.DOAnchorPos(new Vector2(width, 0), moveSpeed);
-                stageSelect2RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed);
+                stageSelect2RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed).OnComplete(() =>
+                {
+                    moving = false;
+                });
 
                 --page;
             }
         }
         else
         {
-            if (stageSelect1.SetPage(page - 1) == true)
+            if (moving == false && stageSelect1.SetPage(page - 1) == true)
             {
                 index = 1;
                 stageSelect1RectTransform.anchoredPosition = new Vector2(-width, 0);
 
+                moving = true;
                 stageSelect2RectTransform.DOAnchorPos(new Vector2(width, 0), moveSpeed);
-                stageSelect1RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed);
+                stageSelect1RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed).OnComplete(() =>
+                {
+                    moving = false;
+                });
 
                 --page;
             }
@@ -124,26 +133,34 @@ public class PageMove : MonoBehaviour
     {
         if (index == 1)
         {
-            if (stageSelect2.SetPage(page + 1) == true)
+            if (moving == false && stageSelect2.SetPage(page + 1) == true)
             {
                 index = 2;
                 stageSelect2RectTransform.anchoredPosition = new Vector2(width, 0);
 
+                moving = true;
                 stageSelect1RectTransform.DOAnchorPos(new Vector2(-width, 0), moveSpeed);
-                stageSelect2RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed);
+                stageSelect2RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed).OnComplete(() =>
+                {
+                    moving = false;
+                });
 
                 ++page;
             }
         }
         else
         {
-            if (stageSelect1.SetPage(page + 1) == true)
+            if (moving == false && stageSelect1.SetPage(page + 1) == true)
             {
                 index = 1;
                 stageSelect1RectTransform.anchoredPosition = new Vector2(width, 0);
 
+                moving = true;
                 stageSelect2RectTransform.DOAnchorPos(new Vector2(-width, 0), moveSpeed);
-                stageSelect1RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed);
+                stageSelect1RectTransform.DOAnchorPos(new Vector2(0, 0), moveSpeed).OnComplete(() =>
+                {
+                    moving = false;
+                });
 
                 ++page;
             }
