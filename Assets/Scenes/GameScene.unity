@@ -1171,7 +1171,7 @@ MonoBehaviour:
     value: 0
   gameOverObj: {fileID: 1122812489}
   gameOverText: {fileID: 2051715108}
-  gameOver:
+  gameResult:
     value: 0
   towerPoint: 
   delayMillisecond: 1000
@@ -5110,7 +5110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf317c0687fed6d42990d3f6788d0d45, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7af266a173362cf4da5d2d235db5c888, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5140,6 +5140,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c41a1fd96324d468e00d7f32b0c217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 0}
+  clearObj: {fileID: 0}
+  lockObj: {fileID: 0}
+  unlockObj: {fileID: 0}
 --- !u!1 &1523202581
 GameObject:
   m_ObjectHideFlags: 0
@@ -6648,6 +6652,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c41a1fd96324d468e00d7f32b0c217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 0}
+  clearObj: {fileID: 0}
+  lockObj: {fileID: 0}
+  unlockObj: {fileID: 0}
 --- !u!1 &2030532715
 GameObject:
   m_ObjectHideFlags: 0
