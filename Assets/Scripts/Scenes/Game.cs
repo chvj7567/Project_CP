@@ -724,7 +724,7 @@ public class Game : MonoBehaviour
                 if (curBlock.IsFixdBlock() == true)
                     continue;
 
-                if (curBlock.IsBlock() == true)
+                if (curBlock.IsBoomBlock() == true || curBlock.IsSpecialBlock() == true)
                 {
                     canMatchRow = curBlock.row;
                     canMatchCol = curBlock.col;
