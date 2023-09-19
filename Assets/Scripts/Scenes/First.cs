@@ -29,7 +29,7 @@ public class First : MonoBehaviour
     CancellationTokenSource tokenSource;
 
     int i = 1;
-    private void Start()
+    async void Start()
     {
         tokenSource = new CancellationTokenSource();
 
@@ -46,6 +46,7 @@ public class First : MonoBehaviour
             loadingText.gameObject.SetActive(true);
             startBtn.gameObject.SetActive(true);
 
+#if UNITY_EDITOR == false
             CHMGPGS.Instance.Login(async (success, localUser) =>
             {
                 if (success)
@@ -57,10 +58,12 @@ public class First : MonoBehaviour
                 else
                 {
                     Debug.Log("GPGS Login Failed");
-                    await CHMData.Instance.LoadLocalData();
-                    dataDownload = true;
                 }
             });
+#else
+            await CHMData.Instance.LoadLocalData();
+            dataDownload = true;
+#endif
 
             CHMAdmob.Instance.Init();
 

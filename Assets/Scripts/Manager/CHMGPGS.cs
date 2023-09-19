@@ -1,3 +1,4 @@
+#if UNITY_EDITOR == false
 using GooglePlayGames.BasicApi.Events;
 using GooglePlayGames.BasicApi.SavedGame;
 using GooglePlayGames.BasicApi;
@@ -165,3 +166,4 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
         });
     }
 }
+#endif

@@ -290,11 +290,7 @@ public class Block : MonoBehaviour
     {
         switch (blockState)
         {
-            case Defines.EBlockState.CatPang1:
-            case Defines.EBlockState.CatPang2:
-            case Defines.EBlockState.CatPang3:
-            case Defines.EBlockState.CatPang4:
-            case Defines.EBlockState.CatPang5:
+            case Defines.EBlockState.CatPang:
                 await game.Boom1(this, ani);
                 break;
             case Defines.EBlockState.Arrow1:
@@ -315,7 +311,7 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.Arrow6:
                 await game.Boom6(this, ani);
                 break;
-            case Defines.EBlockState.Bomb:
+            case Defines.EBlockState.BlackBomb:
                 // 드래그 해야 함
                 break;
         }
@@ -326,15 +322,16 @@ public class Block : MonoBehaviour
         switch (blockState)
         {
             case Defines.EBlockState.Cat1:
-                return Defines.EBlockState.CatPang1;
             case Defines.EBlockState.Cat2:
-                return Defines.EBlockState.CatPang2;
             case Defines.EBlockState.Cat3:
-                return Defines.EBlockState.CatPang3;
             case Defines.EBlockState.Cat4:
-                return Defines.EBlockState.CatPang4;
             case Defines.EBlockState.Cat5:
-                return Defines.EBlockState.CatPang5;
+            case Defines.EBlockState.Cat6:
+            case Defines.EBlockState.Cat7:
+            case Defines.EBlockState.Cat8:
+            case Defines.EBlockState.Cat9:
+            case Defines.EBlockState.Cat10:
+                return Defines.EBlockState.CatPang;
             default:
                 return Defines.EBlockState.None;
         }
@@ -359,11 +356,7 @@ public class Block : MonoBehaviour
     {
         switch (blockState)
         {
-            case Defines.EBlockState.CatPang1:
-            case Defines.EBlockState.CatPang2:
-            case Defines.EBlockState.CatPang3:
-            case Defines.EBlockState.CatPang4:
-            case Defines.EBlockState.CatPang5:
+            case Defines.EBlockState.CatPang:
             case Defines.EBlockState.Arrow1:
             case Defines.EBlockState.Arrow2:
             case Defines.EBlockState.Arrow3:
@@ -392,7 +385,7 @@ public class Block : MonoBehaviour
     {
         switch (blockState)
         {
-            case Defines.EBlockState.Bomb:
+            case Defines.EBlockState.BlackBomb:
                 return true;
             default:
                 return false;

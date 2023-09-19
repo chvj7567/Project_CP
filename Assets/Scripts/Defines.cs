@@ -79,12 +79,13 @@ public class Defines
         Cat3,
         Cat4,
         Cat5,
+        Cat6,
+        Cat7,
+        Cat8,
+        Cat9,
+        Cat10,
 
-        CatPang1,
-        CatPang2,
-        CatPang3,
-        CatPang4,
-        CatPang5,
+        CatPang,
 
         Arrow1,
         Arrow2,
@@ -93,10 +94,10 @@ public class Defines
         Arrow5,
         Arrow6,
 
-        Bomb,
-
         Wall,
         Potal,
+
+        BlackBomb,
 
         Max
     }

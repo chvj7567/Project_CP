@@ -479,10 +479,10 @@ public class Game : MonoBehaviour
             data.clear = true;
         }
 
-#if UNITY_EDITOR
-        CHMData.Instance.SaveJsonToLocal();
-#else
+#if UNITY_EDITOR == false
         CHMData.Instance.SaveJsonToGPGSCloud();
+#else
+        CHMData.Instance.SaveJsonToLocal();
 #endif
     }
 
@@ -501,7 +501,7 @@ public class Game : MonoBehaviour
 
             if (block1.IsSpecialBlock() == true)
             {
-                if (block1.GetBlockState() == Defines.EBlockState.Bomb)
+                if (block1.GetBlockState() == Defines.EBlockState.BlackBomb)
                 {
                     await Boom3(block1, block2.GetBlockState());
                     return;
@@ -509,7 +509,7 @@ public class Game : MonoBehaviour
             }
             else if (block2.IsSpecialBlock() == true)
             {
-                if (block2.GetBlockState() == Defines.EBlockState.Bomb)
+                if (block2.GetBlockState() == Defines.EBlockState.BlackBomb)
                 {
                     await Boom3(block2, block1.GetBlockState());
                     return;
@@ -520,7 +520,7 @@ public class Game : MonoBehaviour
                 checkFirst = true;
                 bonusScore.Value += 30;
                 block2.match = true;
-                block1.changeBlockState = Defines.EBlockState.Bomb;
+                block1.changeBlockState = Defines.EBlockState.BlackBomb;
             }
             else if (block1.IsBoomBlock() == true)
             {
@@ -1184,11 +1184,11 @@ public class Game : MonoBehaviour
                             checkMoveBlock = true;
                             if (tempScore >= 5)
                             {
-                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 8, Defines.EBlockState.CatPang5);
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 8, Defines.EBlockState.CatPang);
                             }
                             else
                             {
-                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 9, Defines.EBlockState.CatPang1);
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 9, Defines.EBlockState.CatPang);
                             }
                         }
 
@@ -1199,11 +1199,11 @@ public class Game : MonoBehaviour
                     {
                         if (tempScore >= 5)
                         {
-                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 10, Defines.EBlockState.CatPang5);
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 10, Defines.EBlockState.CatPang);
                         }
                         else
                         {
-                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 11, Defines.EBlockState.CatPang1);
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 11, Defines.EBlockState.CatPang);
                         }
                     }
                 }

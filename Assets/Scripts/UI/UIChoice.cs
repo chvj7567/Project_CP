@@ -226,13 +226,13 @@ public class UIChoice : UIBase
                         {
                             if (arg.catPangLevel.Value == 2)
                             {
-                                cat.attackImg.sprite = arg.catPangImgList[(int)Defines.EBlockState.CatPang2];
+                                cat.attackImg.sprite = arg.catPangImgList[(int)Defines.EBlockState.CatPang];
                                 cat.attackPower += 500;
                                 cat.attackSpeed += 5;
                             }
                             else if (arg.catPangLevel.Value == 3)
                             {
-                                cat.attackImg.sprite = arg.catPangImgList[(int)Defines.EBlockState.CatPang3];
+                                cat.attackImg.sprite = arg.catPangImgList[(int)Defines.EBlockState.CatPang];
                                 cat.attackPower += 1000;
                                 cat.attackSpeed += 10;
                             }

@@ -25,12 +25,6 @@ public class CHMData : CHSingleton<CHMData>
         stageDataDic = stageData.MakeDict();
     }
 
-    public async Task LoadCloudData()
-    {
-        var stageData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(Defines.EData.Stage.ToString());
-        stageDataDic = stageData.MakeDict();
-    }
-
     async Task<Loader> LoadJsonToLocal<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
     {
         if (name == Defines.EData.Stage.ToString())
@@ -72,7 +66,13 @@ public class CHMData : CHSingleton<CHMData>
         File.WriteAllText(stagePath, json);;
     }
 
-    public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
+#if UNITY_EDITOR == false
+public async Task LoadCloudData()
+    {
+        var stageData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(Defines.EData.Stage.ToString());
+        stageDataDic = stageData.MakeDict();
+    }
+public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
     {
         TaskCompletionSource<string> taskCompletionSource = new TaskCompletionSource<string>();
 
@@ -116,4 +116,5 @@ public class CHMData : CHSingleton<CHMData>
             Debug.Log($"Save Data is {success} : {data}");
         });
     }
+#endif
 }
