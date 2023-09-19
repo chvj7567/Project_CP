@@ -621,14 +621,12 @@ public class Game : MonoBehaviour
             {
                 var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
-                block.SetBlockState(Defines.ELog.CreateMap, 1, (Defines.EBlockState)random);
-                block.img.sprite = blockSpriteList[random];
+                block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[random], (Defines.EBlockState)random);
                 block.SetHp(-1);
             }
             else
             {
-                block.SetBlockState(Defines.ELog.CreateMap, 2, stageBlockInfo.blockState);
-                block.img.sprite = blockSpriteList[(int)stageBlockInfo.blockState];
+                block.SetBlockState(Defines.ELog.CreateMap, 2, blockSpriteList[(int)stageBlockInfo.blockState], stageBlockInfo.blockState);
 
                 if (block.IsNormalBlock() == true)
                 {
@@ -1218,8 +1216,7 @@ public class Game : MonoBehaviour
 
     void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _boomBlock)
     {
-        _block.SetBlockState(_log, _key, _boomBlock);
-        _block.img.sprite = blockSpriteList[(int)_boomBlock];
+        _block.SetBlockState(_log, _key, blockSpriteList[(int)_boomBlock], _boomBlock);
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;

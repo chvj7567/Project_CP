@@ -242,10 +242,45 @@ public class Block : MonoBehaviour
         return hp;
     }
 
-    public void SetBlockState(Defines.ELog _log, int _key, Defines.EBlockState _blockState)
+    public void SetBlockState(Defines.ELog _log, int _key, Sprite _sprite, Defines.EBlockState _blockState)
     {
         blockState = _blockState;
         match = false;
+        img.sprite = _sprite;
+
+        switch (blockState)
+        {
+            case EBlockState.Cat1:
+            case EBlockState.Cat2:
+            case EBlockState.Cat3:
+            case EBlockState.Cat4:
+            case EBlockState.Cat5:
+            case EBlockState.Cat6:
+            case EBlockState.Cat7:
+            case EBlockState.Cat8:
+            case EBlockState.Cat9:
+            case EBlockState.Cat10:
+            case EBlockState.CatPang:
+            case EBlockState.Arrow1:
+            case EBlockState.Arrow2:
+            case EBlockState.Arrow3:
+            case EBlockState.Arrow4:
+            case EBlockState.Arrow5:
+            case EBlockState.Arrow6:
+                img.rectTransform.sizeDelta = new Vector2(30, 30);
+                break;
+            case EBlockState.Wall:
+                img.rectTransform.sizeDelta = new Vector2(0, 0);
+                break;
+            case EBlockState.Potal:
+                img.rectTransform.sizeDelta = new Vector2(-20, -20);
+                break;
+            case EBlockState.BlackBomb:
+                img.rectTransform.sizeDelta = new Vector2(30, 30);
+                break;
+            case EBlockState.Max:
+                break;
+        }
 
         CheckNoneBlockLog(_log, _key);
     }
