@@ -85,8 +85,6 @@ public class Defines
         Cat9,
         Cat10,
 
-        CatPang,
-
         Arrow1,
         Arrow2,
         Arrow3,
@@ -97,7 +95,8 @@ public class Defines
         Wall,
         Potal,
 
-        BlackBomb,
+        CatPang,
+        SpecailBomb,
 
         Max
     }

@@ -247,6 +247,7 @@ public class Block : MonoBehaviour
         blockState = _blockState;
         match = false;
         img.sprite = _sprite;
+        img.color = new Color(1, 1, 1, 1);
 
         switch (blockState)
         {
@@ -260,25 +261,22 @@ public class Block : MonoBehaviour
             case EBlockState.Cat8:
             case EBlockState.Cat9:
             case EBlockState.Cat10:
-            case EBlockState.CatPang:
             case EBlockState.Arrow1:
             case EBlockState.Arrow2:
             case EBlockState.Arrow3:
             case EBlockState.Arrow4:
             case EBlockState.Arrow5:
             case EBlockState.Arrow6:
+            case EBlockState.CatPang:
+            case EBlockState.SpecailBomb:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
                 break;
             case EBlockState.Wall:
-                img.rectTransform.sizeDelta = new Vector2(0, 0);
+                img.rectTransform.sizeDelta = new Vector2(30, 30);
+                img.color = new Color(.5f, .5f, .5f);
                 break;
             case EBlockState.Potal:
                 img.rectTransform.sizeDelta = new Vector2(-20, -20);
-                break;
-            case EBlockState.BlackBomb:
-                img.rectTransform.sizeDelta = new Vector2(30, 30);
-                break;
-            case EBlockState.Max:
                 break;
         }
 
@@ -346,7 +344,7 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.Arrow6:
                 await game.Boom6(this, ani);
                 break;
-            case Defines.EBlockState.BlackBomb:
+            case Defines.EBlockState.SpecailBomb:
                 // 드래그 해야 함
                 break;
         }
@@ -420,7 +418,7 @@ public class Block : MonoBehaviour
     {
         switch (blockState)
         {
-            case Defines.EBlockState.BlackBomb:
+            case Defines.EBlockState.SpecailBomb:
                 return true;
             default:
                 return false;
