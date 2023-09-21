@@ -6,6 +6,13 @@ using UnityEngine;
 namespace Data
 {
     [Serializable]
+    public class Login
+    {
+        public string key = "";
+        public bool connectGPGS = false;
+    }
+
+    [Serializable]
     public class Stage
     {
         public string key = "";
@@ -17,13 +24,19 @@ namespace Data
     [Serializable]
     public class ExtractData<T> : ILoader<string, T> where T : class
     {
+        public List<Login> loginList = new List<Login>();
         public List<Stage> stageList = new List<Stage>();
 
         public Dictionary<string, T> MakeDict()
         {
             Dictionary<string, T> dict = new Dictionary<string, T>();
 
-            if (typeof(T) == typeof(Stage))
+            if (typeof(T) == typeof(Login))
+            {
+                foreach (Login data in loginList)
+                    dict.Add(data.key, data as T);
+            }
+            else if (typeof(T) == typeof(Stage))
             {
                 foreach (Stage data in stageList)
                     dict.Add(data.key, data as T);

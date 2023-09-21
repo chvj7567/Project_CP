@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,12 +19,15 @@ public class First : MonoBehaviour
     [SerializeField] GameObject stageSelect1;
     [SerializeField] GameObject stageSelect2;
     [SerializeField] PageMove pageMove;
+    [SerializeField] TMP_Text downloadText;
     [SerializeField] Button startBtn;
+    [SerializeField] Button connectGPGSBtn;
+    [SerializeField] TMP_Text connectText;
     [SerializeField] List<string> liDownloadKey = new List<string>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
-    bool dataDownload = false;
-    bool bundleDownload = false;
+    ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
+    ReactiveProperty<bool> bundleDownload = new ReactiveProperty<bool>();
     int downloadCount = 0;
 
     CancellationTokenSource tokenSource;
@@ -35,34 +39,48 @@ public class First : MonoBehaviour
 
         loadingBar.gameObject.SetActive(false);
         loadingText.gameObject.SetActive(false);
+        downloadText.gameObject.SetActive(false);
         stageSelect1.SetActive(false);
         stageSelect2.SetActive(false);
         startBtn.gameObject.SetActive(false);
 
+        downloadText.text = "";
         if (CHMAssetBundle.Instance.firstDownload == true)
         {
             pageMove.ActiveMoveBtn(false);
             loadingBar.gameObject.SetActive(true);
             loadingText.gameObject.SetActive(true);
-            startBtn.gameObject.SetActive(true);
+            downloadText.gameObject.SetActive(true);
 
+            connectText.text = "Connect GPGS";
 #if UNITY_EDITOR == false
-            CHMGPGS.Instance.Login(async (success, localUser) =>
+            if (PlayerPrefs.GetInt("Login") == 1)
             {
-                if (success)
+                connectText.text = "Logining...";
+                CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
-                    Debug.Log("GPGS Login Success");
-                    await CHMData.Instance.LoadCloudData();
-                    dataDownload = true;
-                }
-                else
-                {
-                    Debug.Log("GPGS Login Failed");
-                }
-            });
+                    if (success)
+                    {
+                        Debug.Log("GPGS Login Success");
+                        connectText.text = "Login Success";
+                        await CHMData.Instance.LoadCloudData();
+                        dataDownload = true;
+                    }
+                    else
+                    {
+                        Debug.Log("GPGS Login Failed");
+                        connectText.text = "Login Failed";
+                    }
+                });
+            }
+            else
+            {
+                await CHMData.Instance.LoadLocalData();
+                dataDownload.Value = true;
+            }
 #else
             await CHMData.Instance.LoadLocalData();
-            dataDownload = true;
+            dataDownload.Value = true;
 #endif
 
             CHMAdmob.Instance.Init();
@@ -78,8 +96,8 @@ public class First : MonoBehaviour
         {
             backgroundIndex = PlayerPrefs.GetInt("background");
 
-            bundleDownload = true;
-            dataDownload = true;
+            bundleDownload.Value = true;
+            dataDownload.Value = true;
 
             pageMove.Init(PlayerPrefs.GetInt("stage"));
             stageSelect1.SetActive(true);
@@ -92,7 +110,7 @@ public class First : MonoBehaviour
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (bundleDownload == false || dataDownload == false) return;
+            if (bundleDownload.Value == false || dataDownload.Value == false) return;
 
             pageMove.Init(PlayerPrefs.GetInt("Stage"));
             startBtn.gameObject.SetActive(false);
@@ -103,12 +121,72 @@ public class First : MonoBehaviour
 
             PlayerPrefs.SetInt("background", backgroundIndex);
         });
+
+        dataDownload.Subscribe(_ =>
+        {
+            if (CHMAssetBundle.Instance.firstDownload == true && _ == true && bundleDownload.Value == true)
+            {
+                downloadText.gameObject.SetActive(false);
+                startBtn.gameObject.SetActive(true);
+            }
+        });
+
+        bundleDownload.Subscribe(_ =>
+        {
+            if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
+            {
+                downloadText.gameObject.SetActive(false);
+                startBtn.gameObject.SetActive(true);
+            }
+        });
+
+        connectGPGSBtn.OnPointerClickAsObservable().Subscribe(_ =>
+        {
+            if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var data))
+            {
+                Debug.Log($"ConnectGPGS : {data.connectGPGS}");
+
+                if (data.connectGPGS == true)
+                    return;
+
+                PlayerPrefs.SetInt("Login", 1);
+
+                connectText.text = "Login...";
+#if UNITY_EDITOR == false
+                CHMGPGS.Instance.Login(async (success, localUser) =>
+                {
+                    if (success)
+                    {
+                        Debug.Log("GPGS Login Success");
+                        connectText.text = "Login Success";
+                        await CHMData.Instance.LoadCloudData();
+                        dataDownload = true;
+                    }
+                    else
+                    {
+                        Debug.Log("GPGS Login Failed");
+                        connectText.text = "Login Failed";
+                    }
+                });
+
+                CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
+                CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Stage.ToString());
+#endif
+                data.connectGPGS = true;
+            }
+            else
+            {
+                connectText.text = "Login Failed";
+                Debug.Log($"LoginData Load Failed");
+            }
+        });
     }
 
     IEnumerator LoadAssetBundle(string _bundleName)
     {
         string bundlePath = Path.Combine(Application.streamingAssetsPath, _bundleName);
 
+        downloadText.text = $"{_bundleName} Downloading...";
         // 에셋 번들 로드
         AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
 
@@ -120,7 +198,7 @@ public class First : MonoBehaviour
             downloadProgress = bundleRequest.progress;
 
             if (loadingBar) loadingBar.fillAmount = downloadProgress / liDownloadKey.Count * downloadCount;
-            if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f+ "%";
+            if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
 
             yield return null;
         }
@@ -144,12 +222,13 @@ public class First : MonoBehaviour
             if (loadingBar) loadingBar.fillAmount = downloadProgress / liDownloadKey.Count * downloadCount;
             if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
 
-            Debug.Log($"{_bundleName} download");
+            Debug.Log($"{_bundleName} Download");
+            downloadText.text = $"{_bundleName} Download Success";
 
             if (downloadCount == liDownloadKey.Count)
             {
                 Debug.Log($"Bundle download Success");
-                bundleDownload = true;
+                bundleDownload.Value = true;
                 CHMAssetBundle.Instance.firstDownload = false;
             }
         }

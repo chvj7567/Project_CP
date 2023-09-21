@@ -84,8 +84,6 @@ public class Game : MonoBehaviour
     [SerializeField] TMP_Text gameOverText;
     [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
 
-    [SerializeField, ReadOnly] List<int> towerPoint = new List<int>();
-
     List<Sprite> blockSpriteList = new List<Sprite>();
 
     Infomation.StageInfo stageInfo;
@@ -93,7 +91,7 @@ public class Game : MonoBehaviour
     [SerializeField] int delayMillisecond;
     bool oneTimeAlarm = false;
 
-    
+
     CancellationTokenSource tokenSource;
 
     async void Start()
@@ -266,7 +264,7 @@ public class Game : MonoBehaviour
             .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
-                if (isLock == false && gameResult.Value == EGameResult.None)
+                if (gameResult.Value == EGameResult.None)
                 {
                     if (timerImg.fillAmount >= 1)
                     {
@@ -474,15 +472,25 @@ public class Game : MonoBehaviour
 
     void SaveClearData()
     {
-        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var data))
+        if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData) == false)
+            return;
+
+        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var stageData))
         {
-            data.clear = true;
+            stageData.clear = true;
         }
 
 #if UNITY_EDITOR == false
-        CHMData.Instance.SaveJsonToGPGSCloud();
+        if (loginData.connectGPGS == true)
+        {
+            CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Stage.ToString());
+        }
+        else
+        {
+            CHMData.Instance.SaveJsonToLocal(Defines.EData.Stage.ToString());
+        }
 #else
-        CHMData.Instance.SaveJsonToLocal();
+        CHMData.Instance.SaveJsonToLocal(Defines.EData.Stage.ToString());
 #endif
     }
 
@@ -559,6 +567,14 @@ public class Game : MonoBehaviour
             await RemoveMatchBlock();
             await CreateBoomBlock();
             await DownBlock();
+
+            totScore.Value += oneTimeScore.Value;
+            totScore.Value += bonusScore.Value;
+            curScore.Value += oneTimeScore.Value;
+            curScore.Value += bonusScore.Value;
+            oneTimeScore.Value = 0;
+            bonusScore.Value = 0;
+
             await UpdateMap();
             CheckMap();
         } while (isMatch == true);
@@ -568,7 +584,6 @@ public class Game : MonoBehaviour
             moveCount.Value -= 1;
         }
 
-        towerPoint.Add(oneTimeScore.Value);
         totScore.Value += oneTimeScore.Value;
         totScore.Value += bonusScore.Value;
         curScore.Value += oneTimeScore.Value;
@@ -909,7 +924,7 @@ public class Game : MonoBehaviour
     // Match된 블럭 제거
     {
         bool removeDelay = false;
-        
+
         for (int i = 0; i < boardSize; ++i)
         {
             for (int j = 0; j < boardSize; ++j)
@@ -1233,7 +1248,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].IsFixdBlock() == true)
+            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBoomBlock() == true)
             {
                 blockState = Defines.EBlockState.None;
                 matchCount = 0;
@@ -1386,7 +1401,7 @@ public class Game : MonoBehaviour
     bool IsNormalBlock(int row, int col)
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
-            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBlock() == false)
+            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBoomBlock() == true)
             return false;
 
         return true;

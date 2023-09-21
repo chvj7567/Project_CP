@@ -11,65 +11,78 @@ public interface ILoader<Key, Value>
 
 public class CHMData : CHSingleton<CHMData>
 {
+    public Dictionary<string, Data.Login> loginDataDic = new Dictionary<string, Data.Login>();
     public Dictionary<string, Data.Stage> stageDataDic = new Dictionary<string, Data.Stage>();
-
-    string stagePath;
 
     public async Task LoadLocalData()
     {
-        stagePath = $"{Application.persistentDataPath}/{Defines.EData.Stage.ToString()}.json";
-
-        Debug.Log($"Path:{stagePath}");
-
+        var loginData = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(Defines.EData.Login.ToString());
         var stageData = await LoadJsonToLocal<Data.ExtractData<Data.Stage>, string, Data.Stage>(Defines.EData.Stage.ToString());
+
+        loginDataDic = loginData.MakeDict();
         stageDataDic = stageData.MakeDict();
     }
 
     async Task<Loader> LoadJsonToLocal<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
     {
-        if (name == Defines.EData.Stage.ToString())
+        string path = $"{Application.persistentDataPath}/{name}.json";
+
+        Debug.Log($"Local Path : {path}");
+
+        if (File.Exists(path) == false)
         {
-            if (File.Exists(stagePath) == false)
+            TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
+            CHMMain.Resource.LoadData(name, (data) =>
             {
-                TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+                taskCompletionSource.SetResult(data);
+            });
 
-                CHMMain.Resource.LoadStageData((data) =>
-                {
-                    taskCompletionSource.SetResult(data);
-                });
+            var task = await taskCompletionSource.Task;
 
-                var task = await taskCompletionSource.Task;
+            Debug.Log($"Load Local Data is {task.text}");
 
-                Debug.Log($"Load Local Data is {task.text}");
-
-                return JsonUtility.FromJson<Loader>("{\"stageList\":" + task.text + "}");
-            }
-            else
-            {
-                return JsonUtility.FromJson<Loader>(File.ReadAllText(stagePath));
-            }
+            return JsonUtility.FromJson<Loader>($"{{\"{name.ToLower()}List\":{task.text}}}");
         }
-
-        return default(Loader);
+        else
+        {
+            return JsonUtility.FromJson<Loader>(File.ReadAllText($"{Application.persistentDataPath}/{name}.json"));
+        }
     }
 
-    public void SaveJsonToLocal()
+    public void SaveJsonToLocal(string name)
     {
-        Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
+        string json = "";
 
-        stageData.stageList = stageData.MakeList(stageDataDic);
+        if (name == Defines.EData.Login.ToString())
+        {
+            Data.ExtractData<Data.Login> loginData = new Data.ExtractData<Data.Login>();
 
-        string json = JsonUtility.ToJson(stageData);
+            loginData.loginList = loginData.MakeList(loginDataDic);
+
+            json = JsonUtility.ToJson(loginData);
+        }
+        else if (name == Defines.EData.Stage.ToString())
+        {
+            Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
+
+            stageData.stageList = stageData.MakeList(stageDataDic);
+
+            json = JsonUtility.ToJson(stageData);
+        }
 
         Debug.Log($"Save Data is {json}");
 
-        File.WriteAllText(stagePath, json);;
+        File.WriteAllText($"{Application.persistentDataPath}/{name.ToLower()}.json", json);
     }
 
 #if UNITY_EDITOR == false
 public async Task LoadCloudData()
     {
+        var loginData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(Defines.EData.Login.ToString());
         var stageData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(Defines.EData.Stage.ToString());
+
+        loginDataDic = loginData.MakeDict();
         stageDataDic = stageData.MakeDict();
     }
 public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
@@ -89,7 +102,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) w
         {
             TaskCompletionSource<TextAsset> taskCompletionSource2 = new TaskCompletionSource<TextAsset>();
 
-            CHMMain.Resource.LoadStageData((data) =>
+            CHMMain.Resource.LoadData(name, (data) =>
             {
                 Debug.Log($"Load Game Data : {data}");
                 taskCompletionSource2.SetResult(data);
@@ -97,23 +110,36 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) w
 
             var task = await taskCompletionSource2.Task;
 
-            return JsonUtility.FromJson<Loader>("{\"stageList\":" + task.text + "}");
+            return JsonUtility.FromJson<Loader>($"{{\"{name.ToLower()}List\":{task.text}}}");
         }
 
         return JsonUtility.FromJson<Loader>(stringTask);
     }
 
-    public void SaveJsonToGPGSCloud()
+    public void SaveJsonToGPGSCloud(string name)
     {
-        Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
+        string json = "";
 
-        stageData.stageList = stageData.MakeList(stageDataDic);
-
-        string data = JsonUtility.ToJson(stageData);
-
-        CHMGPGS.Instance.SaveCloud(Defines.EData.Stage.ToString(), data, success =>
+        if (name == Defines.EData.Login.ToString())
         {
-            Debug.Log($"Save Data is {success} : {data}");
+            Data.ExtractData<Data.Login> loginData = new Data.ExtractData<Data.Login>();
+
+            loginData.loginList = loginData.MakeList(loginDataDic);
+
+            json = JsonUtility.ToJson(loginData);
+        }
+        else if (name == Defines.EData.Stage.ToString())
+        {
+            Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
+
+            stageData.stageList = stageData.MakeList(stageDataDic);
+
+            json = JsonUtility.ToJson(stageData);
+        }
+
+        CHMGPGS.Instance.SaveCloud(name, json, success =>
+        {
+            Debug.Log($"Save Data is {success} : {json}");
         });
     }
 #endif

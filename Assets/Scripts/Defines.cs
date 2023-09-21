@@ -140,6 +140,7 @@ public class Defines
     {
         None = -1,
 
+        Login,
         Stage,
 
         Max
