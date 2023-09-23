@@ -419,6 +419,10 @@ public class Block : MonoBehaviour
         switch (blockState)
         {
             case Defines.EBlockState.PinkBomb:
+            case Defines.EBlockState.GreenBomb:
+            case Defines.EBlockState.OrangeBomb:
+            case Defines.EBlockState.BlueBomb:
+            case Defines.EBlockState.YellowBomb:
                 return true;
             default:
                 return false;

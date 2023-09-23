@@ -103,12 +103,7 @@ public class First : MonoBehaviour
         {
             PlayerPrefs.SetInt("Login", 0);
 #if UNITY_EDITOR == false
-            CHMGPGS.Instance.DeleteCloud(Defines.EData.Login.ToString(), success =>
-            {
-                Debug.Log($"Delete {Defines.EData.Login.ToString()} Data is {success}");
-            });
-
-            CHMGPGS.Instance.DeleteCloud(Defines.EData.Stage.ToString(), success =>
+            CHMGPGS.Instance.DeleteCloud("CatPang", success =>
             {
                 Debug.Log($"Delete {Defines.EData.Stage.ToString()} Data is {success}");
             });
@@ -145,7 +140,7 @@ public class First : MonoBehaviour
                         if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData))
                         {
                             loginData.connectGPGS = true;
-                            CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
+                            CHMData.Instance.SaveJsonToGPGSCloud();
                         }
                     }
                     else
@@ -159,10 +154,12 @@ public class First : MonoBehaviour
             {
                 await CHMData.Instance.LoadLocalData();
                 dataDownload.Value = true;
+                CHMData.Instance.SaveJsonToLocal();
             }
 #else
                 await CHMData.Instance.LoadLocalData();
                 dataDownload.Value = true;
+                CHMData.Instance.SaveJsonToLocal();
 #endif
             }
             else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
@@ -191,12 +188,10 @@ public class First : MonoBehaviour
                         PlayerPrefs.SetInt("Login", 1);
                         Debug.Log("GPGS Login Success");
                         connectText.text = "Login Success";
-                        await CHMData.Instance.LoadCloudData();
                         dataDownload.Value = true;
                         data.connectGPGS = true;
 
-                        CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
-                        CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Stage.ToString());
+                        CHMData.Instance.SaveJsonToGPGSCloud();
                     }
                     else
                     {

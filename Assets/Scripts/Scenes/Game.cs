@@ -484,14 +484,14 @@ public class Game : MonoBehaviour
 #if UNITY_EDITOR == false
         if (loginData.connectGPGS == true)
         {
-            CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Stage.ToString());
+            CHMData.Instance.SaveJsonToGPGSCloud();
         }
         else
         {
-            CHMData.Instance.SaveJsonToLocal(Defines.EData.Stage.ToString());
+            CHMData.Instance.SaveJsonToLocal();
         }
 #else
-        CHMData.Instance.SaveJsonToLocal(Defines.EData.Stage.ToString());
+        CHMData.Instance.SaveJsonToLocal();
 #endif
     }
 
@@ -508,22 +508,25 @@ public class Game : MonoBehaviour
             moveIndex1 = block1.index;
             moveIndex2 = block2.index;
 
-            if (block1.IsSpecialBlock() == true)
+            // 두 블럭 모두 스페셜 블럭일 경우
+            if (block1.IsSpecialBlock() == true && block2.IsSpecialBlock() == true)
             {
-                if (block1.GetBlockState() == Defines.EBlockState.PinkBomb)
-                {
-                    await Boom3(block1, block2.GetBlockState());
-                    return;
-                }
+                await BoomAll();
+                return;
             }
+            // 한 블럭만 스페셜 블럭일 경우
+            else if (block1.IsSpecialBlock() == true)
+            {
+                await Boom3(block1, block2.GetBlockState());
+                return;
+            }
+            // 한 블럭만 스페셜 블럭일 경우
             else if (block2.IsSpecialBlock() == true)
             {
-                if (block2.GetBlockState() == Defines.EBlockState.PinkBomb)
-                {
-                    await Boom3(block2, block1.GetBlockState());
-                    return;
-                }
+                await Boom3(block2, block1.GetBlockState());
+                return;
             }
+            // 두 블럭 모두 폭탄 블럭일 경우
             else if (block1.IsBoomBlock() == true && block2.IsBoomBlock() == true)
             {
                 checkFirst = true;
@@ -531,11 +534,13 @@ public class Game : MonoBehaviour
                 block2.match = true;
                 block1.changeBlockState = Defines.EBlockState.PinkBomb;
             }
+            // 한 블럭만 폭탄 블럭일 경우
             else if (block1.IsBoomBlock() == true)
             {
                 await block1.Boom();
                 return;
             }
+            // 한 블럭만 폭탄 블럭일 경우
             else if (block2.IsBoomBlock() == true)
             {
                 await block2.Boom();
@@ -690,6 +695,7 @@ public class Game : MonoBehaviour
 
         } while (isMatch == true);
 
+        Debug.Log("Create Map End");
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
     }
 
