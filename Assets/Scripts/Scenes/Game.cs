@@ -3,6 +3,7 @@ using GoogleMobileAds.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -353,7 +354,7 @@ public class Game : MonoBehaviour
                 }
             });
 
-        await AfterDrag(null, null);
+        //await AfterDrag(null, null);
     }
 
     private async void Update()
@@ -654,6 +655,41 @@ public class Game : MonoBehaviour
             }
         }
 
+        do
+        {
+            isMatch = false;
+            CheckMap();
+
+            for (int i = 0; i < boardSize; ++i)
+            {
+                for (int j = 0; j < boardSize; ++j)
+                {
+                    var block = boardArr[i, j];
+
+                    if (block == null)
+                        continue;
+
+                    if (block.squareMatch == true || block.IsMatch() == true)
+                    {
+                        var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+
+                        block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[random], (Defines.EBlockState)random);
+                        block.SetHp(-1);
+                        block.ResetScore();
+                        block.match = false;
+                        block.squareMatch = false;
+                    }
+                }
+            }
+
+            if (isMatch == true)
+            {
+                isMatch = false;
+                CheckMap();
+            }
+
+        } while (isMatch == true);
+
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
     }
 
@@ -674,20 +710,32 @@ public class Game : MonoBehaviour
 
                     if (reupdate == true || block.IsMatch() == true)
                     {
-                        var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                        if (block.changeBlockState != Defines.EBlockState.None)
+                        {
+                            createDelay = true;
+                            CreateNewBlock(block, Defines.ELog.UpdateMap, 1, block.changeBlockState);
+                            block.SetHp(-1);
+                            block.ResetScore();
+                            block.SetOriginPos();
+                            block.changeBlockState = Defines.EBlockState.None;
+                        }
+                        else
+                        {
+                            var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
-                        createDelay = true;
-                        CreateNewBlock(block, Defines.ELog.UpdateMap, 1, (Defines.EBlockState)random);
-                        block.SetHp(-1);
-                        block.ResetScore();
-                        block.SetOriginPos();
+                            createDelay = true;
+                            CreateNewBlock(block, Defines.ELog.UpdateMap, 2, (Defines.EBlockState)random);
+                            block.SetHp(-1);
+                            block.ResetScore();
+                            block.SetOriginPos();
+                        }
                     }
                     else
                     {
                         if (block.changeBlockState != Defines.EBlockState.None)
                         {
                             createDelay = true;
-                            CreateNewBlock(block, Defines.ELog.UpdateMap, 2, block.changeBlockState);
+                            CreateNewBlock(block, Defines.ELog.UpdateMap, 3, block.changeBlockState);
                             block.SetHp(-1);
                             block.ResetScore();
                             block.SetOriginPos();
@@ -998,7 +1046,7 @@ public class Game : MonoBehaviour
         }*/
     }
 
-    async Task CreateBoomBlock()
+    async Task CreateBoomBlock(bool boomBlock = true)
     // ÆøÅº ºí·° »ý¼º
     {
         bool createDelay = false;
@@ -1018,8 +1066,8 @@ public class Game : MonoBehaviour
                 if (block.squareMatch == true)
                 {
                     createDelay = true;
-                    var pangType = block.GetPangType();
-                    CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 1, pangType);
+                    
+                    CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 1, block.GetPangType());
                     block.ResetScore();
                     block.SetOriginPos();
                     block.squareMatch = false;
@@ -1229,14 +1277,24 @@ public class Game : MonoBehaviour
         }
     }
 
-    void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _boomBlock)
+    void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _boomBlock, bool isDelay = true)
     {
         _block.SetBlockState(_log, _key, blockSpriteList[(int)_boomBlock], _boomBlock);
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;
         _block.remove = false;
-        _block.rectTransform.DOScale(1f, delay);
+        if (isDelay == true)
+            _block.rectTransform.DOScale(1f, delay);
+        else
+            _block.rectTransform.localScale = Vector3.one;
+    }
+
+    void CreateRandomBlock(Block _block, Defines.ELog _log, int _key, int _maxIndex, bool isDelay = true)
+    {
+        var random = UnityEngine.Random.Range(0, _maxIndex);
+
+        CreateNewBlock(_block, _log, _key, (Defines.EBlockState)random, isDelay);
     }
 
     void Check3Match(List<Block> blockList, Defines.EDirection direction, bool test = false)
