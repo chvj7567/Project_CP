@@ -90,21 +90,21 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) w
 
         CHMGPGS.Instance.LoadCloud(name, (success, data) =>
         {
-            Debug.Log($"Load Cloud Data is {success} : {data}");
+            Debug.Log($"Load Cloud {name} Data is {success} : {data}");
             taskCompletionSource.SetResult(data);
         });
 
         var stringTask = await taskCompletionSource.Task;
 
         // 데이터가 없을 경우 디폴트 데이터 저장
-        if (stringTask.Contains($"\"{name.ToLower()}List\":[]"))
+        if (stringTask == "" || stringTask.Contains($"\"{name.ToLower()}List\":[]"))
         {
-            Debug.Log($"{name}Data is null");
+            Debug.Log($"{name} Data is null");
             TaskCompletionSource<TextAsset> taskCompletionSource2 = new TaskCompletionSource<TextAsset>();
 
             CHMMain.Resource.LoadData(name, (data) =>
             {
-                Debug.Log($"Load Game Data : {data}");
+                Debug.Log($"Load Game {name} Data : {data}");
                 taskCompletionSource2.SetResult(data);
             });
 
@@ -120,8 +120,12 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) w
     {
         string json = "";
 
+        Debug.Log($"Save 1");
+
         if (name == Defines.EData.Login.ToString())
         {
+            Debug.Log($"Save {name}");
+
             Data.ExtractData<Data.Login> loginData = new Data.ExtractData<Data.Login>();
 
             loginData.loginList = loginData.MakeList(loginDataDic);
@@ -130,6 +134,8 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) w
         }
         else if (name == Defines.EData.Stage.ToString())
         {
+            Debug.Log($"Save {name}");
+
             Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
 
             stageData.stageList = stageData.MakeList(stageDataDic);
@@ -137,9 +143,11 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) w
             json = JsonUtility.ToJson(stageData);
         }
 
+        Debug.Log($"Save {json}");
+
         CHMGPGS.Instance.SaveCloud(name, json, success =>
         {
-            Debug.Log($"Save Data is {success} : {json}");
+            Debug.Log($"Save {name} Data is {success} : {json}");
         });
     }
 #endif

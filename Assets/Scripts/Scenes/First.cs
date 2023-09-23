@@ -22,6 +22,7 @@ public class First : MonoBehaviour
     [SerializeField] TMP_Text downloadText;
     [SerializeField] Button startBtn;
     [SerializeField] Button connectGPGSBtn;
+    [SerializeField] Button deleteTestBtn;
     [SerializeField] TMP_Text connectText;
     [SerializeField] List<string> liDownloadKey = new List<string>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
@@ -98,6 +99,22 @@ public class First : MonoBehaviour
             PlayerPrefs.SetInt("background", backgroundIndex);
         });
 
+        deleteTestBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            PlayerPrefs.SetInt("Login", 0);
+#if UNITY_EDITOR == false
+            CHMGPGS.Instance.DeleteCloud(Defines.EData.Login.ToString(), success =>
+            {
+                Debug.Log($"Delete {Defines.EData.Login.ToString()} Data is {success}");
+            });
+
+            CHMGPGS.Instance.DeleteCloud(Defines.EData.Stage.ToString(), success =>
+            {
+                Debug.Log($"Delete {Defines.EData.Stage.ToString()} Data is {success}");
+            });
+#endif
+        });
+
         dataDownload.Subscribe(_ =>
         {
             if (CHMAssetBundle.Instance.firstDownload == true && _ == true && bundleDownload.Value == true)
@@ -125,7 +142,7 @@ public class First : MonoBehaviour
                         await CHMData.Instance.LoadCloudData();
                         dataDownload.Value = true;
 
-                        if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData) == false)
+                        if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData))
                         {
                             loginData.connectGPGS = true;
                             CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
@@ -177,6 +194,9 @@ public class First : MonoBehaviour
                         await CHMData.Instance.LoadCloudData();
                         dataDownload.Value = true;
                         data.connectGPGS = true;
+
+                        CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
+                        CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Stage.ToString());
                     }
                     else
                     {
@@ -184,9 +204,6 @@ public class First : MonoBehaviour
                         connectText.text = "Login Failed";
                     }
                 });
-
-                CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
-                CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Stage.ToString());
 #else
                 PlayerPrefs.SetInt("Login", 0);
                 connectText.text = "Login Failed";

@@ -49,11 +49,8 @@ namespace Data
         {
             List<T> list = new List<T>();
 
-            if (typeof(T) == typeof(Stage))
-            {
-                foreach (T info in dict.Values)
-                    list.Add(info);
-            }
+            foreach (T info in dict.Values)
+                list.Add(info);
 
             return list;
         }
