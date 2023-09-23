@@ -268,7 +268,7 @@ public class Block : MonoBehaviour
             case EBlockState.Arrow5:
             case EBlockState.Arrow6:
             case EBlockState.CatPang:
-            case EBlockState.SpecailBomb:
+            case EBlockState.PinkBomb:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
                 break;
             case EBlockState.Wall:
@@ -344,7 +344,7 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.Arrow6:
                 await game.Boom6(this, ani);
                 break;
-            case Defines.EBlockState.SpecailBomb:
+            case Defines.EBlockState.PinkBomb:
                 // 드래그 해야 함
                 break;
         }
@@ -418,7 +418,7 @@ public class Block : MonoBehaviour
     {
         switch (blockState)
         {
-            case Defines.EBlockState.SpecailBomb:
+            case Defines.EBlockState.PinkBomb:
                 return true;
             default:
                 return false;

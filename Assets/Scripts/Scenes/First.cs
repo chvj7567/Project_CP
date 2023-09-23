@@ -54,36 +54,6 @@ public class First : MonoBehaviour
             downloadText.gameObject.SetActive(true);
             connectGPGSBtn.gameObject.SetActive(true);
 
-#if UNITY_EDITOR == false
-            if (PlayerPrefs.GetInt("Login") == 1)
-            {
-                connectText.text = "Logining...";
-                CHMGPGS.Instance.Login(async (success, localUser) =>
-                {
-                    if (success)
-                    {
-                        Debug.Log("GPGS Login Success");
-                        connectText.text = "Login Success";
-                        await CHMData.Instance.LoadCloudData();
-                        dataDownload = true;
-                    }
-                    else
-                    {
-                        Debug.Log("GPGS Login Failed");
-                        connectText.text = "Login Failed";
-                    }
-                });
-            }
-            else
-            {
-                await CHMData.Instance.LoadLocalData();
-                dataDownload.Value = true;
-            }
-#else
-            await CHMData.Instance.LoadLocalData();
-            dataDownload.Value = true;
-#endif
-
             CHMAdmob.Instance.Init();
 
             backgroundIndex = 0;
@@ -132,15 +102,55 @@ public class First : MonoBehaviour
         {
             if (CHMAssetBundle.Instance.firstDownload == true && _ == true && bundleDownload.Value == true)
             {
+                CHMAssetBundle.Instance.firstDownload = false;
                 downloadText.gameObject.SetActive(false);
                 startBtn.gameObject.SetActive(true);
             }
         });
 
-        bundleDownload.Subscribe(_ =>
+        bundleDownload.Subscribe(async _ =>
         {
-            if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
+            if (_ == true && dataDownload.Value == false)
             {
+#if UNITY_EDITOR == false
+            if (PlayerPrefs.GetInt("Login") == 1)
+            {
+                connectText.text = "Logining...";
+                CHMGPGS.Instance.Login(async (success, localUser) =>
+                {
+                    if (success)
+                    {
+                        Debug.Log("GPGS Login Success");
+                        connectText.text = "Login Success";
+                        await CHMData.Instance.LoadCloudData();
+                        dataDownload.Value = true;
+
+                        if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData) == false)
+                        {
+                            loginData.connectGPGS = true;
+                            CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("GPGS Login Failed");
+                        connectText.text = "Login Failed";
+                    }
+                });
+            }
+            else
+            {
+                await CHMData.Instance.LoadLocalData();
+                dataDownload.Value = true;
+            }
+#else
+                await CHMData.Instance.LoadLocalData();
+                dataDownload.Value = true;
+#endif
+            }
+            else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
+            {
+                CHMAssetBundle.Instance.firstDownload = false;
                 downloadText.gameObject.SetActive(false);
                 startBtn.gameObject.SetActive(true);
             }
@@ -165,7 +175,8 @@ public class First : MonoBehaviour
                         Debug.Log("GPGS Login Success");
                         connectText.text = "Login Success";
                         await CHMData.Instance.LoadCloudData();
-                        dataDownload = true;
+                        dataDownload.Value = true;
+                        data.connectGPGS = true;
                     }
                     else
                     {
@@ -176,8 +187,6 @@ public class First : MonoBehaviour
 
                 CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Login.ToString());
                 CHMData.Instance.SaveJsonToGPGSCloud(Defines.EData.Stage.ToString());
-
-                data.connectGPGS = true;
 #else
                 PlayerPrefs.SetInt("Login", 0);
                 connectText.text = "Login Failed";
@@ -239,7 +248,6 @@ public class First : MonoBehaviour
             {
                 Debug.Log($"Bundle download Success");
                 bundleDownload.Value = true;
-                CHMAssetBundle.Instance.firstDownload = false;
             }
         }
     }

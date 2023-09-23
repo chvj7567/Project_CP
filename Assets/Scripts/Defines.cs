@@ -96,7 +96,11 @@ public class Defines
         Potal,
 
         CatPang,
-        SpecailBomb,
+        PinkBomb,
+        YellowBomb,
+        OrangeBomb,
+        GreenBomb,
+        BlueBomb,
 
         Max
     }

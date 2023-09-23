@@ -509,7 +509,7 @@ public class Game : MonoBehaviour
 
             if (block1.IsSpecialBlock() == true)
             {
-                if (block1.GetBlockState() == Defines.EBlockState.SpecailBomb)
+                if (block1.GetBlockState() == Defines.EBlockState.PinkBomb)
                 {
                     await Boom3(block1, block2.GetBlockState());
                     return;
@@ -517,7 +517,7 @@ public class Game : MonoBehaviour
             }
             else if (block2.IsSpecialBlock() == true)
             {
-                if (block2.GetBlockState() == Defines.EBlockState.SpecailBomb)
+                if (block2.GetBlockState() == Defines.EBlockState.PinkBomb)
                 {
                     await Boom3(block2, block1.GetBlockState());
                     return;
@@ -528,7 +528,7 @@ public class Game : MonoBehaviour
                 checkFirst = true;
                 bonusScore.Value += 30;
                 block2.match = true;
-                block1.changeBlockState = Defines.EBlockState.SpecailBomb;
+                block1.changeBlockState = Defines.EBlockState.PinkBomb;
             }
             else if (block1.IsBoomBlock() == true)
             {

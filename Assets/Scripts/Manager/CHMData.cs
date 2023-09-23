@@ -35,12 +35,11 @@ public class CHMData : CHSingleton<CHMData>
 
             CHMMain.Resource.LoadData(name, (data) =>
             {
+                Debug.Log($"Load Local Data is {data}");
                 taskCompletionSource.SetResult(data);
             });
 
             var task = await taskCompletionSource.Task;
-
-            Debug.Log($"Load Local Data is {task.text}");
 
             return JsonUtility.FromJson<Loader>($"{{\"{name.ToLower()}List\":{task.text}}}");
         }
@@ -98,8 +97,9 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string name) w
         var stringTask = await taskCompletionSource.Task;
 
         // 데이터가 없을 경우 디폴트 데이터 저장
-        if (stringTask == "")
+        if (stringTask.Contains($"\"{name.ToLower()}List\":[]"))
         {
+            Debug.Log($"{name}Data is null");
             TaskCompletionSource<TextAsset> taskCompletionSource2 = new TaskCompletionSource<TextAsset>();
 
             CHMMain.Resource.LoadData(name, (data) =>
