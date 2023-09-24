@@ -36,7 +36,8 @@ public class Game : MonoBehaviour
     [SerializeField] GameObject adLoadingObj;
     [SerializeField] Button plusBoomAllChance;
     [SerializeField] CHTMPro boomAllChanceText;
-    [SerializeField] RectTransform darkBall;
+    [SerializeField] RectTransform bombEffectRectTransform;
+    [SerializeField] ParticleSystem bombEffectPS;
     [SerializeField] List<Image> backgroundList = new List<Image>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
@@ -710,39 +711,25 @@ public class Game : MonoBehaviour
                         (block.IsFixdBlock() == true && block.IsMatch() == false))
                         continue;
 
-                    if (reupdate == true || block.IsMatch() == true)
+                    if (block.changeBlockState != Defines.EBlockState.None)
                     {
-                        if (block.changeBlockState != Defines.EBlockState.None)
-                        {
-                            createDelay = true;
-                            CreateNewBlock(block, Defines.ELog.UpdateMap, 1, block.changeBlockState);
-                            block.SetHp(-1);
-                            block.ResetScore();
-                            block.SetOriginPos();
-                            block.changeBlockState = Defines.EBlockState.None;
-                        }
-                        else
-                        {
-                            var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
-
-                            createDelay = true;
-                            CreateNewBlock(block, Defines.ELog.UpdateMap, 2, (Defines.EBlockState)random);
-                            block.SetHp(-1);
-                            block.ResetScore();
-                            block.SetOriginPos();
-                        }
+                        Debug.Log(block.changeBlockState);
+                        createDelay = true;
+                        CreateNewBlock(block, Defines.ELog.UpdateMap, 1, block.changeBlockState);
+                        block.SetHp(-1);
+                        block.ResetScore();
+                        block.SetOriginPos();
+                        block.changeBlockState = Defines.EBlockState.None;
                     }
-                    else
+                    else if (reupdate == true || block.IsMatch() == true)
                     {
-                        if (block.changeBlockState != Defines.EBlockState.None)
-                        {
-                            createDelay = true;
-                            CreateNewBlock(block, Defines.ELog.UpdateMap, 3, block.changeBlockState);
-                            block.SetHp(-1);
-                            block.ResetScore();
-                            block.SetOriginPos();
-                            block.changeBlockState = Defines.EBlockState.None;
-                        }
+                        var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+
+                        createDelay = true;
+                        CreateNewBlock(block, Defines.ELog.UpdateMap, 2, (Defines.EBlockState)random);
+                        block.SetHp(-1);
+                        block.ResetScore();
+                        block.SetOriginPos();
                     }
                 }
 
@@ -1597,7 +1584,7 @@ public class Game : MonoBehaviour
                 {
                     block.match = true;
 
-                    var blueHoleObj = CHMMain.Resource.Instantiate(darkBall.gameObject, transform.parent);
+                    var blueHoleObj = CHMMain.Resource.Instantiate(bombEffectRectTransform.gameObject, transform.parent);
                     blueHoleObj.SetActive(true);
                     var rt = blueHoleObj.GetComponent<RectTransform>();
                     rt.anchoredPosition = _specialBlock.rectTransform.anchoredPosition;

@@ -922,6 +922,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313412095}
   m_CullTransparentMesh: 1
+--- !u!198 &330975173 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8515881571322186921, guid: 4e491c0970198e5418a378f0cc298ec2, type: 3}
+  m_PrefabInstance: {fileID: 390423386}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &366982307
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,7 +1122,8 @@ MonoBehaviour:
   adLoadingObj: {fileID: 656704867}
   plusBoomAllChance: {fileID: 513557891}
   boomAllChanceText: {fileID: 1760365287}
-  darkBall: {fileID: 390423387}
+  bombEffectRectTransform: {fileID: 390423387}
+  bombEffectPS: {fileID: 330975173}
   backgroundList:
   - {fileID: 1523202583}
   - {fileID: 122077973}
@@ -1173,7 +1179,6 @@ MonoBehaviour:
   gameOverText: {fileID: 2051715108}
   gameResult:
     value: 0
-  towerPoint: 
   delayMillisecond: 1000
 --- !u!1 &386755759
 GameObject:

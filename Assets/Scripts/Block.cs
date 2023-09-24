@@ -25,7 +25,7 @@ public class Block : MonoBehaviour
     [ReadOnly]
     public int col;
     [SerializeField, ReadOnly]
-    public Defines.EBlockState changeBlockState;
+    public Defines.EBlockState changeBlockState = Defines.EBlockState.None;
     [SerializeField, ReadOnly]
     Defines.EBlockState blockState = Defines.EBlockState.None;
     [ReadOnly]
@@ -53,7 +53,7 @@ public class Block : MonoBehaviour
 
     private void Start()
     {
-        changeBlockState = Defines.EBlockState.None;
+        changeBlockState = EBlockState.None;
 
         originPos = rectTransform.anchoredPosition;
 
