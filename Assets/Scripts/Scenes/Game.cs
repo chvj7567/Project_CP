@@ -372,8 +372,11 @@ public class Game : MonoBehaviour
             viewImg2.color = Color.green;
         }*/
 
-        curTimer += Time.deltaTime;
-        timerImg.fillAmount = curTimer / stageInfo.time;
+        if (isLock == false)
+        {
+            curTimer += Time.deltaTime;
+            timerImg.fillAmount = curTimer / stageInfo.time;
+        }
 
         if (isLock == true)
         {

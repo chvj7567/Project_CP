@@ -106,6 +106,10 @@ public class StageSelect : MonoBehaviour
                 {
                     btnList[_index].lockObj.SetActive(true);
                     await Task.Delay(1000);
+
+                    if (btnList[_index] == null)
+                        return;
+
                     btnList[_index].lockObj.SetActive(false);
                     btnList[_index].unlockObj.SetActive(true);
                     var rectTransform = btnList[_index].unlockObj.GetComponent<RectTransform>();
