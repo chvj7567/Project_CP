@@ -54,6 +54,7 @@ public class Defines
         UICanvas,
         UIChoice,
         UIAlarm,
+        UIMission,
 
         Max
     }

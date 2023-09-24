@@ -134,13 +134,13 @@ public class First : MonoBehaviour
                     {
                         Debug.Log("GPGS Login Success");
                         connectText.text = "Login Success";
-                        await CHMData.Instance.LoadCloudData();
+                        await CHMData.Instance.LoadCloudData("CatPang");
                         dataDownload.Value = true;
 
                         if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData))
                         {
                             loginData.connectGPGS = true;
-                            CHMData.Instance.SaveJsonToGPGSCloud();
+                            CHMData.Instance.SaveJsonToGPGSCloud("CatPang");
                         }
                     }
                     else
@@ -152,14 +152,14 @@ public class First : MonoBehaviour
             }
             else
             {
-                await CHMData.Instance.LoadLocalData();
+                await CHMData.Instance.LoadLocalData("CatPang");
                 dataDownload.Value = true;
-                CHMData.Instance.SaveJsonToLocal();
+                CHMData.Instance.SaveJsonToLocal("CatPang");
             }
 #else
-                await CHMData.Instance.LoadLocalData();
+                await CHMData.Instance.LoadLocalData("CatPang");
                 dataDownload.Value = true;
-                CHMData.Instance.SaveJsonToLocal();
+                CHMData.Instance.SaveJsonToLocal("CatPang");
 #endif
             }
             else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
@@ -191,7 +191,7 @@ public class First : MonoBehaviour
                         dataDownload.Value = true;
                         data.connectGPGS = true;
 
-                        CHMData.Instance.SaveJsonToGPGSCloud();
+                        CHMData.Instance.SaveJsonToGPGSCloud("CatPang");
                     }
                     else
                     {

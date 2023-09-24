@@ -3,6 +3,7 @@ using GoogleMobileAds.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -166,10 +167,11 @@ public class Game : MonoBehaviour
             if (_ == EGameResult.GameOver || _ == EGameResult.GameClear)
             {
                 Time.timeScale = 0;
-                CHMMain.UI.CloseUI(Defines.EUI.UIChoice);
-                gameOverObj.transform.SetAsLastSibling();
-                gameOverObj.SetActive(true);
-                gameOverText.DOText("GameOver", 5f);
+                
+                if (tokenSource != null && !tokenSource.IsCancellationRequested)
+                {
+                    tokenSource.Cancel();
+                }
             }
         });
 
@@ -267,94 +269,86 @@ public class Game : MonoBehaviour
             {
                 if (gameResult.Value == EGameResult.None)
                 {
-                    if (timerImg.fillAmount >= 1)
+                    bool clear = true;
+
+                    bool useTime = stageInfo.time > 0;
+                    bool useTargetScore = stageInfo.targetScore > 0;
+                    bool useMoveCount = stageInfo.moveCount > 0;
+
+                    // 체력이 있는 블럭이 있으면 미클리어
+                    for (int i = 0; i < boardSize; ++i)
                     {
-                        if (stageInfo.targetScore > 0)
+                        for (int j = 0; j < boardSize; ++j)
                         {
-                            if (totScore.Value < stageInfo.targetScore)
+                            if (boardArr[i, j].GetHp() > 0)
                             {
-                                gameOverText.text = "Game Over";
-                                gameResult.Value = EGameResult.GameOver;
-                            }
-                            else
-                            {
-                                gameOverText.text = "Game Clear";
-                                gameResult.Value = EGameResult.GameClear;
-                                SaveClearData();
+                                clear = false;
+                                break;
                             }
                         }
-                        else
-                        {
-                            bool clear = true;
 
-                            for (int i = 0; i < boardSize; ++i)
-                            {
-                                for (int j = 0; j < boardSize; ++j)
-                                {
-                                    if (boardArr[i, j].GetHp() > 0)
-                                    {
-                                        clear = false;
-                                    }
-                                }
-                            }
-
-                            if (clear == false)
-                            {
-                                gameOverText.text = "Game Over";
-                                gameResult.Value = EGameResult.GameOver;
-                            }
-                            else
-                            {
-                                gameOverText.text = "Game Clear";
-                                gameResult.Value = EGameResult.GameClear;
-                                SaveClearData();
-                            }
-                        }
+                        if (clear == false)
+                            break;
                     }
+
+                    // 시간제한이 있고 시간이 다 된 경우 게임 종료 확인
+                    if (useTime == true && timerImg.fillAmount >= 1)
+                    {
+                        // 목표 점수를 사용하는 경우 목표 점수 달성 확인
+                        if (useTargetScore == true && totScore.Value < stageInfo.targetScore)
+                        {
+                            clear = false;
+                        }
+
+                        GameEnd(clear);
+                    }
+                    // 시간을 사용하고 시간이 다 되지 않은 경우 게임 종료 확인
                     else
                     {
-                        if (stageInfo.targetScore > 0)
+                        // 목표 점수를 사용하는 경우 목표 점수 달성 확인
+                        if (useTargetScore == true && totScore.Value < stageInfo.targetScore)
                         {
-                            if (totScore.Value >= stageInfo.targetScore)
-                            {
-                                gameOverText.text = "Game Clear";
-                                gameResult.Value = EGameResult.GameClear;
-                                SaveClearData();
-                            }
+                            clear = false;
+                        }
+
+                        // 움직임 횟수를 사용하는 경우 횟수를 다 소진했을 때 게임 종료 확인
+                        if (useMoveCount == true && moveCount.Value <= 0)
+                        {
+                            GameEnd(clear);
                         }
                         else
                         {
-                            bool clear = true;
-
-                            for (int i = 0; i < boardSize; ++i)
+                            // 클리어 한 경우만 게임 종료
+                            if (clear == true)
                             {
-                                for (int j = 0; j < boardSize; ++j)
-                                {
-                                    if (boardArr[i, j].GetHp() > 0)
-                                    {
-                                        clear = false;
-                                    }
-                                }
+                                GameEnd(clear);
                             }
-
-                            if (clear)
-                            {
-                                gameOverText.text = "Game Clear";
-                                gameResult.Value = EGameResult.GameClear;
-                                SaveClearData();
-                            }
-                        }
-
-                        if (moveCount.Value <= 0)
-                        {
-                            gameOverText.text = "Game Over";
-                            gameResult.Value = EGameResult.GameOver;
                         }
                     }
                 }
             });
 
         //await AfterDrag(null, null);
+    }
+
+    void GameEnd(bool _clear)
+    {
+        gameOverObj.transform.SetAsLastSibling();
+        gameOverObj.SetActive(true);
+
+        if (_clear == false)
+        {
+            gameOverText.text = "Game Over";
+            //gameOverText.DOText("Game Over", 3f);
+            gameResult.Value = EGameResult.GameOver;
+        }
+        else
+        {
+            gameOverText.text = "Game Clear";
+            //gameOverText.DOText("Game Clear", 3f);
+            gameResult.Value = EGameResult.GameClear;
+            SaveClearData();
+        }
     }
 
     private async void Update()
@@ -484,14 +478,14 @@ public class Game : MonoBehaviour
 #if UNITY_EDITOR == false
         if (loginData.connectGPGS == true)
         {
-            CHMData.Instance.SaveJsonToGPGSCloud();
+            CHMData.Instance.SaveJsonToGPGSCloud("CatPang");
         }
         else
         {
-            CHMData.Instance.SaveJsonToLocal();
+            CHMData.Instance.SaveJsonToLocal("CatPang");
         }
 #else
-        CHMData.Instance.SaveJsonToLocal();
+        CHMData.Instance.SaveJsonToLocal("CatPang");
 #endif
     }
 
