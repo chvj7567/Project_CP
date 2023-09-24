@@ -12,6 +12,7 @@ public class Defines
         Monster,
         Stage,
         StageBlock,
+        Mission,
 
         Max
     }
@@ -147,6 +148,7 @@ public class Defines
 
         Login,
         Stage,
+        Collection,
 
         Max
     }

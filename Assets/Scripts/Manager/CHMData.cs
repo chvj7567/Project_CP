@@ -14,6 +14,7 @@ public class CHMData : CHSingleton<CHMData>
 {
     public Dictionary<string, Data.Login> loginDataDic = null;
     public Dictionary<string, Data.Stage> stageDataDic = null;
+    public Dictionary<string, Data.Collection> collectionDataDic = null;
 
     public async Task LoadLocalData(string _path)
     {
@@ -31,6 +32,13 @@ public class CHMData : CHSingleton<CHMData>
             Debug.Log("Login Local Data Load");
             var stageData = await LoadJsonToLocal<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
             stageDataDic = stageData.MakeDict();
+        }
+
+        if (collectionDataDic == null)
+        {
+            Debug.Log("Collection Local Data Load");
+            var collectionData = await LoadJsonToLocal<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
+            collectionDataDic = collectionData.MakeDict();
         }
     }
 
@@ -60,7 +68,7 @@ public class CHMData : CHSingleton<CHMData>
         }
     }
 
-    public void SaveJsonToLocal(string _path)
+    public void SaveData(string _path)
     {
         string json = "";
 
@@ -72,11 +80,21 @@ public class CHMData : CHSingleton<CHMData>
         Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
         saveData.stageList = stageData.MakeList(stageDataDic);
 
+        Data.ExtractData<Data.Collection> collectionData = new Data.ExtractData<Data.Collection>();
+        saveData.collectionList = collectionData.MakeList(collectionDataDic);
+
         json = JsonUtility.ToJson(saveData);
 
         Debug.Log($"Save Local Data is {json}");
 
         File.WriteAllText($"{Application.persistentDataPath}/{_path}.json", json);
+
+#if UNITY_EDITOR == false && UNITY_ANDROID == true
+        CHMGPGS.Instance.SaveCloud(_path, json, success =>
+        {
+            Debug.Log($"Save Cloud Data is {success} : {json}");
+        });
+#endif
     }
 
 #if UNITY_EDITOR == false
@@ -96,6 +114,13 @@ public async Task LoadCloudData(string _path)
             Debug.Log("Stage Cloud Data Load");
             var stageData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
             stageDataDic = stageData.MakeDict();
+        }
+
+        if (collectionDataDic == null)
+        {
+            Debug.Log("Collection Cloud Data Load");
+            var collectionData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
+            collectionDataDic = collectionData.MakeDict();
         }
     }
 public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
@@ -128,28 +153,6 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         }
 
         return JsonUtility.FromJson<Loader>(stringTask);
-    }
-
-    public void SaveJsonToGPGSCloud(string _path)
-    {
-        string json = "";
-
-        Data.ExtractData<Object> saveData = new Data.ExtractData<Object>();
-
-        Data.ExtractData<Data.Login> loginData = new Data.ExtractData<Data.Login>();
-        saveData.loginList = loginData.MakeList(loginDataDic);
-
-        Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
-        saveData.stageList = stageData.MakeList(stageDataDic);
-
-        json = JsonUtility.ToJson(saveData);
-
-        Debug.Log($"Save {json}");
-
-        CHMGPGS.Instance.SaveCloud(_path, json, success =>
-        {
-            Debug.Log($"Save Cloud Data is {success} : {json}");
-        });
     }
 #endif
 }

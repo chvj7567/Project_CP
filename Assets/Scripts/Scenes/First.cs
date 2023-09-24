@@ -140,7 +140,7 @@ public class First : MonoBehaviour
                         if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData))
                         {
                             loginData.connectGPGS = true;
-                            CHMData.Instance.SaveJsonToGPGSCloud("CatPang");
+                            CHMData.Instance.SaveData("CatPang");
                         }
                     }
                     else
@@ -154,12 +154,12 @@ public class First : MonoBehaviour
             {
                 await CHMData.Instance.LoadLocalData("CatPang");
                 dataDownload.Value = true;
-                CHMData.Instance.SaveJsonToLocal("CatPang");
+                CHMData.Instance.SaveData("CatPang");
             }
 #else
                 await CHMData.Instance.LoadLocalData("CatPang");
                 dataDownload.Value = true;
-                CHMData.Instance.SaveJsonToLocal("CatPang");
+                CHMData.Instance.SaveData("CatPang");
 #endif
             }
             else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
@@ -191,7 +191,7 @@ public class First : MonoBehaviour
                         dataDownload.Value = true;
                         data.connectGPGS = true;
 
-                        CHMData.Instance.SaveJsonToGPGSCloud("CatPang");
+                        CHMData.Instance.SaveData("CatPang");
                     }
                     else
                     {

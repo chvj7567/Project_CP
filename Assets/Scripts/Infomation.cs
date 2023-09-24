@@ -49,4 +49,11 @@ public class Infomation
         public int row = -1;
         public int col = -1;
     }
+
+    [Serializable]
+    public class MissionInfo
+    {
+        public Defines.EBlockState id = Defines.EBlockState.None;
+        public int clearValue = -1;
+    }
 }

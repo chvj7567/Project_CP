@@ -475,18 +475,20 @@ public class Game : MonoBehaviour
             stageData.clear = true;
         }
 
-#if UNITY_EDITOR == false
-        if (loginData.connectGPGS == true)
-        {
-            CHMData.Instance.SaveJsonToGPGSCloud("CatPang");
-        }
-        else
-        {
-            CHMData.Instance.SaveJsonToLocal("CatPang");
-        }
-#else
-        CHMData.Instance.SaveJsonToLocal("CatPang");
-#endif
+        CHMData.Instance.SaveData("CatPang");
+    }
+
+    void SaveBoomCollectionData(Block _block)
+    {
+        if (_block.IsBoomBlock() == false && _block.IsSpecialBlock() == false)
+            return;
+
+        if (CHMData.Instance.collectionDataDic.TryGetValue(_block.GetBlockState().ToString(), out var data) == false)
+            return;
+
+        data.value += 1;
+
+        CHMData.Instance.SaveData("CatPang");
     }
 
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
@@ -1541,6 +1543,8 @@ public class Game : MonoBehaviour
         changeMatchState(block.row + 1, block.col);
         changeMatchState(block.row + 1, block.col + 1);
 
+        SaveBoomCollectionData(block);
+
         if (ani)
         {
             await AfterDrag(null, null, true);
@@ -1563,6 +1567,8 @@ public class Game : MonoBehaviour
         {
             changeMatchState(block.row, i);
         }
+
+        SaveBoomCollectionData(block);
 
         if (ani)
         {
@@ -1595,13 +1601,15 @@ public class Game : MonoBehaviour
                     blueHoleObj.SetActive(true);
                     var rt = blueHoleObj.GetComponent<RectTransform>();
                     rt.anchoredPosition = _specialBlock.rectTransform.anchoredPosition;
-                    rt.DOAnchorPos(block.rectTransform.anchoredPosition, .2f);
+                    rt.DOAnchorPos(block.rectTransform.anchoredPosition, .05f);
                     blueHoleList.Add(blueHoleObj);
 
                     await Task.Delay(200, tokenSource.Token);
                 }
             }
         }
+
+        SaveBoomCollectionData(_specialBlock);
 
         if (_ani)
         {
@@ -1628,6 +1636,8 @@ public class Game : MonoBehaviour
             changeMatchState(block.row, i);
         }
 
+        SaveBoomCollectionData(block);
+
         if (ani)
         {
             await AfterDrag(null, null, true);
@@ -1645,6 +1655,8 @@ public class Game : MonoBehaviour
         {
             changeMatchState(i, block.col);
         }
+
+        SaveBoomCollectionData(block);
 
         if (ani)
         {
@@ -1667,6 +1679,8 @@ public class Game : MonoBehaviour
             changeMatchState(block.row + i, block.col + i);
         }
 
+        SaveBoomCollectionData(block);
+
         if (ani)
         {
             await AfterDrag(null, null, true);
@@ -1686,6 +1700,8 @@ public class Game : MonoBehaviour
             changeMatchState(block.row + i, block.col - i);
         }
 
+        SaveBoomCollectionData(block);
+
         if (ani)
         {
             await AfterDrag(null, null, true);
@@ -1704,6 +1720,8 @@ public class Game : MonoBehaviour
             changeMatchState(block.row - i, block.col - i);
             changeMatchState(block.row + i, block.col + i);
         }
+
+        SaveBoomCollectionData(block);
 
         if (ani)
         {

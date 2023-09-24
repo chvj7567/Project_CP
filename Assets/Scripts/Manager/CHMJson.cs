@@ -15,6 +15,7 @@ public class CHMJson
         public MonsterInfo[] monsterInfoArr;
         public StageInfo[] stageInfoArr;
         public StageBlockInfo[] stageBlockInfoArr;
+        public MissionInfo[] missionInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -27,6 +28,7 @@ public class CHMJson
     List<MonsterInfo> monsterInfoList = new List<MonsterInfo>();
     List<StageInfo> stageInfoList = new List<StageInfo>();
     List<StageBlockInfo> stageBlockInfoList = new List<StageBlockInfo>();
+    List<MissionInfo> missionInfoList = new List<MissionInfo>();
 
     public void Init()
     {
@@ -41,6 +43,7 @@ public class CHMJson
         monsterInfoList.Clear();
         stageInfoList.Clear();
         stageBlockInfoList.Clear();
+        missionInfoList.Clear();
     }
 
     void LoadJsonData()
@@ -53,6 +56,7 @@ public class CHMJson
         actionList.Add(LoadMonsterInfo());
         actionList.Add(LoadStageInfo());
         actionList.Add(LoadStageBlockInfo());
+        actionList.Add(LoadMissionInfo());
 
         loadingFileCount = actionList.Count;
     }
@@ -167,6 +171,26 @@ public class CHMJson
         return callback;
     }
 
+    Action<TextAsset> LoadMissionInfo()
+    {
+        Action<TextAsset> callback;
+
+        missionInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Mission, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"missionInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.missionInfoArr)
+            {
+                missionInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
     public string GetStringInfo(int _stringID)
     {
         if (stringInfoDic.TryGetValue(_stringID, out string result))
@@ -225,5 +249,10 @@ public class CHMJson
     public List<StageBlockInfo> GetStageBlockInfoList(int _stage)
     {
         return stageBlockInfoList.FindAll(_ => _.stage == _stage);
+    }
+
+    public MissionInfo GetMissionInfo(Defines.EBlockState _id)
+    {
+        return missionInfoList.Find(_ => _.id == _id);
     }
 }
