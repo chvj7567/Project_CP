@@ -6629,6 +6629,10 @@ MonoBehaviour:
   btn: {fileID: 1975192481}
   backRect: {fileID: 2089328443}
   hpText: {fileID: 448771714}
+  background: {fileID: 1709301465}
+  img: {fileID: 1146541783}
+  rectTransform: {fileID: 1975192478}
+  originPos: {x: 0, y: 0}
   index: 0
   row: 0
   col: 0
@@ -6636,9 +6640,6 @@ MonoBehaviour:
   blockState: -1
   hScore: 0
   vScore: 0
-  img: {fileID: 1146541783}
-  rectTransform: {fileID: 1975192478}
-  originPos: {x: 0, y: 0}
   match: 0
   boom: 0
   squareMatch: 0

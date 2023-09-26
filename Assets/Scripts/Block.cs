@@ -18,6 +18,11 @@ public class Block : MonoBehaviour
     [SerializeField]
     CHTMPro hpText;
 
+    public Image background;
+    public Image img;
+    public RectTransform rectTransform;
+    public Vector2 originPos;
+
     [ReadOnly]
     public int index;
     [ReadOnly]
@@ -32,10 +37,6 @@ public class Block : MonoBehaviour
     public int hScore;
     [ReadOnly]
     public int vScore;
-
-    public Image img;
-    public RectTransform rectTransform;
-    public Vector2 originPos;
 
     // 매치되었는지 확인
     public bool match = false;
@@ -274,9 +275,11 @@ public class Block : MonoBehaviour
             case EBlockState.Wall:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
                 img.color = new Color(.5f, .5f, .5f);
+                background.color = new Color(0, 0, 0, 170);
                 break;
             case EBlockState.Potal:
                 img.rectTransform.sizeDelta = new Vector2(-20, -20);
+                background.color = new Color(0, 0, 0, 170);
                 break;
         }
 

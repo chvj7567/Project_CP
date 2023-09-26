@@ -190,6 +190,8 @@ public class Defines
 
         GameOver,
         GameClear,
+        GameOverWait,
+        GameClearWait,
 
         Max
     }

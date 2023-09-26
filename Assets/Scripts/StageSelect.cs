@@ -21,7 +21,7 @@ public class StageSelect : MonoBehaviour
             int index = i;
             btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
-                PlayerPrefs.SetInt("stage", int.Parse(btnList[index].text.text));
+                PlayerPrefs.SetInt(CHMMain.String.stage, int.Parse(btnList[index].text.text));
                 SceneManager.LoadScene(1);
             });
 
@@ -102,7 +102,7 @@ public class StageSelect : MonoBehaviour
                     return;
                 }
 
-                if (PlayerPrefs.GetInt("stage") == stage - 1 && data2.clear == false)
+                if (PlayerPrefs.GetInt(CHMMain.String.stage) == stage - 1 && data2.clear == false)
                 {
                     btnList[_index].lockObj.SetActive(true);
                     await Task.Delay(1000);

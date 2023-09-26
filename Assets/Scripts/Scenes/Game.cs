@@ -101,7 +101,7 @@ public class Game : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
-        backgroundIndex = PlayerPrefs.GetInt("background");
+        backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.background);
 
         ChangeBackgroundLoop();
 
@@ -122,7 +122,7 @@ public class Game : MonoBehaviour
                 CHInstantiateButton.ResetBlockDict();
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
                 CHMMain.Pool.Clear();
-                PlayerPrefs.SetInt("background", backgroundIndex);
+                PlayerPrefs.SetInt(CHMMain.String.background, backgroundIndex);
                 SceneManager.LoadScene(0);
             });
         }
@@ -228,11 +228,14 @@ public class Game : MonoBehaviour
 
         boomAllChance.Value = 0;
 
-        var stage = PlayerPrefs.GetInt("stage");
+        var stage = PlayerPrefs.GetInt(CHMMain.String.stage);
         if (stage <= 0)
         {
             stage = 1;
+            PlayerPrefs.SetInt(CHMMain.String.stage, stage);
         }
+
+        Debug.Log($"Stage : {stage}");
 
         stageInfo = CHMMain.Json.GetStageInfo(stage);
         stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
@@ -268,6 +271,17 @@ public class Game : MonoBehaviour
             .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
+                if (gameResult.Value == EGameResult.GameClearWait)
+                {
+                    GameEnd(true);
+                    return;
+                }
+                else if (gameResult.Value == EGameResult.GameOverWait)
+                {
+                    GameEnd(false);
+                    return;
+                }
+
                 if (gameResult.Value == EGameResult.None)
                 {
                     bool clear = true;
@@ -334,22 +348,36 @@ public class Game : MonoBehaviour
 
     void GameEnd(bool _clear)
     {
-        gameOverObj.transform.SetAsLastSibling();
-        gameOverObj.SetActive(true);
+        if (isLock == true)
+        {
+            if (_clear == true)
+            {
+                gameResult.Value = EGameResult.GameClearWait;
+            }
+            else
+            {
+                gameResult.Value = EGameResult.GameOverWait;
+            }
+
+            return;
+        }
 
         if (_clear == false)
         {
             gameOverText.text = "Game Over";
-            //gameOverText.DOText("Game Over", 3f);
+            gameOverText.DOText("Game Over", 3f);
             gameResult.Value = EGameResult.GameOver;
         }
         else
         {
             gameOverText.text = "Game Clear";
-            //gameOverText.DOText("Game Clear", 3f);
+            gameOverText.DOText("Game Clear", 3f);
             gameResult.Value = EGameResult.GameClear;
             SaveClearData();
         }
+
+        gameOverObj.transform.SetAsLastSibling();
+        gameOverObj.SetActive(true);
     }
 
     private async void Update()
@@ -463,7 +491,7 @@ public class Game : MonoBehaviour
 
     void AddBoomAllCount()
     {
-        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var data))
+        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt(CHMMain.String.stage).ToString(), out var data))
         {
             data.boomAllCount += 1;
         }
@@ -471,15 +499,12 @@ public class Game : MonoBehaviour
 
     void SaveClearData()
     {
-        if (CHMData.Instance.loginDataDic.TryGetValue("CatPang", out var loginData) == false)
-            return;
-
-        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt("stage").ToString(), out var stageData))
+        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt(CHMMain.String.stage).ToString(), out var data))
         {
-            stageData.clear = true;
+            data.clear = true;
         }
 
-        CHMData.Instance.SaveData("CatPang");
+        CHMData.Instance.SaveData(CHMMain.String.catPang);
     }
 
     void SaveBoomCollectionData(Block _block)
@@ -492,7 +517,7 @@ public class Game : MonoBehaviour
 
         data.value += 1;
 
-        CHMData.Instance.SaveData("CatPang");
+        CHMData.Instance.SaveData(CHMMain.String.catPang);
     }
 
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
@@ -1269,9 +1294,9 @@ public class Game : MonoBehaviour
         }
     }
 
-    void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _boomBlock, bool isDelay = true)
+    void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _blockState, bool isDelay = true)
     {
-        _block.SetBlockState(_log, _key, blockSpriteList[(int)_boomBlock], _boomBlock);
+        _block.SetBlockState(_log, _key, blockSpriteList[(int)_blockState], _blockState);
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;

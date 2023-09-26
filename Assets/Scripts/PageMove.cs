@@ -17,6 +17,9 @@ public class PageMove : MonoBehaviour
     [SerializeField] Button leftBtn;
     [SerializeField] Button rightBtn;
     [SerializeField] float moveSpeed;
+
+    [Header("한 페이지당 스테이지 수")]
+    [SerializeField] int stageCount;
     [SerializeField, ReadOnly] int page;
     [SerializeField, ReadOnly] float width;
 
@@ -45,19 +48,21 @@ public class PageMove : MonoBehaviour
 
     public void Init(int _stage)
     {
+        Debug.Log($"Page Init Stage : {_stage}");
         if (_stage <= 1)
         {
             page = 1;
         }    
         else
         {
-            page = (_stage - 1) / 9 + 1;
+            page = (_stage - 1) / stageCount + 1;
         }
 
         stageSelect1.Init();
         stageSelect2.Init();
 
         stageSelect1.SetPage(page);
+        stageSelect2.SetPage(page);
 
         CheckCurrentPage();
     }

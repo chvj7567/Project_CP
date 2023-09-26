@@ -727,7 +727,7 @@ MonoBehaviour:
   downloadText: {fileID: 81801738}
   startBtn: {fileID: 1932905913}
   connectGPGSBtn: {fileID: 627991667}
-  deleteTestBtn: {fileID: 172993936}
+  logoutBtn: {fileID: 172993936}
   connectText: {fileID: 727513912}
   liDownloadKey:
   - json
@@ -774,6 +774,7 @@ MonoBehaviour:
   leftBtn: {fileID: 1063547741}
   rightBtn: {fileID: 1909224479}
   moveSpeed: 0.5
+  stageCount: 10
   page: 0
   width: 0
 --- !u!1 &81801736
@@ -1424,7 +1425,7 @@ GameObject:
   - component: {fileID: 172993936}
   - component: {fileID: 172993935}
   m_Layer: 5
-  m_Name: DeleteTestBtn
+  m_Name: LogoutBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8505,7 +8506,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Delete
+  m_text: Logout
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9b54ea3303e1f7442ac70dd3df5860c7, type: 2}
   m_sharedMaterial: {fileID: 3606320079389574382, guid: 9b54ea3303e1f7442ac70dd3df5860c7, type: 2}
@@ -8532,7 +8533,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 77.2
+  m_fontSize: 69.65
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
