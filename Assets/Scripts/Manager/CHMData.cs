@@ -56,13 +56,16 @@ public class CHMData : CHSingleton<CHMData>
 
         Debug.Log($"Local Path : {path}");
 
-        if (File.Exists(path) == false)
+        var data = File.ReadAllText(path);
+
+        // 데이터가 없을 경우 디폴트 데이터 저장
+        if (data == "" || data.Contains($"\"{_name.ToLower()}List\":[]"))
         {
             TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
 
             CHMMain.Resource.LoadData(_name, (data) =>
             {
-                Debug.Log($"Load Local Data is {data}");
+                Debug.Log($"Load {_name} Data is {data}");
                 taskCompletionSource.SetResult(data);
             });
 
@@ -161,7 +164,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
             CHMMain.Resource.LoadData(_name, (data) =>
             {
-                Debug.Log($"Load Game {_name} Data : {data}");
+                Debug.Log($"Load {_name} Data : {data}");
                 taskCompletionSource2.SetResult(data);
             });
 
@@ -180,7 +183,8 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         {
             key = _key,
             startValue = 0,
-            clearState = 0
+            clearState = 0,
+            repeatCount = 0
         };
 
         missionDataDic.Add(_key, data);
