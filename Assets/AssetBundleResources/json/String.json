@@ -70,5 +70,13 @@
   {
     "stringID": "18",
     "value": "Move"
+  },
+  {
+    "stringID": "19",
+    "value": "Bomb"
+  },
+  {
+    "stringID": "20",
+    "value": "{0}/{1}"
   }
 ]

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 16414097
+CRC: 3127367889
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c536394e629a8a5dd8fb0f36a3c0489a
+    Hash: 564f75b68e92797fa7874ffa784a1758
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -16,4 +16,5 @@ Assets:
 - Assets/AssetBundleResources/data/Stage.json
 - Assets/AssetBundleResources/data/Login.json
 - Assets/AssetBundleResources/data/Collection.json
+- Assets/AssetBundleResources/data/Mission.json
 Dependencies: []

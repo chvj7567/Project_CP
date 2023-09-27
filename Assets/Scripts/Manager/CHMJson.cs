@@ -251,8 +251,8 @@ public class CHMJson
         return stageBlockInfoList.FindAll(_ => _.stage == _stage);
     }
 
-    public MissionInfo GetMissionInfo(Defines.EBlockState _id)
+    public List<MissionInfo> GetMissionInfoList()
     {
-        return missionInfoList.Find(_ => _.id == _id);
+        return missionInfoList;
     }
 }

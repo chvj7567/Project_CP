@@ -53,7 +53,9 @@ public class Infomation
     [Serializable]
     public class MissionInfo
     {
-        public Defines.EBlockState id = Defines.EBlockState.None;
+        public int missionID = -1;
+        public Defines.EBlockState collectionType = Defines.EBlockState.None;
         public int clearValue = -1;
+        public int addValue = -1;
     }
 }

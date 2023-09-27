@@ -30,11 +30,21 @@ namespace Data
     }
 
     [Serializable]
+    public class Mission
+    {
+        public string key = "";
+        public int startValue = -1;
+        public Defines.EClearState clearState = Defines.EClearState.None;
+        public int repeatCount = -1;
+    }
+
+    [Serializable]
     public class ExtractData<T> : ILoader<string, T> where T : class
     {
         public List<Login> loginList = new List<Login>();
         public List<Stage> stageList = new List<Stage>();
         public List<Collection> collectionList = new List<Collection>();
+        public List<Mission> missionList = new List<Mission>();
 
         public Dictionary<string, T> MakeDict()
         {
@@ -53,6 +63,11 @@ namespace Data
             else if (typeof(T) == typeof(Collection))
             {
                 foreach (Collection data in collectionList)
+                    dict.Add(data.key, data as T);
+            }
+            else if (typeof(T) == typeof(Mission))
+            {
+                foreach (Mission data in missionList)
                     dict.Add(data.key, data as T);
             }
 
@@ -76,6 +91,11 @@ namespace Data
             else if (typeof(T) == typeof(Collection))
             {
                 foreach (Collection data in collectionList)
+                    list.Add(data as T);
+            }
+            else if (typeof(T) == typeof(Collection))
+            {
+                foreach (Mission data in missionList)
                     list.Add(data as T);
             }
 

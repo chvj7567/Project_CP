@@ -25,7 +25,7 @@ public class UIChoiceArg : CHUIArg
 public class UIChoice : UIBase
 {
     UIChoiceArg arg;
-
+    
     [SerializeField] Button backBtn;
     [SerializeField] Button select1Btn;
     [SerializeField] CHTMPro select1Text;

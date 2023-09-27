@@ -1,3 +1,10 @@
 [
-  {"id":18,"clearValue":18}
+  {"missionID":"1", "collectionType":10,"clearValue":10, "addValue":10},
+  {"missionID":"2", "collectionType":11,"clearValue":10, "addValue":10},
+  {"missionID":"3", "collectionType":12,"clearValue":10, "addValue":10},
+  {"missionID":"4", "collectionType":13,"clearValue":10, "addValue":10},
+  {"missionID":"5", "collectionType":14,"clearValue":10, "addValue":10},
+  {"missionID":"6", "collectionType":15,"clearValue":10, "addValue":10},
+  {"missionID":"7", "collectionType":18,"clearValue":10, "addValue":10},
+  {"missionID":"8", "collectionType":19,"clearValue":10, "addValue":10}
 ]

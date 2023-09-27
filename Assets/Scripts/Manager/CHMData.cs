@@ -15,6 +15,7 @@ public class CHMData : CHSingleton<CHMData>
     public Dictionary<string, Data.Login> loginDataDic = null;
     public Dictionary<string, Data.Stage> stageDataDic = null;
     public Dictionary<string, Data.Collection> collectionDataDic = null;
+    public Dictionary<string, Data.Mission> missionDataDic = null;
 
     public async Task LoadLocalData(string _path)
     {
@@ -23,22 +24,29 @@ public class CHMData : CHSingleton<CHMData>
         if (loginDataDic == null)
         {
             Debug.Log("Login Local Data Load");
-            var loginData = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
-            loginDataDic = loginData.MakeDict();
+            var data = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
+            loginDataDic = data.MakeDict();
         }
 
         if (stageDataDic == null)
         {
-            Debug.Log("Login Local Data Load");
-            var stageData = await LoadJsonToLocal<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
-            stageDataDic = stageData.MakeDict();
+            Debug.Log("Stage Local Data Load");
+            var data = await LoadJsonToLocal<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
+            stageDataDic = data.MakeDict();
         }
 
         if (collectionDataDic == null)
         {
             Debug.Log("Collection Local Data Load");
-            var collectionData = await LoadJsonToLocal<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
-            collectionDataDic = collectionData.MakeDict();
+            var data = await LoadJsonToLocal<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
+            collectionDataDic = data.MakeDict();
+        }
+
+        if (missionDataDic == null)
+        {
+            Debug.Log("Mission Local Data Load");
+            var data = await LoadJsonToLocal<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
+            missionDataDic = data.MakeDict();
         }
     }
 
@@ -83,6 +91,9 @@ public class CHMData : CHSingleton<CHMData>
         Data.ExtractData<Data.Collection> collectionData = new Data.ExtractData<Data.Collection>();
         saveData.collectionList = collectionData.MakeList(collectionDataDic);
 
+        Data.ExtractData<Data.Mission> missionData = new Data.ExtractData<Data.Mission>();
+        saveData.missionList = missionData.MakeList(missionDataDic);
+
         json = JsonUtility.ToJson(saveData);
 
         Debug.Log($"Save Local Data is {json}");
@@ -105,22 +116,29 @@ public async Task LoadCloudData(string _path)
         if (loginDataDic == null)
         {
             Debug.Log("Login Cloud Data Load");
-            var loginData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
-            loginDataDic = loginData.MakeDict();
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
+            loginDataDic = data.MakeDict();
         }
 
         if (stageDataDic == null)
         {
             Debug.Log("Stage Cloud Data Load");
-            var stageData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
-            stageDataDic = stageData.MakeDict();
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
+            stageDataDic = data.MakeDict();
         }
 
         if (collectionDataDic == null)
         {
             Debug.Log("Collection Cloud Data Load");
-            var collectionData = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
-            collectionDataDic = collectionData.MakeDict();
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
+            collectionDataDic = data.MakeDict();
+        }
+
+        if (missionDataDic == null)
+        {
+            Debug.Log("Mission Cloud Data Load");
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
+            missionDataDic = data.MakeDict();
         }
     }
 public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
@@ -155,4 +173,18 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         return JsonUtility.FromJson<Loader>(stringTask);
     }
 #endif
+
+    public Data.Mission CreateMissionData(string _key)
+    {
+        Data.Mission data = new Data.Mission
+        {
+            key = _key,
+            startValue = 0,
+            clearState = 0
+        };
+
+        missionDataDic.Add(_key, data);
+
+        return data;
+    }
 }

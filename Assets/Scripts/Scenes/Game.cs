@@ -128,6 +128,7 @@ public class Game : MonoBehaviour
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
                 CHMMain.Pool.Clear();
                 PlayerPrefs.SetInt(CHMMain.String.background, backgroundIndex);
+
                 SceneManager.LoadScene(0);
             });
         }

@@ -151,6 +151,7 @@ public class Defines
         Login,
         Stage,
         Collection,
+        Mission,
 
         Max
     }
@@ -194,6 +195,17 @@ public class Defines
         GameClear,
         GameOverWait,
         GameClearWait,
+
+        Max
+    }
+
+    public enum EClearState
+    {
+        None = -1,
+
+        NotDoing,
+        Doing,
+        Clear,
 
         Max
     }

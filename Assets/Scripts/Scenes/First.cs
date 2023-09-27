@@ -20,6 +20,7 @@ public class First : MonoBehaviour
     [SerializeField] GameObject stageSelect2;
     [SerializeField] PageMove pageMove;
     [SerializeField] TMP_Text downloadText;
+    [SerializeField] Button missionBtn;
     [SerializeField] Button startBtn;
     [SerializeField] Button connectGPGSBtn;
     [SerializeField] Button logoutBtn;
@@ -43,6 +44,7 @@ public class First : MonoBehaviour
         stageSelect1.SetActive(false);
         stageSelect2.SetActive(false);
         startBtn.gameObject.SetActive(false);
+        missionBtn.gameObject.SetActive(false);
         connectGPGSBtn.gameObject.SetActive(false);
         logoutBtn.gameObject.SetActive(false);
 
@@ -74,6 +76,7 @@ public class First : MonoBehaviour
             pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.stage));
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
+            missionBtn.gameObject.SetActive(true);
 
             var login = GetLoginState();
             connectGPGSBtn.gameObject.SetActive(login == false);
@@ -90,12 +93,18 @@ public class First : MonoBehaviour
 
             pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.stage));
             startBtn.gameObject.SetActive(false);
+            missionBtn.gameObject.SetActive(true);
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
             loadingBar.gameObject.SetActive(false);
             loadingText.gameObject.SetActive(false);
 
             PlayerPrefs.SetInt(CHMMain.String.background, backgroundIndex);
+        });
+
+        missionBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIMission, new CHUIArg());
         });
 
         logoutBtn.OnClickAsObservable().Subscribe(_ =>
@@ -106,6 +115,7 @@ public class First : MonoBehaviour
             SetLoginState(false);
             connectText.text = "Connect GPGS";
 #if UNITY_EDITOR == false
+            CHMGPGS.Instance.DeleteCloud("CatPang");
             CHMGPGS.Instance.Logout();
 #endif
         });
