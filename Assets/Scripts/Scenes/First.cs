@@ -127,7 +127,7 @@ public class First : MonoBehaviour
 #if UNITY_EDITOR == false
             if (GetPhoneLoginState() == true)
             {
-                connectText.text = "Logining...";
+                downloadText.text = "Login...";
                 CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
                     if (success)
@@ -274,7 +274,6 @@ public class First : MonoBehaviour
             if (loadingBar) loadingBar.fillAmount = downloadProgress / liDownloadKey.Count * downloadCount;
             if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
 
-            Debug.Log($"{_bundleName} Download");
             downloadText.text = $"{_bundleName} Download Success";
 
             if (downloadCount == liDownloadKey.Count)

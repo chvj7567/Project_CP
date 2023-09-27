@@ -8,7 +8,7 @@ public class CHMString
     public string catPang = "CatPang";
     public string login = "Login";
     public string stage = "Stage";
-    public string background = "background";
+    public string background = "Background";
     public string GetString(int _stringID)
     {
         return CHMMain.Json.GetStringInfo(_stringID);

@@ -272,16 +272,15 @@ public class Block : MonoBehaviour
             case EBlockState.CatPang:
             case EBlockState.PinkBomb:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
-                
                 break;
             case EBlockState.Wall:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
                 img.color = new Color(.5f, .5f, .5f);
-                background.color = new Color(0, 0, 0, 170);
+                background.color = new Color(0, 0, 0, .5f);
                 break;
             case EBlockState.Potal:
                 img.rectTransform.sizeDelta = new Vector2(-20, -20);
-                background.color = new Color(0, 0, 0, 170);
+                background.color = new Color(0, 0, 0, .2f);
                 break;
         }
 
@@ -301,7 +300,7 @@ public class Block : MonoBehaviour
         }
     }
 
-    public void Damage()
+    public void Damage(int _blockMaxIndex)
     {
         if (checkDamage == false && hp >= 1)
         {
@@ -314,7 +313,8 @@ public class Block : MonoBehaviour
             }
             else
             {
-                match = true;
+                var random = UnityEngine.Random.Range(0, _blockMaxIndex);
+                changeBlockState = (Defines.EBlockState)random;
             }
         }
     }
@@ -442,5 +442,16 @@ public class Block : MonoBehaviour
     public bool IsBlock()
     {
         return blockState != Defines.EBlockState.None;
+    }
+
+    public bool DisappearBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.Fish:
+                return true;
+            default:
+                return false;
+        }
     }
 }

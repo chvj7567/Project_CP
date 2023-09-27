@@ -118,6 +118,11 @@ public class Game : MonoBehaviour
         {
             backBtn.OnClickAsObservable().Subscribe(_ =>
             {
+                if (tokenSource != null && !tokenSource.IsCancellationRequested)
+                {
+                    tokenSource.Cancel();
+                }
+
                 Time.timeScale = 1;
                 CHInstantiateButton.ResetBlockDict();
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
@@ -290,12 +295,12 @@ public class Game : MonoBehaviour
                     bool useTargetScore = stageInfo.targetScore > 0;
                     bool useMoveCount = stageInfo.moveCount > 0;
 
-                    // 체력이 있는 블럭이 있으면 미클리어
+                    // 체력이 있는 블럭이 있거나 없어져야 되는 블럭이 있으면 미클리어
                     for (int i = 0; i < boardSize; ++i)
                     {
                         for (int j = 0; j < boardSize; ++j)
                         {
-                            if (boardArr[i, j].GetHp() > 0)
+                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].DisappearBlock() == true)
                             {
                                 clear = false;
                                 break;
@@ -437,6 +442,20 @@ public class Game : MonoBehaviour
         }
     }
 
+    void CheckDissapearBlock()
+    {
+        int row = boardSize - 1;
+
+        for (int i = 0; i < boardSize; ++i)
+        {
+            var block = boardArr[row, i];
+            if (block.DisappearBlock() == true)
+            {
+                block.changeBlockState = Defines.EBlockState.BlueBomb;
+            }
+        }
+    }
+
     async Task ChangeBackgroundLoop()
     {
         for (int i = 0; i < backgroundList.Count; ++i)
@@ -526,8 +545,6 @@ public class Game : MonoBehaviour
 
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
 
-        bool checkFirst = false;
-
         if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)
         {
             moveIndex1 = block1.index;
@@ -554,7 +571,6 @@ public class Game : MonoBehaviour
             // 두 블럭 모두 폭탄 블럭일 경우
             else if (block1.IsBoomBlock() == true && block2.IsBoomBlock() == true)
             {
-                checkFirst = true;
                 bonusScore.Value += 30;
                 block2.match = true;
                 block1.changeBlockState = Defines.EBlockState.PinkBomb;
@@ -575,26 +591,24 @@ public class Game : MonoBehaviour
 
         bool back = false;
 
+        isMatch = false;
+        CheckMap();
+
+        if (block1 != null && block2 != null)
+        {
+            if (isMatch == false)
+            {
+                ChangeBlock(block1, block2);
+                block1.rectTransform.DOAnchorPos(block1.originPos, delay);
+                block2.rectTransform.DOAnchorPos(block2.originPos, delay);
+
+                await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+                back = true;
+            }
+        }
+
         do
         {
-            isMatch = false;
-            CheckMap();
-            if (block1 != null && block2 != null)
-            {
-                if (checkFirst == false && isMatch == false)
-                {
-                    ChangeBlock(block1, block2);
-                    block1.rectTransform.DOAnchorPos(block1.originPos, delay);
-                    block2.rectTransform.DOAnchorPos(block2.originPos, delay);
-
-                    await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
-                    back = true;
-                    break;
-                }
-            }
-
-            checkFirst = true;
-
             await RemoveMatchBlock();
             await CreateBoomBlock();
             await DownBlock();
@@ -605,6 +619,8 @@ public class Game : MonoBehaviour
             curScore.Value += bonusScore.Value;
             oneTimeScore.Value = 0;
             bonusScore.Value = 0;
+
+            CheckDissapearBlock();
 
             await UpdateMap();
             CheckMap();
@@ -685,11 +701,11 @@ public class Game : MonoBehaviour
             }
         }
 
+        isMatch = false;
+        CheckMap();
+
         do
         {
-            isMatch = false;
-            CheckMap();
-
             for (int i = 0; i < boardSize; ++i)
             {
                 for (int j = 0; j < boardSize; ++j)
@@ -712,11 +728,8 @@ public class Game : MonoBehaviour
                 }
             }
 
-            if (isMatch == true)
-            {
-                isMatch = false;
-                CheckMap();
-            }
+            isMatch = false;
+            CheckMap();
 
         } while (isMatch == true);
 
@@ -735,8 +748,7 @@ public class Game : MonoBehaviour
             {
                 foreach (var block in boardArr)
                 {
-                    if (block == null ||
-                        (block.IsFixdBlock() == true && block.IsMatch() == false))
+                    if (block == null)
                         continue;
 
                     if (block.changeBlockState != Defines.EBlockState.None)
@@ -750,6 +762,9 @@ public class Game : MonoBehaviour
                     }
                     else if (reupdate == true || block.IsMatch() == true)
                     {
+                        if (block.DisappearBlock() == true)
+                            continue;
+
                         var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
                         createDelay = true;
@@ -877,6 +892,17 @@ public class Game : MonoBehaviour
     void CheckMap(bool _test = false)
     // 3Match 블럭 확인
     {
+        if (_test == false)
+        {
+            for (int i = 0; i < boardSize; ++i)
+            {
+                for (int j = 0; j < boardSize; ++j)
+                {
+                    boardArr[i, j].ResetCheckWallDamage();
+                }
+            }
+        }
+
         for (int i = 0; i < boardSize; ++i)
         {
             for (int j = 0; j < boardSize; ++j)
@@ -988,13 +1014,15 @@ public class Game : MonoBehaviour
     // Match된 블럭 제거
     {
         bool removeDelay = false;
-
         for (int i = 0; i < boardSize; ++i)
         {
             for (int j = 0; j < boardSize; ++j)
             {
                 var block = boardArr[i, j];
                 if (block == null)
+                    continue;
+
+                if (block.DisappearBlock() == true)
                     continue;
 
                 // 없어져야 할 블럭
@@ -1046,20 +1074,6 @@ public class Game : MonoBehaviour
             CHMMain.Sound.Play(Defines.ESound.Cat);
             await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
         }
-
-        // match 되어 scale이 0이 되어야하는데 안된 경우 즉시 0으로 변경
-        /*for (int i = 0; i < boardSize; ++i)
-        {
-            for (int j = 0; j < boardSize; ++j)
-            {
-                var block = boardArr[i, j];
-                if (block.match == true && block.rectTransform.localScale.x > 0.01f)
-                {
-                    Debug.Log($"Why {block.row}/{block.col}:{i}/{j} {block.rectTransform.localScale.x}");
-                    block.rectTransform.localScale = Vector3.zero;
-                }
-            }
-        }*/
     }
 
     async Task CreateBoomBlock(bool boomBlock = true)
@@ -1086,7 +1100,6 @@ public class Game : MonoBehaviour
                     CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 1, block.GetPangType());
                     block.ResetScore();
                     block.SetOriginPos();
-                    block.squareMatch = false;
                 }
 
                 // 십자가 매치 블럭 생성
@@ -1348,8 +1361,6 @@ public class Game : MonoBehaviour
                             var block = blockList[temp--];
                             block.SetScore(matchCount, direction);
                             block.match = true;
-
-                            Debug.Log($"@@{block.row}/{block.col}");
                         }
                     }
 
@@ -1491,7 +1502,9 @@ public class Game : MonoBehaviour
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return false;
 
-        if (boardArr[row, col].IsFixdBlock() == false && boardArr[row, col].match == false)
+        if (boardArr[row, col].DisappearBlock() == false &&
+            boardArr[row, col].IsFixdBlock() == false &&
+            boardArr[row, col].match == false)
         {
             boardArr[row, col].match = true;
             return true;
@@ -1517,7 +1530,7 @@ public class Game : MonoBehaviour
         {
             if (boardArr[row, col].IsFixdBlock() == true)
             {
-                boardArr[row, col].Damage();
+                boardArr[row, col].Damage(stageInfo.blockTypeCount);
             }
         }
     }
