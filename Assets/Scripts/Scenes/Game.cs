@@ -741,7 +741,6 @@ public class Game : MonoBehaviour
 
                     if (block.changeBlockState != Defines.EBlockState.None)
                     {
-                        Debug.Log(block.changeBlockState);
                         createDelay = true;
                         CreateNewBlock(block, Defines.ELog.UpdateMap, 1, block.changeBlockState);
                         block.SetHp(-1);
@@ -1192,8 +1191,6 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                block.ResetCheckWallDamage();
-
                 // 가로 3개 초과 매치 시 특수 블럭 생성
                 if (block.hScore > 3)
                 {
@@ -1351,6 +1348,8 @@ public class Game : MonoBehaviour
                             var block = blockList[temp--];
                             block.SetScore(matchCount, direction);
                             block.match = true;
+
+                            Debug.Log($"@@{block.row}/{block.col}");
                         }
                     }
 

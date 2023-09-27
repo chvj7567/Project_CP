@@ -249,6 +249,7 @@ public class Block : MonoBehaviour
         match = false;
         img.sprite = _sprite;
         img.color = new Color(1, 1, 1, 1);
+        background.color = new Color(1, 1, 1, 1);
 
         switch (blockState)
         {
@@ -271,6 +272,7 @@ public class Block : MonoBehaviour
             case EBlockState.CatPang:
             case EBlockState.PinkBomb:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
+                
                 break;
             case EBlockState.Wall:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);

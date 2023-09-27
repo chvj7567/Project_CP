@@ -104,6 +104,8 @@ public class Defines
         GreenBomb,
         BlueBomb,
 
+        Fish,
+
         Max
     }
 
