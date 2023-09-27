@@ -115,7 +115,6 @@ public class First : MonoBehaviour
             SetLoginState(false);
             connectText.text = "Connect GPGS";
 #if UNITY_EDITOR == false
-            CHMGPGS.Instance.DeleteCloud("CatPang");
             CHMGPGS.Instance.Logout();
 #endif
         });
@@ -226,7 +225,7 @@ public class First : MonoBehaviour
         connectGPGSBtn.gameObject.SetActive(_active == false);
         logoutBtn.gameObject.SetActive(_active);
 
-        CHMData.Instance.SaveData(CHMMain.String.catPang);
+        //CHMData.Instance.SaveData(CHMMain.String.catPang);
 
         return true;
     }

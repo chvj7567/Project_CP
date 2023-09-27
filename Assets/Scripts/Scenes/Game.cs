@@ -532,10 +532,16 @@ public class Game : MonoBehaviour
         if (_block.IsBoomBlock() == false && _block.IsSpecialBlock() == false)
             return;
 
-        if (CHMData.Instance.collectionDataDic.TryGetValue(_block.GetBlockState().ToString(), out var data) == false)
+        if (CHMData.Instance.stageDataDic.TryGetValue(stageInfo.stage.ToString(), out var stageData) == false)
             return;
 
-        data.value += 1;
+        if (CHMData.Instance.collectionDataDic.TryGetValue(_block.GetBlockState().ToString(), out var collectionData) == false)
+            return;
+
+        if (stageData.clear == true)
+            return;
+
+        collectionData.value += 1;
 
         CHMData.Instance.SaveData(CHMMain.String.catPang);
     }

@@ -179,6 +179,8 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Mission CreateMissionData(string _key)
     {
+        Debug.Log($"Create Mission {_key}");
+
         Data.Mission data = new Data.Mission
         {
             key = _key,
