@@ -11,6 +11,7 @@ namespace Data
     {
         public string key = "";
         public bool connectGPGS = false;
+        public int selectCatShop = 0;
     }
 
     [Serializable]
@@ -39,12 +40,20 @@ namespace Data
     }
 
     [Serializable]
+    public class Shop
+    {
+        public string key = "";
+        public bool buy = false;
+    }
+
+    [Serializable]
     public class ExtractData<T> : ILoader<string, T> where T : class
     {
         public List<Login> loginList = new List<Login>();
         public List<Stage> stageList = new List<Stage>();
         public List<Collection> collectionList = new List<Collection>();
         public List<Mission> missionList = new List<Mission>();
+        public List<Shop> shopList = new List<Shop>();
 
         public Dictionary<string, T> MakeDict()
         {
@@ -70,36 +79,13 @@ namespace Data
                 foreach (Mission data in missionList)
                     dict.Add(data.key, data as T);
             }
+            else if (typeof(T) == typeof(Shop))
+            {
+                foreach (Shop data in shopList)
+                    dict.Add(data.key, data as T);
+            }
 
             return dict;
-        }
-
-        public List<T> MakeList()
-        {
-            List<T> list = new List<T>();
-
-            if (typeof(T) == typeof(Login))
-            {
-                foreach (Login data in loginList)
-                    list.Add(data as T);
-            }
-            else if (typeof(T) == typeof(Stage))
-            {
-                foreach (Stage data in stageList)
-                    list.Add(data as T);
-            }
-            else if (typeof(T) == typeof(Collection))
-            {
-                foreach (Collection data in collectionList)
-                    list.Add(data as T);
-            }
-            else if (typeof(T) == typeof(Collection))
-            {
-                foreach (Mission data in missionList)
-                    list.Add(data as T);
-            }
-
-            return list;
         }
 
         public List<T> MakeList(Dictionary<string, T> dict)
@@ -110,6 +96,84 @@ namespace Data
                 list.Add(data.Value);
 
             return list;
+        }
+
+        public bool CheckData(Dictionary<string, T> dict)
+        {
+            if (typeof(T) == typeof(Login))
+            {
+                foreach (var data in dict)
+                {
+                    var temp = data.Value as Login;
+                    if (temp == null)
+                        return false;
+
+                    if (temp.key == "")
+                        return false;
+                }
+            }
+            else if (typeof(T) == typeof(Stage))
+            {
+                foreach (var data in dict)
+                {
+                    var temp = data.Value as Stage;
+                    if (temp == null)
+                        return false;
+
+                    if (temp.key == "")
+                        return false;
+
+                    if (temp.stage == -1 ||
+                        temp.boomAllCount == -1)
+                        return false;
+                }
+            }
+            else if (typeof(T) == typeof(Collection))
+            {
+                foreach (var data in dict)
+                {
+                    var temp = data.Value as Collection;
+                    if (temp == null)
+                        return false;
+
+                    if (temp.key == "")
+                        return false;
+
+                    if (temp.value == -1)
+                        return false;
+                }
+            }
+            else if (typeof(T) == typeof(Mission))
+            {
+                foreach (var data in dict)
+                {
+                    var temp = data.Value as Mission;
+                    if (temp == null)
+                        return false;
+
+                    if (temp.key == "")
+                        return false;
+
+                    if (temp.startValue == -1 ||
+                        temp.clearState == Defines.EClearState.None ||
+                        temp.repeatCount == -1)
+                        return false;
+                }
+            }
+            else if (typeof(T) == typeof(Shop))
+            {
+                foreach (var data in dict)
+                {
+                    var temp = data.Value as Shop;
+                    if (temp == null)
+                        return false;
+
+                    if (temp.key == "")
+                        return false;
+                }
+            }
+
+            return true;
         }
     }
 }

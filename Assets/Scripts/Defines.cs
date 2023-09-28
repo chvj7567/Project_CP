@@ -13,6 +13,7 @@ public class Defines
         Stage,
         StageBlock,
         Mission,
+        Shop,
 
         Max
     }
@@ -56,6 +57,7 @@ public class Defines
         UIChoice,
         UIAlarm,
         UIMission,
+        UIShop,
 
         Max
     }
@@ -152,6 +154,7 @@ public class Defines
         Stage,
         Collection,
         Mission,
+        Shop,
 
         Max
     }
@@ -206,6 +209,16 @@ public class Defines
         NotDoing,
         Doing,
         Clear,
+
+        Max
+    }
+
+    public enum EShop
+    {
+        None = -1,
+
+        Cat, // Cat1 ~ Cat5
+        CatFoot, // Cat6 ~ Cat10
 
         Max
     }

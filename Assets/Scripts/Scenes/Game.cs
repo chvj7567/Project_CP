@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -524,6 +525,8 @@ public class Game : MonoBehaviour
             data.clear = true;
         }
 
+        CHMData.Instance.GetCollectionData(CHMMain.String.gold).value += totScore.Value;
+
         CHMData.Instance.SaveData(CHMMain.String.catPang);
     }
 
@@ -688,14 +691,15 @@ public class Game : MonoBehaviour
             var stageBlockInfo = stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
             if (stageBlockInfo == null)
             {
-                var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
-
-                block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[random], (Defines.EBlockState)random);
+                var random = (Defines.EBlockState)UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                random = block.CheckSelectCatShop(random);
+                block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[(int)random], random);
                 block.SetHp(-1);
             }
             else
             {
-                block.SetBlockState(Defines.ELog.CreateMap, 2, blockSpriteList[(int)stageBlockInfo.blockState], stageBlockInfo.blockState);
+                var blockState = block.CheckSelectCatShop(stageBlockInfo.blockState);
+                block.SetBlockState(Defines.ELog.CreateMap, 2, blockSpriteList[(int)blockState], blockState);
 
                 if (block.IsNormalBlock() == true)
                 {
@@ -724,9 +728,9 @@ public class Game : MonoBehaviour
 
                     if (block.squareMatch == true || block.IsMatch() == true)
                     {
-                        var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
-
-                        block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[random], (Defines.EBlockState)random);
+                        var random = (Defines.EBlockState)UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                        random = block.CheckSelectCatShop(random);
+                        block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[(int)random], random);
                         block.SetHp(-1);
                         block.ResetScore();
                         block.match = false;
@@ -1313,6 +1317,7 @@ public class Game : MonoBehaviour
 
     void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _blockState, bool isDelay = true)
     {
+        _blockState = _block.CheckSelectCatShop(_blockState);
         _block.SetBlockState(_log, _key, blockSpriteList[(int)_blockState], _blockState);
         _block.match = false;
         _block.boom = false;

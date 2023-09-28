@@ -15,7 +15,6 @@ public class UIMission : UIBase
 {
     UIMissionArg arg;
 
-    [SerializeField] Button backBtn;
     [SerializeField] MissionScrollView scrollView;
 
     public override void InitUI(CHUIArg _uiArg)
@@ -25,11 +24,6 @@ public class UIMission : UIBase
 
     private void Start()
     {
-        backBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            CHMMain.UI.CloseUI(gameObject);
-        });
-
         scrollView.SetItemList(CHMMain.Json.GetMissionInfoList());
     }
 }

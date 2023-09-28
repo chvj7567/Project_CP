@@ -9,6 +9,8 @@ public class CHMString
     public string login = "Login";
     public string stage = "Stage";
     public string background = "Background";
+    public string gold = "Gold";
+
     public string GetString(int _stringID)
     {
         return CHMMain.Json.GetStringInfo(_stringID);

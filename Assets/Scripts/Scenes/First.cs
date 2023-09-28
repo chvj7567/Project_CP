@@ -23,8 +23,9 @@ public class First : MonoBehaviour
     [SerializeField] Button missionBtn;
     [SerializeField] Button startBtn;
     [SerializeField] Button connectGPGSBtn;
-    [SerializeField] Button logoutBtn;
     [SerializeField] TMP_Text connectText;
+    [SerializeField] Button logoutBtn;
+    [SerializeField] Button shopBtn;
     [SerializeField] List<string> liDownloadKey = new List<string>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
@@ -47,6 +48,7 @@ public class First : MonoBehaviour
         missionBtn.gameObject.SetActive(false);
         connectGPGSBtn.gameObject.SetActive(false);
         logoutBtn.gameObject.SetActive(false);
+        shopBtn.gameObject.SetActive(false);
 
         connectText.text = "Connect GPGS";
         downloadText.text = "";
@@ -77,6 +79,7 @@ public class First : MonoBehaviour
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
             missionBtn.gameObject.SetActive(true);
+            shopBtn.gameObject.SetActive(true);
 
             var login = GetLoginState();
             connectGPGSBtn.gameObject.SetActive(login == false);
@@ -94,10 +97,14 @@ public class First : MonoBehaviour
             pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.stage));
             startBtn.gameObject.SetActive(false);
             missionBtn.gameObject.SetActive(true);
+            shopBtn.gameObject.SetActive(true);
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
             loadingBar.gameObject.SetActive(false);
             loadingText.gameObject.SetActive(false);
+
+            // 기본 스킨
+            CHMData.Instance.GetShopData("1").buy = true;
 
             PlayerPrefs.SetInt(CHMMain.String.background, backgroundIndex);
         });
@@ -117,6 +124,11 @@ public class First : MonoBehaviour
 #if UNITY_EDITOR == false
             CHMGPGS.Instance.Logout();
 #endif
+        });
+
+        shopBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIShop, new CHUIArg());
         });
 
         dataDownload.Subscribe(_ =>

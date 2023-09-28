@@ -16,6 +16,7 @@ public class CHMJson
         public StageInfo[] stageInfoArr;
         public StageBlockInfo[] stageBlockInfoArr;
         public MissionInfo[] missionInfoArr;
+        public ShopInfo[] shopInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -29,6 +30,7 @@ public class CHMJson
     List<StageInfo> stageInfoList = new List<StageInfo>();
     List<StageBlockInfo> stageBlockInfoList = new List<StageBlockInfo>();
     List<MissionInfo> missionInfoList = new List<MissionInfo>();
+    List<ShopInfo> shopInfoList = new List<ShopInfo>();
 
     public void Init()
     {
@@ -44,6 +46,7 @@ public class CHMJson
         stageInfoList.Clear();
         stageBlockInfoList.Clear();
         missionInfoList.Clear();
+        shopInfoList.Clear();
     }
 
     void LoadJsonData()
@@ -57,6 +60,7 @@ public class CHMJson
         actionList.Add(LoadStageInfo());
         actionList.Add(LoadStageBlockInfo());
         actionList.Add(LoadMissionInfo());
+        actionList.Add(LoadShopInfo());
 
         loadingFileCount = actionList.Count;
     }
@@ -191,6 +195,26 @@ public class CHMJson
         return callback;
     }
 
+    Action<TextAsset> LoadShopInfo()
+    {
+        Action<TextAsset> callback;
+
+        shopInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Shop, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"shopInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.shopInfoArr)
+            {
+                shopInfoList.Add(data);
+            }
+
+            ++loadCompleteFileCount;
+        });
+
+        return callback;
+    }
+
     public string GetStringInfo(int _stringID)
     {
         if (stringInfoDic.TryGetValue(_stringID, out string result))
@@ -254,5 +278,10 @@ public class CHMJson
     public List<MissionInfo> GetMissionInfoList()
     {
         return missionInfoList;
+    }
+
+    public List<ShopInfo> GetShopInfoList()
+    {
+        return shopInfoList;
     }
 }

@@ -287,6 +287,34 @@ public class Block : MonoBehaviour
         CheckNoneBlockLog(_log, _key);
     }
 
+    public EBlockState CheckSelectCatShop(EBlockState _blockState)
+    {
+        var data = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        if (data == null)
+            return _blockState;
+
+        if (data.selectCatShop == 0)
+            return _blockState;
+        else if (data.selectCatShop == 1)
+        {
+            switch (_blockState)
+            {
+                case EBlockState.Cat1:
+                    return EBlockState.Cat6;
+                case EBlockState.Cat2:
+                    return EBlockState.Cat7;
+                case EBlockState.Cat3:
+                    return EBlockState.Cat8;
+                case EBlockState.Cat4:
+                    return EBlockState.Cat9;
+                case EBlockState.Cat5:
+                    return EBlockState.Cat10;
+            }
+        }
+
+        return _blockState;
+    }
+
     public Defines.EBlockState GetBlockState()
     {
         return blockState;

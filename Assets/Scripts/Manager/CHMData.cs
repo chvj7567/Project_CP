@@ -16,6 +16,7 @@ public class CHMData : CHSingleton<CHMData>
     public Dictionary<string, Data.Stage> stageDataDic = null;
     public Dictionary<string, Data.Collection> collectionDataDic = null;
     public Dictionary<string, Data.Mission> missionDataDic = null;
+    public Dictionary<string, Data.Shop> shopDataDic = null;
 
     public async Task LoadLocalData(string _path)
     {
@@ -47,6 +48,13 @@ public class CHMData : CHSingleton<CHMData>
             Debug.Log("Mission Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
             missionDataDic = data.MakeDict();
+        }
+
+        if (shopDataDic == null)
+        {
+            Debug.Log("Mission Local Data Load");
+            var data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
+            shopDataDic = data.MakeDict();
         }
     }
 
@@ -96,6 +104,9 @@ public class CHMData : CHSingleton<CHMData>
 
         Data.ExtractData<Data.Mission> missionData = new Data.ExtractData<Data.Mission>();
         saveData.missionList = missionData.MakeList(missionDataDic);
+
+        Data.ExtractData<Data.Shop> shopData = new Data.ExtractData<Data.Shop>();
+        saveData.shopList = shopData.MakeList(shopDataDic);
 
         json = JsonUtility.ToJson(saveData);
 
@@ -176,8 +187,39 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         return JsonUtility.FromJson<Loader>(stringTask);
     }
 #endif
+    Data.Stage CreateStageData(string _key)
+    {
+        Debug.Log($"Create Stage {_key}");
 
-    public Data.Mission CreateMissionData(string _key)
+        Data.Stage data = new Data.Stage
+        {
+            key = _key,
+            stage = int.Parse(_key),
+            clear = false,
+            boomAllCount = 0
+        };
+
+        stageDataDic.Add(_key, data);
+
+        return data;
+    }
+
+    Data.Collection CreateCollectionData(string _key)
+    {
+        Debug.Log($"Create Collection {_key}");
+
+        Data.Collection data = new Data.Collection
+        {
+            key = _key,
+            value = 0
+        };
+
+        collectionDataDic.Add(_key, data);
+
+        return data;
+    }
+
+    Data.Mission CreateMissionData(string _key)
     {
         Debug.Log($"Create Mission {_key}");
 
@@ -190,6 +232,71 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         };
 
         missionDataDic.Add(_key, data);
+
+        return data;
+    }
+
+    Data.Shop CreateShopData(string _key)
+    {
+        Debug.Log($"Create Shop {_key}");
+
+        Data.Shop data = new Data.Shop
+        {
+            key = _key,
+            buy = false
+        };
+
+        shopDataDic.Add(_key, data);
+
+        return data;
+    }
+
+    public Data.Login GetLoginData(string _key)
+    {
+        if (CHMData.Instance.loginDataDic.TryGetValue(_key, out var data) == false)
+        {
+            return null;
+        }
+
+        return data;
+    }
+
+    public Data.Stage GetStageData(string _key)
+    {
+        if (CHMData.Instance.stageDataDic.TryGetValue(_key, out var data) == false)
+        {
+            data = CreateStageData(_key);
+        }
+
+        return data;
+    }
+
+    public Data.Collection GetCollectionData(string _key)
+    {
+        if (CHMData.Instance.collectionDataDic.TryGetValue(_key, out var data) == false)
+        {
+            data = CreateCollectionData(_key);
+        }
+
+        return data;
+    }
+
+    public Data.Mission GetMissionData(string _key)
+    {
+        if (CHMData.Instance.missionDataDic.TryGetValue(_key, out var data) == false)
+        {
+            data = CreateMissionData(_key);
+        }
+
+        return data;
+    }
+
+    public Data.Shop GetShopData(string _key)
+    {
+        if (CHMData.Instance.shopDataDic.TryGetValue(_key, out var data) == false)
+        {
+            data = CreateShopData(_key);
+        }
 
         return data;
     }

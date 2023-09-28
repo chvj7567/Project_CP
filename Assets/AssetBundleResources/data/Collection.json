@@ -10,5 +10,6 @@
 	{"key":"YellowBomb","value":0},
 	{"key":"OrangeBomb","value":0},
 	{"key":"GreenBomb","value":0},
-	{"key":"BlueBomb","value":0}
+	{"key":"BlueBomb","value":0},
+	{"key":"Gold","value":0}
 ]

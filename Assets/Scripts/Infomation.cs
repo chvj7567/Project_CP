@@ -58,4 +58,11 @@ public class Infomation
         public int clearValue = -1;
         public int addValue = -1;
     }
+
+    [Serializable]
+    public class ShopInfo
+    {
+        public int shopID = -1;
+        public int gold = -1;
+    }
 }

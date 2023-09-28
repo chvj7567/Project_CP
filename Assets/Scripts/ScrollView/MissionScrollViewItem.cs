@@ -35,13 +35,8 @@ public class MissionScrollViewItem : MonoBehaviour
     {
         info = _info;
 
-        if (CHMData.Instance.collectionDataDic.TryGetValue(info.collectionType.ToString(), out collectionData) == false)
-            return;
-
-        if (CHMData.Instance.missionDataDic.TryGetValue(info.missionID.ToString(), out missionData) == false)
-        {
-            missionData = CHMData.Instance.CreateMissionData(info.missionID.ToString());
-        }
+        collectionData = CHMData.Instance.GetCollectionData(info.collectionType.ToString());
+        missionData = CHMData.Instance.GetMissionData(info.missionID.ToString());
 
         clearObj.SetActive(false);
 

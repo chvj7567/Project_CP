@@ -1,12 +1,13 @@
-using Unity.Collections;
+using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIBase : MonoBehaviour
 {
-    [ReadOnly]
-    public Defines.EUI eUIType;
-    [ReadOnly]
-    public int uid = 0;
+    [ReadOnly] public Defines.EUI eUIType;
+    [ReadOnly] public int uid = 0;
+
+    [SerializeField] Button backBtn;
 
     private void Awake()
     {
@@ -14,6 +15,14 @@ public class UIBase : MonoBehaviour
         if (_canvas)
         {
             transform.SetParent(_canvas.transform, false);
+        }
+
+        if (backBtn)
+        {
+            backBtn.OnClickAsObservable().Subscribe(_ =>
+            {
+                CHMMain.UI.CloseUI(gameObject);
+            });
         }
     }
 
