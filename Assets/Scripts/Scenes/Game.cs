@@ -761,7 +761,7 @@ public class Game : MonoBehaviour
                     }
                     else if (reupdate == true || block.IsMatch() == true)
                     {
-                        if (block.DisappearBlock() == true)
+                        if (block.IsFixdBlock() == true || block.DisappearBlock() == true)
                             continue;
 
                         var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
