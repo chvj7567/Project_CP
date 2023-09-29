@@ -26,8 +26,6 @@ public class MissionScrollViewItem : MonoBehaviour
 
             SetBtnInteractable(clearValue);
             missionValueText.SetText(collectionData.value - missionData.startValue, clearValue);
-
-            CHMData.Instance.SaveData(CHMMain.String.catPang);
         });
     }
 

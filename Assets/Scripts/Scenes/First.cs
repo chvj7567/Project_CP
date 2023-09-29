@@ -70,7 +70,7 @@ public class First : MonoBehaviour
         }
         else
         {
-            backgroundIndex = PlayerPrefs.GetInt("background");
+            backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.background);
 
             bundleDownload.Value = true;
             dataDownload.Value = true;
@@ -174,13 +174,11 @@ public class First : MonoBehaviour
                 await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
                 SetLoginState(false);
                 dataDownload.Value = true;
-                CHMData.Instance.SaveData(CHMMain.String.catPang);
             }
 #else
                 await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
                 SetLoginState(false);
                 dataDownload.Value = true;
-                CHMData.Instance.SaveData(CHMMain.String.catPang);
 #endif
             }
             else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
@@ -229,6 +227,11 @@ public class First : MonoBehaviour
                 Debug.Log($"LoginData Load Failed");
             }
         });
+    }
+
+    private void OnApplicationQuit()
+    {
+        CHMData.Instance.SaveData(CHMMain.String.catPang);
     }
 
     bool SetLoginState(bool _active)

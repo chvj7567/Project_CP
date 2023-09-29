@@ -372,8 +372,7 @@ public class Game : MonoBehaviour
             CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
             {
                 result = gameResult.Value,
-                gold = totScore.Value,
-                backgroundIndex = backgroundIndex
+                gold = totScore.Value
             });
         }
     }
@@ -433,6 +432,11 @@ public class Game : MonoBehaviour
         {
             tokenSource.Cancel();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        CHMData.Instance.SaveData(CHMMain.String.catPang);
     }
 
     void CheckDissapearBlock()
@@ -529,8 +533,6 @@ public class Game : MonoBehaviour
             return;
 
         collectionData.value += 1;
-
-        CHMData.Instance.SaveData(CHMMain.String.catPang);
     }
 
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)

@@ -64,8 +64,6 @@ public class UIShop : UIBase
         if (loginData != null)
         {
             loginData.selectCatShop = _skinIndex;
-
-            CHMData.Instance.SaveData(CHMMain.String.catPang);
         }
     }
 }

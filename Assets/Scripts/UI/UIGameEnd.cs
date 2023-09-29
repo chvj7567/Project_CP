@@ -14,7 +14,6 @@ public class UIGameEndArg : CHUIArg
 {
     public Defines.EGameResult result = Defines.EGameResult.None;
     public int gold;
-    public int backgroundIndex;
 }
 
 public class UIGameEnd : UIBase
@@ -56,7 +55,6 @@ public class UIGameEnd : UIBase
                 CHInstantiateButton.ResetBlockDict();
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
                 CHMMain.Pool.Clear();
-                PlayerPrefs.SetInt(CHMMain.String.background, arg.backgroundIndex);
 
                 SceneManager.LoadScene(0);
                 return;
@@ -74,13 +72,10 @@ public class UIGameEnd : UIBase
                 alarmText = "Received Reward"
             });
 
-            CHMData.Instance.SaveData(CHMMain.String.catPang);
-
             Time.timeScale = 1;
             CHInstantiateButton.ResetBlockDict();
             CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
             CHMMain.Pool.Clear();
-            PlayerPrefs.SetInt(CHMMain.String.background, arg.backgroundIndex);
 
             SceneManager.LoadScene(0);
         });
@@ -114,8 +109,6 @@ public class UIGameEnd : UIBase
             {
                 alarmText = "Received Reward"
             });
-
-            CHMData.Instance.SaveData(CHMMain.String.catPang);
         };
     }
 }
