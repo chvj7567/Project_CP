@@ -34,7 +34,6 @@ public class Game : MonoBehaviour
     [SerializeField] Transform parent;
     [SerializeField] ReactiveProperty<int> boomAllChance = new ReactiveProperty<int>();
     [SerializeField] Button boomAllBtn;
-    [SerializeField] GameObject adLoadingObj;
     [SerializeField] Button plusBoomAllChance;
     [SerializeField] CHTMPro boomAllChanceText;
     [SerializeField] RectTransform bombEffectRectTransform;
@@ -82,10 +81,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<float> attackDelay = new ReactiveProperty<float>();
     [SerializeField, ReadOnly] ReactiveProperty<float> attackSpeed = new ReactiveProperty<float>();
     [SerializeField, ReadOnly] ReactiveProperty<int> catPangLevel = new ReactiveProperty<int>();
-    [SerializeField, ReadOnly] ReactiveProperty<bool> isAD = new ReactiveProperty<bool>();
 
-    [SerializeField] GameObject gameOverObj;
-    [SerializeField] TMP_Text gameOverText;
     [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
 
     List<Sprite> blockSpriteList = new List<Sprite>();
@@ -166,16 +162,12 @@ public class Game : MonoBehaviour
             speedText.SetText(a);
         });
 
-        gameOverObj.SetActive(false);
-
         gameResult.Value = EGameResult.None;
 
         gameResult.Subscribe(_ =>
         {
             if (_ == EGameResult.GameOver || _ == EGameResult.GameClear)
             {
-                Time.timeScale = 0;
-                
                 if (tokenSource != null && !tokenSource.IsCancellationRequested)
                 {
                     tokenSource.Cancel();
@@ -198,7 +190,7 @@ public class Game : MonoBehaviour
             }
         });
 
-        boomAllChance.Subscribe(_ =>
+        /*boomAllChance.Subscribe(_ =>
         {
             boomAllChanceText.SetText(_);
         });
@@ -231,7 +223,7 @@ public class Game : MonoBehaviour
             {
                 adLoadingObj.transform.SetAsLastSibling();
             }
-        });
+        });*/
 
         boomAllChance.Value = 0;
 
@@ -272,7 +264,6 @@ public class Game : MonoBehaviour
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
         await CreateMap(stage);
-        CHMMain.Sound.Play(Defines.ESound.Bgm);
 
         this.UpdateAsObservable()
             .ThrottleFirst(TimeSpan.FromSeconds(1))
@@ -371,20 +362,20 @@ public class Game : MonoBehaviour
 
         if (_clear == false)
         {
-            gameOverText.text = "Game Over";
-            gameOverText.DOText("Game Over", 3f);
             gameResult.Value = EGameResult.GameOver;
         }
         else
         {
-            gameOverText.text = "Game Clear";
-            gameOverText.DOText("Game Clear", 3f);
             gameResult.Value = EGameResult.GameClear;
             SaveClearData();
-        }
 
-        gameOverObj.transform.SetAsLastSibling();
-        gameOverObj.SetActive(true);
+            CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
+            {
+                result = gameResult.Value,
+                gold = totScore.Value,
+                backgroundIndex = backgroundIndex
+            });
+        }
     }
 
     private async void Update()
@@ -524,10 +515,6 @@ public class Game : MonoBehaviour
         {
             data.clear = true;
         }
-
-        CHMData.Instance.GetCollectionData(CHMMain.String.gold).value += totScore.Value;
-
-        CHMData.Instance.SaveData(CHMMain.String.catPang);
     }
 
     void SaveBoomCollectionData(Block _block)
@@ -553,6 +540,7 @@ public class Game : MonoBehaviour
     {
         isLock = true;
 
+        Debug.Log($"Dealy : {delay}");
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
 
         if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)

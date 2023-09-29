@@ -18,6 +18,7 @@ public class UIShop : UIBase
 
     [SerializeField] CHTMPro goldText;
     [SerializeField] ShopScrollView scrollView;
+    [SerializeField] List<GameObject> skinImgList = new List<GameObject>();
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -37,5 +38,34 @@ public class UIShop : UIBase
         }
 
         scrollView.SetItemList(shopScript);
+
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        if (loginData != null)
+        {
+            SetCurrentSkin(loginData.selectCatShop);
+        }
+    }
+
+    public void SetCurrentSkin(int _skinIndex)
+    {
+        for (int i = 0; i < skinImgList.Count; ++i)
+        {
+            if (i == _skinIndex)
+            {
+                skinImgList[i].SetActive(true);
+            }
+            else
+            {
+                skinImgList[i].SetActive(false);
+            }
+        }
+
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        if (loginData != null)
+        {
+            loginData.selectCatShop = _skinIndex;
+
+            CHMData.Instance.SaveData(CHMMain.String.catPang);
+        }
     }
 }

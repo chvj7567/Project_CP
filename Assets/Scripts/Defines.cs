@@ -58,6 +58,7 @@ public class Defines
         UIAlarm,
         UIMission,
         UIShop,
+        UIGameEnd,
 
         Max
     }

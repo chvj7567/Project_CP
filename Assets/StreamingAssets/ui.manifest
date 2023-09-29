@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3248961755
+CRC: 2959866329
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 293efafd01d8aab24b9cb5e62328121c
+    Hash: 4da06376f221c8b127d6ee66cfd351b5
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 76f4ab5c760f4f22d5d3cae23b54f464
+    Hash: 3cb747ec6c8b768ec8f168996dbf45ee
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -30,6 +30,10 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 36473553e127ba14d82e762a72bad19e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 80b2307f20df6e44f84b09dec664faae, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -39,6 +43,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1511ccae7919cfc46b603b9b337fdc94, type: 3}
 - Class: 114
@@ -50,16 +56,22 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: bb222f37d4e8f6d47afc5b36328e5323, type: 3}
+  Script: {fileID: 11500000, guid: a7f2a247a6a27e64da9c98999b074db2, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 36473553e127ba14d82e762a72bad19e, type: 3}
+  Script: {fileID: 11500000, guid: bb222f37d4e8f6d47afc5b36328e5323, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 096089e983ec46545a8a6af112ab0724, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 80b2307f20df6e44f84b09dec664faae, type: 3}
+  Script: {fileID: 11500000, guid: 1cc64c815a395fe48a7530bf1205ae48, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 587ad3a96754f504484639ee2028ab94, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
@@ -75,7 +87,10 @@ Assets:
 - Assets/AssetBundleResources/ui/UIChoice.prefab
 - Assets/AssetBundleResources/ui/UICamera.prefab
 - Assets/AssetBundleResources/ui/UIMission.prefab
+- Assets/AssetBundleResources/ui/GoldImg.prefab
+- Assets/AssetBundleResources/ui/UIShop.prefab
 - Assets/AssetBundleResources/ui/EventSystem.prefab
 - Assets/AssetBundleResources/ui/UICanvas.prefab
 Dependencies:
+- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/effect
 - C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite

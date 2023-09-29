@@ -107,6 +107,8 @@ public class First : MonoBehaviour
             CHMData.Instance.GetShopData("1").buy = true;
 
             PlayerPrefs.SetInt(CHMMain.String.background, backgroundIndex);
+
+            CHMMain.Sound.Play(Defines.ESound.Bgm);
         });
 
         missionBtn.OnClickAsObservable().Subscribe(_ =>
@@ -170,11 +172,13 @@ public class First : MonoBehaviour
             else
             {
                 await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
+                SetLoginState(false);
                 dataDownload.Value = true;
                 CHMData.Instance.SaveData(CHMMain.String.catPang);
             }
 #else
                 await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
+                SetLoginState(false);
                 dataDownload.Value = true;
                 CHMData.Instance.SaveData(CHMMain.String.catPang);
 #endif

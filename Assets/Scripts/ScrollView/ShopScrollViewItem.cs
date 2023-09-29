@@ -6,10 +6,11 @@ using UniRx;
 
 public class ShopScrollViewItem : MonoBehaviour
 {
+    [SerializeField] UIShop shopScript;
     [SerializeField] List<GameObject> shopImgList = new List<GameObject>();
     [SerializeField] Button buyBtn;
     [SerializeField] CHTMPro buyGoldText;
-    [SerializeField] GameObject buyObj;
+    [SerializeField] Button skinSelectBtn;
 
     Infomation.ShopInfo info;
 
@@ -50,11 +51,16 @@ public class ShopScrollViewItem : MonoBehaviour
 
             shopData.buy = true;
             collectionData.value -= info.gold;
-            buyObj.SetActive(true);
+            skinSelectBtn.gameObject.SetActive(true);
+
+            shopScript.SetCurrentSkin(info.shopID - 1);
 
             CHMMain.UI.CloseUI(Defines.EUI.UIShop);
+        });
 
-            CHMData.Instance.SaveData(CHMMain.String.catPang);
+        skinSelectBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            shopScript.SetCurrentSkin(info.shopID - 1);
         });
     }
 
@@ -69,7 +75,7 @@ public class ShopScrollViewItem : MonoBehaviour
 
         SetImage(info.shopID);
 
-        buyObj.SetActive(shopData.buy);
+        skinSelectBtn.gameObject.SetActive(shopData.buy);
     }
 
     void SetImage(int _selectCatShop)

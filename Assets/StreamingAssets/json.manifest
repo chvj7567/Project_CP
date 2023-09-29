@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1113261534
+CRC: 3700419667
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 08b7df808d0f7cfac85a9a17dc8db815
+    Hash: e38e205876732f5b222928b0908d73a2
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -17,6 +17,7 @@ Assets:
 - Assets/AssetBundleResources/json/Monster.json
 - Assets/AssetBundleResources/json/Mission.json
 - Assets/AssetBundleResources/json/Select.json
+- Assets/AssetBundleResources/json/Shop.json
 - Assets/AssetBundleResources/json/StageBlock.json
 - Assets/AssetBundleResources/json/Stage.json
 Dependencies: []

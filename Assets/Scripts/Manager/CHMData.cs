@@ -154,6 +154,13 @@ public async Task LoadCloudData(string _path)
             var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
             missionDataDic = data.MakeDict();
         }
+
+        if (shopDataDic == null)
+        {
+            Debug.Log("Mission Local Data Load");
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
+            shopDataDic = data.MakeDict();
+        }
     }
 public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
     {
