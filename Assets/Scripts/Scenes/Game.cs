@@ -522,11 +522,8 @@ public class Game : MonoBehaviour
         if (_block.IsBoomBlock() == false && _block.IsSpecialBlock() == false)
             return;
 
-        if (CHMData.Instance.stageDataDic.TryGetValue(stageInfo.stage.ToString(), out var stageData) == false)
-            return;
-
-        if (CHMData.Instance.collectionDataDic.TryGetValue(_block.GetBlockState().ToString(), out var collectionData) == false)
-            return;
+        CHMData.Instance.stageDataDic.TryGetValue(stageInfo.stage.ToString(), out var stageData);
+        CHMData.Instance.collectionDataDic.TryGetValue(_block.GetBlockState().ToString(), out var collectionData);
 
         if (stageData.clear == true)
             return;
