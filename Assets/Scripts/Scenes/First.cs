@@ -50,7 +50,7 @@ public class First : MonoBehaviour
         logoutBtn.gameObject.SetActive(false);
         shopBtn.gameObject.SetActive(false);
 
-        connectText.text = "Connect GPGS";
+        connectText.text = "Google";
         downloadText.text = "";
         if (CHMAssetBundle.Instance.firstDownload == true)
         {
@@ -122,7 +122,7 @@ public class First : MonoBehaviour
                 return;
 
             SetLoginState(false);
-            connectText.text = "Connect GPGS";
+            connectText.text = "Google";
 #if UNITY_EDITOR == false
             CHMGPGS.Instance.Logout();
 #endif
@@ -224,7 +224,6 @@ public class First : MonoBehaviour
             else
             {
                 connectText.text = "LoginData Load Failed";
-                Debug.Log($"LoginData Load Failed");
             }
         });
     }

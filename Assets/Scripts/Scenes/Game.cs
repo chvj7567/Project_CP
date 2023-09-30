@@ -363,6 +363,12 @@ public class Game : MonoBehaviour
         if (_clear == false)
         {
             gameResult.Value = EGameResult.GameOver;
+
+            CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
+            {
+                result = gameResult.Value,
+                gold = totScore.Value / 3
+            });
         }
         else
         {

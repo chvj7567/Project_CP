@@ -63,28 +63,40 @@ public class CHMData : CHSingleton<CHMData>
         string path = $"{Application.persistentDataPath}/{_path}.json";
 
         Debug.Log($"Local Path : {path}");
-
-        var data = File.ReadAllText(path);
-
-        // 데이터가 없을 경우 디폴트 데이터 저장
-        if (data == "" || data.Contains($"\"{_name.ToLower()}List\":[]"))
+        if (File.Exists(path) == false)
         {
-            TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
-
-            CHMMain.Resource.LoadData(_name, (data) =>
-            {
-                Debug.Log($"Load {_name} Data is {data}");
-                taskCompletionSource.SetResult(data);
-            });
-
-            var task = await taskCompletionSource.Task;
-
-            return JsonUtility.FromJson<Loader>($"{{\"{_name.ToLower()}List\":{task.text}}}");
+            Debug.Log("Path is Null");
+            return await LoadDefaultData<Loader>(_name);
         }
         else
         {
-            return JsonUtility.FromJson<Loader>(File.ReadAllText(path));
+            var data = File.ReadAllText(path);
+
+            // 데이터가 없을 경우 디폴트 데이터 저장
+            if (data == "" || data.Contains($"\"{_name.ToLower()}List\":[]"))
+            {
+                return await LoadDefaultData<Loader>(_name);
+            }
+            else
+            {
+                return JsonUtility.FromJson<Loader>(File.ReadAllText(path));
+            }
         }
+    }
+
+    async Task<Loader> LoadDefaultData<Loader>(string _name)
+    {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
+        CHMMain.Resource.LoadData(_name, (data) =>
+        {
+            Debug.Log($"Load Default {_name} Data is {data}");
+            taskCompletionSource.SetResult(data);
+        });
+
+        var task = await taskCompletionSource.Task;
+
+        return JsonUtility.FromJson<Loader>($"{{\"{_name.ToLower()}List\":{task.text}}}");
     }
 
     public void SaveData(string _path)
@@ -177,18 +189,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         // 데이터가 없을 경우 디폴트 데이터 저장
         if (stringTask == "" || stringTask.Contains($"\"{_name.ToLower()}List\":[]"))
         {
-            Debug.Log($"{_name} Data is null");
-            TaskCompletionSource<TextAsset> taskCompletionSource2 = new TaskCompletionSource<TextAsset>();
-
-            CHMMain.Resource.LoadData(_name, (data) =>
-            {
-                Debug.Log($"Load {_name} Data : {data}");
-                taskCompletionSource2.SetResult(data);
-            });
-
-            var task = await taskCompletionSource2.Task;
-
-            return JsonUtility.FromJson<Loader>($"{{\"{_name.ToLower()}List\":{task.text}}}");
+            return await LoadDefaultData<Loader>(_name);
         }
 
         return JsonUtility.FromJson<Loader>(stringTask);
