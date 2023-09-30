@@ -523,7 +523,7 @@ public class Game : MonoBehaviour
     {
         if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt(CHMMain.String.stage).ToString(), out var data))
         {
-            data.clear = true;
+            data.clearState = Defines.EClearState.Clear;
         }
     }
 
@@ -535,7 +535,7 @@ public class Game : MonoBehaviour
         CHMData.Instance.stageDataDic.TryGetValue(stageInfo.stage.ToString(), out var stageData);
         CHMData.Instance.collectionDataDic.TryGetValue(_block.GetBlockState().ToString(), out var collectionData);
 
-        if (stageData.clear == true)
+        if (stageData.clearState == Defines.EClearState.Clear)
             return;
 
         collectionData.value += 1;

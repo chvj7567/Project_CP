@@ -19,7 +19,7 @@ namespace Data
     {
         public string key = "";
         public int stage = -1;
-        public bool clear = false;
+        public Defines.EClearState clearState = Defines.EClearState.None;
         public int boomAllCount = -1;
     }
 

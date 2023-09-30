@@ -203,7 +203,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         {
             key = _key,
             stage = int.Parse(_key),
-            clear = false,
+            clearState = Defines.EClearState.NotDoing,
             boomAllCount = 0
         };
 

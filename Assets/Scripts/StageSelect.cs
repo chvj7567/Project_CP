@@ -63,7 +63,7 @@ public class StageSelect : MonoBehaviour
 
         if (CHMData.Instance.stageDataDic.TryGetValue(stage.ToString(), out var data))
         {
-            if (data.clear)
+            if (data.clearState == Defines.EClearState.Clear)
             {
                 btnList[_index].clearObj.SetActive(true);
             }
@@ -95,14 +95,14 @@ public class StageSelect : MonoBehaviour
 
         if (CHMData.Instance.stageDataDic.TryGetValue((stage - 1).ToString(), out var data))
         {
-            if (data.clear)
+            if (data.clearState == Defines.EClearState.Clear)
             {
                 if (CHMData.Instance.stageDataDic.TryGetValue(stage.ToString(), out var data2) == false)
                 {
                     return;
                 }
 
-                if (PlayerPrefs.GetInt(CHMMain.String.stage) == stage - 1 && data2.clear == false)
+                if (PlayerPrefs.GetInt(CHMMain.String.stage) == stage - 1 && data.clearState != Defines.EClearState.Clear)
                 {
                     btnList[_index].lockObj.SetActive(true);
                     await Task.Delay(1000);
