@@ -93,44 +93,38 @@ public class StageSelect : MonoBehaviour
             return;
         }
 
-        if (CHMData.Instance.stageDataDic.TryGetValue((stage - 1).ToString(), out var data))
+        var beforeStageData = CHMData.Instance.GetStageData((stage - 1).ToString());
+        var currentStageData = CHMData.Instance.GetStageData(stage.ToString());
+
+        if (beforeStageData.clearState == Defines.EClearState.Clear)
         {
-            if (data.clearState == Defines.EClearState.Clear)
+            // 전 스테이지를 마지막으로 클리어하고 현 스테이지를 클리어하지 않은 상태라면
+            Debug.Log($"@{stage}");
+            if (PlayerPrefs.GetInt(CHMMain.String.stage) == stage - 1 && currentStageData.clearState != Defines.EClearState.Clear)
             {
-                if (CHMData.Instance.stageDataDic.TryGetValue(stage.ToString(), out var data2) == false)
-                {
+                Debug.Log($"@@{stage}");
+                btnList[_index].lockObj.SetActive(true);
+                await Task.Delay(1000);
+
+                if (btnList[_index] == null)
                     return;
-                }
 
-                if (PlayerPrefs.GetInt(CHMMain.String.stage) == stage - 1 && data.clearState != Defines.EClearState.Clear)
+                btnList[_index].lockObj.SetActive(false);
+                btnList[_index].unlockObj.SetActive(true);
+                var rectTransform = btnList[_index].unlockObj.GetComponent<RectTransform>();
+                if (rectTransform != null)
                 {
-                    btnList[_index].lockObj.SetActive(true);
-                    await Task.Delay(1000);
-
-                    if (btnList[_index] == null)
-                        return;
-
-                    btnList[_index].lockObj.SetActive(false);
-                    btnList[_index].unlockObj.SetActive(true);
-                    var rectTransform = btnList[_index].unlockObj.GetComponent<RectTransform>();
-                    if (rectTransform != null)
+                    rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + 30f, 1f).OnComplete(() =>
                     {
-                        rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + 30f, 1f).OnComplete(() =>
-                        {
-                            btnList[_index].button.interactable = true;
-                            btnList[_index].unlockObj.SetActive(false);
-                        });
-                    }
-                }
-                else
-                {
-                    btnList[_index].button.interactable = true;
-                    btnList[_index].lockObj.SetActive(false);
+                        btnList[_index].button.interactable = true;
+                        btnList[_index].unlockObj.SetActive(false);
+                    });
                 }
             }
             else
             {
-                btnList[_index].lockObj.SetActive(true);
+                btnList[_index].button.interactable = true;
+                btnList[_index].lockObj.SetActive(false);
             }
         }
         else
