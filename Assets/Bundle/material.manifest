@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3274471029
+CRC: 687286052
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dbd6f6672277562e3d5476f2f7c1676f
+    Hash: 1b84d7e516318b0c1c0ffa75b27bf742
   TypeTreeHash:
     serializedVersion: 2
     Hash: 939e20ecac0e95a3f7c5cfb3e57acb1d
@@ -62,4 +62,4 @@ Assets:
 - Assets/AssetPiece/material/Spark5.mat
 - Assets/AssetPiece/material/SnowCrystal2.mat
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/texture
+- C:/Users/admin/Desktop/CatPang/Assets/Bundle/texture

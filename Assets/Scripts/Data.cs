@@ -34,6 +34,7 @@ namespace Data
     public class Mission
     {
         public string key = "";
+        public Defines.EBlockState blockState = Defines.EBlockState.None;
         public int startValue = -1;
         public Defines.EClearState clearState = Defines.EClearState.None;
         public int repeatCount = -1;

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 194775098
+CRC: 3677394852
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 446c07f70456a8665d07ca3a23c1741c
+    Hash: d8b70279d91fea9e557ef451ddca1605
   TypeTreeHash:
     serializedVersion: 2
     Hash: c9f173d8e7a6d5dd41bf1a20faba079b
@@ -30,4 +30,4 @@ Assets:
 - Assets/AssetBundleResources/unit/AttackCat.prefab
 - Assets/AssetBundleResources/unit/Monster.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
+- C:/Users/admin/Desktop/CatPang/Assets/Bundle/sprite

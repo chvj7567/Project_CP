@@ -1,8 +1,58 @@
-[{"key":1,"startValue":10,"clearState":0,"repeatCount":0},
-{"key":2,"startValue":11,"clearState":0,"repeatCount":0},
-{"key":3,"startValue":12,"clearState":0,"repeatCount":0},
-{"key":4,"startValue":13,"clearState":0,"repeatCount":0},
-{"key":5,"startValue":14,"clearState":0,"repeatCount":0},
-{"key":6,"startValue":15,"clearState":0,"repeatCount":0},
-{"key":7,"startValue":18,"clearState":0,"repeatCount":0},
-{"key":8,"startValue":19,"clearState":0,"repeatCount":0}]
+[
+  {
+    "key": 1,
+    "blockState": 10,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  },
+  {
+    "key": 2,
+    "blockState": 11,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  },
+  {
+    "key": 3,
+    "blockState": 12,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  },
+  {
+    "key": 4,
+    "blockState": 13,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  },
+  {
+    "key": 5,
+    "blockState": 14,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  },
+  {
+    "key": 6,
+    "blockState": 15,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  },
+  {
+    "key": 7,
+    "blockState": 18,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  },
+  {
+    "key": 8,
+    "blockState": 19,
+    "startValue": 0,
+    "clearState": 0,
+    "repeatCount": 0
+  }
+]

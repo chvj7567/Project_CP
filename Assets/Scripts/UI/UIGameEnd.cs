@@ -77,6 +77,7 @@ public class UIGameEnd : UIBase
             CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
             CHMMain.Pool.Clear();
 
+            CHMData.Instance.SaveData(CHMMain.String.catPang);
             SceneManager.LoadScene(0);
         });
 

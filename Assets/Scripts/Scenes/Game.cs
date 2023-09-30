@@ -364,22 +364,35 @@ public class Game : MonoBehaviour
         {
             gameResult.Value = EGameResult.GameOver;
 
+            int gold = 0;
+            if (GetClearState() == Defines.EClearState.Clear)
+                gold = 0;
+            else
+                gold = totScore.Value / 3;
+
             CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
             {
                 result = gameResult.Value,
-                gold = totScore.Value / 3
+                gold = gold
             });
         }
         else
         {
             gameResult.Value = EGameResult.GameClear;
-            SaveClearData();
+
+            int gold = 0;
+            if (GetClearState() == Defines.EClearState.Clear)
+                gold = 0;
+            else
+                gold = totScore.Value;
 
             CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
             {
                 result = gameResult.Value,
-                gold = totScore.Value
+                gold = gold
             });
+
+            SaveClearData();
         }
     }
 
@@ -521,10 +534,12 @@ public class Game : MonoBehaviour
 
     void SaveClearData()
     {
-        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt(CHMMain.String.stage).ToString(), out var data))
-        {
-            data.clearState = Defines.EClearState.Clear;
-        }
+        CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.stage).ToString()).clearState = Defines.EClearState.Clear;
+    }
+
+    Defines.EClearState GetClearState()
+    {
+        return CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.stage).ToString()).clearState;
     }
 
     void SaveBoomCollectionData(Block _block)
@@ -532,12 +547,12 @@ public class Game : MonoBehaviour
         if (_block.IsBoomBlock() == false && _block.IsSpecialBlock() == false)
             return;
 
-        CHMData.Instance.stageDataDic.TryGetValue(stageInfo.stage.ToString(), out var stageData);
-        CHMData.Instance.collectionDataDic.TryGetValue(_block.GetBlockState().ToString(), out var collectionData);
-
-        if (stageData.clearState == Defines.EClearState.Clear)
+        if (GetClearState() == Defines.EClearState.Clear)
             return;
 
+        
+        var collectionData = CHMData.Instance.GetCollectionData(_block.GetBlockState().ToString());
+        Debug.Log($"@@{_block.GetBlockState()} {collectionData.value}");
         collectionData.value += 1;
     }
 
@@ -545,7 +560,6 @@ public class Game : MonoBehaviour
     {
         isLock = true;
 
-        Debug.Log($"Dealy : {delay}");
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
 
         if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)

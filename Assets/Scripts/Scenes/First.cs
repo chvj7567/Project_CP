@@ -180,6 +180,7 @@ public class First : MonoBehaviour
                 SetLoginState(false);
                 dataDownload.Value = true;
 #endif
+                //CHMData.Instance.SaveData(CHMMain.String.catPang);
             }
             else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
             {

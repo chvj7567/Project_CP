@@ -52,7 +52,7 @@ public class CHMData : CHSingleton<CHMData>
 
         if (shopDataDic == null)
         {
-            Debug.Log("Mission Local Data Load");
+            Debug.Log("Shop Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
             shopDataDic = data.MakeDict();
         }
