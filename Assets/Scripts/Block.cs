@@ -286,6 +286,9 @@ public class Block : MonoBehaviour
                 img.rectTransform.sizeDelta = new Vector2(-20, -20);
                 background.color = new Color(0, 0, 0, .2f);
                 break;
+            case EBlockState.Fish:
+                background.color = new Color(0, 0, 0, .35f);
+                break;
         }
 
         CheckNoneBlockLog(_log, _key);
@@ -472,6 +475,7 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.OrangeBomb:
             case Defines.EBlockState.BlueBomb:
             case Defines.EBlockState.YellowBomb:
+            case Defines.EBlockState.Fish:
                 return true;
             default:
                 return false;

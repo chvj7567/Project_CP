@@ -1362,7 +1362,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBoomBlock() == true)
+            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBoomBlock() == true || blockList[i].IsSpecialBlock() == true)
             {
                 blockState = Defines.EBlockState.None;
                 matchCount = 0;
@@ -1515,7 +1515,8 @@ public class Game : MonoBehaviour
     bool IsNormalBlock(int row, int col)
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
-            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBoomBlock() == true)
+            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBoomBlock() == true ||
+            boardArr[row, col].IsSpecialBlock() == true)
             return false;
 
         return true;
