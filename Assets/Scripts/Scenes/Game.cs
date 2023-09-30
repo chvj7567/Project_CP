@@ -1,16 +1,12 @@
 using DG.Tweening;
-using GoogleMobileAds.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -233,8 +229,6 @@ public class Game : MonoBehaviour
             stage = 1;
             PlayerPrefs.SetInt(CHMMain.String.stage, stage);
         }
-
-        Debug.Log($"Stage : {stage}");
 
         stageInfo = CHMMain.Json.GetStageInfo(stage);
         stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
@@ -552,12 +546,14 @@ public class Game : MonoBehaviour
 
         
         var collectionData = CHMData.Instance.GetCollectionData(_block.GetBlockState().ToString());
-        Debug.Log($"@@{_block.GetBlockState()} {collectionData.value}");
         collectionData.value += 1;
     }
 
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
     {
+        if (moveCount.Value == 0)
+            return;
+
         isLock = true;
 
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
@@ -573,16 +569,28 @@ public class Game : MonoBehaviour
                 await BoomAll();
                 return;
             }
+            // 한 블럭만 스페셜 블럭 중 특별한 경우
+            else if (block1.GetBlockState() == Defines.EBlockState.PinkBomb)
+            {
+                await Boom3(block1, block2.GetBlockState());
+                return;
+            }
+            // 한 블럭만 스페셜 블럭 중 특별한 경우
+            else if (block2.GetBlockState() == Defines.EBlockState.PinkBomb)
+            {
+                await Boom3(block2, block1.GetBlockState());
+                return;
+            }
             // 한 블럭만 스페셜 블럭일 경우
             else if (block1.IsSpecialBlock() == true)
             {
-                await Boom3(block1, block2.GetBlockState());
+                await block1.Boom();
                 return;
             }
             // 한 블럭만 스페셜 블럭일 경우
             else if (block2.IsSpecialBlock() == true)
             {
-                await Boom3(block2, block1.GetBlockState());
+                await block2.Boom();
                 return;
             }
             // 두 블럭 모두 폭탄 블럭일 경우
@@ -590,7 +598,9 @@ public class Game : MonoBehaviour
             {
                 bonusScore.Value += 30;
                 block2.match = true;
-                block1.changeBlockState = Defines.EBlockState.PinkBomb;
+
+                var random = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.CatPang, (int)Defines.EBlockState.BlueBomb + 1);
+                block1.changeBlockState = random;
             }
             // 한 블럭만 폭탄 블럭일 경우
             else if (block1.IsBoomBlock() == true)
@@ -1040,7 +1050,7 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                if (block.DisappearBlock() == true)
+                if (block.IsSpecialBlock() == true || block.DisappearBlock() == true)
                     continue;
 
                 // 없어져야 할 블럭
@@ -1259,11 +1269,11 @@ public class Game : MonoBehaviour
                     {
                         if (tempScore >= 5)
                         {
-                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 6, Defines.EBlockState.Arrow2);
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 6, Defines.EBlockState.Arrow1);
                         }
                         else
                         {
-                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 7, Defines.EBlockState.Arrow3);
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 7, Defines.EBlockState.Arrow4);
                         }
                     }
                 }
@@ -1290,11 +1300,11 @@ public class Game : MonoBehaviour
                             checkMoveBlock = true;
                             if (tempScore >= 5)
                             {
-                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 8, Defines.EBlockState.CatPang);
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 8, Defines.EBlockState.Arrow2);
                             }
                             else
                             {
-                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 9, Defines.EBlockState.CatPang);
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 9, Defines.EBlockState.Arrow3);
                             }
                         }
 
@@ -1305,11 +1315,11 @@ public class Game : MonoBehaviour
                     {
                         if (tempScore >= 5)
                         {
-                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 10, Defines.EBlockState.CatPang);
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 10, Defines.EBlockState.Arrow2);
                         }
                         else
                         {
-                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 11, Defines.EBlockState.CatPang);
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 11, Defines.EBlockState.Arrow3);
                         }
                     }
                 }
@@ -1576,7 +1586,7 @@ public class Game : MonoBehaviour
     public async Task Boom1(Block block, bool ani = true)
     // 자기 주변 1칸 폭탄
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
 
@@ -1766,6 +1776,125 @@ public class Game : MonoBehaviour
             changeMatchState(block.row - i, block.col - i);
             changeMatchState(block.row + i, block.col + i);
         }
+
+        SaveBoomCollectionData(block);
+
+        if (ani)
+        {
+            await AfterDrag(null, null, true);
+        }
+    }
+
+    public async Task Boom9(Block block, bool ani = true)
+    // 마름모 폭탄
+    {
+        bonusScore.Value += 10;
+        block.match = true;
+        block.boom = true;
+
+        changeMatchState(block.row - 2, block.col);
+        changeMatchState(block.row - 1, block.col);
+        changeMatchState(block.row - 1, block.col - 1);
+        changeMatchState(block.row - 1, block.col + 1);
+        changeMatchState(block.row, block.col - 2);
+        changeMatchState(block.row, block.col - 1);
+        changeMatchState(block.row, block.col + 1);
+        changeMatchState(block.row, block.col + 2);
+        changeMatchState(block.row + 1, block.col - 1);
+        changeMatchState(block.row + 1, block.col + 1);
+        changeMatchState(block.row + 1, block.col);
+        changeMatchState(block.row + 2, block.col);
+
+        SaveBoomCollectionData(block);
+
+        if (ani)
+        {
+            await AfterDrag(null, null, true);
+        }
+    }
+
+    public async Task Boom10(Block block, bool ani = true)
+    // 자기 주변 1칸 띄운 사각형 폭탄
+    {
+        bonusScore.Value += 10;
+        block.match = true;
+        block.boom = true;
+
+        changeMatchState(block.row - 2, block.col - 2);
+        changeMatchState(block.row - 2, block.col - 1);
+        changeMatchState(block.row - 2, block.col);
+        changeMatchState(block.row - 2, block.col + 1);
+        changeMatchState(block.row - 2, block.col + 2);
+        changeMatchState(block.row - 1, block.col - 2);
+        changeMatchState(block.row - 1, block.col + 2);
+        changeMatchState(block.row, block.col - 2);
+        changeMatchState(block.row, block.col + 2);
+        changeMatchState(block.row + 1, block.col - 2);
+        changeMatchState(block.row + 1, block.col + 2);
+        changeMatchState(block.row + 2, block.col - 2);
+        changeMatchState(block.row + 2, block.col - 1);
+        changeMatchState(block.row + 2, block.col);
+        changeMatchState(block.row + 2, block.col + 1);
+        changeMatchState(block.row + 2, block.col + 2);
+
+        SaveBoomCollectionData(block);
+
+        if (ani)
+        {
+            await AfterDrag(null, null, true);
+        }
+    }
+
+    public async Task Boom11(Block block, bool ani = true)
+    // 빠직 모양 폭탄
+    {
+        bonusScore.Value += 10;
+        block.match = true;
+        block.boom = true;
+
+        changeMatchState(block.row - 2, block.col - 1);
+        changeMatchState(block.row - 1, block.col - 2);
+        changeMatchState(block.row - 1, block.col - 1);
+
+        changeMatchState(block.row - 2, block.col + 1);
+        changeMatchState(block.row - 1, block.col + 2);
+        changeMatchState(block.row - 1, block.col + 1);
+
+        changeMatchState(block.row + 2, block.col - 1);
+        changeMatchState(block.row + 1, block.col - 2);
+        changeMatchState(block.row + 1, block.col - 1);
+
+        changeMatchState(block.row + 2, block.col + 1);
+        changeMatchState(block.row + 1, block.col + 2);
+        changeMatchState(block.row + 1, block.col + 1);
+
+        SaveBoomCollectionData(block);
+
+        if (ani)
+        {
+            await AfterDrag(null, null, true);
+        }
+    }
+
+    public async Task Boom12(Block block, bool ani = true)
+    // Z 모양 폭탄
+    {
+        bonusScore.Value += 10;
+        block.match = true;
+        block.boom = true;
+
+        changeMatchState(block.row - 2, block.col - 2);
+        changeMatchState(block.row - 2, block.col - 1);
+        changeMatchState(block.row - 2, block.col);
+        changeMatchState(block.row - 2, block.col + 1);
+        changeMatchState(block.row - 2, block.col + 2);
+        changeMatchState(block.row - 1, block.col + 1);
+        changeMatchState(block.row + 1, block.col - 1);
+        changeMatchState(block.row + 2, block.col - 2);
+        changeMatchState(block.row + 2, block.col - 1);
+        changeMatchState(block.row + 2, block.col);
+        changeMatchState(block.row + 2, block.col + 1);
+        changeMatchState(block.row + 2, block.col + 2);
 
         SaveBoomCollectionData(block);
 

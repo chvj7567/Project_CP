@@ -99,10 +99,8 @@ public class StageSelect : MonoBehaviour
         if (beforeStageData.clearState == Defines.EClearState.Clear)
         {
             // 전 스테이지를 마지막으로 클리어하고 현 스테이지를 클리어하지 않은 상태라면
-            Debug.Log($"@{stage}");
             if (PlayerPrefs.GetInt(CHMMain.String.stage) == stage - 1 && currentStageData.clearState != Defines.EClearState.Clear)
             {
-                Debug.Log($"@@{stage}");
                 btnList[_index].lockObj.SetActive(true);
                 await Task.Delay(1000);
 

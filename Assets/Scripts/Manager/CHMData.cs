@@ -120,7 +120,11 @@ public class CHMData : CHSingleton<CHMData>
         Data.ExtractData<Data.Shop> shopData = new Data.ExtractData<Data.Shop>();
         saveData.shopList = shopData.MakeList(shopDataDic);
 
+#if UNITY_EDITOR == false
         json = JsonUtility.ToJson(saveData);
+#else
+        json = JsonUtility.ToJson(saveData, true);
+#endif
 
         Debug.Log($"Save Local Data is {json}");
 
