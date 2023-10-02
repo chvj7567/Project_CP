@@ -599,7 +599,7 @@ public class Game : MonoBehaviour
                 bonusScore.Value += 30;
                 block2.match = true;
 
-                var random = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.CatPang, (int)Defines.EBlockState.BlueBomb + 1);
+                var random = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.PinkBomb, (int)Defines.EBlockState.BlueBomb + 1);
                 block1.changeBlockState = random;
             }
             // 한 블럭만 폭탄 블럭일 경우
@@ -1050,7 +1050,7 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                if (block.IsSpecialBlock() == true || block.DisappearBlock() == true)
+                if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.DisappearBlock() == true)
                     continue;
 
                 // 없어져야 할 블럭

@@ -26,6 +26,7 @@ public class First : MonoBehaviour
     [SerializeField] TMP_Text connectText;
     [SerializeField] Button logoutBtn;
     [SerializeField] Button shopBtn;
+    [SerializeField] Button boomBtn;
     [SerializeField] List<string> liDownloadKey = new List<string>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
@@ -49,6 +50,7 @@ public class First : MonoBehaviour
         connectGPGSBtn.gameObject.SetActive(false);
         logoutBtn.gameObject.SetActive(false);
         shopBtn.gameObject.SetActive(false);
+        boomBtn.gameObject.SetActive(false);
 
         connectText.text = "Google";
         downloadText.text = "";
@@ -80,6 +82,7 @@ public class First : MonoBehaviour
             stageSelect2.SetActive(true);
             missionBtn.gameObject.SetActive(true);
             shopBtn.gameObject.SetActive(true);
+            boomBtn.gameObject.SetActive(true);
 
             var login = GetLoginState();
             connectGPGSBtn.gameObject.SetActive(login == false);
@@ -98,6 +101,7 @@ public class First : MonoBehaviour
             startBtn.gameObject.SetActive(false);
             missionBtn.gameObject.SetActive(true);
             shopBtn.gameObject.SetActive(true);
+            boomBtn.gameObject.SetActive(true);
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
             loadingBar.gameObject.SetActive(false);
@@ -133,6 +137,11 @@ public class First : MonoBehaviour
             CHMMain.UI.ShowUI(Defines.EUI.UIShop, new CHUIArg());
         });
 
+        boomBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIBoom, new CHUIArg());
+        });
+
         dataDownload.Subscribe(_ =>
         {
             if (CHMAssetBundle.Instance.firstDownload == true && _ == true && bundleDownload.Value == true)
@@ -166,6 +175,10 @@ public class First : MonoBehaviour
                     {
                         Debug.Log("GPGS Login Failed");
                         connectText.text = "Login Failed";
+
+                        await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
+                        SetLoginState(false);
+                        dataDownload.Value = true;
                     }
                 });
             }
@@ -240,6 +253,8 @@ public class First : MonoBehaviour
             return false;
 
         data.connectGPGS = _active;
+
+        PlayerPrefs.SetInt(CHMMain.String.login, 0);
 
         connectGPGSBtn.gameObject.SetActive(_active == false);
         logoutBtn.gameObject.SetActive(_active);

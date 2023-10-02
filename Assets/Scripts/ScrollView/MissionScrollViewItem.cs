@@ -22,8 +22,10 @@ public class MissionScrollViewItem : MonoBehaviour
             missionData.repeatCount++;
             var clearValue = info.clearValue + (missionData.repeatCount * info.addValue);
 
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{missionData.repeatCount}Reward" });
+            var gold = 10 * missionData.repeatCount;
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{gold} Gold Reward" });
 
+            CHMData.Instance.GetCollectionData(CHMMain.String.gold).value += gold;
             SetBtnInteractable(clearValue);
             missionValueText.SetText(collectionData.value - missionData.startValue, clearValue);
         });
@@ -108,6 +110,18 @@ public class MissionScrollViewItem : MonoBehaviour
                 break;
             case Defines.EBlockState.PinkBomb:
                 missionImgList[7].SetActive(true);
+                break;
+            case Defines.EBlockState.YellowBomb:
+                missionImgList[8].SetActive(true);
+                break;
+            case Defines.EBlockState.OrangeBomb:
+                missionImgList[9].SetActive(true);
+                break;
+            case Defines.EBlockState.GreenBomb:
+                missionImgList[10].SetActive(true);
+                break;
+            case Defines.EBlockState.BlueBomb:
+                missionImgList[11].SetActive(true);
                 break;
         }
     }

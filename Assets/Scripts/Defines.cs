@@ -59,6 +59,7 @@ public class Defines
         UIMission,
         UIShop,
         UIGameEnd,
+        UIBoom,
 
         Max
     }

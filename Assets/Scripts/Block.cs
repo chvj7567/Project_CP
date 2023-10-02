@@ -448,6 +448,10 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.Arrow4:
             case Defines.EBlockState.Arrow5:
             case Defines.EBlockState.Arrow6:
+            case Defines.EBlockState.GreenBomb:
+            case Defines.EBlockState.OrangeBomb:
+            case Defines.EBlockState.BlueBomb:
+            case Defines.EBlockState.YellowBomb:
                 return true;
             default:
                 return false;

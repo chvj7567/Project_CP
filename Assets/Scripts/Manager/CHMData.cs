@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -130,11 +131,15 @@ public class CHMData : CHSingleton<CHMData>
 
         File.WriteAllText($"{Application.persistentDataPath}/{_path}.json", json);
 
-#if UNITY_EDITOR == false && UNITY_ANDROID == true
-        CHMGPGS.Instance.SaveCloud(_path, json, success =>
+
+#if UNITY_EDITOR == false
+        if (saveData.loginList.First().connectGPGS == true)
         {
-            Debug.Log($"Save Cloud Data is {success} : {json}");
-        });
+            CHMGPGS.Instance.SaveCloud(_path, json, success =>
+            {
+                Debug.Log($"Save Cloud Data is {success} : {json}");
+            });
+        }
 #endif
     }
 
