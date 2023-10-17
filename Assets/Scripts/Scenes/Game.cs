@@ -1534,7 +1534,7 @@ public class Game : MonoBehaviour
 
         if (boardArr[row, col].DisappearBlock() == false &&
             boardArr[row, col].IsFixdBlock() == false &&
-            boardArr[row, col].match == false)
+            boardArr[row, col].GetBlockState() != Defines.EBlockState.PinkBomb)
         {
             boardArr[row, col].match = true;
             return true;
