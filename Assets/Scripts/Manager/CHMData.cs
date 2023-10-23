@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -74,7 +72,7 @@ public class CHMData : CHSingleton<CHMData>
             var data = File.ReadAllText(path);
 
             // 데이터가 없을 경우 디폴트 데이터 저장
-            if (data == "" || data.Contains($"\"{_name.ToLower()}List\":[]"))
+            if (data.Contains($"{_name.ToLower()}List") == false || data.Contains($"\"{_name.ToLower()}List\":[]"))
             {
                 return await LoadDefaultData<Loader>(_name);
             }
@@ -196,7 +194,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         var stringTask = await taskCompletionSource.Task;
 
         // 데이터가 없을 경우 디폴트 데이터 저장
-        if (stringTask == "" || stringTask.Contains($"\"{_name.ToLower()}List\":[]"))
+        if (stringTask.Contains($"{_name.ToLower()}List") == false || stringTask.Contains($"\"{_name.ToLower()}List\":[]"))
         {
             return await LoadDefaultData<Loader>(_name);
         }

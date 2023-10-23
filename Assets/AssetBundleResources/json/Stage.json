@@ -538,5 +538,14 @@
     "time": 10,
     "targetScore": -1,
     "moveCount": 1
+  },
+  {
+    "group": 7,
+    "stage": 61,
+    "blockTypeCount": 5,
+    "boardSize": 9,
+    "time": 10,
+    "targetScore": -1,
+    "moveCount": 1
   }
 ]

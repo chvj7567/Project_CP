@@ -27,12 +27,11 @@ public class First : MonoBehaviour
     [SerializeField] Button logoutBtn;
     [SerializeField] Button shopBtn;
     [SerializeField] Button boomBtn;
-    [SerializeField] List<string> liDownloadKey = new List<string>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
+    [SerializeField] CHLoadingBarFromAssetBundle bundleLoadingScript;
 
     ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
     ReactiveProperty<bool> bundleDownload = new ReactiveProperty<bool>();
-    int downloadCount = 0;
 
     CancellationTokenSource tokenSource;
 
@@ -64,11 +63,6 @@ public class First : MonoBehaviour
             CHMAdmob.Instance.Init();
 
             backgroundIndex = 0;
-
-            foreach (var key in liDownloadKey)
-            {
-                StartCoroutine(LoadAssetBundle(key));
-            }
         }
         else
         {
@@ -92,6 +86,11 @@ public class First : MonoBehaviour
         ChangeBackgroundLoop();
 
         loadingBar.fillAmount = 0f;
+
+        bundleLoadingScript.bundleDownloadSuccess += () =>
+        {
+            bundleDownload.Value = true;
+        };
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -277,54 +276,19 @@ public class First : MonoBehaviour
         return PlayerPrefs.GetInt(CHMMain.String.login) == 1;
     }
 
-    IEnumerator LoadAssetBundle(string _bundleName)
+    void CopyFile(string _fileDirectoryPath, string _destDirectoryPath, string _fileName)
     {
-        string bundlePath = Path.Combine(Application.streamingAssetsPath, _bundleName);
+        if (Directory.Exists(_fileDirectoryPath) == false)
+            return;
 
-        downloadText.text = $"{_bundleName} Downloading...";
-        // 에셋 번들 로드
-        AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
-
-        // 다운로드 표시
-        float downloadProgress = 0;
-
-        while (!bundleRequest.isDone)
+        if (Directory.Exists(_destDirectoryPath) == false)
         {
-            downloadProgress = bundleRequest.progress;
-
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / liDownloadKey.Count * downloadCount;
-            if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
-
-            yield return null;
+            Directory.CreateDirectory(_destDirectoryPath);
         }
 
-        if (bundleRequest.assetBundle == null)
-        {
-            Debug.LogError($"{_bundleName} is Null");
+        File.Copy(Path.Combine(_fileDirectoryPath, _fileName), Path.Combine(_destDirectoryPath, _fileName));
 
-            LoadAssetBundle(_bundleName);
-        }
-        else
-        {
-            downloadProgress = bundleRequest.progress;
-
-            AssetBundle assetBundle = bundleRequest.assetBundle;
-
-            CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
-
-            ++downloadCount;
-
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / liDownloadKey.Count * downloadCount;
-            if (loadingText) loadingText.text = downloadProgress / liDownloadKey.Count * downloadCount * 100f + "%";
-
-            downloadText.text = $"{_bundleName} Download Success";
-
-            if (downloadCount == liDownloadKey.Count)
-            {
-                Debug.Log($"Bundle download Success");
-                bundleDownload.Value = true;
-            }
-        }
+        Debug.Log($"Copy Success : {_fileName}");
     }
 
     async Task ChangeBackgroundLoop()

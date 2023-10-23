@@ -694,6 +694,7 @@ GameObject:
   - component: {fileID: 67400170}
   - component: {fileID: 67400169}
   - component: {fileID: 67400172}
+  - component: {fileID: 67400171}
   m_Layer: 0
   m_Name: First
   m_TagString: Untagged
@@ -743,6 +744,7 @@ MonoBehaviour:
   - data
   - unit
   backgroundIndex: 0
+  bundleLoadingScript: {fileID: 67400171}
 --- !u!4 &67400170
 Transform:
   m_ObjectHideFlags: 0
@@ -757,6 +759,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &67400171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67400168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558f24f99a9b3fd4aa308aab95c0d019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadingBar: {fileID: 284160808}
+  loadingText: {fileID: 1963077614}
+  downloadText: {fileID: 81801738}
+  useStreamingAssets: 1
+  googleDriveDownload: 0
+  bundleKey: Bundle
+  googleDownloadKeyList: []
+  downloadCount: 0
 --- !u!114 &67400172
 MonoBehaviour:
   m_ObjectHideFlags: 0
