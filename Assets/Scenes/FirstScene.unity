@@ -733,18 +733,12 @@ MonoBehaviour:
   logoutBtn: {fileID: 172993936}
   shopBtn: {fileID: 1725852224}
   boomBtn: {fileID: 1060617467}
-  liDownloadKey:
-  - json
-  - ui
-  - sprite
-  - texture
-  - material
-  - effect
-  - sound
-  - data
-  - unit
   backgroundIndex: 0
   bundleLoadingScript: {fileID: 67400171}
+  dataDownload:
+    value: 0
+  bundleDownload:
+    value: 0
 --- !u!4 &67400170
 Transform:
   m_ObjectHideFlags: 0
@@ -774,11 +768,33 @@ MonoBehaviour:
   loadingBar: {fileID: 284160808}
   loadingText: {fileID: 1963077614}
   downloadText: {fileID: 81801738}
-  useStreamingAssets: 1
-  googleDriveDownload: 0
+  useStreamingAssets: 0
+  googleDriveDownload: 1
   bundleKey: Bundle
-  googleDownloadKeyList: []
-  downloadCount: 0
+  googleDownloadKeyList:
+  - 1wwDLKIjOPOeuw-AEcgGb992upE7lqqi_
+  - 1g-KdzAAOx4CAsDn87UtZ4K82Us6AEgbW
+  - 160H0GyGwv6TUHJ5PB0pR3khzd51tPgTh
+  - 16V8Hxnas0riIc_p8eYE9Fc2gc_eT2DIR
+  - 1-IRIXAuUsi2XVCZop2MbJenYUsc_pB6x
+  - 1ftjEW2jZr-1YRW8sT7xOPG0sFu27lmxT
+  - 1pJEdkPeiUWjbBVtPIBWUYxB4ysXnZwGl
+  - 1IixokRp_9CDAW0F1z36Mwvb4ADMwawuZ
+  - 1m9Ir2BdIZEMaASl_0ZlXfwtP2LRhtZl4
+  googleDownloadValueList:
+  - data
+  - effect
+  - json
+  - material
+  - sound
+  - sprite
+  - texture
+  - ui
+  - unit
+  totalLoadCount: 0
+  loadingCount: 0
+  totalDownoadCount: 0
+  downloadingCount: 0
 --- !u!114 &67400172
 MonoBehaviour:
   m_ObjectHideFlags: 0

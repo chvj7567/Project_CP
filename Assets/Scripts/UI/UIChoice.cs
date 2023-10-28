@@ -52,7 +52,7 @@ public class UIChoice : UIBase
         do
         {
             var select1 = (Defines.ESelect)Random.Range(0, (int)Defines.ESelect.Max);
-            select1Info = CHMMain.Json.GetSelectInfo(select1);
+            select1Info = CHMJson.Instance.GetSelectInfo(select1);
             select1Text.SetStringID(select1Info.titleStr);
             select1Text.SetText(select1Info.value);
             select1PriceText.SetText(select1Info.scoreCost);
@@ -76,7 +76,7 @@ public class UIChoice : UIBase
         do
         {
             var select2 = (Defines.ESelect)Random.Range(0, (int)Defines.ESelect.Max);
-            select2Info = CHMMain.Json.GetSelectInfo(select2);
+            select2Info = CHMJson.Instance.GetSelectInfo(select2);
             select2Text.SetStringID(select2Info.titleStr);
             select2Text.SetText(select2Info.value);
             select2PriceText.SetText(select2Info.scoreCost);

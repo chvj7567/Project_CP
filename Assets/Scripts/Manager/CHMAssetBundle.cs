@@ -49,7 +49,7 @@ public partial class AssetBundlePool
 
     public AssetBundle GetItem(string _bundleName)
     {
-        if (dicItem.TryGetValue(_bundleName.ToLower(), out Item ret))
+        if (dicItem.TryGetValue(_bundleName, out Item ret))
         {
             return ret.obj;
         }
@@ -101,6 +101,7 @@ public partial class ObjectPool
 public class CHMAssetBundle : CHSingleton<CHMAssetBundle>
 {
     public bool firstDownload = true;
+    public Dictionary<string, string> bundleDic = new Dictionary<string, string>();
     AssetBundlePool assetBundlePool = new AssetBundlePool();
     ObjectPool objectPool = new ObjectPool();
 
@@ -114,7 +115,13 @@ public class CHMAssetBundle : CHSingleton<CHMAssetBundle>
         var obj = objectPool.GetItem(_bundleName, _assetName);
         if (obj == null)
         {
-            AssetBundle assetBundle = assetBundlePool.GetItem(_bundleName);
+            if (bundleDic.TryGetValue(_bundleName.ToLower(), out var name) == false)
+            {
+                _callback(null);
+                return;
+            }
+
+            AssetBundle assetBundle = assetBundlePool.GetItem(name);
 
             if (assetBundle != null)
             {

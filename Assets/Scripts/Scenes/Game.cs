@@ -230,8 +230,8 @@ public class Game : MonoBehaviour
             PlayerPrefs.SetInt(CHMMain.String.stage, stage);
         }
 
-        stageInfo = CHMMain.Json.GetStageInfo(stage);
-        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+        stageInfo = CHMJson.Instance.GetStageInfo(stage);
+        stageBlockInfoList = CHMJson.Instance.GetStageBlockInfoList(stage);
 
         targetScoreText.SetText(stageInfo.targetScore);
         if (stageInfo.targetScore < 0)

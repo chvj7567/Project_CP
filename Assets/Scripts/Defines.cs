@@ -110,6 +110,18 @@ public class Defines
 
         Fish,
 
+        CatHat1,
+        CatHat2,
+        CatHat3,
+        CatHat4,
+        CatHat5,
+
+        CatSkin1,
+        CatSkin2,
+        CatSkin3,
+        CatSkin4,
+        CatSkin5,
+
         Max
     }
 

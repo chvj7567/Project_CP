@@ -70,7 +70,7 @@ public class Spawner : MonoBehaviour
                         copyMonster.rectTransform.anchoredPosition = new Vector2(pos.x, Random.Range(pos.y - 150, pos.y));
                         ++index;
 
-                        var monsterInfo = CHMMain.Json.GetMonsterInfo(stage, index);
+                        var monsterInfo = CHMJson.Instance.GetMonsterInfo(stage, index);
                         if (monsterInfo == null)
                             break;
 
@@ -105,7 +105,7 @@ public class Spawner : MonoBehaviour
 
                 ++index;
 
-                var monsterInfo = CHMMain.Json.GetMonsterInfo(1, index);
+                var monsterInfo = CHMJson.Instance.GetMonsterInfo(1, index);
                 if (monsterInfo == null)
                     return;
 

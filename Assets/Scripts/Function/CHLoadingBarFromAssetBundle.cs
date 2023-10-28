@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using TMPro;
-using UniRx;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -18,36 +17,72 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
     [SerializeField] bool googleDriveDownload;
     [SerializeField] string bundleKey;
     [SerializeField] List<string> googleDownloadKeyList = new List<string>();
+    [SerializeField] List<string> googleDownloadValueList = new List<string>();
 
-    [SerializeField, ReadOnly] int totalDownloadCount = 0;
+    [SerializeField, ReadOnly] int totalLoadCount = 0;
+    [SerializeField, ReadOnly] int loadingCount = 0;
+    [SerializeField, ReadOnly] int totalDownoadCount = 0;
     [SerializeField, ReadOnly] int downloadingCount = 0;
 
+    public Action bundleLoadSuccess;
     public Action bundleDownloadSuccess;
 
     string googleDriveDownloadURL = "https://docs.google.com/uc?export=download&id=";
     string url = "";
 
-    private void Start()
+    public void Init()
     {
         if (CHMAssetBundle.Instance.firstDownload == false)
             return;
 
         if (loadingBar) loadingBar.fillAmount = 0f;
 
-        totalDownloadCount = googleDownloadKeyList.Count;
+        totalDownoadCount = totalLoadCount = googleDownloadKeyList.Count;
 
-        StartCoroutine(LoadAssetBundleAll());
-        /*if (googleDriveDownload)
+        // 에셋 번들 저장 경로 설정
+        string savePath = Path.Combine(Application.persistentDataPath, bundleKey);
+        if (Directory.Exists(savePath) == false)
         {
-            foreach (var key in googleDownloadKeyList)
+            Directory.CreateDirectory(savePath);
+        }
+
+        
+
+        if (googleDriveDownload)
+        {
+            for (int i = 0; i < googleDownloadKeyList.Count; ++i)
+            {
+                CHMAssetBundle.Instance.bundleDic.Add(googleDownloadValueList[i], googleDownloadKeyList[i]);
+            }
+            /*foreach (var key in googleDownloadKeyList)
             {
                 StartCoroutine(DownloadAssetBundle(key));
+            }*/
+
+            for (int i = 0; i < googleDownloadKeyList.Count; ++i)
+            {
+                StartCoroutine(DownloadAssetBundle(googleDownloadKeyList[i]));
             }
         }
         else
         {
-            StartCoroutine(DownloadAllAssetBundle());
-        }*/
+            for (int i = 0; i < googleDownloadValueList.Count; ++i)
+            {
+                CHMAssetBundle.Instance.bundleDic.Add(googleDownloadValueList[i], googleDownloadValueList[i]);
+            }
+
+            StartCoroutine(LoadAssetBundleAll());
+            //StartCoroutine(DownloadAllAssetBundle());
+        }
+
+        bundleDownloadSuccess += () =>
+        {
+            Debug.Log("bundleDownloadSuccess");
+            foreach (var key in googleDownloadKeyList)
+            {
+                StartCoroutine(LoadAssetBundle(key));
+            }
+        };
     }
 
     IEnumerator LoadAssetBundleAll()
@@ -64,6 +99,8 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         {
             bundlePath = Path.Combine(Application.persistentDataPath, bundleKey);
         }
+
+        Debug.Log($"BundlePath : {bundlePath}");
 
         // 에셋 번들 로드
         AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
@@ -86,7 +123,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
             assetBundle.Unload(false);
 
-            totalDownloadCount = arrBundleName.Length;
+            totalLoadCount = arrBundleName.Length;
 
             foreach (string name in arrBundleName)
             {
@@ -95,22 +132,22 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         }
     }
 
-    IEnumerator LoadAssetBundle(string _bundleName)
+    IEnumerator LoadAssetBundle(string bundleName)
     {
         string bundlePath = "";
-
+        AssetBundleCreateRequest bundleRequest;
         if (useStreamingAssets)
         {
-            bundlePath = Path.Combine(Application.streamingAssetsPath, _bundleName);
+            bundlePath = Path.Combine(Application.streamingAssetsPath, bundleName);
+            bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
         }
         else
         {
-            bundlePath = Path.Combine(Application.persistentDataPath, _bundleName);
+            bundlePath = Path.Combine(Application.persistentDataPath, bundleKey);
+            bundleRequest = AssetBundle.LoadFromFileAsync(Path.Combine(bundlePath + "/", $"{bundleName}.unity3d"));
         }
 
-        downloadText.text = $"{_bundleName} Downloading...";
-        // 에셋 번들 로드
-        AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
+        downloadText.text = $"{bundleName} Loading...";
 
         // 다운로드 표시
         float downloadProgress = 0;
@@ -119,15 +156,15 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         {
             downloadProgress = bundleRequest.progress;
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / googleDownloadKeyList.Count * downloadingCount;
-            if (loadingText) loadingText.text = downloadProgress / googleDownloadKeyList.Count * downloadingCount * 100f + "%";
+            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
+            if (loadingText) loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
 
             yield return null;
         }
 
         if (bundleRequest.assetBundle == null)
         {
-            Debug.LogError($"{_bundleName} is Null");
+            Debug.LogError($"{bundleName} is Null");
         }
         else
         {
@@ -135,31 +172,29 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
             AssetBundle assetBundle = bundleRequest.assetBundle;
 
-            CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
+            CHMAssetBundle.Instance.LoadAssetBundle(bundleName, assetBundle);
 
-            ++downloadingCount;
+            ++loadingCount;
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / googleDownloadKeyList.Count * downloadingCount;
-            if (loadingText) loadingText.text = downloadProgress / googleDownloadKeyList.Count * downloadingCount * 100f + "%";
+            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
+            if (loadingText) loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
 
-            downloadText.text = $"{_bundleName} Download Success";
-            Debug.Log($"{_bundleName} Download Success");
+            downloadText.text = $"{bundleName} Load Success";
+            Debug.Log($"{bundleName} Load Success");
 
-            if (downloadingCount == totalDownloadCount)
+            if (loadingCount == totalLoadCount)
             {
                 if (loadingBar) loadingBar.fillAmount = 1;
                 if (loadingText) loadingText.text = "100%";
-                Debug.Log($"Bundle download Success");
-                bundleDownloadSuccess.Invoke();
+                Debug.Log($"Bundle load Success");
+                bundleLoadSuccess.Invoke();
             }
         }
     }
 
     IEnumerator DownloadAllAssetBundle()
     {
-        UnityWebRequest request;
-
-        request = UnityWebRequestAssetBundle.GetAssetBundle(Path.Combine(url, bundleKey));
+        UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(url);
 
         yield return request.SendWebRequest();
 
@@ -169,6 +204,12 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         }
         else
         {
+            // 에셋 번들 저장 경로 설정
+            string savePath = Path.Combine(Application.persistentDataPath, bundleKey);
+
+            // 파일 저장
+            File.WriteAllBytes(savePath, request.downloadHandler.data);
+
             AssetBundle assetBundle = DownloadHandlerAssetBundle.GetContent(request);
             AssetBundleManifest manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
             string[] arrBundleName = manifest.GetAllAssetBundles();
@@ -181,28 +222,33 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         }
     }
 
-    IEnumerator DownloadAssetBundle(string _bundleName)
+    IEnumerator DownloadAssetBundle(string bundleName)
     {
-        UnityWebRequest request;
+        string path = "";
         if (googleDriveDownload)
         {
-            request = UnityWebRequestAssetBundle.GetAssetBundle(Path.Combine(googleDriveDownloadURL, _bundleName));
+            path = $"{googleDriveDownloadURL}{bundleName}";
         }
         else
         {
-            request = UnityWebRequestAssetBundle.GetAssetBundle(Path.Combine(url, bundleKey));
+            path = Path.Combine(url, bundleName);
         }
+
+        Debug.Log(path);
+
+        UnityWebRequest request = UnityWebRequest.Get(path);
 
         request.SendWebRequest();
 
         // 다운로드 표시
+        float downloadProgress = 0;
         while (!request.isDone)
         {
-            float downloadProgress = request.downloadProgress;
+            downloadProgress = request.downloadProgress;
             int downloadPercentage = Mathf.RoundToInt(downloadProgress * 100);
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress;
-            if (loadingText) loadingText.text = downloadPercentage.ToString() + "%";
+            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalDownoadCount * loadingCount;
+            if (loadingText) loadingText.text = downloadProgress / totalDownoadCount * loadingCount * 100f + "%";
 
             yield return null;
         }
@@ -213,18 +259,29 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         }
         else
         {
-            AssetBundle assetBundle = DownloadHandlerAssetBundle.GetContent(request);
-
             // 에셋 번들 저장 경로 설정
-            string savePath = Path.Combine(Application.persistentDataPath, _bundleName);
-            Debug.Log($"Saving asset bundle to: {savePath}");
+            string savePath = Path.Combine(Application.persistentDataPath, bundleKey);
 
             // 파일 저장
-            File.WriteAllBytes(savePath, request.downloadHandler.data);
+            File.WriteAllBytes(savePath + "/" + $"{bundleName}.unity3d", request.downloadHandler.data);
 
-            Debug.Log($"Success : {_bundleName}");
+            Debug.Log($"Saving asset bundle to: {savePath}");
 
-            CHMAssetBundle.Instance.LoadAssetBundle(_bundleName, assetBundle);
+            ++downloadingCount;
+
+            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalDownoadCount * loadingCount;
+            if (loadingText) loadingText.text = downloadProgress / totalDownoadCount * loadingCount * 100f + "%";
+
+            downloadText.text = $"{bundleName} Download Success";
+            Debug.Log($"{bundleName} Download Success");
+
+            if (downloadingCount == totalDownoadCount)
+            {
+                if (loadingBar) loadingBar.fillAmount = 1;
+                if (loadingText) loadingText.text = "100%";
+                Debug.Log($"Bundle download Success");
+                bundleDownloadSuccess.Invoke();
+            }
         }
     }
 }

@@ -318,6 +318,38 @@ public class Block : MonoBehaviour
                     return EBlockState.Cat10;
             }
         }
+        else if (data.selectCatShop == 2)
+        {
+            switch (_blockState)
+            {
+                case EBlockState.Cat1:
+                    return EBlockState.CatHat1;
+                case EBlockState.Cat2:
+                    return EBlockState.CatHat2;
+                case EBlockState.Cat3:
+                    return EBlockState.CatHat3;
+                case EBlockState.Cat4:
+                    return EBlockState.CatHat4;
+                case EBlockState.Cat5:
+                    return EBlockState.CatHat5;
+            }
+        }
+        else if (data.selectCatShop == 3)
+        {
+            switch (_blockState)
+            {
+                case EBlockState.Cat1:
+                    return EBlockState.CatSkin1;
+                case EBlockState.Cat2:
+                    return EBlockState.CatSkin2;
+                case EBlockState.Cat3:
+                    return EBlockState.CatSkin3;
+                case EBlockState.Cat4:
+                    return EBlockState.CatSkin4;
+                case EBlockState.Cat5:
+                    return EBlockState.CatSkin5;
+            }
+        }
 
         return _blockState;
     }

@@ -1,4 +1,6 @@
 [
   {"shopID":"1", "gold":0},
-  {"shopID":"2", "gold":10000}
+  {"shopID":"2", "gold":10000},
+  {"shopID":"3", "gold":30000},
+  {"shopID":"4", "gold":50000}
 ]

@@ -24,6 +24,6 @@ public class UIMission : UIBase
 
     private void Start()
     {
-        scrollView.SetItemList(CHMMain.Json.GetMissionInfoList());
+        scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList());
     }
 }

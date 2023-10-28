@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using static Defines;
 using static Infomation;
 
-public class CHMJson
+public class CHMJson : CHSingleton<CHMJson>
 {
     [Serializable]
     public class JsonData
@@ -32,9 +33,9 @@ public class CHMJson
     List<MissionInfo> missionInfoList = new List<MissionInfo>();
     List<ShopInfo> shopInfoList = new List<ShopInfo>();
 
-    public void Init()
+    public async Task Init()
     {
-        LoadJsonData();
+        await LoadJsonData();
     }
 
     public void Clear()
@@ -49,18 +50,28 @@ public class CHMJson
         shopInfoList.Clear();
     }
 
-    void LoadJsonData()
+    async Task LoadJsonData()
     {
+        Debug.Log("LoadJsonData");
         loadCompleteFileCount = 0;
         actionList.Clear();
 
-        actionList.Add(LoadStringInfo());
+        await LoadStringInfo();
+        Debug.Log("LoadStringInfo@");
+        await LoadSelectInfo();
+        await LoadMonsterInfo();
+        await LoadStageInfo();
+        await LoadStageBlockInfo();
+        await LoadMissionInfo();
+        await LoadShopInfo();
+
+        /*actionList.Add(LoadStringInfo());
         actionList.Add(LoadSelectInfo());
         actionList.Add(LoadMonsterInfo());
         actionList.Add(LoadStageInfo());
         actionList.Add(LoadStageBlockInfo());
         actionList.Add(LoadMissionInfo());
-        actionList.Add(LoadShopInfo());
+        actionList.Add(LoadShopInfo());*/
 
         loadingFileCount = actionList.Count;
     }
@@ -69,34 +80,40 @@ public class CHMJson
     {
         if (loadingFileCount == 0 || loadCompleteFileCount == 0)
         {
-            return 0;
+            return -1;
         }
 
         return ((float)loadCompleteFileCount) / loadingFileCount * 100f;
     }
 
-    Action<TextAsset> LoadStringInfo()
+    async Task<TextAsset> LoadStringInfo()
     {
-        Action<TextAsset> callback;
+        Debug.Log("LoadStringInfo1");
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
 
+        Action<TextAsset> callback;
         stringInfoDic.Clear();
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
         {
+            Debug.Log("LoadStringInfo2");
             var jsonData = JsonUtility.FromJson<JsonData>("{\"stringInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.stringInfoArr)
             {
                 stringInfoDic.Add(data.stringID, data.value);
             }
 
+            taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
-
-        return callback;
+        Debug.Log("LoadStringInfo3");
+        return await taskCompletionSource.Task;
     }
 
-    Action<TextAsset> LoadSelectInfo()
+    async Task<TextAsset> LoadSelectInfo()
     {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
         Action<TextAsset> callback;
 
         selectInfoList.Clear();
@@ -109,14 +126,17 @@ public class CHMJson
                 selectInfoList.Add(data);
             }
 
+            taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
 
-        return callback;
+        return await taskCompletionSource.Task;
     }
 
-    Action<TextAsset> LoadMonsterInfo()
+    async Task<TextAsset> LoadMonsterInfo()
     {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
         Action<TextAsset> callback;
 
         monsterInfoList.Clear();
@@ -129,14 +149,17 @@ public class CHMJson
                 monsterInfoList.Add(data);
             }
 
+            taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
 
-        return callback;
+        return await taskCompletionSource.Task;
     }
 
-    Action<TextAsset> LoadStageInfo()
+    async Task<TextAsset> LoadStageInfo()
     {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
         Action<TextAsset> callback;
 
         stageInfoList.Clear();
@@ -149,14 +172,17 @@ public class CHMJson
                 stageInfoList.Add(data);
             }
 
+            taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
 
-        return callback;
+        return await taskCompletionSource.Task;
     }
 
-    Action<TextAsset> LoadStageBlockInfo()
+    async Task<TextAsset> LoadStageBlockInfo()
     {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
         Action<TextAsset> callback;
 
         stageBlockInfoList.Clear();
@@ -169,14 +195,17 @@ public class CHMJson
                 stageBlockInfoList.Add(data);
             }
 
+            taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
 
-        return callback;
+        return await taskCompletionSource.Task;
     }
 
-    Action<TextAsset> LoadMissionInfo()
+    async Task<TextAsset> LoadMissionInfo()
     {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
         Action<TextAsset> callback;
 
         missionInfoList.Clear();
@@ -189,14 +218,17 @@ public class CHMJson
                 missionInfoList.Add(data);
             }
 
+            taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
 
-        return callback;
+        return await taskCompletionSource.Task;
     }
 
-    Action<TextAsset> LoadShopInfo()
+    async Task<TextAsset> LoadShopInfo()
     {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
         Action<TextAsset> callback;
 
         shopInfoList.Clear();
@@ -209,10 +241,11 @@ public class CHMJson
                 shopInfoList.Add(data);
             }
 
+            taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
 
-        return callback;
+        return await taskCompletionSource.Task;
     }
 
     public string GetStringInfo(int _stringID)
