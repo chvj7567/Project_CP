@@ -25,8 +25,7 @@ public class UIChoiceArg : CHUIArg
 public class UIChoice : UIBase
 {
     UIChoiceArg arg;
-    
-    [SerializeField] Button backBtn;
+
     [SerializeField] Button select1Btn;
     [SerializeField] CHTMPro select1Text;
     [SerializeField] CHTMPro select1PriceText;
@@ -99,12 +98,6 @@ public class UIChoice : UIBase
                 }
             }
         } while (true);
-
-        backBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            Time.timeScale = 1;
-            CHMMain.UI.CloseUI(gameObject);
-        });
 
         select1Btn.OnClickAsObservable().Subscribe(_ =>
         {

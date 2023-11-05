@@ -46,18 +46,12 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             Directory.CreateDirectory(savePath);
         }
 
-        
-
         if (googleDriveDownload)
         {
             for (int i = 0; i < googleDownloadKeyList.Count; ++i)
             {
                 CHMAssetBundle.Instance.bundleDic.Add(googleDownloadValueList[i], googleDownloadKeyList[i]);
             }
-            /*foreach (var key in googleDownloadKeyList)
-            {
-                StartCoroutine(DownloadAssetBundle(key));
-            }*/
 
             for (int i = 0; i < googleDownloadKeyList.Count; ++i)
             {
@@ -72,7 +66,6 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             }
 
             StartCoroutine(LoadAssetBundleAll());
-            //StartCoroutine(DownloadAllAssetBundle());
         }
 
         bundleDownloadSuccess += () =>
