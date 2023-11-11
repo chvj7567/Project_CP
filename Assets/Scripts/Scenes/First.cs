@@ -37,6 +37,8 @@ public class First : MonoBehaviour
 
     async void Start()
     {
+        CHMIAP.Instance.Init();
+
         tokenSource = new CancellationTokenSource();
 
         loadingBar.gameObject.SetActive(false);
