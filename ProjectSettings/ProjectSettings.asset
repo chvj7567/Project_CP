@@ -152,7 +152,7 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 3
+  AndroidBundleVersionCode: 7
   AndroidMinSdkVersion: 21
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -748,7 +748,7 @@ PlayerSettings:
   cloudProjectId: e978d79b-8554-4992-a815-83d1228677b6
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: CatPang
+  projectName: Test
   organizationId: chvj7567
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

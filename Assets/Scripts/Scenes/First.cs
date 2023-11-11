@@ -190,6 +190,8 @@ public class First : MonoBehaviour
             }
             else
             {
+                await CHMJson.Instance.Init();
+                Debug.Log($"@JsonPercent{CHMJson.Instance.GetJsonLoadingPercent()}");
                 await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
                 SetLoginState(false);
                 dataDownload.Value = true;

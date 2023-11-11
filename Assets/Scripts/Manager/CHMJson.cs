@@ -57,7 +57,6 @@ public class CHMJson : CHSingleton<CHMJson>
         actionList.Clear();
 
         await LoadStringInfo();
-        Debug.Log("LoadStringInfo@");
         await LoadSelectInfo();
         await LoadMonsterInfo();
         await LoadStageInfo();
@@ -71,9 +70,11 @@ public class CHMJson : CHSingleton<CHMJson>
         actionList.Add(LoadStageInfo());
         actionList.Add(LoadStageBlockInfo());
         actionList.Add(LoadMissionInfo());
-        actionList.Add(LoadShopInfo());*/
+        actionList.Add(LoadShopInfo());
 
-        loadingFileCount = actionList.Count;
+        loadingFileCount = actionList.Count;*/
+
+        loadingFileCount = loadCompleteFileCount;
     }
 
     public float GetJsonLoadingPercent()
@@ -88,7 +89,6 @@ public class CHMJson : CHSingleton<CHMJson>
 
     async Task<TextAsset> LoadStringInfo()
     {
-        Debug.Log("LoadStringInfo1");
         TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
 
         Action<TextAsset> callback;
@@ -96,7 +96,6 @@ public class CHMJson : CHSingleton<CHMJson>
 
         CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
         {
-            Debug.Log("LoadStringInfo2");
             var jsonData = JsonUtility.FromJson<JsonData>("{\"stringInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.stringInfoArr)
             {
@@ -106,7 +105,7 @@ public class CHMJson : CHSingleton<CHMJson>
             taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
-        Debug.Log("LoadStringInfo3");
+        
         return await taskCompletionSource.Task;
     }
 

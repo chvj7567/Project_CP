@@ -1,9 +1,10 @@
+using Unity.Services.Analytics;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
 public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 {
-    public const string ProductConsumable = "Consumable";
+    public const string ProductConsumable = "test";
     public const string ProductNonConsumable = "NonConsumable";
     public const string ProductSubscription = "Subscription";
 
@@ -11,7 +12,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
     public const string _IOS_ConsumableID = "com.studio.app.consumable";
 
     public const string _AOS_NonConsumableID = "com.studio.app.nonConsumable";
-    public const string _IOS_NonConsumableID = "com.studio.app.NonConsumable";
+    public const string _IOS_NonConsumableID = "com.studio.app.nonConsumable";
 
     public const string _AOS_SubscriptionID = "com.studio.app.subscription";
     public const string _IOS_SubscriptionID = "com.studio.app.subscription";
@@ -31,11 +32,11 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         builder.AddProduct(
             ProductConsumable, ProductType.Consumable, new IDs()
             {
-                {_AOS_ConsumableID, GooglePlay.Name},
-                {_IOS_ConsumableID, AppleAppStore.Name}
+                {ProductConsumable, GooglePlay.Name},
+                //{_IOS_ConsumableID, AppleAppStore.Name}
             });
 
-        builder.AddProduct(
+        /*builder.AddProduct(
             ProductNonConsumable, ProductType.NonConsumable, new IDs()
             {
                 {_AOS_NonConsumableID, GooglePlay.Name},
@@ -47,7 +48,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
             {
                 {_AOS_SubscriptionID, GooglePlay.Name},
                 {_IOS_SubscriptionID, AppleAppStore.Name}
-            });
+            });*/
 
         UnityPurchasing.Initialize(this, builder);
     }
@@ -96,7 +97,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         return PurchaseProcessingResult.Complete;
     }
 
-    public void OnPurchaseFailed(Product product, PurchaseFailureReason error)
+    public void OnPurchaseFailed(UnityEngine.Purchasing.Product product, PurchaseFailureReason error)
     {
         Debug.LogWarning($"구매 실패 - ID : {product.definition.id}\n{error}");
     }
@@ -106,8 +107,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         if (false == IsInitialized)
             return;
 
-        var product = iStoreController.products.WithID(productID);
-
+        var product = GetProduct(productID);
         if (product != null && product.availableToPurchase)
         {
             Debug.Log($"구매 시도 - ID : {product.definition.id}");
@@ -138,10 +138,33 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         if (false == IsInitialized)
             return false;
 
-        var product = iStoreController.products.WithID(productID);
+        var product = GetProduct(productID);
         if (product == null)
             return false;
 
         return product.hasReceipt;
+    }
+
+    public UnityEngine.Purchasing.Product GetProduct(string productID)
+    {
+        return iStoreController.products.WithID(productID);
+    }
+
+    public decimal GetPrice(string productID)
+    {
+        var product = GetProduct(productID);
+        if (product == null)
+            return 0;
+
+        return product.metadata.localizedPrice;
+    }
+
+    public string GetPriceUnit(string productID)
+    {
+        var product = GetProduct(productID);
+        if (product == null)
+            return "";
+
+        return product.metadata.isoCurrencyCode;
     }
 }
