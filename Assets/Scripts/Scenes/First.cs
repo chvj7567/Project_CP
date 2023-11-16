@@ -29,7 +29,7 @@ public class First : MonoBehaviour
     [SerializeField] Button boomBtn;
     [SerializeField, ReadOnly] int backgroundIndex = 0;
     [SerializeField] CHLoadingBarFromAssetBundle bundleLoadingScript;
-
+    [SerializeField] CHAdvertise adScript;
     [SerializeField] ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
     [SerializeField] ReactiveProperty<bool> bundleDownload = new ReactiveProperty<bool>();
 
@@ -232,7 +232,8 @@ public class First : MonoBehaviour
             bundleDownload.Value = true;
             dataDownload.Value = true;
 
-            pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.stage));
+            var stage = PlayerPrefs.GetInt(CHMMain.String.stage);
+            pageMove.Init(stage);
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
             missionBtn.gameObject.SetActive(true);
@@ -242,6 +243,8 @@ public class First : MonoBehaviour
             var login = GetLoginState();
             connectGPGSBtn.gameObject.SetActive(login == false);
             logoutBtn.gameObject.SetActive(login);
+
+            adScript.GetAdvertise(stage);
         }
 
         ChangeBackgroundLoop();

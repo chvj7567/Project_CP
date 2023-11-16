@@ -72,7 +72,7 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
                 });
     }
 
-    void ShowInterstitialAd()
+    public void ShowInterstitialAd()
     {
         if (interstitialAd != null && interstitialAd.CanShowAd() == true)
         {
