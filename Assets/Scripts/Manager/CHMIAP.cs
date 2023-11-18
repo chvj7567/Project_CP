@@ -1,26 +1,59 @@
+using System;
+using System.Collections.Generic;
 using Unity.Services.Analytics;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
 public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 {
-    public const string ProductConsumable = "test";
-    public const string ProductNonConsumable = "NonConsumable";
-    public const string ProductSubscription = "Subscription";
+    public class IAPInfo
+    {
+        public string productName;
+        public string productID;
+        public ProductType productType;
+    }
 
-    public const string _AOS_ConsumableID = "com.studio.app.consumable";
-    public const string _IOS_ConsumableID = "com.studio.app.consumable";
-
-    public const string _AOS_NonConsumableID = "com.studio.app.nonConsumable";
-    public const string _IOS_NonConsumableID = "com.studio.app.nonConsumable";
-
-    public const string _AOS_SubscriptionID = "com.studio.app.subscription";
-    public const string _IOS_SubscriptionID = "com.studio.app.subscription";
+    List<IAPInfo> productList = new List<IAPInfo>();
 
     IStoreController iStoreController; // 구매 과정을 제어하는 함수 제공
     IExtensionProvider iExtensionProvider; // 여러 플랫폼을 위한 확장 처리 제공
 
     public bool IsInitialized => iStoreController != null && iExtensionProvider != null;
+
+    public Action<Defines.EPurchase> purchaseState;
+
+    public bool IsConsumableType(string productName)
+    {
+        var product = productList.Find(_ => _.productName == productName);
+        if (product == null)
+            return false;
+
+        return product.productType == ProductType.Consumable;
+    }
+
+    public void PurchaseProduct(string productName)
+    {
+        var product = productList.Find(_ => _.productName == productName);
+        if (product == null)
+            return;
+
+        switch (productName)
+        {
+            case "RemoveAD":
+                {
+                    Debug.Log($"구매 성공 처리 : {productName}");
+
+                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+                    if (loginData == null)
+                        return;
+
+                    loginData.buyRemoveAD = true;
+
+                    CHMData.Instance.SaveData(CHMMain.String.catPang);
+                }
+                break;
+        }
+    }
 
     public void Init()
     {
@@ -29,26 +62,22 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
-        builder.AddProduct(
-            ProductConsumable, ProductType.Consumable, new IDs()
-            {
-                {ProductConsumable, GooglePlay.Name},
-                //{_IOS_ConsumableID, AppleAppStore.Name}
-            });
+        productList.Add(new IAPInfo
+        {
+            productName = "RemoveAD",
+            productID = "com.catpang.product1",
+            productType = ProductType.NonConsumable
+        });
+        
+        for(int i = 0; i < productList.Count; ++i)
+        {
+            var product = productList[i];
 
-        /*builder.AddProduct(
-            ProductNonConsumable, ProductType.NonConsumable, new IDs()
+            builder.AddProduct(product.productName, product.productType, new IDs
             {
-                {_AOS_NonConsumableID, GooglePlay.Name},
-                {_IOS_NonConsumableID, AppleAppStore.Name}
+                {product.productID, GooglePlay.Name }
             });
-
-        builder.AddProduct(
-            ProductSubscription, ProductType.Subscription, new IDs()
-            {
-                {_AOS_SubscriptionID, GooglePlay.Name},
-                {_IOS_SubscriptionID, AppleAppStore.Name}
-            });*/
+        }
 
         UnityPurchasing.Initialize(this, builder);
     }
@@ -75,24 +104,10 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         var id = args.purchasedProduct.definition.id;
         Debug.Log($"구매 성공 - ID : {id}");
 
-        switch (id)
-        {
-            case ProductConsumable:
-                {
-                    Debug.Log($"구매 성공 처리 : {id}");
-                }
-                break;
-            case ProductNonConsumable:
-                {
-                    Debug.Log($"구매 성공 처리 : {id}");
-                }
-                break;
-            case ProductSubscription:
-                {
-                    Debug.Log($"구매 성공 처리 : {id}");
-                }
-                break;
-        }
+        PurchaseProduct(id);
+
+        if (purchaseState != null)
+            purchaseState.Invoke(Defines.EPurchase.Success);
 
         return PurchaseProcessingResult.Complete;
     }
@@ -100,14 +115,18 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
     public void OnPurchaseFailed(UnityEngine.Purchasing.Product product, PurchaseFailureReason error)
     {
         Debug.LogWarning($"구매 실패 - ID : {product.definition.id}\n{error}");
+
+        if (purchaseState != null)
+            purchaseState.Invoke(Defines.EPurchase.Failure);
     }
 
-    public void Purchase(string productID)
+    public void Purchase(string productName)
     {
         if (false == IsInitialized)
             return;
 
-        var product = GetProduct(productID);
+        var product = GetProduct(productName);
+
         if (product != null && product.availableToPurchase)
         {
             Debug.Log($"구매 시도 - ID : {product.definition.id}");
@@ -115,7 +134,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         }
         else
         {
-            Debug.Log($"구매 시도 불가 - ID : {productID}");
+            Debug.Log($"구매 시도 불가 - ID : {productName}");
         }
     }
 

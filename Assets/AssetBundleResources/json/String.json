@@ -82,5 +82,9 @@
   {
     "stringID": "21",
     "value": "Current Skin"
+  },
+  {
+    "stringID": "22",
+    "value": "{0} {1}"
   }
 ]

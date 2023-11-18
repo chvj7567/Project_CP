@@ -1,6 +1,7 @@
 [
-  {"shopID":"1", "gold":0},
-  {"shopID":"2", "gold":10000},
-  {"shopID":"3", "gold":30000},
-  {"shopID":"4", "gold":50000}
+  {"shopID":"0", "productName":"RemoveAD", "gold":-1},
+  {"shopID":"1", "productName":"", "gold":0},
+  {"shopID":"2", "productName":"", "gold":10000},
+  {"shopID":"3", "productName":"", "gold":30000},
+  {"shopID":"4", "productName":"", "gold":50000}
 ]

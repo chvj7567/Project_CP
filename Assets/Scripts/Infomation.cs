@@ -63,6 +63,7 @@ public class Infomation
     public class ShopInfo
     {
         public int shopID = -1;
+        public string productName = "";
         public int gold = -1;
     }
 }

@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UniRx;
-using UnityEngine;
 
 namespace Data
 {
@@ -12,6 +10,7 @@ namespace Data
         public string key = "";
         public bool connectGPGS = false;
         public int selectCatShop = 0;
+        public bool buyRemoveAD = false;
     }
 
     [Serializable]

@@ -46,11 +46,14 @@ public class UIShop : UIBase
         }
     }
 
-    public void SetCurrentSkin(int _skinIndex)
+    public void SetCurrentSkin(int skinIndex)
     {
+        if (skinIndex < 0 || skinIndex >= skinImgList.Count)
+            return;
+
         for (int i = 0; i < skinImgList.Count; ++i)
         {
-            if (i == _skinIndex)
+            if (i == skinIndex)
             {
                 skinImgList[i].SetActive(true);
             }
@@ -63,7 +66,7 @@ public class UIShop : UIBase
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
         if (loginData != null)
         {
-            loginData.selectCatShop = _skinIndex;
+            loginData.selectCatShop = skinIndex;
         }
     }
 }

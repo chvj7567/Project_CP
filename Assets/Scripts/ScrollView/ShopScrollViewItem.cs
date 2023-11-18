@@ -19,6 +19,35 @@ public class ShopScrollViewItem : MonoBehaviour
 
     void Start()
     {
+        CHMIAP.Instance.purchaseState += (state) =>
+        {
+            switch (state)
+            {
+                case Defines.EPurchase.Success:
+                    {
+                        shopData.buy = true;
+                        skinSelectBtn.gameObject.SetActive(true);
+                        shopScript.SetCurrentSkin(info.shopID - 1);
+
+                        CHMData.Instance.SaveData(CHMMain.String.catPang);
+
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        {
+                            alarmText = "Purchase Success"
+                        });
+                    }
+                    break;
+                case Defines.EPurchase.Failure:
+                    {
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        {
+                            alarmText = "Purchase Failure"
+                        });
+                    }
+                    break;
+            }
+        };
+
         buyBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (shopData == null || collectionData == null)
@@ -44,16 +73,22 @@ public class ShopScrollViewItem : MonoBehaviour
                 return;
             }
 
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+            if (info.gold >= 0)
             {
-                alarmText = "Buy Success"
-            });
+                shopData.buy = true;
+                collectionData.value -= info.gold;
+                skinSelectBtn.gameObject.SetActive(true);
+                shopScript.SetCurrentSkin(info.shopID - 1);
 
-            shopData.buy = true;
-            collectionData.value -= info.gold;
-            skinSelectBtn.gameObject.SetActive(true);
-
-            shopScript.SetCurrentSkin(info.shopID - 1);
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    alarmText = "Buy Success"
+                });
+            }
+            else
+            {
+                CHMIAP.Instance.Purchase(info.productName);
+            }
 
             CHMMain.UI.CloseUI(Defines.EUI.UIShop);
         });
@@ -64,25 +99,46 @@ public class ShopScrollViewItem : MonoBehaviour
         });
     }
 
-    public void Init(int _index, Infomation.ShopInfo _info)
+    public void Init(int index, Infomation.ShopInfo info)
     {
-        info = _info;
+        this.info = info;
 
         collectionData = CHMData.Instance.GetCollectionData(CHMMain.String.gold);
-        shopData = CHMData.Instance.GetShopData(_info.shopID.ToString());
+        shopData = CHMData.Instance.GetShopData(info.shopID.ToString());
 
-        buyGoldText.SetText(info.gold);
+        if (info.gold >= 0)
+        {
+            buyGoldText.SetText(info.gold, "Gold");
+
+            skinSelectBtn.gameObject.SetActive(shopData.buy);
+        }
+        else
+        {
+            var price = CHMIAP.Instance.GetPrice(info.productName);
+            var priceUnit = CHMIAP.Instance.GetPriceUnit(info.productName);
+
+            buyGoldText.SetText(price, priceUnit);
+
+            var checkBuy = CHMIAP.Instance.HadPurchased(info.productName);
+
+            if (false == CHMIAP.Instance.IsConsumableType(info.productName))
+            {
+                skinSelectBtn.gameObject.SetActive(checkBuy);
+            }
+            else
+            {
+                skinSelectBtn.gameObject.SetActive(false);
+            }
+        }
 
         SetImage(info.shopID);
-
-        skinSelectBtn.gameObject.SetActive(shopData.buy);
     }
 
-    void SetImage(int _selectCatShop)
+    void SetImage(int selectCatShop)
     {
         for (int i = 0; i < shopImgList.Count; ++i)
         {
-            if (i == _selectCatShop - 1)
+            if (i == selectCatShop)
             {
                 shopImgList[i].SetActive(true);
             }

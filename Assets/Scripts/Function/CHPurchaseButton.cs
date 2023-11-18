@@ -30,8 +30,7 @@ public class CHPurchaseButton : MonoBehaviour
 
     public void HandleClick()
     {
-        if (targetProductID == CHMIAP.ProductNonConsumable ||
-            targetProductID == CHMIAP.ProductSubscription)
+        if (false == CHMIAP.Instance.IsConsumableType(targetProductID))
         {
             if (CHMIAP.Instance.HadPurchased(targetProductID))
             {

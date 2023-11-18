@@ -236,4 +236,10 @@ public class Defines
 
         Max
     }
+
+    public enum EPurchase
+    {
+        Success,
+        Failure,
+    }
 }

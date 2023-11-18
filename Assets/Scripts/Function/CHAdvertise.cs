@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class CHAdvertise : MonoBehaviour
 {
-    List<int> adStageList = new List<int> { 3, 7, 10 };
+    List<int> adStageList = new List<int> { 2, 5, 8, 0 };
     public bool GetAdvertise(int stage)
     {
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        if (loginData == null || loginData.buyRemoveAD)
+            return false;
+
         var checkAdStage = stage % 10;
 
         if (false == adStageList.Contains(checkAdStage))
