@@ -19,35 +19,6 @@ public class ShopScrollViewItem : MonoBehaviour
 
     void Start()
     {
-        CHMIAP.Instance.purchaseState += (state) =>
-        {
-            switch (state)
-            {
-                case Defines.EPurchase.Success:
-                    {
-                        shopData.buy = true;
-                        skinSelectBtn.gameObject.SetActive(true);
-                        shopScript.SetCurrentSkin(info.shopID - 1);
-
-                        CHMData.Instance.SaveData(CHMMain.String.catPang);
-
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                        {
-                            alarmText = "Purchase Success"
-                        });
-                    }
-                    break;
-                case Defines.EPurchase.Failure:
-                    {
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                        {
-                            alarmText = "Purchase Failure"
-                        });
-                    }
-                    break;
-            }
-        };
-
         buyBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (shopData == null || collectionData == null)

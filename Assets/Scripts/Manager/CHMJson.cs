@@ -57,8 +57,6 @@ public class CHMJson : CHSingleton<CHMJson>
         actionList.Clear();
 
         await LoadStringInfo();
-        await LoadSelectInfo();
-        await LoadMonsterInfo();
         await LoadStageInfo();
         await LoadStageBlockInfo();
         await LoadMissionInfo();
@@ -106,52 +104,6 @@ public class CHMJson : CHSingleton<CHMJson>
             ++loadCompleteFileCount;
         });
         
-        return await taskCompletionSource.Task;
-    }
-
-    async Task<TextAsset> LoadSelectInfo()
-    {
-        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
-
-        Action<TextAsset> callback;
-
-        selectInfoList.Clear();
-
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Select, callback = (TextAsset textAsset) =>
-        {
-            var jsonData = JsonUtility.FromJson<JsonData>("{\"selectInfoArr\":" + textAsset.text + "}");
-            foreach (var data in jsonData.selectInfoArr)
-            {
-                selectInfoList.Add(data);
-            }
-
-            taskCompletionSource.SetResult(textAsset);
-            ++loadCompleteFileCount;
-        });
-
-        return await taskCompletionSource.Task;
-    }
-
-    async Task<TextAsset> LoadMonsterInfo()
-    {
-        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
-
-        Action<TextAsset> callback;
-
-        monsterInfoList.Clear();
-
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Monster, callback = (TextAsset textAsset) =>
-        {
-            var jsonData = JsonUtility.FromJson<JsonData>("{\"monsterInfoArr\":" + textAsset.text + "}");
-            foreach (var data in jsonData.monsterInfoArr)
-            {
-                monsterInfoList.Add(data);
-            }
-
-            taskCompletionSource.SetResult(textAsset);
-            ++loadCompleteFileCount;
-        });
-
         return await taskCompletionSource.Task;
     }
 
