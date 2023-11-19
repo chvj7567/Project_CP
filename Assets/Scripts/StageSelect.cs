@@ -21,7 +21,7 @@ public class StageSelect : MonoBehaviour
             int index = i;
             btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
-                PlayerPrefs.SetInt(CHMMain.String.stage, int.Parse(btnList[index].text.text));
+                PlayerPrefs.SetInt(CHMMain.String.Stage, int.Parse(btnList[index].text.text));
                 SceneManager.LoadScene(1);
             });
 
@@ -99,7 +99,7 @@ public class StageSelect : MonoBehaviour
         if (beforeStageData.clearState == Defines.EClearState.Clear)
         {
             // 전 스테이지를 마지막으로 클리어하고 현 스테이지를 클리어하지 않은 상태라면
-            if (PlayerPrefs.GetInt(CHMMain.String.stage) == stage - 1 && currentStageData.clearState != Defines.EClearState.Clear)
+            if (PlayerPrefs.GetInt(CHMMain.String.Stage) == stage - 1 && currentStageData.clearState != Defines.EClearState.Clear)
             {
                 btnList[_index].lockObj.SetActive(true);
                 await Task.Delay(1000);

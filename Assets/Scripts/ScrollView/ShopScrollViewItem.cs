@@ -74,7 +74,7 @@ public class ShopScrollViewItem : MonoBehaviour
     {
         this.info = info;
 
-        collectionData = CHMData.Instance.GetCollectionData(CHMMain.String.gold);
+        collectionData = CHMData.Instance.GetCollectionData(CHMMain.String.Gold);
         shopData = CHMData.Instance.GetShopData(info.shopID.ToString());
 
         if (info.gold >= 0)

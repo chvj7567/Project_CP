@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class CHMString
 {
-    public string catPang = "CatPang";
-    public string login = "Login";
-    public string stage = "Stage";
-    public string background = "Background";
-    public string gold = "Gold";
+    public string CatPang = "CatPang";
+    public string Login = "Login";
+    public string Stage = "Stage";
+    public string Background = "Background";
+    public string Gold = "Gold";
+    public string Product_RemoveAD = "RemoveAD";
 
     public string GetString(int _stringID)
     {

@@ -54,7 +54,7 @@ public class Spawner : MonoBehaviour
 
         if (spawnObj != null)
         {
-            var stage = PlayerPrefs.GetInt(CHMMain.String.stage);
+            var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
             Debug.Log($"Start {stage}Stage");
 
             while (true)

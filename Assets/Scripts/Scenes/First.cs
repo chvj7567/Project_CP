@@ -60,7 +60,7 @@ public class First : MonoBehaviour
         {
             if (bundleDownload.Value == false || dataDownload.Value == false) return;
 
-            pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.stage));
+            pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.Stage));
             startBtn.gameObject.SetActive(false);
             missionBtn.gameObject.SetActive(true);
             shopBtn.gameObject.SetActive(true);
@@ -73,7 +73,7 @@ public class First : MonoBehaviour
             // 기본 스킨
             CHMData.Instance.GetShopData("1").buy = true;
 
-            PlayerPrefs.SetInt(CHMMain.String.background, backgroundIndex);
+            PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 
             CHMMain.Sound.Play(Defines.ESound.Bgm);
         });
@@ -107,7 +107,7 @@ public class First : MonoBehaviour
 
         connectGPGSBtn.OnPointerClickAsObservable().Subscribe(_ =>
         {
-            if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.catPang, out var data))
+            if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data))
             {
                 if (data.connectGPGS == true)
                     return;
@@ -118,7 +118,7 @@ public class First : MonoBehaviour
                 {
                     if (success)
                     {
-                        PlayerPrefs.SetInt(CHMMain.String.login, 1);
+                        PlayerPrefs.SetInt(CHMMain.String.Login, 1);
                         Debug.Log("GPGS Login Success");
                         connectText.text = "Login Success";
                         dataDownload.Value = true;
@@ -132,7 +132,7 @@ public class First : MonoBehaviour
                     }
                 });
 #else
-                PlayerPrefs.SetInt(CHMMain.String.login, 0);
+                PlayerPrefs.SetInt(CHMMain.String.Login, 0);
                 connectText.text = "Login Failed";
                 data.connectGPGS = false;
 #endif
@@ -172,7 +172,7 @@ public class First : MonoBehaviour
                     {
                         Debug.Log("GPGS Login Success");
                         connectText.text = "Login Success";
-                        await CHMData.Instance.LoadCloudData(CHMMain.String.catPang);
+                        await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
                         dataDownload.Value = true;
 
                         SetLoginState(true);
@@ -182,7 +182,7 @@ public class First : MonoBehaviour
                         Debug.Log("GPGS Login Failed");
                         connectText.text = "Login Failed";
 
-                        await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
+                        await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
                         SetLoginState(false);
                         dataDownload.Value = true;
                     }
@@ -192,14 +192,14 @@ public class First : MonoBehaviour
             {
                 await CHMJson.Instance.Init();
                 Debug.Log($"@JsonPercent{CHMJson.Instance.GetJsonLoadingPercent()}");
-                await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
+                await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
                 SetLoginState(false);
                 dataDownload.Value = true;
             }
 #else
                 await CHMJson.Instance.Init();
                 Debug.Log($"@JsonPercent{CHMJson.Instance.GetJsonLoadingPercent()}");
-                await CHMData.Instance.LoadLocalData(CHMMain.String.catPang);
+                await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
                 SetLoginState(false);
                 dataDownload.Value = true;
 #endif
@@ -227,12 +227,12 @@ public class First : MonoBehaviour
         }
         else
         {
-            backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.background);
+            backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.Background);
 
             bundleDownload.Value = true;
             dataDownload.Value = true;
 
-            var stage = PlayerPrefs.GetInt(CHMMain.String.stage);
+            var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
             pageMove.Init(stage);
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
@@ -254,17 +254,17 @@ public class First : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        CHMData.Instance.SaveData(CHMMain.String.catPang);
+        CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
     bool SetLoginState(bool _active)
     {
-        if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.catPang, out var data) == false)
+        if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data) == false)
             return false;
 
         data.connectGPGS = _active;
 
-        PlayerPrefs.SetInt(CHMMain.String.login, 0);
+        PlayerPrefs.SetInt(CHMMain.String.Login, 0);
 
         connectGPGSBtn.gameObject.SetActive(_active == false);
         logoutBtn.gameObject.SetActive(_active);
@@ -276,7 +276,7 @@ public class First : MonoBehaviour
 
     bool GetLoginState()
     {
-        if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.catPang, out var data) == false)
+        if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data) == false)
             return false;
 
         return data.connectGPGS;
@@ -284,7 +284,7 @@ public class First : MonoBehaviour
 
     bool GetPhoneLoginState()
     {
-        return PlayerPrefs.GetInt(CHMMain.String.login) == 1;
+        return PlayerPrefs.GetInt(CHMMain.String.Login) == 1;
     }
 
     void CopyFile(string _fileDirectoryPath, string _destDirectoryPath, string _fileName)

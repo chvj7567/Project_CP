@@ -7,7 +7,9 @@ public class CHAdvertise : MonoBehaviour
     List<int> adStageList = new List<int> { 2, 5, 8, 0 };
     public bool GetAdvertise(int stage)
     {
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        SetRemoveAD();
+
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData == null || loginData.buyRemoveAD)
             return false;
 
@@ -21,5 +23,19 @@ public class CHAdvertise : MonoBehaviour
         CHMAdmob.Instance.ShowInterstitialAd();
 
         return true;
+    }
+
+    void SetRemoveAD()
+    {
+        var checkPurchase = CHMIAP.Instance.HadPurchased(CHMMain.String.Product_RemoveAD);
+        if (checkPurchase)
+        {
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            if (loginData != null && false == loginData.buyRemoveAD)
+            {
+                loginData.buyRemoveAD = true;
+                CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            }
+        }
     }
 }

@@ -296,7 +296,7 @@ public class Block : MonoBehaviour
 
     public EBlockState CheckSelectCatShop(EBlockState _blockState)
     {
-        var data = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        var data = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (data == null)
             return _blockState;
 

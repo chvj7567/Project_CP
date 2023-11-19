@@ -94,7 +94,7 @@ public class Game : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
-        backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.background);
+        backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.Background);
 
         ChangeBackgroundLoop();
 
@@ -120,7 +120,7 @@ public class Game : MonoBehaviour
                 CHInstantiateButton.ResetBlockDict();
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
                 CHMMain.Pool.Clear();
-                PlayerPrefs.SetInt(CHMMain.String.background, backgroundIndex);
+                PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 
                 SceneManager.LoadScene(0);
             });
@@ -223,11 +223,11 @@ public class Game : MonoBehaviour
 
         boomAllChance.Value = 0;
 
-        var stage = PlayerPrefs.GetInt(CHMMain.String.stage);
+        var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
         if (stage <= 0)
         {
             stage = 1;
-            PlayerPrefs.SetInt(CHMMain.String.stage, stage);
+            PlayerPrefs.SetInt(CHMMain.String.Stage, stage);
         }
 
         stageInfo = CHMJson.Instance.GetStageInfo(stage);
@@ -449,7 +449,7 @@ public class Game : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        CHMData.Instance.SaveData(CHMMain.String.catPang);
+        CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
     void CheckDissapearBlock()
@@ -520,7 +520,7 @@ public class Game : MonoBehaviour
 
     void AddBoomAllCount()
     {
-        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt(CHMMain.String.stage).ToString(), out var data))
+        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString(), out var data))
         {
             data.boomAllCount += 1;
         }
@@ -528,12 +528,12 @@ public class Game : MonoBehaviour
 
     void SaveClearData()
     {
-        CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.stage).ToString()).clearState = Defines.EClearState.Clear;
+        CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState = Defines.EClearState.Clear;
     }
 
     Defines.EClearState GetClearState()
     {
-        return CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.stage).ToString()).clearState;
+        return CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState;
     }
 
     void SaveBoomCollectionData(Block _block)

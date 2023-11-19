@@ -60,8 +60,8 @@ public class UIGameEnd : UIBase
                 return;
             }
 
-            var before = CHMData.Instance.GetCollectionData(CHMMain.String.gold).value;
-            var after = CHMData.Instance.GetCollectionData(CHMMain.String.gold).value += arg.gold;
+            var before = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
+            var after = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += arg.gold;
 
             received = true;
 
@@ -77,7 +77,7 @@ public class UIGameEnd : UIBase
             CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
             CHMMain.Pool.Clear();
 
-            CHMData.Instance.SaveData(CHMMain.String.catPang);
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
             SceneManager.LoadScene(0);
         });
 
@@ -98,8 +98,8 @@ public class UIGameEnd : UIBase
                 return;
             }
 
-            var before = CHMData.Instance.GetCollectionData(CHMMain.String.gold).value;
-            var after = CHMData.Instance.GetCollectionData(CHMMain.String.gold).value += arg.gold * 3;
+            var before = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
+            var after = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += arg.gold * 3;
 
             //adBtn.gameObject.SetActive(false);
             received = true;

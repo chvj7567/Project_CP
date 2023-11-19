@@ -27,7 +27,7 @@ public class UIShop : UIBase
 
     private void Start()
     {
-        var gold = CHMData.Instance.GetCollectionData(CHMMain.String.gold).value;
+        var gold = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
         goldText.SetText(gold);
 
         var shopScript = CHMJson.Instance.GetShopInfoList();
@@ -39,7 +39,7 @@ public class UIShop : UIBase
 
         scrollView.SetItemList(shopScript);
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData != null)
         {
             SetCurrentSkin(loginData.selectCatShop);
@@ -63,7 +63,7 @@ public class UIShop : UIBase
             }
         }
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData != null)
         {
             loginData.selectCatShop = skinIndex;

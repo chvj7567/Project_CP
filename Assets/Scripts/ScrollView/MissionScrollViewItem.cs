@@ -25,7 +25,7 @@ public class MissionScrollViewItem : MonoBehaviour
             var gold = 10 * missionData.repeatCount;
             CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{gold} Gold Reward" });
 
-            CHMData.Instance.GetCollectionData(CHMMain.String.gold).value += gold;
+            CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += gold;
             SetBtnInteractable(clearValue);
             missionValueText.SetText(collectionData.value - missionData.startValue, clearValue);
         });

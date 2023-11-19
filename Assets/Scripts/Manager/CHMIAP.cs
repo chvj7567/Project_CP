@@ -43,13 +43,13 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
                 {
                     Debug.Log($"备概 己傍 贸府 : {productName}");
 
-                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.catPang);
+                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
                     if (loginData == null)
                         return;
 
                     loginData.buyRemoveAD = true;
 
-                    CHMData.Instance.SaveData(CHMMain.String.catPang);
+                    CHMData.Instance.SaveData(CHMMain.String.CatPang);
                 }
                 break;
         }
@@ -64,7 +64,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
         productList.Add(new IAPInfo
         {
-            productName = "RemoveAD",
+            productName = CHMMain.String.Product_RemoveAD,
             productID = "com.catpang.product1",
             productType = ProductType.NonConsumable
         });
