@@ -6,6 +6,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static CHMIAP;
 
 public class UIShopArg : CHUIArg
 {
@@ -44,6 +45,70 @@ public class UIShop : UIBase
         {
             SetCurrentSkin(loginData.selectCatShop);
         }
+
+        CHMIAP.Instance.purchaseState += PurchaseState;
+    }
+
+    private void OnDestroy()
+    {
+        CHMIAP.Instance.purchaseState -= PurchaseState;
+    }
+
+    void PurchaseState(PurchaseState purchaseState)
+    {
+        switch (purchaseState.state)
+        {
+            case Defines.EPurchase.Success:
+                {
+                    PurchaseSuccess(purchaseState.productName);
+
+                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    {
+                        alarmText = "Purchase Success"
+                    });
+                }
+                break;
+            case Defines.EPurchase.Failure:
+                {
+                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    {
+                        alarmText = "Purchase Failure"
+                    });
+                }
+                break;
+        }
+    }
+
+    void PurchaseSuccess(string productName)
+    {
+        Debug.Log($"PurchaseSuccess {productName}");
+
+        if (productName == CHMMain.String.Product_Name_RemoveAD)
+        {
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            if (loginData == null)
+                return;
+
+            loginData.buyRemoveAD = true;
+        }
+        else if (productName == CHMMain.String.Product_Name_AddTime)
+        {
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            if (loginData == null)
+                return;
+
+            loginData.addTimeItemCount += 1;
+        }
+        else if (productName == CHMMain.String.Product_Name_AddMove)
+        {
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            if (loginData == null)
+                return;
+
+            loginData.addMoveItemCount += 1;
+        }
+
+        CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
     public void SetCurrentSkin(int skinIndex)

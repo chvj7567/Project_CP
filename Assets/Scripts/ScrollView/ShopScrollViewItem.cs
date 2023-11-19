@@ -19,12 +19,29 @@ public class ShopScrollViewItem : MonoBehaviour
 
     void Start()
     {
+        CHMIAP.Instance.purchaseState += (purchaseState) =>
+        {
+            if (purchaseState.productName != info.productName)
+                return;
+
+            switch (purchaseState.state)
+            {
+                case Defines.EPurchase.Success:
+                    {
+                        shopData.buy = true;
+                    }
+                    break;
+                case Defines.EPurchase.Failure:
+                    break;
+            }
+        };
+
         buyBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (shopData == null || collectionData == null)
                 return;
 
-            if (shopData.buy == true)
+            if (false == CHMIAP.Instance.IsConsumableType(info.productName) && shopData.buy)
             {
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
@@ -48,8 +65,6 @@ public class ShopScrollViewItem : MonoBehaviour
             {
                 shopData.buy = true;
                 collectionData.value -= info.gold;
-                skinSelectBtn.gameObject.SetActive(true);
-                shopScript.SetCurrentSkin(info.shopID - 1);
 
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
@@ -90,11 +105,9 @@ public class ShopScrollViewItem : MonoBehaviour
 
             buyGoldText.SetText(price, priceUnit);
 
-            var checkBuy = CHMIAP.Instance.HadPurchased(info.productName);
-
             if (false == CHMIAP.Instance.IsConsumableType(info.productName))
             {
-                skinSelectBtn.gameObject.SetActive(checkBuy);
+                skinSelectBtn.gameObject.SetActive(shopData.buy);
             }
             else
             {

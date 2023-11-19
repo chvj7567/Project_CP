@@ -27,7 +27,7 @@ public class CHAdvertise : MonoBehaviour
 
     void SetRemoveAD()
     {
-        var checkPurchase = CHMIAP.Instance.HadPurchased(CHMMain.String.Product_RemoveAD);
+        var checkPurchase = CHMIAP.Instance.HadPurchased(CHMMain.String.Product_Name_RemoveAD);
         if (checkPurchase)
         {
             var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);

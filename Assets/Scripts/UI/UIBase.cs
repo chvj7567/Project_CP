@@ -1,4 +1,6 @@
+using System;
 using UniRx;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,8 @@ public class UIBase : MonoBehaviour
 
     [SerializeField] Button backgroundBtn;
     [SerializeField] Button backBtn;
+
+    protected Action backAction;
 
     private void Awake()
     {
@@ -22,6 +26,8 @@ public class UIBase : MonoBehaviour
         {
             backgroundBtn.OnClickAsObservable().Subscribe(_ =>
             {
+                if (backAction != null)
+                    backAction.Invoke();
                 CHMMain.UI.CloseUI(gameObject);
             });
         }
@@ -30,6 +36,8 @@ public class UIBase : MonoBehaviour
         {
             backBtn.OnClickAsObservable().Subscribe(_ =>
             {
+                if (backAction != null)
+                    backAction.Invoke();
                 CHMMain.UI.CloseUI(gameObject);
             });
         }

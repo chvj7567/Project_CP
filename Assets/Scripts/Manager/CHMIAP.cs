@@ -13,6 +13,12 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         public ProductType productType;
     }
 
+    public class PurchaseState
+    {
+        public string productName;
+        public Defines.EPurchase state;
+    }
+
     List<IAPInfo> productList = new List<IAPInfo>();
 
     IStoreController iStoreController; // 구매 과정을 제어하는 함수 제공
@@ -20,7 +26,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
     public bool IsInitialized => iStoreController != null && iExtensionProvider != null;
 
-    public Action<Defines.EPurchase> purchaseState;
+    public Action<PurchaseState> purchaseState;
 
     public bool IsConsumableType(string productName)
     {
@@ -29,30 +35,6 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
             return false;
 
         return product.productType == ProductType.Consumable;
-    }
-
-    public void PurchaseProduct(string productName)
-    {
-        var product = productList.Find(_ => _.productName == productName);
-        if (product == null)
-            return;
-
-        switch (productName)
-        {
-            case "RemoveAD":
-                {
-                    Debug.Log($"구매 성공 처리 : {productName}");
-
-                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-                    if (loginData == null)
-                        return;
-
-                    loginData.buyRemoveAD = true;
-
-                    CHMData.Instance.SaveData(CHMMain.String.CatPang);
-                }
-                break;
-        }
     }
 
     public void Init()
@@ -64,12 +46,26 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
         productList.Add(new IAPInfo
         {
-            productName = CHMMain.String.Product_RemoveAD,
-            productID = "com.catpang.product1",
+            productName = CHMMain.String.Product_Name_RemoveAD,
+            productID = CHMMain.String.Product_ID_RemoveAD,
             productType = ProductType.NonConsumable
         });
-        
-        for(int i = 0; i < productList.Count; ++i)
+
+        productList.Add(new IAPInfo
+        {
+            productName = CHMMain.String.Product_Name_AddTime,
+            productID = CHMMain.String.Product_ID_AddTime,
+            productType = ProductType.Consumable
+        });
+
+        productList.Add(new IAPInfo
+        {
+            productName = CHMMain.String.Product_Name_AddMove,
+            productID = CHMMain.String.Product_ID_AddMove,
+            productType = ProductType.Consumable
+        });
+
+        for (int i = 0; i < productList.Count; ++i)
         {
             var product = productList[i];
 
@@ -104,20 +100,27 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         var id = args.purchasedProduct.definition.id;
         Debug.Log($"구매 성공 - ID : {id}");
 
-        PurchaseProduct(id);
-
         if (purchaseState != null)
-            purchaseState.Invoke(Defines.EPurchase.Success);
+            purchaseState.Invoke(new PurchaseState
+            {
+                productName = id,
+                state = Defines.EPurchase.Success
+            });
 
         return PurchaseProcessingResult.Complete;
     }
 
     public void OnPurchaseFailed(UnityEngine.Purchasing.Product product, PurchaseFailureReason error)
     {
-        Debug.LogWarning($"구매 실패 - ID : {product.definition.id}\n{error}");
+        var id = product.definition.id;
+        Debug.LogWarning($"구매 실패 - ID : {id}\n{error}");
 
         if (purchaseState != null)
-            purchaseState.Invoke(Defines.EPurchase.Failure);
+            purchaseState.Invoke(new PurchaseState
+            {
+                productName = id,
+                state = Defines.EPurchase.Failure
+            });
     }
 
     public void Purchase(string productName)
