@@ -71,13 +71,14 @@ public class ShopScrollViewItem : MonoBehaviour
                 {
                     alarmText = "Buy Success"
                 });
+
+                CHMData.Instance.SaveData(CHMMain.String.CatPang);
+                CHMMain.UI.CloseUI(Defines.EUI.UIShop);
             }
             else
             {
                 CHMIAP.Instance.Purchase(info.productName);
             }
-
-            CHMMain.UI.CloseUI(Defines.EUI.UIShop);
         });
 
         skinSelectBtn.OnClickAsObservable().Subscribe(_ =>
