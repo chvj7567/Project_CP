@@ -19,6 +19,7 @@ public class Game : MonoBehaviour
 
     [SerializeField] bool addDefense;
     [SerializeField] Image timerImg;
+    [SerializeField] CHTMPro timerText;
     [SerializeField, ReadOnly] float curTimer;
     [SerializeField] Image goldImg;
     [SerializeField] Image viewImg1;
@@ -88,6 +89,7 @@ public class Game : MonoBehaviour
     [SerializeField] int delayMillisecond;
     bool oneTimeAlarm = false;
 
+    int helpTime = 0;
 
     CancellationTokenSource tokenSource;
 
@@ -415,6 +417,12 @@ public class Game : MonoBehaviour
         {
             curTimer += Time.deltaTime;
             timerImg.fillAmount = curTimer / stageInfo.time;
+
+            if (curTimer >= helpTime)
+            {
+                timerText.SetText(stageInfo.time - helpTime);
+                ++helpTime;
+            }
         }
 
         if (isLock == true)
