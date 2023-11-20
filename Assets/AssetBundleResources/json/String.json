@@ -86,5 +86,25 @@
   {
     "stringID": "22",
     "value": "{0} {1}"
+  },
+  {
+    "stringID": "23",
+    "value": "Remove\nAD"
+  },
+  {
+    "stringID": "24",
+    "value": "Block\nSkin"
+  },
+  {
+    "stringID": "25",
+    "value": "Time\nItem"
+  },
+  {
+    "stringID": "26",
+    "value": "Move\nItem"
+  },
+  {
+    "stringID": "27",
+    "value": "Stage {0}"
   }
 ]

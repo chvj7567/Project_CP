@@ -22,7 +22,11 @@ public class StageSelect : MonoBehaviour
             btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
                 PlayerPrefs.SetInt(CHMMain.String.Stage, int.Parse(btnList[index].text.text));
-                SceneManager.LoadScene(1);
+
+                CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                {
+                    stage = PlayerPrefs.GetInt(CHMMain.String.Stage)
+                });
             });
 
             SetClearObj(index);

@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Defines;
+using static Infomation;
 
 public class Game : MonoBehaviour
 {
@@ -223,6 +224,10 @@ public class Game : MonoBehaviour
 
         boomAllChance.Value = 0;
 
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        if (loginData == null)
+            return;
+
         var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
         if (stage <= 0)
         {
@@ -241,12 +246,27 @@ public class Game : MonoBehaviour
 
         if (stageInfo.moveCount > 0)
         {
-            moveCount.Value = stageInfo.moveCount;
+            moveCount.Value = stageInfo.moveCount + loginData.useMoveItemCount;
         }
         else
         {
             moveCount.Value = 9999;
+
+            if (loginData.useMoveItemCount > 0)
+                loginData.addMoveItemCount += loginData.useMoveItemCount;
         }
+
+        if (stageInfo.time > 0)
+        {
+            stageInfo.time += loginData.useTimeItemCount * 10;
+        }
+        else
+        {
+            if (loginData.useTimeItemCount > 0)
+                loginData.addTimeItemCount += loginData.useTimeItemCount;
+        }
+
+        CHMData.Instance.SaveData(CHMMain.String.CatPang);
 
         boardSize = stageInfo.boardSize;
 
@@ -260,7 +280,6 @@ public class Game : MonoBehaviour
         await CreateMap(stage);
 
         this.UpdateAsObservable()
-            .ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
                 if (gameResult.Value == EGameResult.GameClearWait)
@@ -354,38 +373,20 @@ public class Game : MonoBehaviour
             return;
         }
 
+        CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
+        {
+            clearState = GetClearState(),
+            result = gameResult.Value,
+            gold = totScore.Value
+        });
+
         if (_clear == false)
         {
             gameResult.Value = EGameResult.GameOver;
-
-            int gold = 0;
-            if (GetClearState() == Defines.EClearState.Clear)
-                gold = 0;
-            else
-                gold = totScore.Value / 3;
-
-            CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
-            {
-                result = gameResult.Value,
-                gold = gold
-            });
         }
         else
         {
             gameResult.Value = EGameResult.GameClear;
-
-            int gold = 0;
-            if (GetClearState() == Defines.EClearState.Clear)
-                gold = 0;
-            else
-                gold = totScore.Value;
-
-            CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
-            {
-                result = gameResult.Value,
-                gold = gold
-            });
-
             SaveClearData();
         }
     }

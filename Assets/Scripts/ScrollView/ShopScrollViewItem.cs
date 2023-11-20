@@ -9,7 +9,8 @@ public class ShopScrollViewItem : MonoBehaviour
     [SerializeField] UIShop shopScript;
     [SerializeField] List<GameObject> shopImgList = new List<GameObject>();
     [SerializeField] Button buyBtn;
-    [SerializeField] CHTMPro buyGoldText;
+    [SerializeField] CHTMPro productName;
+    [SerializeField] CHTMPro costText;
     [SerializeField] Button skinSelectBtn;
 
     Infomation.ShopInfo info;
@@ -94,7 +95,7 @@ public class ShopScrollViewItem : MonoBehaviour
 
         if (info.gold >= 0)
         {
-            buyGoldText.SetText(info.gold, "Gold");
+            costText.SetText(info.gold, "Gold");
 
             skinSelectBtn.gameObject.SetActive(shopData.buy);
         }
@@ -103,7 +104,7 @@ public class ShopScrollViewItem : MonoBehaviour
             var price = CHMIAP.Instance.GetPrice(info.productName);
             var priceUnit = CHMIAP.Instance.GetPriceUnit(info.productName);
 
-            buyGoldText.SetText(price, priceUnit);
+            costText.SetText(price, priceUnit);
 
             if (false == CHMIAP.Instance.IsConsumableType(info.productName))
             {
@@ -116,6 +117,8 @@ public class ShopScrollViewItem : MonoBehaviour
         }
 
         SetImage(info.shopID);
+
+        productName.SetStringID(info.titleStringID);
     }
 
     void SetImage(int selectCatShop)

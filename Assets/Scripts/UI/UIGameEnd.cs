@@ -1,9 +1,4 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -12,6 +7,7 @@ using UnityEngine.UI;
 
 public class UIGameEndArg : CHUIArg
 {
+    public Defines.EClearState clearState = Defines.EClearState.None;
     public Defines.EGameResult result = Defines.EGameResult.None;
     public int gold;
 }
@@ -38,14 +34,24 @@ public class UIGameEnd : UIBase
         if (arg.result == Defines.EGameResult.GameOver)
         {
             resultText.DOText("Game Over", 1f);
+            goldText.SetText(0);
+            goldx3Text.SetText(0);
         }
         else if (arg.result == Defines.EGameResult.GameClear)
         {
             resultText.DOText("Game Clear", 1f);
-        }
 
-        goldText.SetText(arg.gold);
-        goldx3Text.SetText(arg.gold * 3);
+            if (arg.clearState == Defines.EClearState.Clear)
+            {
+                goldText.SetText(0);
+                goldx3Text.SetText(0);
+            }
+            else
+            {
+                goldText.SetText(arg.gold);
+                goldx3Text.SetText(arg.gold * 3);
+            }
+        }
 
         menuBtn.OnClickAsObservable().Subscribe(_ =>
         {

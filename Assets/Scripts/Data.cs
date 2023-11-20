@@ -13,6 +13,8 @@ namespace Data
         public bool buyRemoveAD = false;
         public int addTimeItemCount = 0;
         public int addMoveItemCount = 0;
+        public int useTimeItemCount = 0;
+        public int useMoveItemCount = 0;
     }
 
     [Serializable]

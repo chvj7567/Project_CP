@@ -65,5 +65,6 @@ public class Infomation
         public int shopID = -1;
         public string productName = "";
         public int gold = -1;
+        public int titleStringID = -1;
     }
 }

@@ -58,6 +58,7 @@ public class Defines
         UIAlarm,
         UIMission,
         UIShop,
+        UIGameStart,
         UIGameEnd,
         UIBoom,
 
@@ -223,16 +224,6 @@ public class Defines
         NotDoing,
         Doing,
         Clear,
-
-        Max
-    }
-
-    public enum EShop
-    {
-        None = -1,
-
-        Cat, // Cat1 ~ Cat5
-        CatFoot, // Cat6 ~ Cat10
 
         Max
     }
