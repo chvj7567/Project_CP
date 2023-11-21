@@ -375,13 +375,6 @@ public class Game : MonoBehaviour
             return;
         }
 
-        CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
-        {
-            clearState = GetClearState(),
-            result = gameResult.Value,
-            gold = totScore.Value
-        });
-
         if (_clear == false)
         {
             gameResult.Value = EGameResult.GameOver;
@@ -389,8 +382,16 @@ public class Game : MonoBehaviour
         else
         {
             gameResult.Value = EGameResult.GameClear;
-            SaveClearData();
         }
+
+        CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
+        {
+            clearState = GetClearState(),
+            result = gameResult.Value,
+            gold = totScore.Value
+        });
+
+        SaveClearData();
     }
 
     private async void Update()
