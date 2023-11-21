@@ -189,41 +189,6 @@ public class Game : MonoBehaviour
             }
         });
 
-        /*boomAllChance.Subscribe(_ =>
-        {
-            boomAllChanceText.SetText(_);
-        });
-
-        plusBoomAllChance.OnClickAsObservable().Subscribe(_ =>
-        {
-            CHMAdmob.Instance.ShowRewardedAd();
-            isLock = true;
-            isAD.Value = true;
-        });
-
-        CHMAdmob.Instance.AcquireReward += () =>
-        {
-            boomAllChance.Value += 1;
-            isAD.Value = false;
-            isLock = false;
-        };
-
-        CHMAdmob.Instance.CloseAD += () =>
-        {
-            isAD.Value = false;
-            isLock = false;
-        };
-
-        isAD.Subscribe(_ =>
-        {
-            adLoadingObj.SetActive(_);
-
-            if (_ == true)
-            {
-                adLoadingObj.transform.SetAsLastSibling();
-            }
-        });*/
-
         boomAllChance.Value = 0;
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
@@ -421,8 +386,16 @@ public class Game : MonoBehaviour
 
             if (curTimer >= helpTime)
             {
-                timerText.SetText(stageInfo.time - helpTime);
-                ++helpTime;
+                if (stageInfo.time >= helpTime)
+                {
+                    timerText.gameObject.SetActive(true);
+                    timerText.SetText(stageInfo.time - helpTime);
+                    ++helpTime;
+                }
+                else
+                {
+                    timerText.gameObject.SetActive(false);
+                }
             }
         }
 

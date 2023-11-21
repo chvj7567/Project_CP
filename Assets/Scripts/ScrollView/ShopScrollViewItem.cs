@@ -94,10 +94,11 @@ public class ShopScrollViewItem : MonoBehaviour
         collectionData = CHMData.Instance.GetCollectionData(CHMMain.String.Gold);
         shopData = CHMData.Instance.GetShopData(info.shopID.ToString());
 
+        Debug.Log($"ShopID {shopData.key} {shopData.buy}");
+
         if (info.gold >= 0)
         {
             costText.SetText(info.gold, "Gold");
-
             skinSelectBtn.gameObject.SetActive(shopData.buy);
         }
         else

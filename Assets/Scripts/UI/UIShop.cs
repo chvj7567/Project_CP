@@ -28,6 +28,21 @@ public class UIShop : UIBase
 
     private void Start()
     {
+        var checkPurchase = CHMIAP.Instance.HadPurchased(CHMMain.String.Product_Name_RemoveAD);
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        if (loginData == null)
+            return;
+
+        if (checkPurchase)
+        {
+            loginData.buyRemoveAD = true;
+
+            var shopData = CHMData.Instance.GetShopData("0");
+            shopData.buy = true;
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        }
+
         var gold = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
         goldText.SetText(gold);
 
@@ -45,7 +60,7 @@ public class UIShop : UIBase
             scrollView.SetItemList(shopList);
         });
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData != null)
         {
             SetCurrentSkin(loginData.selectCatShop);
