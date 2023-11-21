@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 using static CHMIAP;
+using UnityEngine.UI;
 
 public class UIShopArg : CHUIArg
 {
@@ -12,8 +14,12 @@ public class UIShop : UIBase
     UIShopArg arg;
 
     [SerializeField] CHTMPro goldText;
+    [SerializeField] Button tap1Btn;
+    [SerializeField] Button tap2Btn;
     [SerializeField] ShopScrollView scrollView;
     [SerializeField] List<GameObject> skinImgList = new List<GameObject>();
+
+    [SerializeField, ReadOnly] public ReactiveProperty<int> curTapIndex = new ReactiveProperty<int>();
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -25,14 +31,19 @@ public class UIShop : UIBase
         var gold = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
         goldText.SetText(gold);
 
-        var shopScript = CHMJson.Instance.GetShopInfoList();
-        if (shopScript == null)
+        var shopScriptList = CHMJson.Instance.GetShopInfoList();
+        if (shopScriptList == null)
         {
             Debug.Log("Shop Script is Null");
             return;
         }
 
-        scrollView.SetItemList(shopScript);
+        curTapIndex.Subscribe(tapIndex =>
+        {
+            var shopList = shopScriptList.FindAll(_ => _.tapIndex == tapIndex);
+
+            scrollView.SetItemList(shopList);
+        });
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData != null)
@@ -40,7 +51,19 @@ public class UIShop : UIBase
             SetCurrentSkin(loginData.selectCatShop);
         }
 
+        tap1Btn.OnClickAsObservable().Subscribe(_ =>
+        {
+            curTapIndex.Value = 1;
+        });
+
+        tap2Btn.OnClickAsObservable().Subscribe(_ =>
+        {
+            curTapIndex.Value = 2;
+        });
+
         CHMIAP.Instance.purchaseState += PurchaseState;
+
+        curTapIndex.Value = 1;
     }
 
     private void OnDestroy()
@@ -87,11 +110,11 @@ public class UIShop : UIBase
         }
         else if (productName == CHMMain.String.Product_Name_AddTime)
         {
-            loginData.addTimeItemCount += 1;
+            loginData.addTimeItemCount += 10;
         }
         else if (productName == CHMMain.String.Product_Name_AddMove)
         {
-            loginData.addMoveItemCount += 1;
+            loginData.addMoveItemCount += 10;
         }
 
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
