@@ -1,9 +1,9 @@
 [
-  {"shopID":"0", "productName":"RemoveAD", "gold":-1, "titleStringID":23},
-  {"shopID":"1", "productName":"", "gold":0, "titleStringID":24},
-  {"shopID":"2", "productName":"", "gold":10000, "titleStringID":24},
-  {"shopID":"3", "productName":"", "gold":30000, "titleStringID":24},
-  {"shopID":"4", "productName":"", "gold":50000, "titleStringID":24},
-  {"shopID":"5", "productName":"AddTime", "gold":-1, "titleStringID":25},
-  {"shopID":"6", "productName":"AddMove", "gold":-1, "titleStringID":26}
+  {"shopID":"0", "productName":"RemoveAD", "gold":-1, "titleStringID":23, "tapIndex":2},
+  {"shopID":"1", "productName":"", "gold":0, "titleStringID":24, "tapIndex":1},
+  {"shopID":"2", "productName":"", "gold":10000, "titleStringID":24, "tapIndex":1},
+  {"shopID":"3", "productName":"", "gold":30000, "titleStringID":24, "tapIndex":1},
+  {"shopID":"4", "productName":"", "gold":50000, "titleStringID":24, "tapIndex":1},
+  {"shopID":"5", "productName":"AddTime", "gold":-1, "titleStringID":25, "tapIndex":2},
+  {"shopID":"6", "productName":"AddMove", "gold":-1, "titleStringID":26, "tapIndex":2}
 ]

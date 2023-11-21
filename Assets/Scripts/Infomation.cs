@@ -57,6 +57,8 @@ public class Infomation
         public Defines.EBlockState collectionType = Defines.EBlockState.None;
         public int clearValue = -1;
         public int addValue = -1;
+        public Defines.EReward reward = Defines.EReward.None;
+        public int rewardCount = -1;
     }
 
     [Serializable]

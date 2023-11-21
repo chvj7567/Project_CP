@@ -1,14 +1,14 @@
 [
-  {"missionID":"1", "collectionType":10,"clearValue":10, "addValue":10},
-  {"missionID":"2", "collectionType":11,"clearValue":10, "addValue":10},
-  {"missionID":"3", "collectionType":12,"clearValue":10, "addValue":10},
-  {"missionID":"4", "collectionType":13,"clearValue":10, "addValue":10},
-  {"missionID":"5", "collectionType":14,"clearValue":10, "addValue":10},
-  {"missionID":"6", "collectionType":15,"clearValue":10, "addValue":10},
-  {"missionID":"7", "collectionType":18,"clearValue":10, "addValue":10},
-  {"missionID":"8", "collectionType":19,"clearValue":10, "addValue":10},
-  {"missionID":"8", "collectionType":20,"clearValue":10, "addValue":10},
-  {"missionID":"8", "collectionType":21,"clearValue":10, "addValue":10},
-  {"missionID":"8", "collectionType":22,"clearValue":10, "addValue":10},
-  {"missionID":"8", "collectionType":23,"clearValue":10, "addValue":10}
+  {"missionID":"1", "collectionType":10,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
+  {"missionID":"2", "collectionType":11,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
+  {"missionID":"3", "collectionType":12,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
+  {"missionID":"4", "collectionType":13,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
+  {"missionID":"5", "collectionType":14,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
+  {"missionID":"6", "collectionType":15,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
+  {"missionID":"7", "collectionType":18,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
+  {"missionID":"8", "collectionType":19,"clearValue":10, "addValue":10, "reward":1, "rewardCount":1},
+  {"missionID":"9", "collectionType":20,"clearValue":10, "addValue":10, "reward":2, "rewardCount":1},
+  {"missionID":"10", "collectionType":21,"clearValue":10, "addValue":10, "reward":1, "rewardCount":1},
+  {"missionID":"11", "collectionType":22,"clearValue":10, "addValue":10, "reward":2, "rewardCount":1},
+  {"missionID":"12", "collectionType":23,"clearValue":10, "addValue":10, "reward":1, "rewardCount":1}
 ]

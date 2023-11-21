@@ -269,7 +269,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Login GetLoginData(string _key)
     {
-        if (CHMData.Instance.loginDataDic.TryGetValue(_key, out var data) == false)
+        if (loginDataDic.TryGetValue(_key, out var data) == false)
         {
             return null;
         }
@@ -279,7 +279,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Stage GetStageData(string _key)
     {
-        if (CHMData.Instance.stageDataDic.TryGetValue(_key, out var data) == false)
+        if (stageDataDic.TryGetValue(_key, out var data) == false)
         {
             data = CreateStageData(_key);
         }
@@ -289,7 +289,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Collection GetCollectionData(string _key)
     {
-        if (CHMData.Instance.collectionDataDic.TryGetValue(_key, out var data) == false)
+        if (collectionDataDic.TryGetValue(_key, out var data) == false)
         {
             data = CreateCollectionData(_key);
         }
@@ -299,7 +299,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Mission GetMissionData(string _key)
     {
-        if (CHMData.Instance.missionDataDic.TryGetValue(_key, out var data) == false)
+        if (missionDataDic.TryGetValue(_key, out var data) == false)
         {
             data = CreateMissionData(_key);
         }
@@ -309,7 +309,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
 
     public Data.Shop GetShopData(string _key)
     {
-        if (CHMData.Instance.shopDataDic.TryGetValue(_key, out var data) == false)
+        if (shopDataDic.TryGetValue(_key, out var data) == false)
         {
             data = CreateShopData(_key);
         }

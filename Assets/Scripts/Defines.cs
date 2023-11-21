@@ -233,4 +233,15 @@ public class Defines
         Success,
         Failure,
     }
+
+    public enum EReward
+    {
+        None = -1,
+
+        Gold,
+        AddTime,
+        AddMove,
+
+        Max
+    }
 }

@@ -8,6 +8,7 @@ public class MissionScrollViewItem : MonoBehaviour
 {
     [SerializeField] CHTMPro missionValueText;
     [SerializeField] List<GameObject> missionImgList = new List<GameObject>();
+    [SerializeField] List<GameObject> rewardImgList = new List<GameObject>();
     [SerializeField] Button rewardBtn;
     [SerializeField] GameObject clearObj;
 
@@ -19,13 +20,39 @@ public class MissionScrollViewItem : MonoBehaviour
     {
         rewardBtn.OnClickAsObservable().Subscribe(_ =>
         {
+            var reward = info.rewardCount;
+            switch (info.reward)
+            {
+                case Defines.EReward.Gold:
+                    {
+                        CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += reward;
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{reward} Gold Reward" });
+                    }
+                    break;
+                case Defines.EReward.AddTime:
+                    {
+                        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                        if (loginData == null)
+                            return;
+
+                        loginData.addTimeItemCount += reward;
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{reward} AddTime Reward" });
+                    }
+                    break;
+                case Defines.EReward.AddMove:
+                    {
+                        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                        if (loginData == null)
+                            return;
+
+                        loginData.addMoveItemCount += reward;
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{reward} AddMove Reward" });
+                    }
+                    break;
+            }
+
             missionData.repeatCount++;
             var clearValue = info.clearValue + (missionData.repeatCount * info.addValue);
-
-            var gold = 10 * missionData.repeatCount;
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{gold} Gold Reward" });
-
-            CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += gold;
             SetBtnInteractable(clearValue);
             missionValueText.SetText(collectionData.value - missionData.startValue, clearValue);
         });
@@ -40,7 +67,8 @@ public class MissionScrollViewItem : MonoBehaviour
 
         clearObj.SetActive(false);
 
-        SetImage(info.collectionType);
+        SetMissionImage(info.collectionType);
+        SetRewardImage(info.reward);
 
         if (missionData.clearState == Defines.EClearState.Clear)
         {
@@ -75,9 +103,9 @@ public class MissionScrollViewItem : MonoBehaviour
         }
     }
 
-    void SetImage(Defines.EBlockState _blockState)
+    void SetMissionImage(Defines.EBlockState blockState)
     {
-        if (missionImgList.Count < 8)
+        if (missionImgList == null)
             return;
 
         for (int i = 0; i < missionImgList.Count; ++i)
@@ -85,7 +113,7 @@ public class MissionScrollViewItem : MonoBehaviour
             missionImgList[i].SetActive(false);
         }
 
-        switch (_blockState)
+        switch (blockState)
         {
             case Defines.EBlockState.Arrow1:
                 missionImgList[0].SetActive(true);
@@ -123,6 +151,24 @@ public class MissionScrollViewItem : MonoBehaviour
             case Defines.EBlockState.BlueBomb:
                 missionImgList[11].SetActive(true);
                 break;
+        }
+    }
+
+    void SetRewardImage(Defines.EReward reward)
+    {
+        if (rewardImgList == null)
+            return;
+
+        for (int i = 0; i < rewardImgList.Count; ++i)
+        {
+            if ((int)reward == i)
+            {
+                rewardImgList[i].SetActive(true);
+            }
+            else
+            {
+                rewardImgList[i].SetActive(false);
+            }
         }
     }
 }
