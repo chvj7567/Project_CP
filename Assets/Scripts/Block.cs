@@ -436,6 +436,11 @@ public class Block : MonoBehaviour
 
     public Defines.EBlockState GetPangType()
     {
+        return Defines.EBlockState.CatPang;
+    }
+
+    public bool IsNormalBlock()
+    {
         switch (blockState)
         {
             case Defines.EBlockState.Cat1:
@@ -448,21 +453,16 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.Cat8:
             case Defines.EBlockState.Cat9:
             case Defines.EBlockState.Cat10:
-                return Defines.EBlockState.CatPang;
-            default:
-                return Defines.EBlockState.None;
-        }
-    }
-
-    public bool IsNormalBlock()
-    {
-        switch (blockState)
-        {
-            case Defines.EBlockState.Cat1:
-            case Defines.EBlockState.Cat2:
-            case Defines.EBlockState.Cat3:
-            case Defines.EBlockState.Cat4:
-            case Defines.EBlockState.Cat5:
+            case Defines.EBlockState.CatHat1:
+            case Defines.EBlockState.CatHat2:
+            case Defines.EBlockState.CatHat3:
+            case Defines.EBlockState.CatHat4:
+            case Defines.EBlockState.CatHat5:
+            case Defines.EBlockState.CatSkin1:
+            case Defines.EBlockState.CatSkin2:
+            case Defines.EBlockState.CatSkin3:
+            case Defines.EBlockState.CatSkin4:
+            case Defines.EBlockState.CatSkin5:
                 return true;
             default:
                 return false;

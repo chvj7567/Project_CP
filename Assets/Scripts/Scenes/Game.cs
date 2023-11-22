@@ -17,7 +17,6 @@ public class Game : MonoBehaviour
 {
     const int MAX = 9;
 
-    [SerializeField] bool addDefense;
     [SerializeField] Image timerImg;
     [SerializeField] CHTMPro timerText;
     [SerializeField, ReadOnly] float curTimer;
@@ -30,16 +29,11 @@ public class Game : MonoBehaviour
     [SerializeField] float margin = 0f;
     [SerializeField, Range(1, MAX)] int boardSize = 1;
     [SerializeField] Transform parent;
-    [SerializeField] ReactiveProperty<int> boomAllChance = new ReactiveProperty<int>();
-    [SerializeField] Button boomAllBtn;
-    [SerializeField] Button plusBoomAllChance;
-    [SerializeField] CHTMPro boomAllChanceText;
     [SerializeField] RectTransform bombEffectRectTransform;
     [SerializeField] ParticleSystem bombEffectPS;
     [SerializeField] List<Image> backgroundList = new List<Image>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
-    [SerializeField] Spawner spawner;
     [SerializeField] public float delay;
     [SerializeField] CHInstantiateButton instBtn;
 
@@ -61,24 +55,12 @@ public class Game : MonoBehaviour
     [SerializeField] CHTMPro targetScoreText;
     [SerializeField] CHTMPro moveCountText;
     [SerializeField] CHTMPro curScoreText;
-    [SerializeField] CHTMPro oneTimeScoreText;
-    [SerializeField] CHTMPro killCountText;
-    [SerializeField] CHTMPro powerText;
-    [SerializeField] CHTMPro delayText;
-    [SerializeField] CHTMPro speedText;
     [SerializeField] int selectScore;
     [SerializeField] int selectCurScore;
     [SerializeField, ReadOnly] ReactiveProperty<int> curScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
-    [SerializeField, ReadOnly] ReactiveProperty<int> oneTimeScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
-    [SerializeField, ReadOnly] public ReactiveProperty<int> killCount = new ReactiveProperty<int>();
-
-    [SerializeField, ReadOnly] ReactiveProperty<int> power = new ReactiveProperty<int>();
-    [SerializeField, ReadOnly] ReactiveProperty<float> attackDelay = new ReactiveProperty<float>();
-    [SerializeField, ReadOnly] ReactiveProperty<float> attackSpeed = new ReactiveProperty<float>();
-    [SerializeField, ReadOnly] ReactiveProperty<int> catPangLevel = new ReactiveProperty<int>();
 
     [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
 
@@ -134,33 +116,6 @@ public class Game : MonoBehaviour
             curScoreText.SetText(_);
         });
 
-        oneTimeScore.Subscribe(_ =>
-        {
-            oneTimeScoreText.SetText(_);
-        });
-
-        killCount.Subscribe(_ =>
-        {
-            killCountText.SetText(_);
-        });
-
-        power.Subscribe(_ =>
-        {
-            powerText.SetText(_);
-        });
-
-        attackDelay.Subscribe(_ =>
-        {
-            var a = Mathf.Round(_ * 10) / 10;
-            delayText.SetText(a);
-        });
-
-        attackSpeed.Subscribe(_ =>
-        {
-            var a = Mathf.Round(_ * 10) / 10;
-            speedText.SetText(a);
-        });
-
         gameResult.Value = EGameResult.None;
 
         gameResult.Subscribe(_ =>
@@ -173,23 +128,6 @@ public class Game : MonoBehaviour
                 }
             }
         });
-
-        power.Value = spawner.GetAttackCatList().First().attackPower;
-        attackDelay.Value = spawner.GetAttackCatList().First().attackDelay;
-        attackSpeed.Value = spawner.GetAttackCatList().First().attackSpeed;
-        catPangLevel.Value = 1;
-
-        boomAllBtn.OnClickAsObservable().Subscribe(async _ =>
-        {
-            if (isLock == false && boomAllChance.Value > 0)
-            {
-                await BoomAll();
-                boomAllChance.Value -= 1;
-                AddBoomAllCount();
-            }
-        });
-
-        boomAllChance.Value = 0;
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData == null)
@@ -623,11 +561,8 @@ public class Game : MonoBehaviour
             await CreateBoomBlock();
             await DownBlock();
 
-            totScore.Value += oneTimeScore.Value;
             totScore.Value += bonusScore.Value;
-            curScore.Value += oneTimeScore.Value;
             curScore.Value += bonusScore.Value;
-            oneTimeScore.Value = 0;
             bonusScore.Value = 0;
 
             CheckDissapearBlock();
@@ -641,38 +576,9 @@ public class Game : MonoBehaviour
             moveCount.Value -= 1;
         }
 
-        totScore.Value += oneTimeScore.Value;
         totScore.Value += bonusScore.Value;
-        curScore.Value += oneTimeScore.Value;
         curScore.Value += bonusScore.Value;
-        oneTimeScore.Value = 0;
         bonusScore.Value = 0;
-
-        if (addDefense == true)
-        {
-            if (totScore.Value > 0 && gameResult.Value == EGameResult.None && selectTog.isOn)
-            {
-                if (totScore.Value >= selectCurScore)
-                {
-                    var temp = totScore.Value / selectScore + 1;
-                    selectCurScore = selectScore * temp;
-
-                    CHMMain.UI.ShowUI(Defines.EUI.UIChoice, new UIChoiceArg
-                    {
-                        curScore = curScore,
-                        power = power,
-                        delay = attackDelay,
-                        speed = attackSpeed,
-                        catPangLevel = catPangLevel,
-                        attackCatList = spawner.GetAttackCatList(),
-                        maxPower = maxPower,
-                        minDealy = minDelay,
-                        maxSpeed = maxSpeed,
-                        catPangImgList = blockSpriteList,
-                    });
-                }
-            }
-        }
 
         isLock = false;
     }
@@ -1042,8 +948,6 @@ public class Game : MonoBehaviour
                     // 주변에 hp가 있는 블럭은 데미지 줌
                     CheckArround(block.row, block.col);
 
-                    oneTimeScore.Value += 1;
-
                     removeDelay = true;
                     block.remove = true;
                     block.rectTransform.DOScale(0f, delay);
@@ -1318,6 +1222,9 @@ public class Game : MonoBehaviour
     void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _blockState, bool isDelay = true)
     {
         _blockState = _block.CheckSelectCatShop(_blockState);
+
+        Debug.Log(_blockState.ToString());
+
         _block.SetBlockState(_log, _key, blockSpriteList[(int)_blockState], _blockState);
         _block.match = false;
         _block.boom = false;
