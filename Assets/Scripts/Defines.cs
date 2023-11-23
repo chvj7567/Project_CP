@@ -244,4 +244,22 @@ public class Defines
 
         Max
     }
+
+    public enum EPangEffect
+    {
+        None = -1,
+
+        Blue,
+        Brown,
+        Pink,
+        Yellow,
+        Green,
+        Explosion,
+        Center_Hit,
+        Move_Line,
+        Move_Line2,
+        
+
+        Max
+    }
 }

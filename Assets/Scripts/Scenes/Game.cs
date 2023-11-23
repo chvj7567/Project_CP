@@ -29,9 +29,9 @@ public class Game : MonoBehaviour
     [SerializeField] float margin = 0f;
     [SerializeField, Range(1, MAX)] int boardSize = 1;
     [SerializeField] Transform parent;
-    [SerializeField] RectTransform bombEffectRectTransform;
     [SerializeField] ParticleSystem bombEffectPS;
     [SerializeField] List<Image> backgroundList = new List<Image>();
+    [SerializeField] List<ParticleSystem> pangEffectList = new List<ParticleSystem>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
     [SerializeField] public float delay;
@@ -1380,6 +1380,16 @@ public class Game : MonoBehaviour
         }
     }
 
+    RectTransform CopyEffect(ParticleSystem effect, Vector2 movePos)
+    {
+        var copyObj = CHMMain.Resource.Instantiate(effect.gameObject, transform.parent);
+        copyObj.SetActive(true);
+        var rt = copyObj.GetComponent<RectTransform>();
+        rt.anchoredPosition = movePos;
+
+        return rt;
+    }
+
     public void ChangeBlock(Block moveBlock, Block targetBlock)
     {
         var tempPos = moveBlock.originPos;
@@ -1481,6 +1491,9 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
+        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+
         changeMatchState(block.row - 1, block.col - 1);
         changeMatchState(block.row - 1, block.col);
         changeMatchState(block.row - 1, block.col + 1);
@@ -1504,6 +1517,8 @@ public class Game : MonoBehaviour
         bonusScore.Value += 5;
         block.match = true;
         block.boom = true;
+
+        CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line], block.rectTransform.anchoredPosition);
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1544,12 +1559,9 @@ public class Game : MonoBehaviour
                 {
                     block.match = true;
 
-                    var blueHoleObj = CHMMain.Resource.Instantiate(bombEffectRectTransform.gameObject, transform.parent);
-                    blueHoleObj.SetActive(true);
-                    var rt = blueHoleObj.GetComponent<RectTransform>();
-                    rt.anchoredPosition = _specialBlock.rectTransform.anchoredPosition;
+                    var rt = CopyEffect(bombEffectPS, _specialBlock.rectTransform.anchoredPosition);
                     rt.DOAnchorPos(block.rectTransform.anchoredPosition, .05f);
-                    blueHoleList.Add(blueHoleObj);
+                    blueHoleList.Add(rt.gameObject);
 
                     await Task.Delay(200, tokenSource.Token);
                 }
@@ -1578,6 +1590,12 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt.Rotate(new Vector3(0, 0, 0));
+
+        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt2.Rotate(new Vector3(0, 0, 180));
+
         for (int i = 0; i < MAX; ++i)
         {
             changeMatchState(block.row, i);
@@ -1598,6 +1616,12 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt.Rotate(new Vector3(0, 0, 90));
+
+        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt2.Rotate(new Vector3(0, 0, 270));
+
         for (int i = 0; i < MAX; ++i)
         {
             changeMatchState(i, block.col);
@@ -1617,6 +1641,9 @@ public class Game : MonoBehaviour
         bonusScore.Value += 5;
         block.match = true;
         block.boom = true;
+
+        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Center_Hit], block.rectTransform.anchoredPosition);
+        rt.Rotate(new Vector3(0, 0, 45));
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1641,6 +1668,12 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt.Rotate(new Vector3(0, 0, 45));
+
+        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt2.Rotate(new Vector3(0, 0, 225));
+
         for (int i = 0; i < MAX; ++i)
         {
             changeMatchState(block.row - i, block.col + i);
@@ -1662,6 +1695,12 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt.Rotate(new Vector3(0, 0, -45));
+
+        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        rt2.Rotate(new Vector3(0, 0, -225));
+
         for (int i = 0; i < MAX; ++i)
         {
             changeMatchState(block.row - i, block.col - i);
@@ -1682,6 +1721,9 @@ public class Game : MonoBehaviour
         bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
+
+        int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
+        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         changeMatchState(block.row - 2, block.col);
         changeMatchState(block.row - 1, block.col);
@@ -1710,6 +1752,9 @@ public class Game : MonoBehaviour
         bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
+
+        int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
+        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         changeMatchState(block.row - 2, block.col - 2);
         changeMatchState(block.row - 2, block.col - 1);
@@ -1743,6 +1788,9 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
+        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+
         changeMatchState(block.row - 2, block.col - 1);
         changeMatchState(block.row - 1, block.col - 2);
         changeMatchState(block.row - 1, block.col - 1);
@@ -1773,6 +1821,9 @@ public class Game : MonoBehaviour
         bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
+
+        int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
+        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         changeMatchState(block.row - 2, block.col - 2);
         changeMatchState(block.row - 2, block.col - 1);
