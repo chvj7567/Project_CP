@@ -1,15 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class CHMSound
 {
-    AudioSource[] audioSourceList = new AudioSource[(int)Defines.ESound.Max];
+    AudioSource[] audioSourceArr = new AudioSource[(int)Defines.ESound.Max];
     Dictionary<string, AudioClip> audioClipDict = new Dictionary<string, AudioClip>();
-    float bgmVolume = 0.2f;
-    float effectVolume = 0.2f;
+
+    public float bgmVolume { get; private set; } = 0.2f;
+
+    public float effectVolume { get; private set; } = 0.2f;
 
     public float Ratio { get; private set; } = 0.5f;
 
@@ -27,11 +30,11 @@ public class CHMSound
                     continue;
 
                 GameObject go = new GameObject { name = soundNames[i] };
-                audioSourceList[i] = go.AddComponent<AudioSource>();
+                audioSourceArr[i] = go.AddComponent<AudioSource>();
                 go.transform.parent = root.transform;
             }
 
-            audioSourceList[(int)Defines.ESound.Bgm].loop = true;
+            audioSourceArr[(int)Defines.ESound.Bgm].loop = true;
 
             UnityEngine.Object.DontDestroyOnLoad(root);
         }
@@ -51,17 +54,30 @@ public class CHMSound
         return ret;
     }
 
-    public void SetBGMVolume(float ratio)
+    public void SetBGMVolume(float volume)
     {
-        Ratio = ratio;
-        audioSourceList[(int)Defines.ESound.Bgm].volume = bgmVolume * Ratio;
+        bgmVolume = volume;
+        audioSourceArr[(int)Defines.ESound.Bgm].volume = bgmVolume * Ratio;
     }
 
-    public async void Play(Defines.ESound type, float pitch = 1.0f, float volume = 1.0f)
+    public void SetEffectVolume(float volume)
+    {
+        effectVolume = volume;
+
+        for (int i = 0; i < audioSourceArr.Length; ++i)
+        {
+            if (i == (int)Defines.ESound.Bgm)
+                continue;
+
+            audioSourceArr[i].volume = effectVolume * Ratio;
+        }
+    }
+
+    public async void Play(Defines.ESound type, float pitch = 1.0f)
     {
         AudioClip audioClip = await GetOrAddAudioClip(type);
 
-        AudioSource audioSource = audioSourceList[(int)type];
+        AudioSource audioSource = audioSourceArr[(int)type];
 
         audioSource.pitch = pitch;
 
@@ -77,7 +93,7 @@ public class CHMSound
         }
         else
         {
-            audioSource.volume = effectVolume * Ratio * volume;
+            audioSource.volume = effectVolume * Ratio;
             audioSource.PlayOneShot(audioClip);
         }
     }

@@ -72,6 +72,12 @@ public class ShopScrollViewItem : MonoBehaviour
                     alarmText = "Buy Success"
                 });
 
+                var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                if (loginData != null)
+                {
+                    loginData.selectCatShop = info.skinIndex;
+                }
+
                 CHMData.Instance.SaveData(CHMMain.String.CatPang);
                 CHMMain.UI.CloseUI(Defines.EUI.UIShop);
             }
@@ -83,7 +89,7 @@ public class ShopScrollViewItem : MonoBehaviour
 
         skinSelectBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            shopScript.SetCurrentSkin(info.shopID - 1);
+            shopScript.SetCurrentSkin(info.skinIndex);
         });
     }
 

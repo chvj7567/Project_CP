@@ -289,6 +289,13 @@ public class Block : MonoBehaviour
             case EBlockState.Fish:
                 background.color = new Color(0, 0, 0, .35f);
                 break;
+            case EBlockState.Locker1:
+            case EBlockState.Locker2:
+            case EBlockState.Locker3:
+            case EBlockState.Locker4:
+            case EBlockState.Locker5:
+                img.rectTransform.sizeDelta = new Vector2(70, 70);
+                break;
         }
 
         CheckNoneBlockLog(_log, _key);
@@ -348,6 +355,22 @@ public class Block : MonoBehaviour
                     return EBlockState.CatSkin4;
                 case EBlockState.Cat5:
                     return EBlockState.CatSkin5;
+            }
+        }
+        else if (data.selectCatShop == 4)
+        {
+            switch (_blockState)
+            {
+                case EBlockState.Cat1:
+                    return EBlockState.Locker1;
+                case EBlockState.Cat2:
+                    return EBlockState.Locker2;
+                case EBlockState.Cat3:
+                    return EBlockState.Locker3;
+                case EBlockState.Cat4:
+                    return EBlockState.Locker4;
+                case EBlockState.Cat5:
+                    return EBlockState.Locker5;
             }
         }
 
@@ -463,6 +486,11 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatSkin3:
             case Defines.EBlockState.CatSkin4:
             case Defines.EBlockState.CatSkin5:
+            case Defines.EBlockState.Locker1:
+            case Defines.EBlockState.Locker2:
+            case Defines.EBlockState.Locker3:
+            case Defines.EBlockState.Locker4:
+            case Defines.EBlockState.Locker5:
                 return true;
             default:
                 return false;

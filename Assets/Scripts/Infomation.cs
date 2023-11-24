@@ -65,6 +65,7 @@ public class Infomation
     public class ShopInfo
     {
         public int shopID = -1;
+        public int skinIndex = -1;
         public string productName = "";
         public int gold = -1;
         public int titleStringID = -1;

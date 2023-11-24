@@ -985,7 +985,7 @@ public class Game : MonoBehaviour
 
         if (removeDelay)
         {
-            CHMMain.Sound.Play(Defines.ESound.Ppauk, 1f, 2f);
+            CHMMain.Sound.Play(Defines.ESound.Ppauk);
             await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
         }
     }

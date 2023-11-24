@@ -123,6 +123,12 @@ public class Defines
         CatSkin4,
         CatSkin5,
 
+        Locker1,
+        Locker2,
+        Locker3,
+        Locker4,
+        Locker5,
+
         Max
     }
 
