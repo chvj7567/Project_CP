@@ -157,6 +157,10 @@ public class Defines
         Bgm,
         Gold,
         Cat,
+        Charang,
+        Ching,
+        Pising,
+        Ppauk,
 
         Max
     }

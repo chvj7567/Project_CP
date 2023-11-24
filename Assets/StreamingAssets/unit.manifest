@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3677394852
+CRC: 1424082072
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d8b70279d91fea9e557ef451ddca1605
+    Hash: 84043a32f4afe8ec4e3c95d53a87c192
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c9f173d8e7a6d5dd41bf1a20faba079b
+    Hash: c5a90161c859ca1678e61fa777406b9a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -14,9 +14,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 9bcf3ed0c3234134faafd8415623a733, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: dda6cb4f9f341fa4dbad3f0e244d23fc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9bcf3ed0c3234134faafd8415623a733, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -30,4 +30,4 @@ Assets:
 - Assets/AssetBundleResources/unit/AttackCat.prefab
 - Assets/AssetBundleResources/unit/Monster.prefab
 Dependencies:
-- C:/Users/admin/Desktop/CatPang/Assets/Bundle/sprite
+- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite

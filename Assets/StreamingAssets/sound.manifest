@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2969339819
+CRC: 3389384484
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c1d87584556481713c335eba47c32da5
+    Hash: 872f8bb6177abba7802aceee615a98d7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 9a2ca7bdbd1871f7131daf57de908e0c
@@ -13,7 +13,11 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/AssetBundleResources/sound/Charang.mp3
 - Assets/AssetBundleResources/sound/Bgm.wav
+- Assets/AssetBundleResources/sound/Pising.mp3
 - Assets/AssetBundleResources/sound/Cat.mp3
 - Assets/AssetBundleResources/sound/Gold.mp3
+- Assets/AssetBundleResources/sound/Ppauk.mp3
+- Assets/AssetBundleResources/sound/Ching.mp3
 Dependencies: []

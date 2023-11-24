@@ -961,7 +961,6 @@ public class Game : MonoBehaviour
                             rect.anchoredPosition = block.rectTransform.anchoredPosition;
                             rect.DOAnchorPosY(rect.anchoredPosition.y + UnityEngine.Random.Range(30f, 50f), .5f).OnComplete(() =>
                             {
-                                CHMMain.Sound.Play(Defines.ESound.Gold);
                                 rect.DOAnchorPos(goldImg.rectTransform.anchoredPosition, UnityEngine.Random.Range(.2f, 1f)).OnComplete(() =>
                                 {
                                     CHMMain.Resource.Destroy(gold);
@@ -986,7 +985,7 @@ public class Game : MonoBehaviour
 
         if (removeDelay)
         {
-            CHMMain.Sound.Play(Defines.ESound.Cat);
+            CHMMain.Sound.Play(Defines.ESound.Ppauk, 1f, 2f);
             await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
         }
     }
@@ -1491,6 +1490,8 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        CHMMain.Sound.Play(ESound.Ching);
+
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
@@ -1517,6 +1518,8 @@ public class Game : MonoBehaviour
         bonusScore.Value += 5;
         block.match = true;
         block.boom = true;
+
+        CHMMain.Sound.Play(ESound.Pising);
 
         CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line], block.rectTransform.anchoredPosition);
 
@@ -1590,6 +1593,8 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        CHMMain.Sound.Play(ESound.Pising);
+
         var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 0));
 
@@ -1615,6 +1620,8 @@ public class Game : MonoBehaviour
         bonusScore.Value += 5;
         block.match = true;
         block.boom = true;
+
+        CHMMain.Sound.Play(ESound.Pising);
 
         var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 90));
@@ -1642,6 +1649,8 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        CHMMain.Sound.Play(ESound.Pising);
+
         var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Center_Hit], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 45));
 
@@ -1667,6 +1676,8 @@ public class Game : MonoBehaviour
         bonusScore.Value += 5;
         block.match = true;
         block.boom = true;
+
+        CHMMain.Sound.Play(ESound.Pising);
 
         var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 45));
@@ -1695,6 +1706,8 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        CHMMain.Sound.Play(ESound.Pising);
+
         var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, -45));
 
@@ -1721,6 +1734,8 @@ public class Game : MonoBehaviour
         bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
+
+        CHMMain.Sound.Play(ESound.Pising);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
@@ -1752,6 +1767,8 @@ public class Game : MonoBehaviour
         bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
+
+        CHMMain.Sound.Play(ESound.Pising);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
@@ -1788,6 +1805,8 @@ public class Game : MonoBehaviour
         block.match = true;
         block.boom = true;
 
+        CHMMain.Sound.Play(ESound.Pising);
+
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
@@ -1821,6 +1840,8 @@ public class Game : MonoBehaviour
         bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
+
+        CHMMain.Sound.Play(ESound.Pising);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);

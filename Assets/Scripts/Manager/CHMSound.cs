@@ -8,8 +8,9 @@ public class CHMSound
 {
     AudioSource[] audioSourceList = new AudioSource[(int)Defines.ESound.Max];
     Dictionary<string, AudioClip> audioClipDict = new Dictionary<string, AudioClip>();
-    float _bgmVolume = 0.2f;
-    float _effectVolume = 0.2f;
+    float bgmVolume = 0.2f;
+    float effectVolume = 0.2f;
+
     public float Ratio { get; private set; } = 0.5f;
 
     public void Init()
@@ -50,13 +51,13 @@ public class CHMSound
         return ret;
     }
 
-    public void SetVolume(float ratio)
+    public void SetBGMVolume(float ratio)
     {
         Ratio = ratio;
-        audioSourceList[(int)Defines.ESound.Bgm].volume = _bgmVolume * Ratio;
+        audioSourceList[(int)Defines.ESound.Bgm].volume = bgmVolume * Ratio;
     }
 
-    public async void Play(Defines.ESound type, float pitch = 1.0f)
+    public async void Play(Defines.ESound type, float pitch = 1.0f, float volume = 1.0f)
     {
         AudioClip audioClip = await GetOrAddAudioClip(type);
 
@@ -66,7 +67,7 @@ public class CHMSound
 
         if (type == Defines.ESound.Bgm)
         {
-            audioSource.volume = _bgmVolume * Ratio;
+            audioSource.volume = bgmVolume * Ratio;
 
             if (audioSource.isPlaying)
                 return;
@@ -76,7 +77,7 @@ public class CHMSound
         }
         else
         {
-            audioSource.volume = _effectVolume * Ratio;
+            audioSource.volume = effectVolume * Ratio * volume;
             audioSource.PlayOneShot(audioClip);
         }
     }
