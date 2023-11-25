@@ -60,10 +60,10 @@ public class Block : MonoBehaviour
 
         btn.OnClickAsObservable().Subscribe(async _ =>
         {
-            if (IsFixdBlock() == true)
+            if (IsFixdBlock())
                 return;
 
-            if (game.isDrag == false && game.isLock == false)
+            if (false == game.isDrag && false == game.isLock)
             {
                 await Boom();
             }
@@ -71,7 +71,7 @@ public class Block : MonoBehaviour
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
         {
-            if (game.isDrag == true || IsFixdBlock() == true)
+            if (game.isDrag || IsFixdBlock() || IsNotDragBlock())
                 return;
 
             game.isDrag = true;
@@ -86,7 +86,7 @@ public class Block : MonoBehaviour
         {
             game.isDrag = false;
 
-            if (game.isLock == true || IsFixdBlock() == true)
+            if (game.isLock || IsFixdBlock() || IsNotDragBlock())
                 return;
 
             Vector2 rectPosition;
@@ -107,7 +107,7 @@ public class Block : MonoBehaviour
                         
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() == true)
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -126,7 +126,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() == true)
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -145,7 +145,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() == true)
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -164,7 +164,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() == true)
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -524,6 +524,19 @@ public class Block : MonoBehaviour
         {
             case Defines.EBlockState.Wall:
             case Defines.EBlockState.Potal:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool IsNotDragBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.Wall:
+            case Defines.EBlockState.Potal:
+            case Defines.EBlockState.Fish:
                 return true;
             default:
                 return false;

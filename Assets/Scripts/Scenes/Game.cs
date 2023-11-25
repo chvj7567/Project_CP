@@ -58,7 +58,6 @@ public class Game : MonoBehaviour
     [SerializeField] int selectScore;
     [SerializeField] int selectCurScore;
     [SerializeField, ReadOnly] ReactiveProperty<int> curScore = new ReactiveProperty<int>();
-    [SerializeField, ReadOnly] ReactiveProperty<int> totScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
@@ -226,7 +225,7 @@ public class Game : MonoBehaviour
                     if (useTime == true && timerImg.fillAmount >= 1)
                     {
                         // 목표 점수를 사용하는 경우 목표 점수 달성 확인
-                        if (useTargetScore == true && totScore.Value < stageInfo.targetScore)
+                        if (useTargetScore == true && curScore.Value < stageInfo.targetScore)
                         {
                             clear = false;
                         }
@@ -237,7 +236,7 @@ public class Game : MonoBehaviour
                     else
                     {
                         // 목표 점수를 사용하는 경우 목표 점수 달성 확인
-                        if (useTargetScore == true && totScore.Value < stageInfo.targetScore)
+                        if (useTargetScore == true && curScore.Value < stageInfo.targetScore)
                         {
                             clear = false;
                         }
@@ -262,11 +261,11 @@ public class Game : MonoBehaviour
         //await AfterDrag(null, null);
     }
 
-    void GameEnd(bool _clear)
+    void GameEnd(bool clear)
     {
         if (isLock == true)
         {
-            if (_clear == true)
+            if (clear == true)
             {
                 gameResult.Value = EGameResult.GameClearWait;
             }
@@ -278,7 +277,7 @@ public class Game : MonoBehaviour
             return;
         }
 
-        if (_clear == false)
+        if (clear == false)
         {
             gameResult.Value = EGameResult.GameOver;
         }
@@ -291,10 +290,13 @@ public class Game : MonoBehaviour
         {
             clearState = GetClearState(),
             result = gameResult.Value,
-            gold = totScore.Value
+            gold = curScore.Value
         });
 
-        SaveClearData();
+        if (clear)
+        {
+            SaveClearData();
+        }
     }
 
     private async void Update()
@@ -382,7 +384,8 @@ public class Game : MonoBehaviour
             var block = boardArr[row, i];
             if (block.DisappearBlock() == true)
             {
-                block.changeBlockState = Defines.EBlockState.BlueBomb;
+                var random = UnityEngine.Random.Range((int)Defines.EBlockState.PinkBomb, (int)Defines.EBlockState.BlueBomb + 1);
+                block.changeBlockState = (Defines.EBlockState)random;
             }
         }
     }
@@ -561,7 +564,6 @@ public class Game : MonoBehaviour
             await CreateBoomBlock();
             await DownBlock();
 
-            totScore.Value += bonusScore.Value;
             curScore.Value += bonusScore.Value;
             bonusScore.Value = 0;
 
@@ -576,7 +578,6 @@ public class Game : MonoBehaviour
             moveCount.Value -= 1;
         }
 
-        totScore.Value += bonusScore.Value;
         curScore.Value += bonusScore.Value;
         bonusScore.Value = 0;
 
@@ -947,6 +948,8 @@ public class Game : MonoBehaviour
                 {
                     // 주변에 hp가 있는 블럭은 데미지 줌
                     CheckArround(block.row, block.col);
+
+                    curScore.Value += 1;
 
                     removeDelay = true;
                     block.remove = true;

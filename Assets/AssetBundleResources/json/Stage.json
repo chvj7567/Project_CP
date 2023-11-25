@@ -4,7 +4,7 @@
     "stage": 1,
     "blockTypeCount": 2,
     "boardSize": 3,
-    "time": 60,
+    "time": 30,
     "targetScore": 100,
     "moveCount": -1
   },
@@ -22,7 +22,7 @@
     "stage": 3,
     "blockTypeCount": 2,
     "boardSize": 4,
-    "time": 60,
+    "time": 30,
     "targetScore": 300,
     "moveCount": -1
   },
@@ -32,7 +32,7 @@
     "blockTypeCount": 2,
     "boardSize": 4,
     "time": -1,
-    "targetScore": 200,
+    "targetScore": 400,
     "moveCount": 10
   },
   {
@@ -40,8 +40,8 @@
     "stage": 5,
     "blockTypeCount": 2,
     "boardSize": 5,
-    "time": 60,
-    "targetScore": 700,
+    "time": 30,
+    "targetScore": 1200,
     "moveCount": -1
   },
   {
@@ -49,8 +49,8 @@
     "stage": 6,
     "blockTypeCount": 2,
     "boardSize": 5,
-    "time": 60,
-    "targetScore": 300,
+    "time": 30,
+    "targetScore": 700,
     "moveCount": -1
   },
   {
@@ -58,8 +58,8 @@
     "stage": 7,
     "blockTypeCount": 2,
     "boardSize": 5,
-    "time": 60,
-    "targetScore": 300,
+    "time": 30,
+    "targetScore": 700,
     "moveCount": -1
   },
   {
@@ -67,8 +67,8 @@
     "stage": 8,
     "blockTypeCount": 2,
     "boardSize": 5,
-    "time": 60,
-    "targetScore": 500,
+    "time": 30,
+    "targetScore": 1000,
     "moveCount": -1
   },
   {
@@ -76,8 +76,8 @@
     "stage": 9,
     "blockTypeCount": 2,
     "boardSize": 5,
-    "time": 60,
-    "targetScore": 500,
+    "time": 30,
+    "targetScore": 1000,
     "moveCount": -1
   },
   {
@@ -94,7 +94,7 @@
     "stage": 11,
     "blockTypeCount": 3,
     "boardSize": 5,
-    "time": 60,
+    "time": 30,
     "targetScore": 300,
     "moveCount": -1
   },
@@ -103,7 +103,7 @@
     "stage": 12,
     "blockTypeCount": 3,
     "boardSize": 5,
-    "time": 60,
+    "time": 30,
     "targetScore": 250,
     "moveCount": -1
   },
@@ -112,8 +112,8 @@
     "stage": 13,
     "blockTypeCount": 3,
     "boardSize": 5,
-    "time": 60,
-    "targetScore": 250,
+    "time": 30,
+    "targetScore": 200,
     "moveCount": 10
   },
   {
@@ -121,8 +121,8 @@
     "stage": 14,
     "blockTypeCount": 3,
     "boardSize": 6,
-    "time": 60,
-    "targetScore": 300,
+    "time": 30,
+    "targetScore": 450,
     "moveCount": -1
   },
   {
@@ -130,8 +130,8 @@
     "stage": 15,
     "blockTypeCount": 3,
     "boardSize": 6,
-    "time": 60,
-    "targetScore": 450,
+    "time": 30,
+    "targetScore": 600,
     "moveCount": -1
   },
   {
@@ -139,8 +139,8 @@
     "stage": 16,
     "blockTypeCount": 3,
     "boardSize": 6,
-    "time": 60,
-    "targetScore": 350,
+    "time": 30,
+    "targetScore": 400,
     "moveCount": -1
   },
   {
@@ -148,8 +148,8 @@
     "stage": 17,
     "blockTypeCount": 3,
     "boardSize": 6,
-    "time": 60,
-    "targetScore": 450,
+    "time": 30,
+    "targetScore": 600,
     "moveCount": -1
   },
   {
@@ -157,7 +157,7 @@
     "stage": 18,
     "blockTypeCount": 3,
     "boardSize": 6,
-    "time": 60,
+    "time": 30,
     "targetScore": -1,
     "moveCount": 5
   },
@@ -166,7 +166,7 @@
     "stage": 19,
     "blockTypeCount": 3,
     "boardSize": 6,
-    "time": 60,
+    "time": 30,
     "targetScore": -1,
     "moveCount": 5
   },
@@ -220,7 +220,7 @@
     "stage": 25,
     "blockTypeCount": 4,
     "boardSize": 7,
-    "time": 60,
+    "time": 30,
     "targetScore": 400,
     "moveCount": -1
   },
@@ -229,7 +229,7 @@
     "stage": 26,
     "blockTypeCount": 4,
     "boardSize": 7,
-    "time": 60,
+    "time": 30,
     "targetScore": 400,
     "moveCount": -1
   },
@@ -238,7 +238,7 @@
     "stage": 27,
     "blockTypeCount": 4,
     "boardSize": 7,
-    "time": 60,
+    "time": 30,
     "targetScore": 500,
     "moveCount": -1
   },
@@ -256,9 +256,9 @@
     "stage": 29,
     "blockTypeCount": 4,
     "boardSize": 7,
-    "time": 60,
+    "time": -1,
     "targetScore": 300,
-    "moveCount": 30
+    "moveCount": 15
   },
   {
     "group": 3,
@@ -283,7 +283,7 @@
     "stage": 32,
     "blockTypeCount": 4,
     "boardSize": 8,
-    "time": 60,
+    "time": 30,
     "targetScore": 450,
     "moveCount": -1
   },
@@ -418,7 +418,7 @@
     "stage": 47,
     "blockTypeCount": 5,
     "boardSize": 9,
-    "time": 60,
+    "time": -1,
     "targetScore": 300,
     "moveCount": 30
   },
@@ -437,7 +437,7 @@
     "blockTypeCount": 5,
     "boardSize": 9,
     "time": 60,
-    "targetScore": 1200,
+    "targetScore": 1500,
     "moveCount": -1
   },
   {
@@ -454,8 +454,8 @@
     "stage": 51,
     "blockTypeCount": 5,
     "boardSize": 9,
-    "time": 60,
-    "targetScore": 500,
+    "time": 30,
+    "targetScore": 300,
     "moveCount": -1
   },
   {
@@ -481,9 +481,9 @@
     "stage": 54,
     "blockTypeCount": 5,
     "boardSize": 9,
-    "time": 60,
+    "time": -1,
     "targetScore": -1,
-    "moveCount": 60
+    "moveCount": 30
   },
   {
     "group": 6,
