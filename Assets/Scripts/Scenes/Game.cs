@@ -74,6 +74,19 @@ public class Game : MonoBehaviour
 
     CancellationTokenSource tokenSource;
 
+    private void Awake()
+    {
+        for (EBlockState i = 0; i < EBlockState.Max; ++i)
+        {
+            Debug.Log(i);
+            CHMMain.Resource.LoadSprite(i, (sprite) =>
+            {
+                if (sprite != null)
+                    blockSpriteList.Add(sprite);
+            });
+        }
+    }
+
     async void Start()
     {
         tokenSource = new CancellationTokenSource();
@@ -81,15 +94,6 @@ public class Game : MonoBehaviour
         backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.Background);
 
         ChangeBackgroundLoop();
-
-        for (int i = 0; i < (int)Defines.EBlockState.Max; ++i)
-        {
-            CHMMain.Resource.LoadSprite((Defines.EBlockState)i, (sprite) =>
-            {
-                if (sprite != null)
-                    blockSpriteList.Add(sprite);
-            });
-        }
 
         if (backBtn)
         {
