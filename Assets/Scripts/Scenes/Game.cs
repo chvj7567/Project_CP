@@ -494,6 +494,8 @@ public class Game : MonoBehaviour
             // 두 블럭 모두 스페셜 블럭일 경우
             if (block1.IsSpecialBlock() == true && block2.IsSpecialBlock() == true)
             {
+                block1.match = true;
+                block2.match = true;
                 await BoomAll();
                 return;
             }
