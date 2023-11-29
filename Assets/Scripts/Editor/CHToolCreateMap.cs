@@ -1,8 +1,8 @@
+using DG.DemiEditor;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading.Tasks;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
 using UnityEngine;
@@ -32,8 +32,8 @@ public class CHToolCreateMap : EditorWindow
     {
         var window = GetWindow(typeof(CHToolCreateMap));
         window.titleContent.text = "Single Window";
-        window.minSize = new Vector2(500, 700);
-        window.maxSize = new Vector2(500, 700);
+        window.minSize = new Vector2(600, 800);
+        window.maxSize = new Vector2(600, 800);
     }
 
     int boardSize = 1;
@@ -137,11 +137,107 @@ public class CHToolCreateMap : EditorWindow
 
         EditorGUILayout.BeginHorizontal();
         {
+            EditorGUILayout.LabelField("MoveCount");
+            moveCount = EditorGUILayout.IntField(moveCount);
+
+            EditorGUILayout.LabelField("HP 지정");
+            hp = EditorGUILayout.IntField(hp);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        {
             EditorGUIUtility.labelWidth = 30;
 
             EditorGUILayout.LabelField("생성할 블럭");
 
-            if (GUILayout.Button(texture, GUILayout.Width(50), GUILayout.Height(50)))
+            if (GUILayout.Button(texture, GUILayout.Width(100), GUILayout.Height(100)))
+            {
+                
+            }
+
+            EditorGUILayout.BeginVertical();
+            {
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Cat1].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Cat1].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Cat2].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Cat2].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Cat3].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Cat3].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Cat4].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Cat4].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Cat5].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Cat5].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.CatPang].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.CatPang].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Potal].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Potal].texture;
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.PinkBomb].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.PinkBomb].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.YellowBomb].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.YellowBomb].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.OrangeBomb].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.OrangeBomb].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.GreenBomb].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.GreenBomb].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.BlueBomb].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.BlueBomb].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Fish].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Fish].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Wall].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.Wall].texture;
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndVertical();
+            /*if (GUILayout.Button(texture, GUILayout.Width(50), GUILayout.Height(50)))
             {
                 if (texture == null)
                     texture = blockSpriteList[(int)Defines.EBlockState.Cat1].texture;
@@ -173,11 +269,7 @@ public class CHToolCreateMap : EditorWindow
                     texture = blockSpriteList[(int)Defines.EBlockState.Fish].texture;
                 else if (texture == blockSpriteList[(int)Defines.EBlockState.Fish].texture)
                     texture = null;
-            }
-
-            EditorGUILayout.LabelField("HP 지정");
-
-            hp = EditorGUILayout.IntField(hp);
+            }*/
         }
         EditorGUILayout.EndHorizontal();
 
@@ -197,7 +289,19 @@ public class CHToolCreateMap : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
 
-        if (GUILayout.Button("불러오기(Stage 값 기준)", GUILayout.Width(480), GUILayout.Height(50)))
+        if (GUILayout.Button("판 리셋", GUILayout.Width(595), GUILayout.Height(30)))
+        {
+            for (int w = 0; w < 9; w++)
+            {
+                for (int h = 0; h < 9; h++)
+                {
+                    textures[w, h] = null;
+                    hps[w, h] = -1;
+                }
+            }
+        }
+
+        if (GUILayout.Button("불러오기(Stage 값 기준)", GUILayout.Width(595), GUILayout.Height(30)))
         {
             var stageInfo = stageInfoList.Find(_ => _.stage == stage);
             var stageBlockInfo = stageBlockInfoList.FindAll(_ => _.stage == stage);
@@ -230,7 +334,7 @@ public class CHToolCreateMap : EditorWindow
             }
         }
 
-        if (GUILayout.Button("저장하기", GUILayout.Width(480), GUILayout.Height(50)))
+        if (GUILayout.Button("저장하기", GUILayout.Width(595), GUILayout.Height(30)))
         {
             var stageInfo = stageInfoList.Find(_ => _.stage == stage);
             if (stageInfo == null)
@@ -277,8 +381,8 @@ public class CHToolCreateMap : EditorWindow
                 }
             }
 
-            stageInfoJson.stageList = stageInfoList;
-            stageBlockInfoJson.stageBlockList = stageBlockInfoList;
+            stageInfoJson.stageList = stageInfoList.OrderBy(_ => _.stage).ToList();
+            stageBlockInfoJson.stageBlockList = stageBlockInfoList.OrderBy(_ => _.stage).ToList();
 
             string jsonData = JsonUtility.ToJson(stageInfoJson, true);
 
@@ -299,6 +403,23 @@ public class CHToolCreateMap : EditorWindow
             filePath = Path.Combine(Application.dataPath + "/AssetBundleResources/json", "StageBlock.json");
             File.WriteAllText(filePath, jsonData);
         }
+    }
+
+    Texture2D MakeBackgroundTexture(int width, int height, Color color)
+    {
+        Color[] pixels = new Color[width * height];
+
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            pixels[i] = color;
+        }
+
+        Texture2D backgroundTexture = new Texture2D(width, height);
+
+        backgroundTexture.SetPixels(pixels);
+        backgroundTexture.Apply();
+
+        return backgroundTexture;
     }
 
     Defines.EBlockState GetBlockState(Texture texture)
