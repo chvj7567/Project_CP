@@ -1,20 +1,16 @@
-using DG.DemiEditor;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.AnimatedValues;
 using UnityEngine;
-using static CHMJson;
-using static Infomation;
 
 public class CHToolCreateMap : EditorWindow
 {
     [Serializable]
     public class StageInfoJson
     {
-        public List<StageInfo> stageList = new List<StageInfo>();
+        public List<Infomation.StageInfo> stageList = new List<Infomation.StageInfo>();
     }
 
     StageInfoJson stageInfoJson = new StageInfoJson();
@@ -22,7 +18,7 @@ public class CHToolCreateMap : EditorWindow
     [Serializable]
     public class StageBlockInfoJson
     {
-        public List<StageBlockInfo> stageBlockList = new List<StageBlockInfo>();
+        public List<Infomation.StageBlockInfo> stageBlockList = new List<Infomation.StageBlockInfo>();
     }
 
     StageBlockInfoJson stageBlockInfoJson = new StageBlockInfoJson();
@@ -32,11 +28,12 @@ public class CHToolCreateMap : EditorWindow
     {
         var window = GetWindow(typeof(CHToolCreateMap));
         window.titleContent.text = "Single Window";
-        window.minSize = new Vector2(600, 800);
-        window.maxSize = new Vector2(600, 800);
+        window.minSize = new Vector2(650, 800);
+        window.maxSize = new Vector2(650, 800);
     }
 
     int boardSize = 1;
+    Texture emptyTexture = null;
     Texture texture = null;
     Texture[,] textures = new Texture[9, 9];
     int[,] hps = new int[9, 9];
@@ -50,8 +47,6 @@ public class CHToolCreateMap : EditorWindow
     float time = -1f;
     int targetScore = -1;
     int moveCount = -1;
-
-    AnimBool changeMapAnim;
 
     private async void OnGUI()
     {
@@ -73,7 +68,7 @@ public class CHToolCreateMap : EditorWindow
         {
             LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.Stage.ToString(), (textAsset) =>
             {
-                var jsonData = JsonUtility.FromJson<JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
+                var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stageInfoArr)
                 {
                     stageInfoList.Add(data);
@@ -87,7 +82,7 @@ public class CHToolCreateMap : EditorWindow
         {
             LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StageBlock.ToString(), (textAsset) =>
             {
-                var jsonData = JsonUtility.FromJson<JsonData>("{\"stageBlockInfoArr\":" + textAsset.text + "}");
+                var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageBlockInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stageBlockInfoArr)
                 {
                     stageBlockInfoList.Add(data);
@@ -193,6 +188,11 @@ public class CHToolCreateMap : EditorWindow
                     if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.Potal].texture, GUILayout.Width(50), GUILayout.Height(50)))
                     {
                         texture = blockSpriteList[(int)Defines.EBlockState.Potal].texture;
+                    }
+
+                    if (GUILayout.Button(emptyTexture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = null;
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -434,6 +434,8 @@ public class CHToolCreateMap : EditorWindow
             return Defines.EBlockState.Cat5;
         else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat5].texture)
             return Defines.EBlockState.Cat5;
+        else if (texture == blockSpriteList[(int)Defines.EBlockState.CatPang].texture)
+            return Defines.EBlockState.CatPang;
         else if (texture == blockSpriteList[(int)Defines.EBlockState.PinkBomb].texture)
             return Defines.EBlockState.PinkBomb;
         else if (texture == blockSpriteList[(int)Defines.EBlockState.YellowBomb].texture)
