@@ -10,6 +10,7 @@ using TMPro;
 public class CHButton : MonoBehaviour
 {
     [NonSerialized] public Button button;
+    [NonSerialized] public RectTransform rectTransform;
 
     public TMP_Text text;
     public GameObject clearObj;
@@ -19,6 +20,7 @@ public class CHButton : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
+        rectTransform = GetComponent<RectTransform>();
     }
 
     private void Start()

@@ -61,7 +61,11 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
+    [SerializeField] CHButton arrowPang1;
+    [SerializeField] CHButton arrowPang2;
+    [SerializeField] Image banView;
     [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
+    [SerializeField, ReadOnly] int arrowPangIndex = 1;
 
     List<Sprite> blockSpriteList = new List<Sprite>();
 
@@ -111,6 +115,21 @@ public class Game : MonoBehaviour
                 PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 
                 SceneManager.LoadScene(0);
+            });
+        }
+
+        if (arrowPang1 && arrowPang2)
+        {
+            arrowPang1.button.OnClickAsObservable().Subscribe(_ =>
+            {
+                arrowPangIndex = 1;
+                banView.rectTransform.DOAnchorPosX(arrowPang2.rectTransform.anchoredPosition.x, .5f);
+            });
+
+            arrowPang2.button.OnClickAsObservable().Subscribe(_ =>
+            {
+                arrowPangIndex = 2;
+                banView.rectTransform.DOAnchorPosX(arrowPang1.rectTransform.anchoredPosition.x, .5f);
             });
         }
 
@@ -1030,14 +1049,12 @@ public class Game : MonoBehaviour
                 {
                     createDelay = true;
 
-                    if (block.hScore >= 4 || block.vScore >= 4)
+                    if (arrowPangIndex == 1)
                     {
-                        createDelay = true;
                         CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 2, Defines.EBlockState.Arrow5);
                     }
-                    else
+                    else if (arrowPangIndex == 2)
                     {
-                        createDelay = true;
                         CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 3, Defines.EBlockState.Arrow6);
                     }
 
@@ -1147,11 +1164,12 @@ public class Game : MonoBehaviour
                             tempBlock.index == moveIndex2)
                         {
                             checkMoveBlock = true;
-                            if (tempScore >= 5)
+
+                            if (arrowPangIndex == 1)
                             {
                                 CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 4, Defines.EBlockState.Arrow1);
                             }
-                            else
+                            else if (arrowPangIndex == 2)
                             {
                                 CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 5, Defines.EBlockState.Arrow4);
                             }
@@ -1162,11 +1180,11 @@ public class Game : MonoBehaviour
 
                     if (checkMoveBlock == false)
                     {
-                        if (tempScore >= 5)
+                        if (arrowPangIndex == 1)
                         {
                             CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 6, Defines.EBlockState.Arrow1);
                         }
-                        else
+                        else if (arrowPangIndex == 2)
                         {
                             CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 7, Defines.EBlockState.Arrow4);
                         }
@@ -1193,13 +1211,14 @@ public class Game : MonoBehaviour
                             tempBlock.index == moveIndex2)
                         {
                             checkMoveBlock = true;
-                            if (tempScore >= 5)
-                            {
-                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 8, Defines.EBlockState.Arrow2);
-                            }
-                            else
+
+                            if (arrowPangIndex == 1)
                             {
                                 CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 9, Defines.EBlockState.Arrow3);
+                            }
+                            else if (arrowPangIndex == 2)
+                            {
+                                CreateNewBlock(tempBlock, Defines.ELog.CreateBoomBlock, 8, Defines.EBlockState.Arrow2);
                             }
                         }
 
@@ -1208,13 +1227,13 @@ public class Game : MonoBehaviour
 
                     if (checkMoveBlock == false)
                     {
-                        if (tempScore >= 5)
-                        {
-                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 10, Defines.EBlockState.Arrow2);
-                        }
-                        else
+                        if (arrowPangIndex == 1)
                         {
                             CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 11, Defines.EBlockState.Arrow3);
+                        }
+                        else if (arrowPangIndex == 2)
+                        {
+                            CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 10, Defines.EBlockState.Arrow2);
                         }
                     }
                 }
