@@ -73,7 +73,7 @@ public class Game : MonoBehaviour
     List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
     [SerializeField] int delayMillisecond;
     bool oneTimeAlarm = false;
-
+    bool gameEnd = false;
     int helpTime = 0;
 
     CancellationTokenSource tokenSource;
@@ -284,7 +284,7 @@ public class Game : MonoBehaviour
         //await AfterDrag(null, null);
     }
 
-    void GameEnd(bool clear)
+    async void GameEnd(bool clear)
     {
         if (isLock == true)
         {
@@ -298,6 +298,27 @@ public class Game : MonoBehaviour
             }
 
             return;
+        }
+
+        if (false == gameEnd)
+        {
+            gameEnd = true;
+        }
+        else
+        {
+            return;
+        }
+
+        if (CheckCatPang())
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+            {
+                alarmText = "CatPang!!!",
+                closeTime = 1
+            });
+
+            await Task.Delay(1000);
+            await CatPang();
         }
 
         if (clear == false)
@@ -396,6 +417,38 @@ public class Game : MonoBehaviour
     private void OnApplicationQuit()
     {
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
+    }
+
+    bool CheckCatPang()
+    {
+        for (int w = 0; w < boardSize; ++w)
+        {
+            for (int h = 0; h < boardSize; ++h)
+            {
+                if (boardArr[w, h].IsBoomBlock())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    async Task CatPang()
+    {
+        for (int w = 0; w < boardSize; ++w)
+        {
+            for (int h = 0; h < boardSize; ++h)
+            {
+                if (boardArr[w, h].IsBoomBlock())
+                {
+                    await boardArr[w, h].Boom();
+
+                    w = -1; break;
+                }
+            }
+        }
     }
 
     void CheckDissapearBlock()

@@ -253,30 +253,6 @@ public class Block : MonoBehaviour
 
         switch (blockState)
         {
-            case EBlockState.Cat1:
-            case EBlockState.Cat2:
-            case EBlockState.Cat3:
-            case EBlockState.Cat4:
-            case EBlockState.Cat5:
-            case EBlockState.Cat6:
-            case EBlockState.Cat7:
-            case EBlockState.Cat8:
-            case EBlockState.Cat9:
-            case EBlockState.Cat10:
-            case EBlockState.Arrow1:
-            case EBlockState.Arrow2:
-            case EBlockState.Arrow3:
-            case EBlockState.Arrow4:
-            case EBlockState.Arrow5:
-            case EBlockState.Arrow6:
-            case EBlockState.CatPang:
-            case EBlockState.PinkBomb:
-            case EBlockState.YellowBomb:
-            case EBlockState.BlueBomb:
-            case EBlockState.OrangeBomb:
-            case EBlockState.GreenBomb:
-                img.rectTransform.sizeDelta = new Vector2(30, 30);
-                break;
             case EBlockState.Wall:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
                 img.color = new Color(.5f, .5f, .5f);
@@ -295,6 +271,9 @@ public class Block : MonoBehaviour
             case EBlockState.Locker4:
             case EBlockState.Locker5:
                 img.rectTransform.sizeDelta = new Vector2(70, 70);
+                break;
+            default:
+                img.rectTransform.sizeDelta = new Vector2(30, 30);
                 break;
         }
 
