@@ -38,6 +38,7 @@ public class Infomation
         public float time = -1;
         public int targetScore = -1;
         public int moveCount = -1;
+        public bool tutorial = false;
     }
 
     [Serializable]
@@ -48,6 +49,7 @@ public class Infomation
         public int hp = -1;
         public int row = -1;
         public int col = -1;
+        public bool tutorialBlock = false;
     }
 
     [Serializable]

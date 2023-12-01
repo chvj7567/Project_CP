@@ -1,551 +1,612 @@
 [
-  {
-    "group": 1,
-    "stage": 1,
-    "blockTypeCount": 2,
-    "boardSize": 3,
-    "time": 30,
-    "targetScore": 100,
-    "moveCount": -1
-  },
-  {
-    "group": 1,
-    "stage": 2,
-    "blockTypeCount": 2,
-    "boardSize": 3,
-    "time": -1,
-    "targetScore": 100,
-    "moveCount": 10
-  },
-  {
-    "group": 1,
-    "stage": 3,
-    "blockTypeCount": 2,
-    "boardSize": 4,
-    "time": 30,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 1,
-    "stage": 4,
-    "blockTypeCount": 2,
-    "boardSize": 4,
-    "time": -1,
-    "targetScore": 400,
-    "moveCount": 10
-  },
-  {
-    "group": 1,
-    "stage": 5,
-    "blockTypeCount": 2,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 1200,
-    "moveCount": -1
-  },
-  {
-    "group": 1,
-    "stage": 6,
-    "blockTypeCount": 2,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 700,
-    "moveCount": -1
-  },
-  {
-    "group": 1,
-    "stage": 7,
-    "blockTypeCount": 2,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 700,
-    "moveCount": -1
-  },
-  {
-    "group": 1,
-    "stage": 8,
-    "blockTypeCount": 2,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 1000,
-    "moveCount": -1
-  },
-  {
-    "group": 1,
-    "stage": 9,
-    "blockTypeCount": 2,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 1000,
-    "moveCount": -1
-  },
-  {
-    "group": 1,
-    "stage": 10,
-    "blockTypeCount": 2,
-    "boardSize": 3,
-    "time": 10,
-    "targetScore": -1,
-    "moveCount": 1
-  },
-  {
-    "group": 2,
-    "stage": 11,
-    "blockTypeCount": 3,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 2,
-    "stage": 12,
-    "blockTypeCount": 3,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 250,
-    "moveCount": -1
-  },
-  {
-    "group": 2,
-    "stage": 13,
-    "blockTypeCount": 3,
-    "boardSize": 5,
-    "time": 30,
-    "targetScore": 200,
-    "moveCount": 10
-  },
-  {
-    "group": 2,
-    "stage": 14,
-    "blockTypeCount": 3,
-    "boardSize": 6,
-    "time": 30,
-    "targetScore": 450,
-    "moveCount": -1
-  },
-  {
-    "group": 2,
-    "stage": 15,
-    "blockTypeCount": 3,
-    "boardSize": 6,
-    "time": 30,
-    "targetScore": 600,
-    "moveCount": -1
-  },
-  {
-    "group": 2,
-    "stage": 16,
-    "blockTypeCount": 3,
-    "boardSize": 6,
-    "time": 30,
-    "targetScore": 400,
-    "moveCount": -1
-  },
-  {
-    "group": 2,
-    "stage": 17,
-    "blockTypeCount": 3,
-    "boardSize": 6,
-    "time": 30,
-    "targetScore": 600,
-    "moveCount": -1
-  },
-  {
-    "group": 2,
-    "stage": 18,
-    "blockTypeCount": 3,
-    "boardSize": 6,
-    "time": 30,
-    "targetScore": -1,
-    "moveCount": 5
-  },
-  {
-    "group": 2,
-    "stage": 19,
-    "blockTypeCount": 3,
-    "boardSize": 6,
-    "time": 30,
-    "targetScore": -1,
-    "moveCount": 5
-  },
-  {
-    "group": 2,
-    "stage": 20,
-    "blockTypeCount": 2,
-    "boardSize": 5,
-    "time": 10,
-    "targetScore": -1,
-    "moveCount": 1
-  },
-  {
-    "group": 3,
-    "stage": 21,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 3,
-    "stage": 22,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 3,
-    "stage": 23,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 3,
-    "stage": 24,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 3,
-    "stage": 25,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": 30,
-    "targetScore": 400,
-    "moveCount": -1
-  },
-  {
-    "group": 3,
-    "stage": 26,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": 30,
-    "targetScore": 400,
-    "moveCount": -1
-  },
-  {
-    "group": 3,
-    "stage": 27,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": 30,
-    "targetScore": 500,
-    "moveCount": -1
-  },
-  {
-    "group": 3,
-    "stage": 28,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": -1,
-    "targetScore": 100,
-    "moveCount": 20
-  },
-  {
-    "group": 3,
-    "stage": 29,
-    "blockTypeCount": 4,
-    "boardSize": 7,
-    "time": -1,
-    "targetScore": 300,
-    "moveCount": 15
-  },
-  {
-    "group": 3,
-    "stage": 30,
-    "blockTypeCount": 2,
-    "boardSize": 7,
-    "time": 10,
-    "targetScore": 250,
-    "moveCount": 1
-  },
-  {
-    "group": 4,
-    "stage": 31,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": 60,
-    "targetScore": -1,
-    "moveCount": 20
-  },
-  {
-    "group": 4,
-    "stage": 32,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": 30,
-    "targetScore": 450,
-    "moveCount": -1
-  },
-  {
-    "group": 4,
-    "stage": 33,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": -1,
-    "targetScore": 350,
-    "moveCount": 30
-  },
-  {
-    "group": 4,
-    "stage": 34,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": 60,
-    "targetScore": 500,
-    "moveCount": -1
-  },
-  {
-    "group": 4,
-    "stage": 35,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": 60,
-    "targetScore": 500,
-    "moveCount": -1
-  },
-  {
-    "group": 4,
-    "stage": 36,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": 60,
-    "targetScore": 700,
-    "moveCount": -1
-  },
-  {
-    "group": 4,
-    "stage": 37,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": -1,
-    "targetScore": 300,
-    "moveCount": 20
-  },
-  {
-    "group": 4,
-    "stage": 38,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": 60,
-    "targetScore": -1,
-    "moveCount": -1
-  },
-  {
-    "group": 4,
-    "stage": 39,
-    "blockTypeCount": 4,
-    "boardSize": 8,
-    "time": 60,
-    "targetScore": 1500,
-    "moveCount": -1
-  },
-  {
-    "group": 4,
-    "stage": 40,
-    "blockTypeCount": 2,
-    "boardSize": 8,
-    "time": 10,
-    "targetScore": 720,
-    "moveCount": 1
-  },
-  {
-    "group": 5,
-    "stage": 41,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 450,
-    "moveCount": -1
-  },
-  {
-    "group": 5,
-    "stage": 42,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": -1,
-    "targetScore": -1,
-    "moveCount": 40
-  },
-  {
-    "group": 5,
-    "stage": 43,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 5,
-    "stage": 44,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 5,
-    "stage": 45,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 5,
-    "stage": 46,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 5,
-    "stage": 47,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": -1,
-    "targetScore": 300,
-    "moveCount": 30
-  },
-  {
-    "group": 5,
-    "stage": 48,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": -1,
-    "targetScore": -1,
-    "moveCount": 60
-  },
-  {
-    "group": 5,
-    "stage": 49,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 1500,
-    "moveCount": -1
-  },
-  {
-    "group": 5,
-    "stage": 50,
-    "blockTypeCount": 2,
-    "boardSize": 9,
-    "time": 10,
-    "targetScore": 500,
-    "moveCount": 1
-  },
-  {
-    "group": 6,
-    "stage": 51,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 30,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 6,
-    "stage": 52,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": -1,
-    "targetScore": -1,
-    "moveCount": 30
-  },
-  {
-    "group": 6,
-    "stage": 53,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": -1,
-    "moveCount": -1
-  },
-  {
-    "group": 6,
-    "stage": 54,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": -1,
-    "targetScore": -1,
-    "moveCount": 30
-  },
-  {
-    "group": 6,
-    "stage": 55,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": -1,
-    "targetScore": -1,
-    "moveCount": 45
-  },
-  {
-    "group": 6,
-    "stage": 56,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 300,
-    "moveCount": -1
-  },
-  {
-    "group": 6,
-    "stage": 57,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 500,
-    "moveCount": -1
-  },
-  {
-    "group": 6,
-    "stage": 58,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": -1,
-    "moveCount": 50
-  },
-  {
-    "group": 6,
-    "stage": 59,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 60,
-    "targetScore": 450,
-    "moveCount": -1
-  },
-  {
-    "group": 6,
-    "stage": 60,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 10,
-    "targetScore": -1,
-    "moveCount": 1
-  },
-  {
-    "group": 7,
-    "stage": 61,
-    "blockTypeCount": 5,
-    "boardSize": 9,
-    "time": 10,
-    "targetScore": -1,
-    "moveCount": 1
-  }
-]
+        {
+            "group": 1,
+            "stage": 1,
+            "blockTypeCount": 3,
+            "boardSize": 3,
+            "time": 30.0,
+            "targetScore": 50,
+            "moveCount": -1,
+            "tutorial": true
+        },
+        {
+            "group": 1,
+            "stage": 2,
+            "blockTypeCount": 2,
+            "boardSize": 3,
+            "time": -1.0,
+            "targetScore": 100,
+            "moveCount": 10,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 3,
+            "blockTypeCount": 3,
+            "boardSize": 4,
+            "time": 30.0,
+            "targetScore": 1,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 4,
+            "blockTypeCount": 2,
+            "boardSize": 4,
+            "time": -1.0,
+            "targetScore": 400,
+            "moveCount": 10,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 5,
+            "blockTypeCount": 2,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 1200,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 6,
+            "blockTypeCount": 2,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 700,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 7,
+            "blockTypeCount": 2,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 700,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 8,
+            "blockTypeCount": 2,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 1000,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 9,
+            "blockTypeCount": 2,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 1000,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 1,
+            "stage": 10,
+            "blockTypeCount": 2,
+            "boardSize": 3,
+            "time": 10.0,
+            "targetScore": -1,
+            "moveCount": 1,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 11,
+            "blockTypeCount": 3,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 12,
+            "blockTypeCount": 3,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 250,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 13,
+            "blockTypeCount": 3,
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 200,
+            "moveCount": 10,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 14,
+            "blockTypeCount": 3,
+            "boardSize": 6,
+            "time": 30.0,
+            "targetScore": 450,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 15,
+            "blockTypeCount": 3,
+            "boardSize": 6,
+            "time": 30.0,
+            "targetScore": 600,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 16,
+            "blockTypeCount": 3,
+            "boardSize": 6,
+            "time": 30.0,
+            "targetScore": 400,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 17,
+            "blockTypeCount": 3,
+            "boardSize": 6,
+            "time": 30.0,
+            "targetScore": 600,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 18,
+            "blockTypeCount": 3,
+            "boardSize": 6,
+            "time": 30.0,
+            "targetScore": -1,
+            "moveCount": 5,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 19,
+            "blockTypeCount": 3,
+            "boardSize": 6,
+            "time": 30.0,
+            "targetScore": -1,
+            "moveCount": 5,
+            "tutorial": false
+        },
+        {
+            "group": 2,
+            "stage": 20,
+            "blockTypeCount": 2,
+            "boardSize": 5,
+            "time": 10.0,
+            "targetScore": -1,
+            "moveCount": 1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 21,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 22,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 23,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 24,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 25,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": 30.0,
+            "targetScore": 400,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 26,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": 30.0,
+            "targetScore": 400,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 27,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": 30.0,
+            "targetScore": 500,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 28,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": -1.0,
+            "targetScore": 100,
+            "moveCount": 20,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 29,
+            "blockTypeCount": 4,
+            "boardSize": 7,
+            "time": -1.0,
+            "targetScore": 300,
+            "moveCount": 15,
+            "tutorial": false
+        },
+        {
+            "group": 3,
+            "stage": 30,
+            "blockTypeCount": 2,
+            "boardSize": 7,
+            "time": 10.0,
+            "targetScore": 250,
+            "moveCount": 1,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 31,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": 60.0,
+            "targetScore": -1,
+            "moveCount": 20,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 32,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": 30.0,
+            "targetScore": 450,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 33,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": -1.0,
+            "targetScore": 350,
+            "moveCount": 30,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 34,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": 60.0,
+            "targetScore": 500,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 35,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": 60.0,
+            "targetScore": 500,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 36,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": 60.0,
+            "targetScore": 700,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 37,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": -1.0,
+            "targetScore": 300,
+            "moveCount": 20,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 38,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": 60.0,
+            "targetScore": -1,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 39,
+            "blockTypeCount": 4,
+            "boardSize": 8,
+            "time": 60.0,
+            "targetScore": 1500,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 4,
+            "stage": 40,
+            "blockTypeCount": 2,
+            "boardSize": 8,
+            "time": 10.0,
+            "targetScore": 720,
+            "moveCount": 1,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 41,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 450,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 42,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 40,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 43,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 44,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 45,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 46,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 47,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": 300,
+            "moveCount": 30,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 48,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 60,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 49,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 1500,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 5,
+            "stage": 50,
+            "blockTypeCount": 2,
+            "boardSize": 9,
+            "time": 10.0,
+            "targetScore": 500,
+            "moveCount": 1,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 51,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 30.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 52,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 30,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 53,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": -1,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 54,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 30,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 55,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 45,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 56,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 57,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 500,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 58,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": -1,
+            "moveCount": 50,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 59,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 60.0,
+            "targetScore": 450,
+            "moveCount": -1,
+            "tutorial": false
+        },
+        {
+            "group": 6,
+            "stage": 60,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 10.0,
+            "targetScore": -1,
+            "moveCount": 1,
+            "tutorial": false
+        },
+        {
+            "group": 7,
+            "stage": 61,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 10.0,
+            "targetScore": -1,
+            "moveCount": 1,
+            "tutorial": false
+        }
+    ]

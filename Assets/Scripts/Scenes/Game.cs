@@ -67,10 +67,13 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
     [SerializeField, ReadOnly] int arrowPangIndex = 1;
 
-    List<Sprite> blockSpriteList = new List<Sprite>();
+    [SerializeField] GameObject guideBackground;
+    [SerializeField] RectTransform guideHole;
 
-    Infomation.StageInfo stageInfo;
-    List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
+    public bool firstDrag = false;
+    List<Sprite> blockSpriteList = new List<Sprite>();
+    public Infomation.StageInfo stageInfo;
+    public List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
     [SerializeField] int delayMillisecond;
     bool oneTimeAlarm = false;
     bool gameEnd = false;
@@ -281,14 +284,65 @@ public class Game : MonoBehaviour
                 }
             });
 
+        if (stageInfo.tutorial)
+        {
+            Time.timeScale = 0;
+
+            guideBackground.SetActive(true);
+            guideHole.gameObject.SetActive(true);
+
+            guideHole.SetAsLastSibling();
+            guideBackground.transform.SetAsLastSibling();
+
+            var holeValue = GetTutorialImgSettingValue(boardArr, stageBlockInfoList);
+            guideHole.sizeDelta = holeValue.Item1;
+            guideHole.anchoredPosition = holeValue.Item2;
+        }
+        else
+        {
+            guideBackground.SetActive(false);
+            guideHole.gameObject.SetActive(false);
+        }
         //await AfterDrag(null, null);
+    }
+
+    (Vector2, Vector2) GetTutorialImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
+    {
+        if (null == stageBlockInfoList || null == blockArr)
+            return (Vector2.zero, Vector2.zero);
+
+        var tutorialBlockList = stageBlockInfoList.FindAll(_ => _.tutorialBlock);
+        if (tutorialBlockList.Count < 2)
+            return (Vector2.zero, Vector2.zero);
+
+        var tutorialBlock1 = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
+        var tutorialBlock2 = blockArr[tutorialBlockList[1].row, tutorialBlockList[1].col];
+
+        float sizeX, sizeY;
+        float posX, posY;
+        if (tutorialBlock1.row == tutorialBlock2.row)
+        {
+            sizeX = tutorialBlock1.rectTransform.sizeDelta.x * 2;
+            sizeY = tutorialBlock1.rectTransform.sizeDelta.y;
+            posX = (tutorialBlock1.rectTransform.anchoredPosition.x + tutorialBlock2.rectTransform.anchoredPosition.x) / 2f;
+            posY = tutorialBlock1.rectTransform.anchoredPosition.y;
+        }
+        else
+        {
+            sizeX = tutorialBlock1.rectTransform.sizeDelta.x;
+            sizeY = tutorialBlock1.rectTransform.sizeDelta.y * 2;
+            posX = tutorialBlock1.rectTransform.anchoredPosition.x;
+            posY = (tutorialBlock1.rectTransform.anchoredPosition.y + tutorialBlock2.rectTransform.anchoredPosition.y) / 2f;
+        }
+
+        return (new Vector2(sizeX, sizeY), new Vector2(posX, posY));
     }
 
     async void GameEnd(bool clear)
     {
-        if (isLock == true)
+        if (isLock)
         {
-            if (clear == true)
+            if (clear)
             {
                 gameResult.Value = EGameResult.GameClearWait;
             }
@@ -553,6 +607,12 @@ public class Game : MonoBehaviour
     {
         if (moveCount.Value == 0)
             return;
+
+        firstDrag = true;
+
+        Time.timeScale = 1;
+        guideBackground.SetActive(false);
+        guideHole.gameObject.SetActive(false);
 
         isLock = true;
 

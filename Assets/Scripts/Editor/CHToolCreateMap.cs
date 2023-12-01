@@ -37,8 +37,11 @@ public class CHToolCreateMap : EditorWindow
     Texture texture = null;
     Texture[,] textures = new Texture[9, 9];
     int[,] hps = new int[9, 9];
+    bool[,] tutorialBlocks = new bool[9, 9];
+
     List<Sprite> blockSpriteList = new List<Sprite>();
     int hp = -1;
+    bool tutorial = false;
     List<Infomation.StageInfo> stageInfoList = new List<Infomation.StageInfo>();
     List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
     int group;
@@ -137,6 +140,9 @@ public class CHToolCreateMap : EditorWindow
 
             EditorGUILayout.LabelField("HP 지정");
             hp = EditorGUILayout.IntField(hp);
+
+            EditorGUILayout.LabelField("튜토리얼 지정");
+            tutorial = EditorGUILayout.Toggle(tutorial);
         }
         EditorGUILayout.EndHorizontal();
 
@@ -283,6 +289,7 @@ public class CHToolCreateMap : EditorWindow
                     {
                         textures[w, h] = texture;
                         hps[w, h] = hp;
+                        tutorialBlocks[w, h] = tutorial;
                     }
                 }
             }
@@ -297,6 +304,7 @@ public class CHToolCreateMap : EditorWindow
                 {
                     textures[w, h] = null;
                     hps[w, h] = -1;
+                    tutorialBlocks[w, h] = false;
                 }
             }
         }
@@ -313,6 +321,7 @@ public class CHToolCreateMap : EditorWindow
                 time = stageInfo.time;
                 targetScore = stageInfo.targetScore;
                 moveCount = stageInfo.moveCount;
+                tutorial = stageInfo.tutorial;
 
                 for (int w = 0; w < boardSize; w++)
                 {
@@ -323,11 +332,13 @@ public class CHToolCreateMap : EditorWindow
                         {
                             textures[w, h] = null;
                             hps[w, h] = -1;
+                            tutorialBlocks[w, h] = false;
                         }
                         else
                         {
                             textures[w, h] = blockSpriteList[(int)findBlock.blockState].texture;
                             hps[w, h] = findBlock.hp;
+                            tutorialBlocks[w, h] = findBlock.tutorialBlock;
                         }
                     }
                 }
@@ -347,7 +358,8 @@ public class CHToolCreateMap : EditorWindow
                     boardSize = boardSize,
                     time = time,
                     targetScore = targetScore,
-                    moveCount = moveCount
+                    moveCount = moveCount,
+                    tutorial = tutorial,
                 });
             }
             else
@@ -359,6 +371,7 @@ public class CHToolCreateMap : EditorWindow
                 stageInfo.time = time;
                 stageInfo.targetScore = targetScore;
                 stageInfo.moveCount = moveCount;
+                stageInfo.tutorial = tutorial;
             }
 
             stageBlockInfoList.RemoveAll(_ => _.stage == stage);
@@ -376,7 +389,8 @@ public class CHToolCreateMap : EditorWindow
                         blockState = GetBlockState(textures[w, h]),
                         hp = hps[w, h],
                         row = w,
-                        col = h
+                        col = h,
+                        tutorialBlock = tutorialBlocks[w, h],
                     });
                 }
             }

@@ -5,6 +5,7 @@ using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 using static Defines;
+using static Infomation;
 
 [RequireComponent(typeof(RectTransform))]
 public class Block : MonoBehaviour
@@ -110,6 +111,9 @@ public class Block : MonoBehaviour
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
+                            if (false == CheckTutorialBlock(ret.Item2))
+                                break;
+
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
                             ret.Item1.DOAnchorPosX(originPos.x, game.delay);
 
@@ -127,6 +131,9 @@ public class Block : MonoBehaviour
                         if (ret.Item1 != null)
                         {
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
+                                break;
+
+                            if (false == CheckTutorialBlock(ret.Item2))
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -148,6 +155,9 @@ public class Block : MonoBehaviour
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
+                            if (false == CheckTutorialBlock(ret.Item2))
+                                break;
+
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
                             ret.Item1.DOAnchorPosX(originPos.x, game.delay);
 
@@ -165,6 +175,9 @@ public class Block : MonoBehaviour
                         if (ret.Item1 != null)
                         {
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
+                                break;
+
+                            if (false == CheckTutorialBlock(ret.Item2))
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -194,6 +207,21 @@ public class Block : MonoBehaviour
         return aimAngle * Mathf.Rad2Deg;
     }
 
+    bool CheckTutorialBlock(Block block)
+    {
+        if (false == game.firstDrag && game.stageInfo.tutorial)
+        {
+            var block1Info = game.stageBlockInfoList.Find(_ => _.row == row && _.col == col);
+            var block2Info = game.stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
+            if (block1Info == null || block2Info == null)
+                return false;
+
+            if (false == block1Info.tutorialBlock || false == block2Info.tutorialBlock)
+                return false;
+        }
+
+        return true;
+    }
     void ChangeBlock(Block block)
     {
         game.ChangeBlock(this, block);
