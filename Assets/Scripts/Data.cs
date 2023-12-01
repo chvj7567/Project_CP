@@ -10,6 +10,7 @@ namespace Data
         public string key = "";
         public bool connectGPGS = false;
         public int selectCatShop = 0;
+        public int tutorialIndex = 0;
         public bool buyRemoveAD = false;
         public int addTimeItemCount = 0;
         public int addMoveItemCount = 0;

@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -67,16 +68,23 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
     [SerializeField, ReadOnly] int arrowPangIndex = 1;
 
-    [SerializeField] GameObject guideBackground;
+    
     [SerializeField] RectTransform guideHole;
+    [SerializeField] GameObject guideBackground;
+    [SerializeField] Button tutorialBackgroundBtn;
+    [SerializeField] List<RectTransform> tutorialHoleList = new List<RectTransform>();
+    [SerializeField] CHTMPro guideDesc;
 
-    public bool firstDrag = false;
+    [SerializeField] int delayMillisecond;
+
+    public bool tutorialNextBlock = false;
     List<Sprite> blockSpriteList = new List<Sprite>();
     public Infomation.StageInfo stageInfo;
     public List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
-    [SerializeField] int delayMillisecond;
+
     bool oneTimeAlarm = false;
     bool gameEnd = false;
+    
     int helpTime = 0;
 
     CancellationTokenSource tokenSource;
@@ -101,6 +109,9 @@ public class Game : MonoBehaviour
         backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.Background);
 
         ChangeBackgroundLoop();
+
+        guideBackground.SetActive(false);
+        guideHole.gameObject.SetActive(false);
 
         if (backBtn)
         {
@@ -196,8 +207,6 @@ public class Game : MonoBehaviour
                 loginData.addTimeItemCount += loginData.useTimeItemCount;
         }
 
-        CHMData.Instance.SaveData(CHMMain.String.CatPang);
-
         boardSize = stageInfo.boardSize;
 
         moveCount.Subscribe(_ =>
@@ -207,7 +216,7 @@ public class Game : MonoBehaviour
 
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
-        await CreateMap(stage);
+        await CreateMap();
 
         this.UpdateAsObservable()
             .Subscribe(_ =>
@@ -284,7 +293,36 @@ public class Game : MonoBehaviour
                 }
             });
 
-        if (stageInfo.tutorial)
+
+        // 튜토리얼 및 가이드 부분
+
+        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        {
+            tutorialHoleList[i].gameObject.SetActive(false);
+        }
+
+        tutorialBackgroundBtn.gameObject.SetActive(false);
+
+        if (loginData.tutorialIndex == 0)
+        {
+            Time.timeScale = 0;
+
+            guideBackground.SetActive(true);
+            guideBackground.transform.SetAsLastSibling();
+
+            tutorialBackgroundBtn.gameObject.SetActive(true);
+            tutorialBackgroundBtn.transform.SetAsLastSibling();
+
+            var tutorialIndex = await TutorialStart();
+            loginData.tutorialIndex = tutorialIndex;
+
+            guideBackground.SetActive(false);
+            tutorialBackgroundBtn.gameObject.SetActive(false);
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        }
+
+        if (stageInfo.tutorialID > 0)
         {
             Time.timeScale = 0;
 
@@ -294,19 +332,53 @@ public class Game : MonoBehaviour
             guideHole.SetAsLastSibling();
             guideBackground.transform.SetAsLastSibling();
 
-            var holeValue = GetTutorialImgSettingValue(boardArr, stageBlockInfoList);
+            var holeValue = GetTutorialStageImgSettingValue(boardArr, stageBlockInfoList);
             guideHole.sizeDelta = holeValue.Item1;
             guideHole.anchoredPosition = holeValue.Item2;
-        }
-        else
-        {
-            guideBackground.SetActive(false);
-            guideHole.gameObject.SetActive(false);
+
+            var tutorialInfo = CHMJson.Instance.GetTutorialStageInfo(stageInfo.tutorialID);
+            if (tutorialInfo != null)
+            {
+                guideDesc.SetStringID(tutorialInfo.descStringID);
+            }
         }
         //await AfterDrag(null, null);
     }
 
-    (Vector2, Vector2) GetTutorialImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
+    async Task<int> TutorialStart()
+    {
+        TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
+
+        guideBackground.SetActive(true);
+
+        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        {
+            var tutorialInfo = CHMJson.Instance.GetTutorialInfo(i + 1);
+            if (tutorialInfo == null)
+                break;
+
+            tutorialHoleList[i].gameObject.SetActive(true);
+            guideDesc.SetStringID(tutorialInfo.descStringID);
+
+            TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
+
+            var btnComplete = tutorialBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
+            {
+                buttonClicktask.SetResult(true);
+            });
+
+            await buttonClicktask.Task;
+
+            tutorialHoleList[i].gameObject.SetActive(false);
+
+            btnComplete.Dispose();
+        }
+
+        tutorialCompleteTask.SetResult(tutorialHoleList.Count);
+
+        return await tutorialCompleteTask.Task;
+    }
+    (Vector2, Vector2) GetTutorialStageImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
     {
         if (null == stageBlockInfoList || null == blockArr)
             return (Vector2.zero, Vector2.zero);
@@ -572,14 +644,6 @@ public class Game : MonoBehaviour
         return nextIndex;
     }
 
-    void AddBoomAllCount()
-    {
-        if (CHMData.Instance.stageDataDic.TryGetValue(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString(), out var data))
-        {
-            data.boomAllCount += 1;
-        }
-    }
-
     void SaveClearData()
     {
         CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState = Defines.EClearState.Clear;
@@ -608,8 +672,6 @@ public class Game : MonoBehaviour
         if (moveCount.Value == 0)
             return;
 
-        firstDrag = true;
-
         Time.timeScale = 1;
         guideBackground.SetActive(false);
         guideHole.gameObject.SetActive(false);
@@ -620,6 +682,11 @@ public class Game : MonoBehaviour
 
         if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)
         {
+            if (block1.tutorialBlock)
+                block1.tutorialBlock = false;
+            if (block2.tutorialBlock)
+                block2.tutorialBlock = false;
+
             moveIndex1 = block1.index;
             moveIndex2 = block2.index;
 
@@ -719,10 +786,68 @@ public class Game : MonoBehaviour
         curScore.Value += bonusScore.Value;
         bonusScore.Value = 0;
 
+        do
+        {
+            if (tutorialNextBlock == false)
+            {
+                tutorialNextBlock = true;
+
+                if (stageInfo.tutorialID > 0)
+                {
+                    var tutorialInfo = CHMJson.Instance.GetTutorialStageInfo(stageInfo.tutorialID);
+                    if (tutorialInfo == null || tutorialInfo.connectNextBlock == Defines.EBlockState.None)
+                        break;
+
+                    guideBackground.SetActive(true);
+                    guideHole.gameObject.SetActive(true);
+
+                    var settingValue = TutorialBlockSetting(boardArr, tutorialInfo.connectNextBlock);
+                    guideHole.sizeDelta = settingValue.Item1;
+                    guideHole.anchoredPosition = settingValue.Item2;
+
+                    guideDesc.SetStringID(tutorialInfo.descNextBlockStringID);
+                }
+            }
+        } while (false);
+
         isLock = false;
     }
 
-    async Task CreateMap(int _stage)
+    public bool CheckTutorial()
+    {
+        for (int w = 0; w < boardSize; w++)
+        {
+            for (int h = 0; h < boardSize; h++)
+            {
+                if (boardArr[w, h].tutorialBlock)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    (Vector2, Vector2) TutorialBlockSetting(Block[,] blockArr, Defines.EBlockState blockState)
+    {
+        for (int w = 0; w < boardSize; w++)
+        {
+            for (int h = 0; h < boardSize; h++)
+            {
+                if (blockArr[w, h].GetBlockState() == blockState)
+                {
+                    blockArr[w, h].tutorialBlock = true;
+                    return (blockArr[w, h].rectTransform.sizeDelta, blockArr[w, h].rectTransform.anchoredPosition);
+                }
+            }
+        }
+            
+        return (Vector2.zero, Vector2.zero);
+    }
+
+    async Task CreateMap()
+    // 스테이지 시작 시 맵 생성
     {
         foreach (var block in boardArr)
         {
@@ -745,6 +870,7 @@ public class Game : MonoBehaviour
             {
                 var blockState = block.CheckSelectCatShop(stageBlockInfo.blockState);
                 block.SetBlockState(Defines.ELog.CreateMap, 2, blockSpriteList[(int)blockState], blockState);
+                block.tutorialBlock = stageBlockInfo.tutorialBlock;
 
                 if (block.IsNormalBlock() == true)
                 {
@@ -794,7 +920,7 @@ public class Game : MonoBehaviour
     }
 
     async Task UpdateMap()
-    // 맵생성
+    // 맵 업데이트
     {
         try
         {
@@ -1363,8 +1489,6 @@ public class Game : MonoBehaviour
     {
         _blockState = _block.CheckSelectCatShop(_blockState);
 
-        Debug.Log(_blockState.ToString());
-
         _block.SetBlockState(_log, _key, blockSpriteList[(int)_blockState], _blockState);
         _block.match = false;
         _block.boom = false;
@@ -1374,13 +1498,6 @@ public class Game : MonoBehaviour
             _block.rectTransform.DOScale(1f, delay);
         else
             _block.rectTransform.localScale = Vector3.one;
-    }
-
-    void CreateRandomBlock(Block _block, Defines.ELog _log, int _key, int _maxIndex, bool isDelay = true)
-    {
-        var random = UnityEngine.Random.Range(0, _maxIndex);
-
-        CreateNewBlock(_block, _log, _key, (Defines.EBlockState)random, isDelay);
     }
 
     void Check3Match(List<Block> blockList, Defines.EDirection direction, bool test = false)

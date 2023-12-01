@@ -12,6 +12,7 @@ public interface ILoader<Key, Value>
 
 public class CHMData : CHSingleton<CHMData>
 {
+    public bool newUser = false;
     public Dictionary<string, Data.Login> loginDataDic = null;
     public Dictionary<string, Data.Stage> stageDataDic = null;
     public Dictionary<string, Data.Collection> collectionDataDic = null;
@@ -65,6 +66,7 @@ public class CHMData : CHSingleton<CHMData>
         Debug.Log($"Local Path : {path}");
         if (File.Exists(path) == false)
         {
+            newUser = true;
             Debug.Log("Path is Null");
             return await LoadDefaultData<Loader>(_name);
         }

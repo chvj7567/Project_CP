@@ -14,6 +14,8 @@ public class Defines
         StageBlock,
         Mission,
         Shop,
+        Tutorial,
+        TutorialStage,
 
         Max
     }

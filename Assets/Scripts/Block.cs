@@ -47,6 +47,8 @@ public class Block : MonoBehaviour
     public bool squareMatch = false;
     // 없어진 블럭인지 확인
     public bool remove = false;
+    // 튜토리얼 블럭 유무
+    public bool tutorialBlock = false;
 
     // 벽HP
     [SerializeField, ReadOnly] int hp = 0;
@@ -66,6 +68,7 @@ public class Block : MonoBehaviour
 
             if (false == game.isDrag && false == game.isLock)
             {
+                tutorialBlock = false;
                 await Boom();
             }
         });
@@ -111,7 +114,8 @@ public class Block : MonoBehaviour
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
-                            if (false == CheckTutorialBlock(ret.Item2))
+                            if (game.CheckTutorial() &&
+                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -133,7 +137,8 @@ public class Block : MonoBehaviour
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
-                            if (false == CheckTutorialBlock(ret.Item2))
+                            if (game.CheckTutorial() &&
+                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -155,7 +160,8 @@ public class Block : MonoBehaviour
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
-                            if (false == CheckTutorialBlock(ret.Item2))
+                            if (game.CheckTutorial() &&
+                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
                                 break;
 
                             rectTransform.DOAnchorPosX(movePos.x, game.delay);
@@ -177,7 +183,8 @@ public class Block : MonoBehaviour
                             if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
                                 break;
 
-                            if (false == CheckTutorialBlock(ret.Item2))
+                            if (game.CheckTutorial() &&
+                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
                                 break;
 
                             rectTransform.DOAnchorPosY(movePos.y, game.delay);
@@ -207,21 +214,6 @@ public class Block : MonoBehaviour
         return aimAngle * Mathf.Rad2Deg;
     }
 
-    bool CheckTutorialBlock(Block block)
-    {
-        if (false == game.firstDrag && game.stageInfo.tutorial)
-        {
-            var block1Info = game.stageBlockInfoList.Find(_ => _.row == row && _.col == col);
-            var block2Info = game.stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
-            if (block1Info == null || block2Info == null)
-                return false;
-
-            if (false == block1Info.tutorialBlock || false == block2Info.tutorialBlock)
-                return false;
-        }
-
-        return true;
-    }
     void ChangeBlock(Block block)
     {
         game.ChangeBlock(this, block);

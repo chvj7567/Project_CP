@@ -41,7 +41,7 @@ public class CHToolCreateMap : EditorWindow
 
     List<Sprite> blockSpriteList = new List<Sprite>();
     int hp = -1;
-    bool tutorial = false;
+    int tutorialID = -1;
     List<Infomation.StageInfo> stageInfoList = new List<Infomation.StageInfo>();
     List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
     int group;
@@ -141,8 +141,8 @@ public class CHToolCreateMap : EditorWindow
             EditorGUILayout.LabelField("HP 지정");
             hp = EditorGUILayout.IntField(hp);
 
-            EditorGUILayout.LabelField("튜토리얼 지정");
-            tutorial = EditorGUILayout.Toggle(tutorial);
+            EditorGUILayout.LabelField("튜토리얼 ID");
+            tutorialID = EditorGUILayout.IntField(tutorialID);
         }
         EditorGUILayout.EndHorizontal();
 
@@ -289,7 +289,7 @@ public class CHToolCreateMap : EditorWindow
                     {
                         textures[w, h] = texture;
                         hps[w, h] = hp;
-                        tutorialBlocks[w, h] = tutorial;
+                        tutorialBlocks[w, h] = tutorialID > 0;
                     }
                 }
             }
@@ -321,7 +321,7 @@ public class CHToolCreateMap : EditorWindow
                 time = stageInfo.time;
                 targetScore = stageInfo.targetScore;
                 moveCount = stageInfo.moveCount;
-                tutorial = stageInfo.tutorial;
+                tutorialID = stageInfo.tutorialID;
 
                 for (int w = 0; w < boardSize; w++)
                 {
@@ -359,7 +359,7 @@ public class CHToolCreateMap : EditorWindow
                     time = time,
                     targetScore = targetScore,
                     moveCount = moveCount,
-                    tutorial = tutorial,
+                    tutorialID = tutorialID,
                 });
             }
             else
@@ -371,7 +371,7 @@ public class CHToolCreateMap : EditorWindow
                 stageInfo.time = time;
                 stageInfo.targetScore = targetScore;
                 stageInfo.moveCount = moveCount;
-                stageInfo.tutorial = tutorial;
+                stageInfo.tutorialID = tutorialID;
             }
 
             stageBlockInfoList.RemoveAll(_ => _.stage == stage);

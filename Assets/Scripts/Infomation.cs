@@ -38,7 +38,7 @@ public class Infomation
         public float time = -1;
         public int targetScore = -1;
         public int moveCount = -1;
-        public bool tutorial = false;
+        public int tutorialID = -1;
     }
 
     [Serializable]
@@ -72,5 +72,21 @@ public class Infomation
         public int gold = -1;
         public int titleStringID = -1;
         public int tapIndex = -1;
+    }
+
+    [Serializable]
+    public class TutorialInfo
+    {
+        public int tutorialIndex = -1;
+        public int descStringID = -1;
+    }
+
+    [Serializable]
+    public class TutorialStageInfo
+    {
+        public int tutorialStageID = -1;
+        public int descStringID = -1;
+        public Defines.EBlockState connectNextBlock = Defines.EBlockState.None;
+        public int descNextBlockStringID = -1;
     }
 }

@@ -7,17 +7,17 @@
             "time": 30.0,
             "targetScore": 50,
             "moveCount": -1,
-            "tutorial": true
+            "tutorialID": 1
         },
         {
             "group": 1,
             "stage": 2,
-            "blockTypeCount": 2,
+            "blockTypeCount": 3,
             "boardSize": 3,
             "time": -1.0,
             "targetScore": 100,
             "moveCount": 10,
-            "tutorial": false
+            "tutorialID": 2
         },
         {
             "group": 1,
@@ -27,7 +27,7 @@
             "time": 30.0,
             "targetScore": 1,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 1,
@@ -37,7 +37,7 @@
             "time": -1.0,
             "targetScore": 400,
             "moveCount": 10,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 1,
@@ -47,7 +47,7 @@
             "time": 30.0,
             "targetScore": 1200,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 1,
@@ -57,7 +57,7 @@
             "time": 30.0,
             "targetScore": 700,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 1,
@@ -67,7 +67,7 @@
             "time": 30.0,
             "targetScore": 700,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 1,
@@ -77,7 +77,7 @@
             "time": 30.0,
             "targetScore": 1000,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 1,
@@ -87,7 +87,7 @@
             "time": 30.0,
             "targetScore": 1000,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 1,
@@ -97,7 +97,7 @@
             "time": 10.0,
             "targetScore": -1,
             "moveCount": 1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -107,7 +107,7 @@
             "time": 30.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -117,7 +117,7 @@
             "time": 30.0,
             "targetScore": 250,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -127,7 +127,7 @@
             "time": 30.0,
             "targetScore": 200,
             "moveCount": 10,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -137,7 +137,7 @@
             "time": 30.0,
             "targetScore": 450,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -147,7 +147,7 @@
             "time": 30.0,
             "targetScore": 600,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -157,7 +157,7 @@
             "time": 30.0,
             "targetScore": 400,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -167,7 +167,7 @@
             "time": 30.0,
             "targetScore": 600,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -177,7 +177,7 @@
             "time": 30.0,
             "targetScore": -1,
             "moveCount": 5,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -187,7 +187,7 @@
             "time": 30.0,
             "targetScore": -1,
             "moveCount": 5,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 2,
@@ -197,7 +197,7 @@
             "time": 10.0,
             "targetScore": -1,
             "moveCount": 1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -207,7 +207,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -217,7 +217,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -227,7 +227,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -237,7 +237,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -247,7 +247,7 @@
             "time": 30.0,
             "targetScore": 400,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -257,7 +257,7 @@
             "time": 30.0,
             "targetScore": 400,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -267,7 +267,7 @@
             "time": 30.0,
             "targetScore": 500,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -277,7 +277,7 @@
             "time": -1.0,
             "targetScore": 100,
             "moveCount": 20,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -287,7 +287,7 @@
             "time": -1.0,
             "targetScore": 300,
             "moveCount": 15,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 3,
@@ -297,7 +297,7 @@
             "time": 10.0,
             "targetScore": 250,
             "moveCount": 1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -307,7 +307,7 @@
             "time": 60.0,
             "targetScore": -1,
             "moveCount": 20,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -317,7 +317,7 @@
             "time": 30.0,
             "targetScore": 450,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -327,7 +327,7 @@
             "time": -1.0,
             "targetScore": 350,
             "moveCount": 30,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -337,7 +337,7 @@
             "time": 60.0,
             "targetScore": 500,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -347,7 +347,7 @@
             "time": 60.0,
             "targetScore": 500,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -357,7 +357,7 @@
             "time": 60.0,
             "targetScore": 700,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -367,7 +367,7 @@
             "time": -1.0,
             "targetScore": 300,
             "moveCount": 20,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -377,7 +377,7 @@
             "time": 60.0,
             "targetScore": -1,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -387,7 +387,7 @@
             "time": 60.0,
             "targetScore": 1500,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 4,
@@ -397,7 +397,7 @@
             "time": 10.0,
             "targetScore": 720,
             "moveCount": 1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -407,7 +407,7 @@
             "time": 60.0,
             "targetScore": 450,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -417,7 +417,7 @@
             "time": -1.0,
             "targetScore": -1,
             "moveCount": 40,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -427,7 +427,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -437,7 +437,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -447,7 +447,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -457,7 +457,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -467,7 +467,7 @@
             "time": -1.0,
             "targetScore": 300,
             "moveCount": 30,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -477,7 +477,7 @@
             "time": -1.0,
             "targetScore": -1,
             "moveCount": 60,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -487,7 +487,7 @@
             "time": 60.0,
             "targetScore": 1500,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 5,
@@ -497,7 +497,7 @@
             "time": 10.0,
             "targetScore": 500,
             "moveCount": 1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -507,7 +507,7 @@
             "time": 30.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -517,7 +517,7 @@
             "time": -1.0,
             "targetScore": -1,
             "moveCount": 30,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -527,7 +527,7 @@
             "time": 60.0,
             "targetScore": -1,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -537,7 +537,7 @@
             "time": -1.0,
             "targetScore": -1,
             "moveCount": 30,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -547,7 +547,7 @@
             "time": -1.0,
             "targetScore": -1,
             "moveCount": 45,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -557,7 +557,7 @@
             "time": 60.0,
             "targetScore": 300,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -567,7 +567,7 @@
             "time": 60.0,
             "targetScore": 500,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -577,7 +577,7 @@
             "time": 60.0,
             "targetScore": -1,
             "moveCount": 50,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -587,7 +587,7 @@
             "time": 60.0,
             "targetScore": 450,
             "moveCount": -1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 6,
@@ -597,7 +597,7 @@
             "time": 10.0,
             "targetScore": -1,
             "moveCount": 1,
-            "tutorial": false
+            "tutorialID": -1
         },
         {
             "group": 7,
@@ -607,6 +607,6 @@
             "time": 10.0,
             "targetScore": -1,
             "moveCount": 1,
-            "tutorial": false
+            "tutorialID": -1
         }
     ]
