@@ -392,16 +392,7 @@ MonoBehaviour:
   useStreamingAssets: 1
   googleDriveDownload: 0
   bundleKey: Bundle
-  googleDownloadKeyList:
-  - 1wwDLKIjOPOeuw-AEcgGb992upE7lqqi_
-  - 1g-KdzAAOx4CAsDn87UtZ4K82Us6AEgbW
-  - 160H0GyGwv6TUHJ5PB0pR3khzd51tPgTh
-  - 16V8Hxnas0riIc_p8eYE9Fc2gc_eT2DIR
-  - 1-IRIXAuUsi2XVCZop2MbJenYUsc_pB6x
-  - 1ftjEW2jZr-1YRW8sT7xOPG0sFu27lmxT
-  - 1pJEdkPeiUWjbBVtPIBWUYxB4ysXnZwGl
-  - 1IixokRp_9CDAW0F1z36Mwvb4ADMwawuZ
-  - 1m9Ir2BdIZEMaASl_0ZlXfwtP2LRhtZl4
+  googleDownloadKeyList: []
   googleDownloadValueList:
   - data
   - effect
@@ -412,6 +403,7 @@ MonoBehaviour:
   - texture
   - ui
   - unit
+  - font
   totalLoadCount: 0
   loadingCount: 0
   totalDownoadCount: 0
