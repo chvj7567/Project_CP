@@ -88,7 +88,7 @@ public class PageMove : MonoBehaviour
             leftBtn.gameObject.SetActive(false);
         }
 
-        if (page == CHMJson.Instance.GetMaxStageGroup())
+        if (page == CHMMain.Json.GetMaxStageGroup())
         {
             rightBtn.gameObject.SetActive(false);
         }

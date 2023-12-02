@@ -143,7 +143,6 @@ public class First : MonoBehaviour
 #if UNITY_EDITOR == false
             if (GetPhoneLoginState() == true)
             {
-                downloadText.text = "Login...";
                 CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
                     if (success)
@@ -166,15 +165,15 @@ public class First : MonoBehaviour
             }
             else
             {
-                await CHMJson.Instance.Init();
-                Debug.Log($"@JsonPercent{CHMJson.Instance.GetJsonLoadingPercent()}");
+                await CHMMain.Json.Init();
+                Debug.Log($"@JsonPercent{CHMMain.Json.GetJsonLoadingPercent()}");
                 await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
                 SetLoginState(false);
                 dataDownload.Value = true;
             }
 #else
-                await CHMJson.Instance.Init();
-                Debug.Log($"@JsonPercent{CHMJson.Instance.GetJsonLoadingPercent()}");
+                await CHMMain.Json.Init();
+                Debug.Log($"@JsonPercent{CHMMain.Json.GetJsonLoadingPercent()}");
                 await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
                 SetLoginState(false);
                 dataDownload.Value = true;

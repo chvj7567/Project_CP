@@ -25,12 +25,11 @@ public class ResourceDownload : MonoBehaviour
 
         ChangeBackgroundLoop();
 
-        await CHMJson.Instance.Init();
-        await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
-
-        script.bundleLoadSuccess += () =>
+        
+        script.bundleLoadSuccess += async () =>
         {
-            SceneManager.LoadScene(0);
+            await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
+            SceneManager.LoadScene(1);
         };
     }
 

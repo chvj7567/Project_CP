@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1773479978
+CRC: 1133234565
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dbd6f6672277562e3d5476f2f7c1676f
+    Hash: 7595abc90fe76fcfad1d1ecd14550799
   TypeTreeHash:
     serializedVersion: 2
     Hash: 939e20ecac0e95a3f7c5cfb3e57acb1d
@@ -43,19 +43,21 @@ Assets:
 - Assets/AssetPiece/material/Ring7.mat
 - Assets/AssetPiece/material/Spark7.mat
 - Assets/AssetPiece/material/SnowCrystal4.mat
+- Assets/AssetPiece/material/Background.mat
 - Assets/AssetPiece/material/Flash.mat
 - Assets/AssetPiece/material/Spark4.mat
 - Assets/AssetPiece/material/Line.mat
 - Assets/AssetPiece/material/Particle.mat
 - Assets/AssetPiece/material/SnowCrystal.mat
-- Assets/AssetPiece/material/Light3.mat
+- Assets/AssetPiece/material/Hole.mat
 - Assets/AssetPiece/material/Flash4.mat
-- Assets/AssetPiece/material/Flash2.mat
+- Assets/AssetPiece/material/Light3.mat
 - Assets/AssetPiece/material/Ring2.mat
 - Assets/AssetPiece/material/Smoke6.mat
+- Assets/AssetPiece/material/Flash2.mat
 - Assets/AssetPiece/material/Ring3.mat
-- Assets/AssetPiece/material/Smoke5.mat
 - Assets/AssetPiece/material/Cube.mat
+- Assets/AssetPiece/material/Smoke5.mat
 - Assets/AssetPiece/material/Ring8.mat
 - Assets/AssetPiece/material/Ring.mat
 - Assets/AssetPiece/material/Smoke7.mat

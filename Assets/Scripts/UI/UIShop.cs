@@ -46,7 +46,7 @@ public class UIShop : UIBase
         var gold = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
         goldText.SetText(gold);
 
-        var shopScriptList = CHMJson.Instance.GetShopInfoListAll();
+        var shopScriptList = CHMMain.Json.GetShopInfoListAll();
         if (shopScriptList == null)
         {
             Debug.Log("Shop Script is Null");

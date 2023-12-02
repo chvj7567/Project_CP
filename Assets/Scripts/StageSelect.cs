@@ -36,7 +36,7 @@ public class StageSelect : MonoBehaviour
 
     public bool SetPage(int _page)
     {
-        var stageList = CHMJson.Instance.GetStageInfoList(_page);
+        var stageList = CHMMain.Json.GetStageInfoList(_page);
         if (stageList == null || stageList.Count == 0)
             return false;
 

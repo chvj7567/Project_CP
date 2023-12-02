@@ -6,7 +6,7 @@ using UnityEngine;
 using static Defines;
 using static Infomation;
 
-public class CHMJson : CHSingleton<CHMJson>
+public class CHMJson
 {
     [Serializable]
     public class JsonData

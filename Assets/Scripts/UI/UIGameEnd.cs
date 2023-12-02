@@ -62,7 +62,7 @@ public class UIGameEnd : UIBase
                 CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
                 CHMMain.Pool.Clear();
 
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(1);
                 return;
             }
 
@@ -84,7 +84,7 @@ public class UIGameEnd : UIBase
             CHMMain.Pool.Clear();
 
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         });
 
         adBtn.OnClickAsObservable().Subscribe(_ =>

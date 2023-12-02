@@ -128,7 +128,7 @@ public class Game : MonoBehaviour
                 CHMMain.Pool.Clear();
                 PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(1);
             });
         }
 
@@ -176,8 +176,8 @@ public class Game : MonoBehaviour
             PlayerPrefs.SetInt(CHMMain.String.Stage, stage);
         }
 
-        stageInfo = CHMJson.Instance.GetStageInfo(stage);
-        stageBlockInfoList = CHMJson.Instance.GetStageBlockInfoList(stage);
+        stageInfo = CHMMain.Json.GetStageInfo(stage);
+        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
 
         targetScoreText.SetText(stageInfo.targetScore);
         if (stageInfo.targetScore < 0)
@@ -336,7 +336,7 @@ public class Game : MonoBehaviour
             guideHole.sizeDelta = holeValue.Item1;
             guideHole.anchoredPosition = holeValue.Item2;
 
-            var tutorialInfo = CHMJson.Instance.GetTutorialStageInfo(stageInfo.tutorialID);
+            var tutorialInfo = CHMMain.Json.GetTutorialStageInfo(stageInfo.tutorialID);
             if (tutorialInfo != null)
             {
                 guideDesc.SetStringID(tutorialInfo.descStringID);
@@ -353,7 +353,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < tutorialHoleList.Count; ++i)
         {
-            var tutorialInfo = CHMJson.Instance.GetTutorialInfo(i + 1);
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 1);
             if (tutorialInfo == null)
                 break;
 
@@ -795,7 +795,7 @@ public class Game : MonoBehaviour
 
                 if (stageInfo.tutorialID > 0)
                 {
-                    var tutorialInfo = CHMJson.Instance.GetTutorialStageInfo(stageInfo.tutorialID);
+                    var tutorialInfo = CHMMain.Json.GetTutorialStageInfo(stageInfo.tutorialID);
                     if (tutorialInfo == null || tutorialInfo.connectNextBlock == Defines.EBlockState.None)
                         break;
 

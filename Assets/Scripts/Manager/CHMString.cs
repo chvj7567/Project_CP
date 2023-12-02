@@ -21,6 +21,6 @@ public class CHMString
     public string GetString(int stringID)
     {
         var laungageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English;
-        return CHMJson.Instance.GetStringInfo(stringID, laungageType);
+        return CHMMain.Json.GetStringInfo(stringID, laungageType);
     }
 }

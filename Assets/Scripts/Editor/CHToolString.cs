@@ -11,7 +11,6 @@ public class CHToolString : EditorWindow
     CHTool.StringKoreaInfoJson stringKoreaInfoJson = new CHTool.StringKoreaInfoJson();
     CHTool.StringEnglishInfoJson stringEnglishInfoJson = new CHTool.StringEnglishInfoJson();
 
-    Defines.ELanguageType languageType = Defines.ELanguageType.Korea;
     int stringID = -1;
     string korea;
     string english;
@@ -57,8 +56,6 @@ public class CHToolString : EditorWindow
 
             Debug.Log(stringEnglishList.Count);
         }
-
-        languageType = (Defines.ELanguageType)EditorGUILayout.EnumPopup("ELaguageType", languageType);
 
         EditorGUIUtility.labelWidth = 10;
 

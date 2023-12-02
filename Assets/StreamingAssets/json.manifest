@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3445171605
+CRC: 924822956
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4a2585e9488fec775f0f6ac2b9c9405e
+    Hash: 7a514ffaa19b2376e73d6a698bcd1c67
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -13,9 +13,12 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/AssetBundleResources/json/String.json
+- Assets/AssetBundleResources/json/StringEnglish.json
+- Assets/AssetBundleResources/json/Tutorial.json
 - Assets/AssetBundleResources/json/Mission.json
+- Assets/AssetBundleResources/json/StringKorea.json
 - Assets/AssetBundleResources/json/Shop.json
 - Assets/AssetBundleResources/json/StageBlock.json
 - Assets/AssetBundleResources/json/Stage.json
+- Assets/AssetBundleResources/json/TutorialStage.json
 Dependencies: []
