@@ -205,6 +205,24 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
         return JsonUtility.FromJson<Loader>(stringTask);
     }
 #endif
+    Data.Login CreateLoginData(string _key)
+    {
+        Debug.Log($"Create Login {_key}");
+
+        Data.Login data = new Data.Login
+        {
+            key = _key,
+            connectGPGS = false,
+            selectCatShop = 0,
+            tutorialIndex = 0,
+            languageType = Defines.ELanguageType.English,
+        };
+
+        loginDataDic.Add(_key, data);
+
+        return data;
+    }
+
     Data.Stage CreateStageData(string _key)
     {
         Debug.Log($"Create Stage {_key}");
@@ -273,7 +291,7 @@ public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, 
     {
         if (loginDataDic.TryGetValue(_key, out var data) == false)
         {
-            return null;
+            return CreateLoginData(_key);
         }
 
         return data;

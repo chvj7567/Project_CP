@@ -113,31 +113,31 @@
         },
         {
             "stringID": 28,
-            "value": "해당 영역의 블록을 드래그 하여\n같은 블럭이 세 칸 이상 배치가 되면\n동전을 얻습니다."
+            "value": "By dragging the block in the area\r\nWhen the same block is placed in three or more spaces,\r\nGet coins."
         },
         {
             "stringID": 29,
-            "value": "해당 영역의 블록을 드래그 하여\n같은 블럭이 사각형 배치가 되면\n검정 폭탄이 생성됩니다."
+            "value": "By dragging the block in the area\r\nWhen the same block is arranged in a square\r\nA black bomb is created."
         },
         {
             "stringID": 30,
-            "value": "검정 폭탄을 눌러 터트려보세요."
+            "value": "Click on the black bomb to explode it."
         },
         {
             "stringID": 31,
-            "value": "해당 영역의 블록을 드래그 하여\n같은 블럭이 네 칸 이상 배치가 되면\n화살표 폭탄이 생성됩니다."
+            "value": "\rBy dragging the block in the area\r\nWhen the same block is placed in four or more spaces\r\nAn arrow bomb is created."
         },
         {
             "stringID": 32,
-            "value": "화살표 폭탄을 눌러 터트려보세요."
+            "value": "\rPress the arrow bomb to explode it."
         },
         {
             "stringID": 33,
-            "value": "해당 스테이지에서 획득해야 하는 골드 양입니다."
+            "value": "This is the amount of gold you need to earn in that stage."
         },
         {
             "stringID": 34,
-            "value": "해당 스테이지에서 블럭을 움직일 수 있는 횟수입니다."
+            "value": "This is the number of times a block can be moved in that stage."
         },
         {
             "stringID": 35,
@@ -145,19 +145,19 @@
         },
         {
             "stringID": 36,
-            "value": "해당 스테이지에서 현재 획득한 골드 양입니다."
+            "value": "\rThis is the amount of gold currently earned in that stage."
         },
         {
             "stringID": 37,
-            "value": "4개 이상의 일자 블럭 혹은 십자가 블럭 매치를 하였을 때\n어떤 종류의 화살표 폭탄을 생성할지 선택할 수 있는 탭입니다."
+            "value": "When matching 4 or more straight blocks or cross blocks\r\nThis is the tab where you can choose what type of arrow bomb you want to create."
         },
         {
             "stringID": 38,
-            "value": "스테이지 선택 화면으로 이동합니다.\n(진행 중인 스테이지 상태는 저장되지 않습니다.)"
+            "value": "Go to the stage selection screen.\r\n(The ongoing stage status is not saved.)"
         },
         {
             "stringID": 39,
-            "value": "분홍 폭탄은 드래그하여 사용이 가능하며,\n드래그 된 폭탄과 같은 폭탄을 모두 터트립니다."
+            "value": "The pink bomb can be used by dragging it.\r\nDetonates all bombs that are the same as the dragged bomb."
         },
         {
             "stringID": 40,
@@ -178,5 +178,21 @@
         {
             "stringID": 44,
             "value": "AD X 3"
+        },
+        {
+            "stringID": 45,
+            "value": "Lauguage"
+        },
+        {
+            "stringID": 46,
+            "value": "Korean"
+        },
+        {
+            "stringID": 47,
+            "value": "English"
+        },
+        {
+            "stringID": 48,
+            "value": "Language settings will be applied upon reconnection."
         }
     ]

@@ -15,13 +15,16 @@ public class UIBoom : UIBase
 {
     UIBoomArg arg;
 
-    [SerializeField] Button soundBtn;
+    [SerializeField] Button etcBtn;
     [SerializeField] GameObject soundObj;
     [SerializeField] Button boomBtn;
     [SerializeField] GameObject boomObj;
 
     [SerializeField] Slider bgmSlider;
     [SerializeField] Slider effectSlider;
+
+    [SerializeField] Button koreanBtn;
+    [SerializeField] Button englishBtn;
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -30,12 +33,14 @@ public class UIBoom : UIBase
 
     private void Start()
     {
-        soundBtn.OnClickAsObservable().Subscribe(_ =>
+        etcBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (false == soundObj.activeSelf)
             {
                 soundObj.SetActive(true);
                 boomObj.SetActive(false);
+                koreanBtn.gameObject.SetActive(true);
+                englishBtn.gameObject.SetActive(true);
             }
         });
 
@@ -45,7 +50,29 @@ public class UIBoom : UIBase
             {
                 boomObj.SetActive(true);
                 soundObj.SetActive(false);
+                koreanBtn.gameObject.SetActive(false);
+                englishBtn.gameObject.SetActive(false);
             }
+        });
+
+        koreanBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            loginData.languageType = Defines.ELanguageType.Korea;
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+
+            Debug.Log(loginData.languageType);
+        });
+
+        englishBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            loginData.languageType = Defines.ELanguageType.English;
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+
+            Debug.Log(loginData.languageType);
         });
 
         bgmSlider.value = CHMMain.Sound.bgmVolume;

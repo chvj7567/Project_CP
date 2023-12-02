@@ -178,5 +178,21 @@
         {
             "stringID": 44,
             "value": "광고 X 3"
+        },
+        {
+            "stringID": 45,
+            "value": "언어"
+        },
+        {
+            "stringID": 46,
+            "value": "한국어"
+        },
+        {
+            "stringID": 47,
+            "value": "영어"
+        },
+        {
+            "stringID": 48,
+            "value": "언어 설정은 재접속 시 적용됩니다."
         }
     ]

@@ -20,7 +20,7 @@ public class CHMString
 
     public string GetString(int stringID)
     {
-        var laungageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English;
-        return CHMMain.Json.GetStringInfo(stringID, laungageType);
+        var loginData = CHMData.Instance.GetLoginData(CatPang);
+        return CHMMain.Json.GetStringInfo(stringID, loginData.languageType);
     }
 }

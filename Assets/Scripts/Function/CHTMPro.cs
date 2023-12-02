@@ -20,7 +20,9 @@ public class CHTMPro : MonoBehaviour
             {
                 text.text = CHMMain.String.GetString(stringID);
 
-                CHMMain.Resource.LoadFont((font) =>
+                var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+
+                CHMMain.Resource.LoadFont(loginData.languageType, (font) =>
                 {
                     text.font = font;
                 });

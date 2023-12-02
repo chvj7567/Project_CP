@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Habo SDF
+  m_Name: Habo
   m_EditorClassIdentifier: 
   hashCode: -529272363
   material: {fileID: 3606320079389574382}
   materialHashCode: 111055317
   m_Version: 1.1.0
   m_SourceFontFileGUID: 98f5fea57f99fa141aa430098a9a261d
-  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 98f5fea57f99fa141aa430098a9a261d,
-    type: 3}
+  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 98f5fea57f99fa141aa430098a9a261d, type: 3}
   m_SourceFontFile: {fileID: 12800000, guid: 98f5fea57f99fa141aa430098a9a261d, type: 3}
   m_AtlasPopulationMode: 1
   m_FaceInfo:

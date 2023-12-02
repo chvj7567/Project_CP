@@ -25,9 +25,16 @@ public class CHMResource
         LoadAsset<TextAsset>($"data", name, _callback);
     }
 
-    public void LoadFont(Action<TMP_FontAsset> _callback)
+    public void LoadFont(Defines.ELanguageType languageType, Action<TMP_FontAsset> _callback)
     {
-        LoadAsset<TMP_FontAsset>($"font", "NotoSansKR_SemiBold", _callback);
+        if (languageType == Defines.ELanguageType.Korea)
+        {
+            LoadAsset<TMP_FontAsset>($"font", "NotoSansKR_SemiBold", _callback);
+        }
+        else if (languageType == Defines.ELanguageType.English)
+        {
+            LoadAsset<TMP_FontAsset>($"font", "Habo", _callback);
+        }
     }
 
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object
