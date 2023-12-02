@@ -300,7 +300,7 @@ public class Game : MonoBehaviour
 
         tutorialBackgroundBtn.gameObject.SetActive(false);
 
-        if (stageInfo.stage == 1 && loginData.tutorialIndex == 0)
+        if (loginData.tutorialIndex == 0)
         {
             Time.timeScale = 0;
 
