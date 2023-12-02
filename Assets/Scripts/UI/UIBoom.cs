@@ -23,6 +23,7 @@ public class UIBoom : UIBase
     [SerializeField] Slider bgmSlider;
     [SerializeField] Slider effectSlider;
 
+    [SerializeField] GameObject languageObj;
     [SerializeField] Button koreanBtn;
     [SerializeField] Button englishBtn;
 
@@ -39,8 +40,7 @@ public class UIBoom : UIBase
             {
                 soundObj.SetActive(true);
                 boomObj.SetActive(false);
-                koreanBtn.gameObject.SetActive(true);
-                englishBtn.gameObject.SetActive(true);
+                languageObj.SetActive(true);
             }
         });
 
@@ -50,8 +50,7 @@ public class UIBoom : UIBase
             {
                 boomObj.SetActive(true);
                 soundObj.SetActive(false);
-                koreanBtn.gameObject.SetActive(false);
-                englishBtn.gameObject.SetActive(false);
+                languageObj.SetActive(false);
             }
         });
 

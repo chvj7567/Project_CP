@@ -194,5 +194,13 @@
         {
             "stringID": 48,
             "value": "Language settings will be applied upon reconnection."
+        },
+        {
+            "stringID": 49,
+            "value": "Color bombs are black bombs and arrow bombs.\r\nThis is a special bomb that comes out when combined.\r\n(You can check the color bombs in the settings.)"
+        },
+        {
+            "stringID": 50,
+            "value": "\rWhen you combine special bombs, the entire map explodes."
         }
     ]

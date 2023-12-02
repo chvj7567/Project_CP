@@ -166,9 +166,6 @@ public class Game : MonoBehaviour
         });
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        if (loginData == null)
-            return;
-
         var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
         if (stage <= 0)
         {
@@ -385,27 +382,36 @@ public class Game : MonoBehaviour
             return (Vector2.zero, Vector2.zero);
 
         var tutorialBlockList = stageBlockInfoList.FindAll(_ => _.tutorialBlock);
-        if (tutorialBlockList.Count < 2)
+        if (tutorialBlockList.Count <= 0)
             return (Vector2.zero, Vector2.zero);
 
-        var tutorialBlock1 = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
-        var tutorialBlock2 = blockArr[tutorialBlockList[1].row, tutorialBlockList[1].col];
+        float sizeX = 0f, sizeY = 0f;
+        float posX = 0f, posY = 0f;
 
-        float sizeX, sizeY;
-        float posX, posY;
-        if (tutorialBlock1.row == tutorialBlock2.row)
+        if (tutorialBlockList.Count == 1)
         {
-            sizeX = tutorialBlock1.rectTransform.sizeDelta.x * 2;
-            sizeY = tutorialBlock1.rectTransform.sizeDelta.y;
-            posX = (tutorialBlock1.rectTransform.anchoredPosition.x + tutorialBlock2.rectTransform.anchoredPosition.x) / 2f;
-            posY = tutorialBlock1.rectTransform.anchoredPosition.y;
+            var tutorialBlock = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
+            return (tutorialBlock.rectTransform.sizeDelta, tutorialBlock.rectTransform.anchoredPosition);
         }
-        else
+        else if (tutorialBlockList.Count == 2)
         {
-            sizeX = tutorialBlock1.rectTransform.sizeDelta.x;
-            sizeY = tutorialBlock1.rectTransform.sizeDelta.y * 2;
-            posX = tutorialBlock1.rectTransform.anchoredPosition.x;
-            posY = (tutorialBlock1.rectTransform.anchoredPosition.y + tutorialBlock2.rectTransform.anchoredPosition.y) / 2f;
+            var tutorialBlock1 = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
+            var tutorialBlock2 = blockArr[tutorialBlockList[1].row, tutorialBlockList[1].col];
+
+            if (tutorialBlock1.row == tutorialBlock2.row)
+            {
+                sizeX = tutorialBlock1.rectTransform.sizeDelta.x * 2;
+                sizeY = tutorialBlock1.rectTransform.sizeDelta.y;
+                posX = (tutorialBlock1.rectTransform.anchoredPosition.x + tutorialBlock2.rectTransform.anchoredPosition.x) / 2f;
+                posY = tutorialBlock1.rectTransform.anchoredPosition.y;
+            }
+            else
+            {
+                sizeX = tutorialBlock1.rectTransform.sizeDelta.x;
+                sizeY = tutorialBlock1.rectTransform.sizeDelta.y * 2;
+                posX = tutorialBlock1.rectTransform.anchoredPosition.x;
+                posY = (tutorialBlock1.rectTransform.anchoredPosition.y + tutorialBlock2.rectTransform.anchoredPosition.y) / 2f;
+            }
         }
 
         return (new Vector2(sizeX, sizeY), new Vector2(posX, posY));

@@ -1,5 +1,7 @@
 [
   {"tutorialStageID":1, "descStringID":28, "connectNextBlock":-1, "descNextBlockStringID":-1},
   {"tutorialStageID":2, "descStringID":29, "connectNextBlock":18, "descNextBlockStringID":30},
-  {"tutorialStageID":3, "descStringID":39, "connectNextBlock":-1, "descNextBlockStringID":-1}
+  {"tutorialStageID":3, "descStringID":39, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":4, "descStringID":49, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":5, "descStringID":50, "connectNextBlock":-1, "descNextBlockStringID":-1}
 ]

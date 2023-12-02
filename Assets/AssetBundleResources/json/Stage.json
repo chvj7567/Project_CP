@@ -33,11 +33,11 @@
             "group": 1,
             "stage": 4,
             "blockTypeCount": 2,
-            "boardSize": 4,
-            "time": -1.0,
-            "targetScore": 400,
-            "moveCount": 10,
-            "tutorialID": -1
+            "boardSize": 5,
+            "time": 30.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorialID": 4
         },
         {
             "group": 1,
@@ -45,9 +45,9 @@
             "blockTypeCount": 2,
             "boardSize": 5,
             "time": 30.0,
-            "targetScore": 1200,
+            "targetScore": 500,
             "moveCount": -1,
-            "tutorialID": -1
+            "tutorialID": 5
         },
         {
             "group": 1,

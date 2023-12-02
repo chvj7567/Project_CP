@@ -160,6 +160,30 @@
             "tutorialBlock": true
         },
         {
+            "stage": 4,
+            "blockState": 20,
+            "hp": -1,
+            "row": 2,
+            "col": 2,
+            "tutorialBlock": true
+        },
+        {
+            "stage": 5,
+            "blockState": 21,
+            "hp": -1,
+            "row": 2,
+            "col": 1,
+            "tutorialBlock": true
+        },
+        {
+            "stage": 5,
+            "blockState": 23,
+            "hp": -1,
+            "row": 2,
+            "col": 2,
+            "tutorialBlock": true
+        },
+        {
             "stage": 6,
             "blockState": 16,
             "hp": -1,
