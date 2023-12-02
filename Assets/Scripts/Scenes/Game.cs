@@ -1,11 +1,8 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using TMPro;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -342,140 +339,6 @@ public class Game : MonoBehaviour
         //await AfterDrag(null, null);
     }
 
-    async Task<int> TutorialStart()
-    {
-        TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
-
-        guideBackground.SetActive(true);
-
-        for (int i = 0; i < tutorialHoleList.Count; ++i)
-        {
-            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 5);
-            if (tutorialInfo == null)
-                break;
-
-            tutorialHoleList[i].gameObject.SetActive(true);
-            guideDesc.SetStringID(tutorialInfo.descStringID);
-
-            TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
-
-            var btnComplete = tutorialBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
-            {
-                buttonClicktask.SetResult(true);
-            });
-
-            await buttonClicktask.Task;
-
-            tutorialHoleList[i].gameObject.SetActive(false);
-
-            btnComplete.Dispose();
-        }
-
-        tutorialCompleteTask.SetResult(tutorialHoleList.Count);
-
-        return await tutorialCompleteTask.Task;
-    }
-
-    (Vector2, Vector2) GetTutorialStageImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
-    {
-        if (null == stageBlockInfoList || null == blockArr)
-            return (Vector2.zero, Vector2.zero);
-
-        var tutorialBlockList = stageBlockInfoList.FindAll(_ => _.tutorialBlock);
-        if (tutorialBlockList.Count <= 0)
-            return (Vector2.zero, Vector2.zero);
-
-        float sizeX = 0f, sizeY = 0f;
-        float posX = 0f, posY = 0f;
-
-        if (tutorialBlockList.Count == 1)
-        {
-            var tutorialBlock = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
-            return (tutorialBlock.rectTransform.sizeDelta, tutorialBlock.rectTransform.anchoredPosition);
-        }
-        else if (tutorialBlockList.Count == 2)
-        {
-            var tutorialBlock1 = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
-            var tutorialBlock2 = blockArr[tutorialBlockList[1].row, tutorialBlockList[1].col];
-
-            if (tutorialBlock1.row == tutorialBlock2.row)
-            {
-                sizeX = tutorialBlock1.rectTransform.sizeDelta.x * 2;
-                sizeY = tutorialBlock1.rectTransform.sizeDelta.y;
-                posX = (tutorialBlock1.rectTransform.anchoredPosition.x + tutorialBlock2.rectTransform.anchoredPosition.x) / 2f;
-                posY = tutorialBlock1.rectTransform.anchoredPosition.y;
-            }
-            else
-            {
-                sizeX = tutorialBlock1.rectTransform.sizeDelta.x;
-                sizeY = tutorialBlock1.rectTransform.sizeDelta.y * 2;
-                posX = tutorialBlock1.rectTransform.anchoredPosition.x;
-                posY = (tutorialBlock1.rectTransform.anchoredPosition.y + tutorialBlock2.rectTransform.anchoredPosition.y) / 2f;
-            }
-        }
-
-        return (new Vector2(sizeX, sizeY), new Vector2(posX, posY));
-    }
-
-    async void GameEnd(bool clear)
-    {
-        if (isLock)
-        {
-            if (clear)
-            {
-                gameResult.Value = EGameResult.GameClearWait;
-            }
-            else
-            {
-                gameResult.Value = EGameResult.GameOverWait;
-            }
-
-            return;
-        }
-
-        if (false == gameEnd)
-        {
-            gameEnd = true;
-        }
-        else
-        {
-            return;
-        }
-
-        if (CheckCatPang())
-        {
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-            {
-                alarmText = "CatPang!!!",
-                closeTime = 1
-            });
-
-            await Task.Delay(1000);
-            await CatPang();
-        }
-
-        if (clear == false)
-        {
-            gameResult.Value = EGameResult.GameOver;
-        }
-        else
-        {
-            gameResult.Value = EGameResult.GameClear;
-        }
-
-        CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
-        {
-            clearState = GetClearState(),
-            result = gameResult.Value,
-            gold = curScore.Value
-        });
-
-        if (clear)
-        {
-            SaveClearData();
-        }
-    }
-
     private async void Update()
     {
         /*if (isAni == true)
@@ -552,13 +415,151 @@ public class Game : MonoBehaviour
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
+    async Task<int> TutorialStart()
+    // Game UI 튜토리얼 시작
+    {
+        TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
+
+        guideBackground.SetActive(true);
+
+        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        {
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 5);
+            if (tutorialInfo == null)
+                break;
+
+            tutorialHoleList[i].gameObject.SetActive(true);
+            guideDesc.SetStringID(tutorialInfo.descStringID);
+
+            TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
+
+            var btnComplete = tutorialBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
+            {
+                buttonClicktask.SetResult(true);
+            });
+
+            await buttonClicktask.Task;
+
+            tutorialHoleList[i].gameObject.SetActive(false);
+
+            btnComplete.Dispose();
+        }
+
+        tutorialCompleteTask.SetResult(tutorialHoleList.Count);
+
+        return await tutorialCompleteTask.Task;
+    }
+
+    (Vector2, Vector2) GetTutorialStageImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
+    // 튜토리얼에서 밝게 보이는 부분 크기과 위치 지정
+    {
+        if (null == stageBlockInfoList || null == blockArr)
+            return (Vector2.zero, Vector2.zero);
+
+        var tutorialBlockList = stageBlockInfoList.FindAll(_ => _.tutorialBlock);
+        if (tutorialBlockList.Count <= 0)
+            return (Vector2.zero, Vector2.zero);
+
+        float sizeX = 0f, sizeY = 0f;
+        float posX = 0f, posY = 0f;
+
+        if (tutorialBlockList.Count == 1)
+        {
+            var tutorialBlock = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
+            return (tutorialBlock.rectTransform.sizeDelta, tutorialBlock.rectTransform.anchoredPosition);
+        }
+        else if (tutorialBlockList.Count == 2)
+        {
+            var tutorialBlock1 = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
+            var tutorialBlock2 = blockArr[tutorialBlockList[1].row, tutorialBlockList[1].col];
+
+            if (tutorialBlock1.row == tutorialBlock2.row)
+            {
+                sizeX = tutorialBlock1.rectTransform.sizeDelta.x * 2;
+                sizeY = tutorialBlock1.rectTransform.sizeDelta.y;
+                posX = (tutorialBlock1.rectTransform.anchoredPosition.x + tutorialBlock2.rectTransform.anchoredPosition.x) / 2f;
+                posY = tutorialBlock1.rectTransform.anchoredPosition.y;
+            }
+            else
+            {
+                sizeX = tutorialBlock1.rectTransform.sizeDelta.x;
+                sizeY = tutorialBlock1.rectTransform.sizeDelta.y * 2;
+                posX = tutorialBlock1.rectTransform.anchoredPosition.x;
+                posY = (tutorialBlock1.rectTransform.anchoredPosition.y + tutorialBlock2.rectTransform.anchoredPosition.y) / 2f;
+            }
+        }
+
+        return (new Vector2(sizeX, sizeY), new Vector2(posX, posY));
+    }
+
+    async void GameEnd(bool clear)
+    // 게임 종료 시 실행
+    {
+        if (isLock)
+        {
+            if (clear)
+            {
+                gameResult.Value = EGameResult.GameClearWait;
+            }
+            else
+            {
+                gameResult.Value = EGameResult.GameOverWait;
+            }
+
+            return;
+        }
+
+        if (false == gameEnd)
+        {
+            gameEnd = true;
+        }
+        else
+        {
+            return;
+        }
+
+        if (CheckCatPang())
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+            {
+                alarmText = "CatPang!!!",
+                closeTime = 1
+            });
+
+            await Task.Delay(1000);
+            await CatPang();
+        }
+
+        if (clear == false)
+        {
+            gameResult.Value = EGameResult.GameOver;
+        }
+        else
+        {
+            gameResult.Value = EGameResult.GameClear;
+        }
+
+        CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
+        {
+            clearState = GetClearState(),
+            result = gameResult.Value,
+            gold = curScore.Value
+        });
+
+        if (clear)
+        {
+            SaveClearData();
+        }
+    }
+
     bool CheckCatPang()
+    // 마지막에 터지는 캣팡을 실행할지 확인
     {
         for (int w = 0; w < boardSize; ++w)
         {
             for (int h = 0; h < boardSize; ++h)
             {
-                if (boardArr[w, h].IsBoomBlock())
+                if (boardArr[w, h].IsBombBlock())
                 {
                     return true;
                 }
@@ -569,12 +570,15 @@ public class Game : MonoBehaviour
     }
 
     async Task CatPang()
+    // 마지막에 터지는 캣팡!!!
     {
+        isLock = true;
+
         for (int w = 0; w < boardSize; ++w)
         {
             for (int h = 0; h < boardSize; ++h)
             {
-                if (boardArr[w, h].IsBoomBlock())
+                if (boardArr[w, h].IsBombBlock())
                 {
                     await boardArr[w, h].Boom();
 
@@ -582,9 +586,12 @@ public class Game : MonoBehaviour
                 }
             }
         }
+
+        isLock = false;
     }
 
-    void CheckDissapearBlock()
+    void SetDissapearBlock()
+    // 사라져야할 블럭은 랜덤 생상 폭탄으로 변환
     {
         int row = boardSize - 1;
 
@@ -600,6 +607,7 @@ public class Game : MonoBehaviour
     }
 
     async Task ChangeBackgroundLoop()
+    // 배경 변환 반복
     {
         for (int i = 0; i < backgroundList.Count; ++i)
         {
@@ -635,6 +643,7 @@ public class Game : MonoBehaviour
     }
 
     int ChangeBackground()
+    // 다음 배경 인덱스 반환
     {
         if (backgroundIndex >= backgroundList.Count)
             return 0;
@@ -652,18 +661,21 @@ public class Game : MonoBehaviour
     }
 
     void SaveClearData()
+    // 현재 스테이지를 클리어 상태로 저장
     {
         CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState = Defines.EClearState.Clear;
     }
 
     Defines.EClearState GetClearState()
+    // 현재 스테이지의 클리어 상태
     {
         return CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState;
     }
 
-    void SaveBoomCollectionData(Block _block)
+    void SaveBombCollectionData(Block _block)
+    // 폭탄 콜렉션 데이터 저장
     {
-        if (_block.IsBoomBlock() == false && _block.IsSpecialBlock() == false)
+        if (_block.IsBombBlock() == false && _block.IsSpecialBlock() == false)
             return;
 
         if (GetClearState() == Defines.EClearState.Clear)
@@ -675,6 +687,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
+    // 블럭을 드래그하고 난 후 다음 드래그가 가능한 상태까지
     {
         if (moveCount.Value == 0)
             return;
@@ -730,7 +743,7 @@ public class Game : MonoBehaviour
                 return;
             }
             // 두 블럭 모두 폭탄 블럭일 경우
-            else if (block1.IsBoomBlock() == true && block2.IsBoomBlock() == true)
+            else if (block1.IsBombBlock() == true && block2.IsBombBlock() == true)
             {
                 bonusScore.Value += 30;
                 block2.match = true;
@@ -739,13 +752,13 @@ public class Game : MonoBehaviour
                 block1.changeBlockState = random;
             }
             // 한 블럭만 폭탄 블럭일 경우
-            else if (block1.IsBoomBlock() == true)
+            else if (block1.IsBombBlock() == true)
             {
                 await block1.Boom();
                 return;
             }
             // 한 블럭만 폭탄 블럭일 경우
-            else if (block2.IsBoomBlock() == true)
+            else if (block2.IsBombBlock() == true)
             {
                 await block2.Boom();
                 return;
@@ -779,7 +792,7 @@ public class Game : MonoBehaviour
             curScore.Value += bonusScore.Value;
             bonusScore.Value = 0;
 
-            CheckDissapearBlock();
+            SetDissapearBlock();
 
             await UpdateMap();
             CheckMap();
@@ -821,6 +834,7 @@ public class Game : MonoBehaviour
     }
 
     public bool CheckTutorial()
+    // 튜토리얼 블럭인지 확인
     {
         for (int w = 0; w < boardSize; w++)
         {
@@ -837,6 +851,7 @@ public class Game : MonoBehaviour
     }
 
     (Vector2, Vector2) TutorialBlockSetting(Block[,] blockArr, Defines.EBlockState blockState)
+    // 튜토리얼 블럭으로 세팅
     {
         for (int w = 0; w < boardSize; w++)
         {
@@ -1005,7 +1020,7 @@ public class Game : MonoBehaviour
                 if (curBlock.IsFixdBlock() == true)
                     continue;
 
-                if (curBlock.IsBoomBlock() == true || curBlock.IsSpecialBlock() == true)
+                if (curBlock.IsBombBlock() == true || curBlock.IsSpecialBlock() == true)
                 {
                     canMatchRow = curBlock.row;
                     canMatchCol = curBlock.col;
@@ -1244,7 +1259,7 @@ public class Game : MonoBehaviour
                     }
 
                     // 아이템이 연달아 터지는 경우
-                    if (block.IsBoomBlock() == true && block.boom == false)
+                    if (block.IsBombBlock() == true && block.boom == false)
                     {
                         bonusScore.Value += 20;
                         await block.Boom(false);
@@ -1493,6 +1508,7 @@ public class Game : MonoBehaviour
     }
 
     void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _blockState, bool isDelay = true)
+    // 새 블럭을 만든다.
     {
         _blockState = _block.CheckSelectCatShop(_blockState);
 
@@ -1516,7 +1532,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBoomBlock() == true || blockList[i].IsSpecialBlock() == true)
+            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBombBlock() == true || blockList[i].IsSpecialBlock() == true)
             {
                 blockState = Defines.EBlockState.None;
                 matchCount = 0;
@@ -1644,7 +1660,8 @@ public class Game : MonoBehaviour
         }
     }
 
-    RectTransform CopyEffect(ParticleSystem effect, Vector2 movePos)
+    RectTransform CreateEffect(ParticleSystem effect, Vector2 movePos)
+    // 이펙트를 생성한다.
     {
         var copyObj = CHMMain.Resource.Instantiate(effect.gameObject, transform.parent);
         copyObj.SetActive(true);
@@ -1655,6 +1672,7 @@ public class Game : MonoBehaviour
     }
 
     public void ChangeBlock(Block moveBlock, Block targetBlock)
+    // 블럭의 위치 및 상태를 바꾼다.
     {
         var tempPos = moveBlock.originPos;
         moveBlock.originPos = targetBlock.originPos;
@@ -1677,9 +1695,10 @@ public class Game : MonoBehaviour
     }
 
     bool IsNormalBlock(int row, int col)
+    // 유효한 일반 블럭인지 확인
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
-            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBoomBlock() == true ||
+            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBombBlock() == true ||
             boardArr[row, col].IsSpecialBlock() == true)
             return false;
 
@@ -1687,11 +1706,13 @@ public class Game : MonoBehaviour
     }
 
     bool IsValidIndex(int row, int col)
+    // 인덱스가 최대 값을 벗어나는지 확인
     {
         return row >= 0 && row < MAX && col >= 0 && col < MAX;
     }
 
     bool ChangeMatchState(int row, int col)
+    // 해당 블럭을 match 상태로 만든다.
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return false;
@@ -1708,6 +1729,7 @@ public class Game : MonoBehaviour
     }
 
     void CheckArround(int row, int col)
+    // 블럭이 매치되었다면 위, 아래, 양 옆 블럭에 데미지를 준다.
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return;
@@ -1719,6 +1741,7 @@ public class Game : MonoBehaviour
     }
 
     void DamageArround(int row, int col)
+    // hp가 있는 블럭이라면 hp - 1을 한다.
     {
         if (IsValidIndex(row, col) && boardArr[row, col] != null)
         {
@@ -1758,7 +1781,7 @@ public class Game : MonoBehaviour
         CHMMain.Sound.Play(ESound.Ching);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
-        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+        CreateEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         ChangeMatchState(block.row - 1, block.col - 1);
         ChangeMatchState(block.row - 1, block.col);
@@ -1769,7 +1792,7 @@ public class Game : MonoBehaviour
         ChangeMatchState(block.row + 1, block.col);
         ChangeMatchState(block.row + 1, block.col + 1);
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -1786,7 +1809,7 @@ public class Game : MonoBehaviour
 
         CHMMain.Sound.Play(ESound.Pising);
 
-        CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line], block.rectTransform.anchoredPosition);
+        CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line], block.rectTransform.anchoredPosition);
 
         for (int i = 0; i < MAX; ++i)
         {
@@ -1798,7 +1821,7 @@ public class Game : MonoBehaviour
             ChangeMatchState(block.row, i);
         }
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -1827,7 +1850,7 @@ public class Game : MonoBehaviour
                 {
                     block.match = true;
 
-                    var rt = CopyEffect(bombEffectPS, _specialBlock.rectTransform.anchoredPosition);
+                    var rt = CreateEffect(bombEffectPS, _specialBlock.rectTransform.anchoredPosition);
                     rt.DOAnchorPos(block.rectTransform.anchoredPosition, .05f);
                     blueHoleList.Add(rt.gameObject);
 
@@ -1836,7 +1859,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        SaveBoomCollectionData(_specialBlock);
+        SaveBombCollectionData(_specialBlock);
 
         if (_ani)
         {
@@ -1860,10 +1883,10 @@ public class Game : MonoBehaviour
 
         CHMMain.Sound.Play(ESound.Pising);
 
-        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 0));
 
-        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt2 = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, 180));
 
         for (int i = 0; i < MAX; ++i)
@@ -1871,7 +1894,7 @@ public class Game : MonoBehaviour
             ChangeMatchState(block.row, i);
         }
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -1888,10 +1911,10 @@ public class Game : MonoBehaviour
 
         CHMMain.Sound.Play(ESound.Pising);
 
-        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 90));
 
-        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt2 = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, 270));
 
         for (int i = 0; i < MAX; ++i)
@@ -1899,7 +1922,7 @@ public class Game : MonoBehaviour
             ChangeMatchState(i, block.col);
         }
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -1916,7 +1939,7 @@ public class Game : MonoBehaviour
 
         CHMMain.Sound.Play(ESound.Pising);
 
-        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Center_Hit], block.rectTransform.anchoredPosition);
+        var rt = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Center_Hit], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 45));
 
         for (int i = 0; i < MAX; ++i)
@@ -1927,7 +1950,7 @@ public class Game : MonoBehaviour
             ChangeMatchState(block.row + i, block.col + i);
         }
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -1944,10 +1967,10 @@ public class Game : MonoBehaviour
 
         CHMMain.Sound.Play(ESound.Pising);
 
-        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 45));
 
-        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt2 = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, 225));
 
         for (int i = 0; i < MAX; ++i)
@@ -1956,7 +1979,7 @@ public class Game : MonoBehaviour
             ChangeMatchState(block.row + i, block.col - i);
         }
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -1973,10 +1996,10 @@ public class Game : MonoBehaviour
 
         CHMMain.Sound.Play(ESound.Pising);
 
-        var rt = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, -45));
 
-        var rt2 = CopyEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        var rt2 = CreateEffect(pangEffectList[(int)Defines.EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, -225));
 
         for (int i = 0; i < MAX; ++i)
@@ -1985,7 +2008,7 @@ public class Game : MonoBehaviour
             ChangeMatchState(block.row + i, block.col + i);
         }
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -2003,7 +2026,7 @@ public class Game : MonoBehaviour
         CHMMain.Sound.Play(ESound.Pising);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
-        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+        CreateEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         ChangeMatchState(block.row - 2, block.col);
         ChangeMatchState(block.row - 1, block.col);
@@ -2018,7 +2041,7 @@ public class Game : MonoBehaviour
         ChangeMatchState(block.row + 1, block.col);
         ChangeMatchState(block.row + 2, block.col);
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -2036,7 +2059,7 @@ public class Game : MonoBehaviour
         CHMMain.Sound.Play(ESound.Pising);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
-        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+        CreateEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         ChangeMatchState(block.row - 2, block.col - 2);
         ChangeMatchState(block.row - 2, block.col - 1);
@@ -2055,7 +2078,7 @@ public class Game : MonoBehaviour
         ChangeMatchState(block.row + 2, block.col + 1);
         ChangeMatchState(block.row + 2, block.col + 2);
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -2073,7 +2096,7 @@ public class Game : MonoBehaviour
         CHMMain.Sound.Play(ESound.Pising);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
-        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+        CreateEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         ChangeMatchState(block.row - 2, block.col - 1);
         ChangeMatchState(block.row - 1, block.col - 2);
@@ -2091,7 +2114,7 @@ public class Game : MonoBehaviour
         ChangeMatchState(block.row + 1, block.col + 2);
         ChangeMatchState(block.row + 1, block.col + 1);
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {
@@ -2109,7 +2132,7 @@ public class Game : MonoBehaviour
         CHMMain.Sound.Play(ESound.Pising);
 
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
-        CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+        CreateEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
         ChangeMatchState(block.row - 2, block.col - 2);
         ChangeMatchState(block.row - 2, block.col - 1);
@@ -2124,7 +2147,7 @@ public class Game : MonoBehaviour
         ChangeMatchState(block.row + 2, block.col + 1);
         ChangeMatchState(block.row + 2, block.col + 2);
 
-        SaveBoomCollectionData(block);
+        SaveBombCollectionData(block);
 
         if (ani)
         {

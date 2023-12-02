@@ -496,7 +496,7 @@ public class Block : MonoBehaviour
         }
     }
 
-    public bool IsBoomBlock()
+    public bool IsBombBlock()
     {
         switch (blockState)
         {

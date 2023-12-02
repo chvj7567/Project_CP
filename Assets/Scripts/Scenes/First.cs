@@ -1,10 +1,7 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using TMPro;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -35,20 +32,14 @@ public class First : MonoBehaviour
 
     CancellationTokenSource tokenSource;
 
-    async void Start()
+    bool initButton = false;
+
+    void InitButton()
     {
-        CHMIAP.Instance.Init();
+        if (initButton)
+            return;
 
-        tokenSource = new CancellationTokenSource();
-
-        stageSelect1.SetActive(false);
-        stageSelect2.SetActive(false);
-        startBtn.gameObject.SetActive(false);
-        missionBtn.gameObject.SetActive(false);
-        connectGPGSBtn.gameObject.SetActive(false);
-        logoutBtn.gameObject.SetActive(false);
-        shopBtn.gameObject.SetActive(false);
-        boomBtn.gameObject.SetActive(false);
+        initButton = true;
 
         startBtn.OnClickAsObservable().Subscribe(async _ =>
         {
@@ -101,6 +92,7 @@ public class First : MonoBehaviour
                 return;
 
             SetLoginState(false);
+
 #if UNITY_EDITOR == false
             CHMGPGS.Instance.Logout();
 #endif
@@ -145,6 +137,31 @@ public class First : MonoBehaviour
 #endif
             }
         });
+    }
+
+    async void Start()
+    {
+        tokenSource = new CancellationTokenSource();
+
+        stageSelect1.SetActive(false);
+        stageSelect2.SetActive(false);
+        startBtn.gameObject.SetActive(false);
+        missionBtn.gameObject.SetActive(false);
+        connectGPGSBtn.gameObject.SetActive(false);
+        logoutBtn.gameObject.SetActive(false);
+        shopBtn.gameObject.SetActive(false);
+        boomBtn.gameObject.SetActive(false);
+
+        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        {
+            tutorialHoleList[i].gameObject.SetActive(false);
+        }
+
+        guideBackground.SetActive(false);
+        tutorialBackgroundBtn.gameObject.SetActive(false);
+
+        CHMIAP.Instance.Init();
+        CHMAdmob.Instance.Init();
 
         dataDownload.Subscribe(_ =>
         {
@@ -154,11 +171,6 @@ public class First : MonoBehaviour
                 startBtn.gameObject.SetActive(true);
             }
         });
-
-        /*bundleLoadingScript.bundleLoadSuccess += () =>
-        {
-            bundleDownload.Value = true;
-        };*/
 
         bundleDownload.Subscribe(async _ =>
         {
@@ -202,7 +214,6 @@ public class First : MonoBehaviour
                 SetLoginState(false);
                 dataDownload.Value = true;
 #endif
-                //CHMData.Instance.SaveData(CHMMain.String.catPang);
             }
             else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
             {
@@ -214,10 +225,6 @@ public class First : MonoBehaviour
         if (CHMAssetBundle.Instance.firstDownload == true)
         {
             pageMove.ActiveMoveBtn(false);
-            //bundleLoadingScript.Init();
-            
-            CHMAdmob.Instance.Init();
-
             backgroundIndex = 0;
         }
         else
@@ -246,13 +253,7 @@ public class First : MonoBehaviour
 
         bundleDownload.Value = true;
 
-        for (int i = 0; i < tutorialHoleList.Count; ++i)
-        {
-            tutorialHoleList[i].gameObject.SetActive(false);
-        }
-
-        guideBackground.SetActive(false);
-        tutorialBackgroundBtn.gameObject.SetActive(false);
+        InitButton();
     }
 
     async Task<int> TutorialStart()
@@ -306,8 +307,6 @@ public class First : MonoBehaviour
         connectGPGSBtn.gameObject.SetActive(_active == false);
         logoutBtn.gameObject.SetActive(_active);
 
-        //CHMData.Instance.SaveData(CHMMain.String.catPang);
-
         return true;
     }
 
@@ -322,21 +321,6 @@ public class First : MonoBehaviour
     bool GetPhoneLoginState()
     {
         return PlayerPrefs.GetInt(CHMMain.String.Login) == 1;
-    }
-
-    void CopyFile(string _fileDirectoryPath, string _destDirectoryPath, string _fileName)
-    {
-        if (Directory.Exists(_fileDirectoryPath) == false)
-            return;
-
-        if (Directory.Exists(_destDirectoryPath) == false)
-        {
-            Directory.CreateDirectory(_destDirectoryPath);
-        }
-
-        File.Copy(Path.Combine(_fileDirectoryPath, _fileName), Path.Combine(_destDirectoryPath, _fileName));
-
-        Debug.Log($"Copy Success : {_fileName}");
     }
 
     async Task ChangeBackgroundLoop()
