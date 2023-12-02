@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
+using TMPro;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,7 +14,7 @@ public class CHMResource
     private void LoadAsset<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
 #if UNITY_EDITOR
-        CHMAssetBundle.Instance.LoadAsset<T>(_bundleName, _assetName, _callback);
+        CHMAssetBundle.Instance.LoadAssetOnEditor<T>(_bundleName, _assetName, _callback);
 #else
         CHMAssetBundle.Instance.LoadAsset<T>(_bundleName, _assetName, _callback);
 #endif
@@ -22,6 +23,11 @@ public class CHMResource
     public void LoadData(string name, Action<TextAsset> _callback)
     {
         LoadAsset<TextAsset>($"data", name, _callback);
+    }
+
+    public void LoadFont(Action<TMP_FontAsset> _callback)
+    {
+        LoadAsset<TMP_FontAsset>($"font", "NotoSansKR_SemiBold", _callback);
     }
 
     public void InstantiateAsObservable<T>(string _bundleName, string _assetName, Action<T> _callback = null) where T : UnityEngine.Object

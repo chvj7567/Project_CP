@@ -1,1 +1,182 @@
-[{"stringID":-1,"value":""},{"stringID":1,"value":"{0}"},{"stringID":2,"value":"구글"},{"stringID":3,"value":"설정"},{"stringID":4,"value":"로그아웃"},{"stringID":5,"value":"미션"},{"stringID":6,"value":"상점"},{"stringID":7,"value":"시작"},{"stringID":8,"value":"Delay\n{0} Down"},{"stringID":9,"value":"Plus\nCat"},{"stringID":10,"value":"CatPang\nUpgrade"},{"stringID":11,"value":"Score\nLotto"},{"stringID":12,"value":"price\n{0}score"},{"stringID":13,"value":"I Have No Money"},{"stringID":14,"value":"Select"},{"stringID":15,"value":"Speed\n{0} Up"},{"stringID":16,"value":"Speed\n{0}"},{"stringID":17,"value":"Target"},{"stringID":18,"value":"Move"},{"stringID":19,"value":"Bomb"},{"stringID":20,"value":"{0}/{1}"},{"stringID":21,"value":"Current Skin"},{"stringID":22,"value":"{0} {1}"},{"stringID":23,"value":"Remove\nAD"},{"stringID":24,"value":"Block\nSkin"},{"stringID":25,"value":"Time\nItemX10"},{"stringID":26,"value":"Move\nItemX10"},{"stringID":27,"value":"Stage {0}"},{"stringID":28,"value":"해당 영역의 블록을 드래그 하여\n같은 블럭이 세 칸 이상 배치가 되면\n동전을 얻습니다."},{"stringID":29,"value":"해당 영역의 블록을 드래그 하여\n같은 블럭이 사각형 배치가 되면\n검정 폭탄이 생성됩니다."},{"stringID":30,"value":"검정 폭탄을 눌러 터트려보세요."},{"stringID":31,"value":"해당 영역의 블록을 드래그 하여\n같은 블럭이 네 칸 이상 배치가 되면\n화살표 폭탄이 생성됩니다."},{"stringID":32,"value":"화살표 폭탄을 눌러 터트려보세요."},{"stringID":33,"value":"해당 스테이지에서 획득해야 하는 골드 양입니다."},{"stringID":34,"value":"해당 스테이지에서 블럭을 움직일 수 있는 횟수입니다."},{"stringID":35,"value":"해당 스테이지를 플레이 할 수 있는 시간입니다.\n(단, 골드 획득 시에는 시간이 흐르지 않습니다.)"},{"stringID":36,"value":"해당 스테이지에서 현재 획득한 골드 양입니다."},{"stringID":37,"value":"4개 이상의 일자 블럭 혹은 십자가 블럭 매치를 하였을 때\n어떤 종류의 화살표 폭탄을 생성할지 선택할 수 있는 탭입니다."},{"stringID":38,"value":"스테이지 선택 화면으로 이동합니다.\n(진행 중인 스테이지 상태는 저장되지 않습니다.)"}]
+[
+        {
+            "stringID": -1,
+            "value": ""
+        },
+        {
+            "stringID": 1,
+            "value": "{0}"
+        },
+        {
+            "stringID": 2,
+            "value": "구글"
+        },
+        {
+            "stringID": 3,
+            "value": "설정"
+        },
+        {
+            "stringID": 4,
+            "value": "로그아웃"
+        },
+        {
+            "stringID": 5,
+            "value": "미션"
+        },
+        {
+            "stringID": 6,
+            "value": "상점"
+        },
+        {
+            "stringID": 7,
+            "value": "시작"
+        },
+        {
+            "stringID": 8,
+            "value": "뒤로 가기"
+        },
+        {
+            "stringID": 9,
+            "value": "기타"
+        },
+        {
+            "stringID": 10,
+            "value": "캣팡"
+        },
+        {
+            "stringID": 11,
+            "value": "브금"
+        },
+        {
+            "stringID": 12,
+            "value": "효과음"
+        },
+        {
+            "stringID": 13,
+            "value": "보상"
+        },
+        {
+            "stringID": 14,
+            "value": "광고"
+        },
+        {
+            "stringID": 15,
+            "value": "메뉴"
+        },
+        {
+            "stringID": 16,
+            "value": "횟수 증가"
+        },
+        {
+            "stringID": 17,
+            "value": "시간 증가"
+        },
+        {
+            "stringID": 18,
+            "value": "폭탄"
+        },
+        {
+            "stringID": 19,
+            "value": "골드"
+        },
+        {
+            "stringID": 20,
+            "value": "{0}/{1}"
+        },
+        {
+            "stringID": 21,
+            "value": "현재 스킨"
+        },
+        {
+            "stringID": 22,
+            "value": "{0} {1}"
+        },
+        {
+            "stringID": 23,
+            "value": "광고\n제거"
+        },
+        {
+            "stringID": 24,
+            "value": "블럭\n스킨"
+        },
+        {
+            "stringID": 25,
+            "value": "시간 증가\n아이템 X10"
+        },
+        {
+            "stringID": 26,
+            "value": "횟수 증가\n아이템X10"
+        },
+        {
+            "stringID": 27,
+            "value": "스테이지 {0}"
+        },
+        {
+            "stringID": 28,
+            "value": "해당 영역의 블록을 드래그 하여\n같은 블럭이 세 칸 이상 배치가 되면\n동전을 얻습니다."
+        },
+        {
+            "stringID": 29,
+            "value": "해당 영역의 블록을 드래그 하여\n같은 블럭이 사각형 배치가 되면\n검정 폭탄이 생성됩니다."
+        },
+        {
+            "stringID": 30,
+            "value": "검정 폭탄을 눌러 터트려보세요."
+        },
+        {
+            "stringID": 31,
+            "value": "해당 영역의 블록을 드래그 하여\n같은 블럭이 네 칸 이상 배치가 되면\n화살표 폭탄이 생성됩니다."
+        },
+        {
+            "stringID": 32,
+            "value": "화살표 폭탄을 눌러 터트려보세요."
+        },
+        {
+            "stringID": 33,
+            "value": "해당 스테이지에서 획득해야 하는 골드 양입니다."
+        },
+        {
+            "stringID": 34,
+            "value": "해당 스테이지에서 블럭을 움직일 수 있는 횟수입니다."
+        },
+        {
+            "stringID": 35,
+            "value": "해당 스테이지를 플레이 할 수 있는 시간입니다.\n(단, 골드 획득 시에는 시간이 흐르지 않습니다.)"
+        },
+        {
+            "stringID": 36,
+            "value": "해당 스테이지에서 현재 획득한 골드 양입니다."
+        },
+        {
+            "stringID": 37,
+            "value": "4개 이상의 일자 블럭 혹은 십자가 블럭 매치를 하였을 때\n어떤 종류의 화살표 폭탄을 생성할지 선택할 수 있는 탭입니다."
+        },
+        {
+            "stringID": 38,
+            "value": "스테이지 선택 화면으로 이동합니다.\n(진행 중인 스테이지 상태는 저장되지 않습니다.)"
+        },
+        {
+            "stringID": 39,
+            "value": "분홍 폭탄은 드래그하여 사용이 가능하며,\n드래그 된 폭탄과 같은 폭탄을 모두 터트립니다."
+        },
+        {
+            "stringID": 40,
+            "value": "유료"
+        },
+        {
+            "stringID": 41,
+            "value": "구매"
+        },
+        {
+            "stringID": 42,
+            "value": "구매 완료"
+        },
+        {
+            "stringID": 43,
+            "value": "스킨"
+        },
+        {
+            "stringID": 44,
+            "value": "광고 X 3"
+        }
+    ]

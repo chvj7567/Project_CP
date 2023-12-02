@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -175,6 +176,10 @@ public class CHMAssetBundle : CHSingleton<CHMAssetBundle>
             {
                 path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.mp3";
             }
+        }
+        else if (typeof(T) == typeof(TMP_FontAsset))
+        {
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.asset";
         }
 
         T original = AssetDatabase.LoadAssetAtPath<T>(path);

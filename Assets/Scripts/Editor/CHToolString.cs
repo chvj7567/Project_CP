@@ -79,11 +79,19 @@ public class CHToolString : EditorWindow
             {
                 korea = stringInfo.value;
             }
+            else
+            {
+                korea = "";
+            }
 
             var stringInfo2 = stringEnglishList.Find(_ => _.stringID == stringID);
             if (stringInfo2 != null)
             {
                 english = stringInfo2.value;
+            }
+            else
+            {
+                english = "";
             }
         }
 

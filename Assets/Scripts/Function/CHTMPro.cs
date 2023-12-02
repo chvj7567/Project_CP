@@ -19,6 +19,11 @@ public class CHTMPro : MonoBehaviour
             if (stringID != -1)
             {
                 text.text = CHMMain.String.GetString(stringID);
+
+                CHMMain.Resource.LoadFont((font) =>
+                {
+                    text.font = font;
+                });
             }
         }
     }
