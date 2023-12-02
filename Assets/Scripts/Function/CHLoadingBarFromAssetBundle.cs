@@ -140,7 +140,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             bundleRequest = AssetBundle.LoadFromFileAsync(Path.Combine(bundlePath + "/", $"{bundleName}.unity3d"));
         }
 
-        downloadText.text = $"{bundleName} Loading...";
+        if (downloadText) downloadText.text = $"{bundleName} Loading...";
 
         // 다운로드 표시
         float downloadProgress = 0;
@@ -172,7 +172,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             if (loadingBar) loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
             if (loadingText) loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
 
-            downloadText.text = $"{bundleName} Load Success";
+            if (downloadText) downloadText.text = $"{bundleName} Load Success";
             Debug.Log($"{bundleName} Load Success");
 
             if (loadingCount == totalLoadCount)
@@ -180,7 +180,8 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
                 if (loadingBar) loadingBar.fillAmount = 1;
                 if (loadingText) loadingText.text = "100%";
                 Debug.Log($"Bundle load Success");
-                bundleLoadSuccess.Invoke();
+                if (bundleLoadSuccess != null)
+                    bundleLoadSuccess.Invoke();
             }
         }
     }

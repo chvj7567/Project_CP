@@ -7,30 +7,8 @@ using UnityEngine;
 
 public class CHToolCreateMap : EditorWindow
 {
-    [Serializable]
-    public class StageInfoJson
-    {
-        public List<Infomation.StageInfo> stageList = new List<Infomation.StageInfo>();
-    }
-
-    StageInfoJson stageInfoJson = new StageInfoJson();
-
-    [Serializable]
-    public class StageBlockInfoJson
-    {
-        public List<Infomation.StageBlockInfo> stageBlockList = new List<Infomation.StageBlockInfo>();
-    }
-
-    StageBlockInfoJson stageBlockInfoJson = new StageBlockInfoJson();
-
-    [MenuItem("CHTools/Create Map")]
-    static void ShowWindow()
-    {
-        var window = GetWindow(typeof(CHToolCreateMap));
-        window.titleContent.text = "Single Window";
-        window.minSize = new Vector2(650, 800);
-        window.maxSize = new Vector2(650, 800);
-    }
+    CHTool.StageInfoJson stageInfoJson = new CHTool.StageInfoJson();
+    CHTool.StageBlockInfoJson stageBlockInfoJson = new CHTool.StageBlockInfoJson();
 
     int boardSize = 1;
     Texture emptyTexture = null;
@@ -51,13 +29,22 @@ public class CHToolCreateMap : EditorWindow
     int targetScore = -1;
     int moveCount = -1;
 
+    [MenuItem("CHTools/Create Map")]
+    static void ShowWindow()
+    {
+        var window = GetWindow(typeof(CHToolCreateMap));
+        window.titleContent.text = "Single Window";
+        window.minSize = new Vector2(650, 800);
+        window.maxSize = new Vector2(650, 800);
+    }
+
     private async void OnGUI()
     {
         if (blockSpriteList != null && blockSpriteList.Count <= 0)
         {
             for (Defines.EBlockState i = 0; i < Defines.EBlockState.Max; ++i)
             {
-                LoadAssetOnEditor<Sprite>(Defines.EResourceType.Sprite.ToString(), i.ToString(), (sprite) =>
+                CHTool.LoadAssetOnEditor<Sprite>(Defines.EResourceType.Sprite.ToString(), i.ToString(), (sprite) =>
                 {
                     if (sprite != null)
                         blockSpriteList.Add(sprite);
@@ -69,7 +56,7 @@ public class CHToolCreateMap : EditorWindow
 
         if (stageInfoList != null && stageInfoList.Count <= 0)
         {
-            LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.Stage.ToString(), (textAsset) =>
+            CHTool.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.Stage.ToString(), (textAsset) =>
             {
                 var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stageInfoArr)
@@ -83,7 +70,7 @@ public class CHToolCreateMap : EditorWindow
 
         if (stageBlockInfoList != null && stageBlockInfoList.Count <= 0)
         {
-            LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StageBlock.ToString(), (textAsset) =>
+            CHTool.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StageBlock.ToString(), (textAsset) =>
             {
                 var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageBlockInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stageBlockInfoArr)
@@ -311,6 +298,16 @@ public class CHToolCreateMap : EditorWindow
 
         if (GUILayout.Button("불러오기(Stage 값 기준)", GUILayout.Width(595), GUILayout.Height(30)))
         {
+            for (int w = 0; w < 9; w++)
+            {
+                for (int h = 0; h < 9; h++)
+                {
+                    textures[w, h] = null;
+                    hps[w, h] = -1;
+                    tutorialBlocks[w, h] = false;
+                }
+            }
+
             var stageInfo = stageInfoList.Find(_ => _.stage == stage);
             var stageBlockInfo = stageBlockInfoList.FindAll(_ => _.stage == stage);
             if (stageInfo != null && stageBlockInfo != null)
@@ -468,50 +465,5 @@ public class CHToolCreateMap : EditorWindow
             return Defines.EBlockState.Fish;
 
         return Defines.EBlockState.None;
-    }
-
-    public void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
-    {
-        string path = null;
-
-        if (typeof(T) == typeof(GameObject))
-        {
-            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.prefab";
-        }
-        else if (typeof(T) == typeof(TextAsset))
-        {
-            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.json";
-        }
-        else if (typeof(T) == typeof(Sprite))
-        {
-            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.jpg";
-
-            T temp = AssetDatabase.LoadAssetAtPath<T>(path);
-
-            if (temp == null)
-            {
-                path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.png";
-            }
-        }
-        else if (typeof(T) == typeof(AudioClip))
-        {
-            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.wav";
-
-            T temp = AssetDatabase.LoadAssetAtPath<T>(path);
-
-            if (temp == null)
-            {
-                path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.mp3";
-            }
-        }
-
-        T original = AssetDatabase.LoadAssetAtPath<T>(path);
-
-        if (original == null)
-        {
-            Debug.Log($"Null : {_assetName}");
-        }
-
-        _callback(original);
     }
 }

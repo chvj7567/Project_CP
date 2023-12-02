@@ -18,13 +18,9 @@ public class CHMString
     public string Product_Name_AddMove = "AddMove";
     public string Product_ID_AddMove = "com.catpang.product3";
 
-    public string GetString(int _stringID)
+    public string GetString(int stringID)
     {
-        return CHMJson.Instance.GetStringInfo(_stringID);
-    }
-
-    public string GetString(int _stringID, params object[] _argArr)
-    {
-        return string.Format(GetString(_stringID), _argArr);
+        var laungageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English;
+        return CHMJson.Instance.GetStringInfo(stringID, laungageType);
     }
 }

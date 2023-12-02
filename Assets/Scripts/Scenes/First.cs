@@ -14,16 +14,12 @@ public class First : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
     [SerializeField] List<Image> backgroundList = new List<Image>();
-    [SerializeField] Image loadingBar;
-    [SerializeField] TMP_Text loadingText;
     [SerializeField] GameObject stageSelect1;
     [SerializeField] GameObject stageSelect2;
     [SerializeField] PageMove pageMove;
-    [SerializeField] TMP_Text downloadText;
     [SerializeField] Button missionBtn;
     [SerializeField] Button startBtn;
     [SerializeField] Button connectGPGSBtn;
-    [SerializeField] TMP_Text connectText;
     [SerializeField] Button logoutBtn;
     [SerializeField] Button shopBtn;
     [SerializeField] Button boomBtn;
@@ -41,9 +37,6 @@ public class First : MonoBehaviour
 
         tokenSource = new CancellationTokenSource();
 
-        loadingBar.gameObject.SetActive(false);
-        loadingText.gameObject.SetActive(false);
-        downloadText.gameObject.SetActive(false);
         stageSelect1.SetActive(false);
         stageSelect2.SetActive(false);
         startBtn.gameObject.SetActive(false);
@@ -52,9 +45,6 @@ public class First : MonoBehaviour
         logoutBtn.gameObject.SetActive(false);
         shopBtn.gameObject.SetActive(false);
         boomBtn.gameObject.SetActive(false);
-
-        connectText.text = "Google";
-        downloadText.text = "";
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -67,8 +57,6 @@ public class First : MonoBehaviour
             boomBtn.gameObject.SetActive(true);
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
-            loadingBar.gameObject.SetActive(false);
-            loadingText.gameObject.SetActive(false);
 
             // 기본 스킨
             CHMData.Instance.GetShopData("1").buy = true;
@@ -89,7 +77,6 @@ public class First : MonoBehaviour
                 return;
 
             SetLoginState(false);
-            connectText.text = "Google";
 #if UNITY_EDITOR == false
             CHMGPGS.Instance.Logout();
 #endif
@@ -112,7 +99,6 @@ public class First : MonoBehaviour
                 if (data.connectGPGS == true)
                     return;
 
-                connectText.text = "Login...";
 #if UNITY_EDITOR == false
                 CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
@@ -120,7 +106,6 @@ public class First : MonoBehaviour
                     {
                         PlayerPrefs.SetInt(CHMMain.String.Login, 1);
                         Debug.Log("GPGS Login Success");
-                        connectText.text = "Login Success";
                         dataDownload.Value = true;
 
                         SetLoginState(true);
@@ -128,18 +113,12 @@ public class First : MonoBehaviour
                     else
                     {
                         Debug.Log("GPGS Login Failed");
-                        connectText.text = "Login Failed";
                     }
                 });
 #else
                 PlayerPrefs.SetInt(CHMMain.String.Login, 0);
-                connectText.text = "Login Failed";
                 data.connectGPGS = false;
 #endif
-            }
-            else
-            {
-                connectText.text = "LoginData Load Failed";
             }
         });
 
@@ -148,15 +127,14 @@ public class First : MonoBehaviour
             if (CHMAssetBundle.Instance.firstDownload == true && _ == true && bundleDownload.Value == true)
             {
                 CHMAssetBundle.Instance.firstDownload = false;
-                downloadText.gameObject.SetActive(false);
                 startBtn.gameObject.SetActive(true);
             }
         });
 
-        bundleLoadingScript.bundleLoadSuccess += () =>
+        /*bundleLoadingScript.bundleLoadSuccess += () =>
         {
             bundleDownload.Value = true;
-        };
+        };*/
 
         bundleDownload.Subscribe(async _ =>
         {
@@ -171,7 +149,6 @@ public class First : MonoBehaviour
                     if (success)
                     {
                         Debug.Log("GPGS Login Success");
-                        connectText.text = "Login Success";
                         await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
                         dataDownload.Value = true;
 
@@ -180,7 +157,6 @@ public class First : MonoBehaviour
                     else
                     {
                         Debug.Log("GPGS Login Failed");
-                        connectText.text = "Login Failed";
 
                         await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
                         SetLoginState(false);
@@ -208,7 +184,6 @@ public class First : MonoBehaviour
             else if (CHMAssetBundle.Instance.firstDownload == true && _ == true && dataDownload.Value == true)
             {
                 CHMAssetBundle.Instance.firstDownload = false;
-                downloadText.gameObject.SetActive(false);
                 startBtn.gameObject.SetActive(true);
             }
         });
@@ -216,10 +191,7 @@ public class First : MonoBehaviour
         if (CHMAssetBundle.Instance.firstDownload == true)
         {
             pageMove.ActiveMoveBtn(false);
-            loadingBar.gameObject.SetActive(true);
-            loadingText.gameObject.SetActive(true);
-            downloadText.gameObject.SetActive(true);
-            bundleLoadingScript.Init();
+            //bundleLoadingScript.Init();
             
             CHMAdmob.Instance.Init();
 
@@ -249,7 +221,7 @@ public class First : MonoBehaviour
 
         ChangeBackgroundLoop();
 
-        loadingBar.fillAmount = 0f;
+        bundleDownload.Value = true;
     }
 
     private void OnApplicationQuit()

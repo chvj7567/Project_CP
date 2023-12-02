@@ -144,6 +144,22 @@
             "tutorialBlock": false
         },
         {
+            "stage": 3,
+            "blockState": 19,
+            "hp": -1,
+            "row": 1,
+            "col": 1,
+            "tutorialBlock": true
+        },
+        {
+            "stage": 3,
+            "blockState": 0,
+            "hp": -1,
+            "row": 1,
+            "col": 2,
+            "tutorialBlock": true
+        },
+        {
             "stage": 6,
             "blockState": 16,
             "hp": -1,

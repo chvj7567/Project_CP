@@ -7,7 +7,8 @@ public class Defines
     {
         None = -1,
 
-        String,
+        StringKorea,
+        StringEnglish,
         Select,
         Monster,
         Stage,
@@ -18,6 +19,12 @@ public class Defines
         TutorialStage,
 
         Max
+    }
+
+    public enum ELanguageType
+    {
+        Korea,
+        English,
     }
 
     public enum EResourceType

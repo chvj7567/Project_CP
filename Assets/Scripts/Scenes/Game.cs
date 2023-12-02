@@ -303,7 +303,7 @@ public class Game : MonoBehaviour
 
         tutorialBackgroundBtn.gameObject.SetActive(false);
 
-        if (loginData.tutorialIndex == 0)
+        if (stageInfo.stage == 1 && loginData.tutorialIndex == 0)
         {
             Time.timeScale = 0;
 
@@ -378,6 +378,7 @@ public class Game : MonoBehaviour
 
         return await tutorialCompleteTask.Task;
     }
+
     (Vector2, Vector2) GetTutorialStageImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
     {
         if (null == stageBlockInfoList || null == blockArr)
@@ -1684,7 +1685,7 @@ public class Game : MonoBehaviour
         return row >= 0 && row < MAX && col >= 0 && col < MAX;
     }
 
-    bool changeMatchState(int row, int col)
+    bool ChangeMatchState(int row, int col)
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return false;
@@ -1731,7 +1732,7 @@ public class Game : MonoBehaviour
         {
             for (int j = 0; j < MAX; ++j)
             {
-                changeMatchState(i, j);
+                ChangeMatchState(i, j);
             }
         }
 
@@ -1753,14 +1754,14 @@ public class Game : MonoBehaviour
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
-        changeMatchState(block.row - 1, block.col - 1);
-        changeMatchState(block.row - 1, block.col);
-        changeMatchState(block.row - 1, block.col + 1);
-        changeMatchState(block.row, block.col - 1);
-        changeMatchState(block.row, block.col + 1);
-        changeMatchState(block.row + 1, block.col - 1);
-        changeMatchState(block.row + 1, block.col);
-        changeMatchState(block.row + 1, block.col + 1);
+        ChangeMatchState(block.row - 1, block.col - 1);
+        ChangeMatchState(block.row - 1, block.col);
+        ChangeMatchState(block.row - 1, block.col + 1);
+        ChangeMatchState(block.row, block.col - 1);
+        ChangeMatchState(block.row, block.col + 1);
+        ChangeMatchState(block.row + 1, block.col - 1);
+        ChangeMatchState(block.row + 1, block.col);
+        ChangeMatchState(block.row + 1, block.col + 1);
 
         SaveBoomCollectionData(block);
 
@@ -1783,12 +1784,12 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < MAX; ++i)
         {
-            changeMatchState(i, block.col);
+            ChangeMatchState(i, block.col);
         }
 
         for (int i = 0; i < MAX; ++i)
         {
-            changeMatchState(block.row, i);
+            ChangeMatchState(block.row, i);
         }
 
         SaveBoomCollectionData(block);
@@ -1861,7 +1862,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < MAX; ++i)
         {
-            changeMatchState(block.row, i);
+            ChangeMatchState(block.row, i);
         }
 
         SaveBoomCollectionData(block);
@@ -1889,7 +1890,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < MAX; ++i)
         {
-            changeMatchState(i, block.col);
+            ChangeMatchState(i, block.col);
         }
 
         SaveBoomCollectionData(block);
@@ -1914,10 +1915,10 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < MAX; ++i)
         {
-            changeMatchState(block.row - i, block.col - i);
-            changeMatchState(block.row - i, block.col + i);
-            changeMatchState(block.row + i, block.col - i);
-            changeMatchState(block.row + i, block.col + i);
+            ChangeMatchState(block.row - i, block.col - i);
+            ChangeMatchState(block.row - i, block.col + i);
+            ChangeMatchState(block.row + i, block.col - i);
+            ChangeMatchState(block.row + i, block.col + i);
         }
 
         SaveBoomCollectionData(block);
@@ -1945,8 +1946,8 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < MAX; ++i)
         {
-            changeMatchState(block.row - i, block.col + i);
-            changeMatchState(block.row + i, block.col - i);
+            ChangeMatchState(block.row - i, block.col + i);
+            ChangeMatchState(block.row + i, block.col - i);
         }
 
         SaveBoomCollectionData(block);
@@ -1974,8 +1975,8 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < MAX; ++i)
         {
-            changeMatchState(block.row - i, block.col - i);
-            changeMatchState(block.row + i, block.col + i);
+            ChangeMatchState(block.row - i, block.col - i);
+            ChangeMatchState(block.row + i, block.col + i);
         }
 
         SaveBoomCollectionData(block);
@@ -1998,18 +1999,18 @@ public class Game : MonoBehaviour
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
-        changeMatchState(block.row - 2, block.col);
-        changeMatchState(block.row - 1, block.col);
-        changeMatchState(block.row - 1, block.col - 1);
-        changeMatchState(block.row - 1, block.col + 1);
-        changeMatchState(block.row, block.col - 2);
-        changeMatchState(block.row, block.col - 1);
-        changeMatchState(block.row, block.col + 1);
-        changeMatchState(block.row, block.col + 2);
-        changeMatchState(block.row + 1, block.col - 1);
-        changeMatchState(block.row + 1, block.col + 1);
-        changeMatchState(block.row + 1, block.col);
-        changeMatchState(block.row + 2, block.col);
+        ChangeMatchState(block.row - 2, block.col);
+        ChangeMatchState(block.row - 1, block.col);
+        ChangeMatchState(block.row - 1, block.col - 1);
+        ChangeMatchState(block.row - 1, block.col + 1);
+        ChangeMatchState(block.row, block.col - 2);
+        ChangeMatchState(block.row, block.col - 1);
+        ChangeMatchState(block.row, block.col + 1);
+        ChangeMatchState(block.row, block.col + 2);
+        ChangeMatchState(block.row + 1, block.col - 1);
+        ChangeMatchState(block.row + 1, block.col + 1);
+        ChangeMatchState(block.row + 1, block.col);
+        ChangeMatchState(block.row + 2, block.col);
 
         SaveBoomCollectionData(block);
 
@@ -2031,22 +2032,22 @@ public class Game : MonoBehaviour
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
-        changeMatchState(block.row - 2, block.col - 2);
-        changeMatchState(block.row - 2, block.col - 1);
-        changeMatchState(block.row - 2, block.col);
-        changeMatchState(block.row - 2, block.col + 1);
-        changeMatchState(block.row - 2, block.col + 2);
-        changeMatchState(block.row - 1, block.col - 2);
-        changeMatchState(block.row - 1, block.col + 2);
-        changeMatchState(block.row, block.col - 2);
-        changeMatchState(block.row, block.col + 2);
-        changeMatchState(block.row + 1, block.col - 2);
-        changeMatchState(block.row + 1, block.col + 2);
-        changeMatchState(block.row + 2, block.col - 2);
-        changeMatchState(block.row + 2, block.col - 1);
-        changeMatchState(block.row + 2, block.col);
-        changeMatchState(block.row + 2, block.col + 1);
-        changeMatchState(block.row + 2, block.col + 2);
+        ChangeMatchState(block.row - 2, block.col - 2);
+        ChangeMatchState(block.row - 2, block.col - 1);
+        ChangeMatchState(block.row - 2, block.col);
+        ChangeMatchState(block.row - 2, block.col + 1);
+        ChangeMatchState(block.row - 2, block.col + 2);
+        ChangeMatchState(block.row - 1, block.col - 2);
+        ChangeMatchState(block.row - 1, block.col + 2);
+        ChangeMatchState(block.row, block.col - 2);
+        ChangeMatchState(block.row, block.col + 2);
+        ChangeMatchState(block.row + 1, block.col - 2);
+        ChangeMatchState(block.row + 1, block.col + 2);
+        ChangeMatchState(block.row + 2, block.col - 2);
+        ChangeMatchState(block.row + 2, block.col - 1);
+        ChangeMatchState(block.row + 2, block.col);
+        ChangeMatchState(block.row + 2, block.col + 1);
+        ChangeMatchState(block.row + 2, block.col + 2);
 
         SaveBoomCollectionData(block);
 
@@ -2068,21 +2069,21 @@ public class Game : MonoBehaviour
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
-        changeMatchState(block.row - 2, block.col - 1);
-        changeMatchState(block.row - 1, block.col - 2);
-        changeMatchState(block.row - 1, block.col - 1);
+        ChangeMatchState(block.row - 2, block.col - 1);
+        ChangeMatchState(block.row - 1, block.col - 2);
+        ChangeMatchState(block.row - 1, block.col - 1);
 
-        changeMatchState(block.row - 2, block.col + 1);
-        changeMatchState(block.row - 1, block.col + 2);
-        changeMatchState(block.row - 1, block.col + 1);
+        ChangeMatchState(block.row - 2, block.col + 1);
+        ChangeMatchState(block.row - 1, block.col + 2);
+        ChangeMatchState(block.row - 1, block.col + 1);
 
-        changeMatchState(block.row + 2, block.col - 1);
-        changeMatchState(block.row + 1, block.col - 2);
-        changeMatchState(block.row + 1, block.col - 1);
+        ChangeMatchState(block.row + 2, block.col - 1);
+        ChangeMatchState(block.row + 1, block.col - 2);
+        ChangeMatchState(block.row + 1, block.col - 1);
 
-        changeMatchState(block.row + 2, block.col + 1);
-        changeMatchState(block.row + 1, block.col + 2);
-        changeMatchState(block.row + 1, block.col + 1);
+        ChangeMatchState(block.row + 2, block.col + 1);
+        ChangeMatchState(block.row + 1, block.col + 2);
+        ChangeMatchState(block.row + 1, block.col + 1);
 
         SaveBoomCollectionData(block);
 
@@ -2104,18 +2105,18 @@ public class Game : MonoBehaviour
         int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
         CopyEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
 
-        changeMatchState(block.row - 2, block.col - 2);
-        changeMatchState(block.row - 2, block.col - 1);
-        changeMatchState(block.row - 2, block.col);
-        changeMatchState(block.row - 2, block.col + 1);
-        changeMatchState(block.row - 2, block.col + 2);
-        changeMatchState(block.row - 1, block.col + 1);
-        changeMatchState(block.row + 1, block.col - 1);
-        changeMatchState(block.row + 2, block.col - 2);
-        changeMatchState(block.row + 2, block.col - 1);
-        changeMatchState(block.row + 2, block.col);
-        changeMatchState(block.row + 2, block.col + 1);
-        changeMatchState(block.row + 2, block.col + 2);
+        ChangeMatchState(block.row - 2, block.col - 2);
+        ChangeMatchState(block.row - 2, block.col - 1);
+        ChangeMatchState(block.row - 2, block.col);
+        ChangeMatchState(block.row - 2, block.col + 1);
+        ChangeMatchState(block.row - 2, block.col + 2);
+        ChangeMatchState(block.row - 1, block.col + 1);
+        ChangeMatchState(block.row + 1, block.col - 1);
+        ChangeMatchState(block.row + 2, block.col - 2);
+        ChangeMatchState(block.row + 2, block.col - 1);
+        ChangeMatchState(block.row + 2, block.col);
+        ChangeMatchState(block.row + 2, block.col + 1);
+        ChangeMatchState(block.row + 2, block.col + 2);
 
         SaveBoomCollectionData(block);
 

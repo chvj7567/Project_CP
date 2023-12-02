@@ -11,7 +11,8 @@ public class CHMJson : CHSingleton<CHMJson>
     [Serializable]
     public class JsonData
     {
-        public StringInfo[] stringInfoArr;
+        public StringInfo[] stringKoreaInfoArr;
+        public StringInfo[] stringEnglishInfoArr;
         public SelectInfo[] selectInfoArr;
         public MonsterInfo[] monsterInfoArr;
         public StageInfo[] stageInfoArr;
@@ -27,7 +28,8 @@ public class CHMJson : CHSingleton<CHMJson>
 
     List<Action<TextAsset>> actionList = new List<Action<TextAsset>>();
 
-    Dictionary<int, string> stringInfoDic = new Dictionary<int, string>();
+    Dictionary<int, string> stringKoreaInfoDic = new Dictionary<int, string>();
+    Dictionary<int, string> stringEnglishInfoDic = new Dictionary<int, string>();
     List<SelectInfo> selectInfoList = new List<SelectInfo>();
     List<MonsterInfo> monsterInfoList = new List<MonsterInfo>();
     List<StageInfo> stageInfoList = new List<StageInfo>();
@@ -45,7 +47,7 @@ public class CHMJson : CHSingleton<CHMJson>
     public void Clear()
     {
         actionList.Clear();
-        stringInfoDic.Clear();
+        stringKoreaInfoDic.Clear();
         selectInfoList.Clear();
         monsterInfoList.Clear();
         stageInfoList.Clear();
@@ -61,7 +63,8 @@ public class CHMJson : CHSingleton<CHMJson>
         loadCompleteFileCount = 0;
         actionList.Clear();
 
-        await LoadStringInfo();
+        await LoadStringKoreaInfo();
+        await LoadStringEnglishInfo();
         await LoadStageInfo();
         await LoadStageBlockInfo();
         await LoadMissionInfo();
@@ -92,25 +95,47 @@ public class CHMJson : CHSingleton<CHMJson>
         return ((float)loadCompleteFileCount) / loadingFileCount * 100f;
     }
 
-    async Task<TextAsset> LoadStringInfo()
+    async Task<TextAsset> LoadStringKoreaInfo()
     {
         TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
 
         Action<TextAsset> callback;
-        stringInfoDic.Clear();
+        stringKoreaInfoDic.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.String, callback = (TextAsset textAsset) =>
+        CHMMain.Resource.LoadJson(Defines.EJsonType.StringKorea, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>("{\"stringInfoArr\":" + textAsset.text + "}");
-            foreach (var data in jsonData.stringInfoArr)
+            var jsonData = JsonUtility.FromJson<JsonData>("{\"stringKoreaInfoArr\":" + textAsset.text + "}");
+            foreach (var data in jsonData.stringKoreaInfoArr)
             {
-                stringInfoDic.Add(data.stringID, data.value);
+                stringKoreaInfoDic.Add(data.stringID, data.value);
             }
 
             taskCompletionSource.SetResult(textAsset);
             ++loadCompleteFileCount;
         });
         
+        return await taskCompletionSource.Task;
+    }
+
+    async Task<TextAsset> LoadStringEnglishInfo()
+    {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
+        Action<TextAsset> callback;
+        stringEnglishInfoDic.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.StringEnglish, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>("{\"stringEnglishInfoArr\":" + textAsset.text + "}");
+            foreach (var data in jsonData.stringEnglishInfoArr)
+            {
+                stringEnglishInfoDic.Add(data.stringID, data.value);
+            }
+
+            taskCompletionSource.SetResult(textAsset);
+            ++loadCompleteFileCount;
+        });
+
         return await taskCompletionSource.Task;
     }
 
@@ -252,19 +277,34 @@ public class CHMJson : CHSingleton<CHMJson>
         return await taskCompletionSource.Task;
     }
 
-    public string GetStringInfo(int _stringID)
+    public string GetStringInfo(int stringID, Defines.ELanguageType languageType)
     {
-        if (stringInfoDic.TryGetValue(_stringID, out string result))
+        switch (languageType)
         {
-            return result;
+            case ELanguageType.Korea:
+                {
+                    if (stringKoreaInfoDic.TryGetValue(stringID, out string result))
+                    {
+                        return result;
+                    }
+                }
+                break;
+            case ELanguageType.English:
+                {
+                    if (stringEnglishInfoDic.TryGetValue(stringID, out string result))
+                    {
+                        return result;
+                    }
+                }
+                break;
         }
 
         return "";
     }
 
-    public SelectInfo GetSelectInfo(ESelect _eSelect)
+    public SelectInfo GetSelectInfo(ESelect eSelect)
     {
-        var selectList = selectInfoList.FindAll(_ => _.eSelect == _eSelect);
+        var selectList = selectInfoList.FindAll(_ => _.eSelect == eSelect);
 
         Int64 totFrequency = 0L;
         for (int i = 0; i < selectList.Count; ++i)
@@ -287,19 +327,19 @@ public class CHMJson : CHSingleton<CHMJson>
         return new SelectInfo();
     }
 
-    public MonsterInfo GetMonsterInfo(int _stage, int _index)
+    public MonsterInfo GetMonsterInfo(int stage, int index)
     {
-        return monsterInfoList.Find(_ => _.stage == _stage && _.index == _index);
+        return monsterInfoList.Find(_ => _.stage == stage && _.index == index);
     }
 
-    public StageInfo GetStageInfo(int _stage)
+    public StageInfo GetStageInfo(int stage)
     {
-        return stageInfoList.Find(_ => _.stage == _stage);
+        return stageInfoList.Find(_ => _.stage == stage);
     }
 
-    public List<StageInfo> GetStageInfoList(int _group)
+    public List<StageInfo> GetStageInfoList(int group)
     {
-        return stageInfoList.FindAll(_ => _.group == _group);
+        return stageInfoList.FindAll(_ => _.group == group);
     }
 
     public int GetMaxStageGroup()
@@ -307,9 +347,9 @@ public class CHMJson : CHSingleton<CHMJson>
         return stageInfoList.Max(_ => _.group);
     }
 
-    public List<StageBlockInfo> GetStageBlockInfoList(int _stage)
+    public List<StageBlockInfo> GetStageBlockInfoList(int stage)
     {
-        return stageBlockInfoList.FindAll(_ => _.stage == _stage);
+        return stageBlockInfoList.FindAll(_ => _.stage == stage);
     }
 
     public List<MissionInfo> GetMissionInfoListAll()
