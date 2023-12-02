@@ -69,7 +69,7 @@ public class Defines
         UIShop,
         UIGameStart,
         UIGameEnd,
-        UIBoom,
+        UISetting,
 
         Max
     }

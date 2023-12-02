@@ -24,7 +24,6 @@ public class ResourceDownload : MonoBehaviour
         script.Init();
 
         ChangeBackgroundLoop();
-
         
         script.bundleLoadSuccess += async () =>
         {

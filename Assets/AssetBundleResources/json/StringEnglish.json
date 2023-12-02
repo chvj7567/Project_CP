@@ -197,10 +197,26 @@
         },
         {
             "stringID": 49,
-            "value": "Color bombs are black bombs and arrow bombs.\r\nThis is a special bomb that comes out when combined.\r\n(You can check the color bombs in the settings.)"
+            "value": "Color bombs include black bombs and arrow bombs.\r\nIt is a special bomb that comes out randomly when combined.\r\n(You can check bomb information in settings.)"
         },
         {
             "stringID": 50,
             "value": "\rWhen you combine special bombs, the entire map explodes."
+        },
+        {
+            "stringID": 51,
+            "value": "\rYou can link it to your Google account."
+        },
+        {
+            "stringID": 52,
+            "value": "You can set sound and language\r\nYou can see a description of the bomb."
+        },
+        {
+            "stringID": 53,
+            "value": "Gold and items through missions\r\nYou can receive it as a reward."
+        },
+        {
+            "stringID": 54,
+            "value": "Gold purchase, paid purchase price\r\nThis store is available."
         }
     ]

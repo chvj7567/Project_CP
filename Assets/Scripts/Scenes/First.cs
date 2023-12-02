@@ -28,6 +28,10 @@ public class First : MonoBehaviour
     [SerializeField] CHAdvertise adScript;
     [SerializeField] ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
     [SerializeField] ReactiveProperty<bool> bundleDownload = new ReactiveProperty<bool>();
+    [SerializeField] GameObject guideBackground;
+    [SerializeField] Button tutorialBackgroundBtn;
+    [SerializeField] List<RectTransform> tutorialHoleList = new List<RectTransform>();
+    [SerializeField] CHTMPro guideDesc;
 
     CancellationTokenSource tokenSource;
 
@@ -46,7 +50,7 @@ public class First : MonoBehaviour
         shopBtn.gameObject.SetActive(false);
         boomBtn.gameObject.SetActive(false);
 
-        startBtn.OnClickAsObservable().Subscribe(_ =>
+        startBtn.OnClickAsObservable().Subscribe(async _ =>
         {
             if (bundleDownload.Value == false || dataDownload.Value == false) return;
 
@@ -64,6 +68,26 @@ public class First : MonoBehaviour
             PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 
             CHMMain.Sound.Play(Defines.ESound.Bgm);
+
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            if (loginData.tutorialIndex == 0)
+            {
+                Time.timeScale = 0;
+
+                guideBackground.SetActive(true);
+                guideBackground.transform.SetAsLastSibling();
+
+                tutorialBackgroundBtn.gameObject.SetActive(true);
+                tutorialBackgroundBtn.transform.SetAsLastSibling();
+
+                var tutorialIndex = await TutorialStart();
+                loginData.tutorialIndex = tutorialIndex;
+
+                guideBackground.SetActive(false);
+                tutorialBackgroundBtn.gameObject.SetActive(false);
+
+                CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            }
         });
 
         missionBtn.OnClickAsObservable().Subscribe(_ =>
@@ -89,7 +113,7 @@ public class First : MonoBehaviour
 
         boomBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMMain.UI.ShowUI(Defines.EUI.UIBoom, new CHUIArg());
+            CHMMain.UI.ShowUI(Defines.EUI.UISetting, new CHUIArg());
         });
 
         connectGPGSBtn.OnPointerClickAsObservable().Subscribe(_ =>
@@ -221,6 +245,48 @@ public class First : MonoBehaviour
         ChangeBackgroundLoop();
 
         bundleDownload.Value = true;
+
+        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        {
+            tutorialHoleList[i].gameObject.SetActive(false);
+        }
+
+        guideBackground.SetActive(false);
+        tutorialBackgroundBtn.gameObject.SetActive(false);
+    }
+
+    async Task<int> TutorialStart()
+    {
+        TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
+
+        guideBackground.SetActive(true);
+
+        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        {
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 5);
+            if (tutorialInfo == null)
+                break;
+
+            tutorialHoleList[i].gameObject.SetActive(true);
+            guideDesc.SetStringID(tutorialInfo.descStringID);
+
+            TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
+
+            var btnComplete = tutorialBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
+            {
+                buttonClicktask.SetResult(true);
+            });
+
+            await buttonClicktask.Task;
+
+            tutorialHoleList[i].gameObject.SetActive(false);
+
+            btnComplete.Dispose();
+        }
+
+        tutorialCompleteTask.SetResult(tutorialHoleList.Count);
+
+        return await tutorialCompleteTask.Task;
     }
 
     private void OnApplicationQuit()

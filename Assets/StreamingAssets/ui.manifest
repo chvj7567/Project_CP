@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3877835178
+CRC: 3874498256
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 14bffe5c4fad325ea9fc0caf83f1bef3
+    Hash: 262f5be89400c90c4846900761f687a8
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 83751b408b8cc1c171ae09cd217bd933
+    Hash: 9ae5fbd1b42dfabd7352110567223cf7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -94,7 +94,7 @@ Assets:
 - Assets/AssetBundleResources/ui/UIMission.prefab
 - Assets/AssetBundleResources/ui/UIGameStart.prefab
 - Assets/AssetBundleResources/ui/UIGameEnd.prefab
-- Assets/AssetBundleResources/ui/UIBoom.prefab
+- Assets/AssetBundleResources/ui/UISetting.prefab
 - Assets/AssetBundleResources/ui/GoldImg.prefab
 - Assets/AssetBundleResources/ui/UIShop.prefab
 - Assets/AssetBundleResources/ui/EventSystem.prefab

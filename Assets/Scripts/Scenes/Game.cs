@@ -300,7 +300,7 @@ public class Game : MonoBehaviour
 
         tutorialBackgroundBtn.gameObject.SetActive(false);
 
-        if (loginData.tutorialIndex == 0)
+        if (loginData.tutorialIndex == 4)
         {
             Time.timeScale = 0;
 
@@ -350,7 +350,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < tutorialHoleList.Count; ++i)
         {
-            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 1);
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 5);
             if (tutorialInfo == null)
                 break;
 
