@@ -264,7 +264,7 @@ public class First : MonoBehaviour
 
         for (int i = 0; i < tutorialHoleList.Count; ++i)
         {
-            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 5);
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 1);
             if (tutorialInfo == null)
                 break;
 
