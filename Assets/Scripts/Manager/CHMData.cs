@@ -27,6 +27,7 @@ public class CHMData : CHSingleton<CHMData>
         {
             Debug.Log("Login Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
+            data.loginList[0].languageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English;
             loginDataDic = data.MakeDict();
         }
 
