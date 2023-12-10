@@ -218,5 +218,49 @@
         {
             "stringID": 54,
             "value": "골드 구매, 유료 구매가\n가능한 상점입니다."
+        },
+        {
+            "stringID": 55,
+            "value": "캣팡!!!"
+        },
+        {
+            "stringID": 56,
+            "value": "맞출 수 있는 블럭이 없네요. 맵을 다시 만들어 드릴게요!"
+        },
+        {
+            "stringID": 57,
+            "value": "{0}골드 획득"
+        },
+        {
+            "stringID": 58,
+            "value": "시간 증가 아이템 {0}개 획득"
+        },
+        {
+            "stringID": 59,
+            "value": "움직임 증가 아이템 {0}개 획득"
+        },
+        {
+            "stringID": 60,
+            "value": "이미 구매함"
+        },
+        {
+            "stringID": 61,
+            "value": "골드 부족"
+        },
+        {
+            "stringID": 62,
+            "value": "구매 성공"
+        },
+        {
+            "stringID": 63,
+            "value": "보상 획득"
+        },
+        {
+            "stringID": 64,
+            "value": "이미 보상을 받음"
+        },
+        {
+            "stringID": 65,
+            "value": "구매 실패"
         }
     ]

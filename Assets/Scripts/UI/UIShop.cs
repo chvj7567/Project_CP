@@ -96,7 +96,7 @@ public class UIShop : UIBase
 
                     CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {
-                        alarmText = "Purchase Success"
+                        stringID = 62
                     });
                 }
                 break;
@@ -104,7 +104,7 @@ public class UIShop : UIBase
                 {
                     CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {
-                        alarmText = "Purchase Failure"
+                        stringID = 65
                     });
                 }
                 break;

@@ -26,7 +26,11 @@ public class MissionScrollViewItem : MonoBehaviour
                 case Defines.EReward.Gold:
                     {
                         CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += reward;
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{reward} Gold Reward" });
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        {
+                            stringID = 57,
+                            intValue = reward
+                        });
                     }
                     break;
                 case Defines.EReward.AddTime:
@@ -36,7 +40,11 @@ public class MissionScrollViewItem : MonoBehaviour
                             return;
 
                         loginData.addTimeItemCount += reward;
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{reward} AddTime Reward" });
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        {
+                            stringID = 58,
+                            intValue = reward
+                        });
                     }
                     break;
                 case Defines.EReward.AddMove:
@@ -46,7 +54,11 @@ public class MissionScrollViewItem : MonoBehaviour
                             return;
 
                         loginData.addMoveItemCount += reward;
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { alarmText = $"{reward} AddMove Reward" });
+                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        {
+                            stringID = 59,
+                            intValue = reward
+                        });
                     }
                     break;
             }

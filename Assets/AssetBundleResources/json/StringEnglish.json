@@ -218,5 +218,49 @@
         {
             "stringID": 54,
             "value": "Gold purchase, paid purchase price\r\nThis store is available."
+        },
+        {
+            "stringID": 55,
+            "value": "CatPang!!!"
+        },
+        {
+            "stringID": 56,
+            "value": "There are no blocks that can be matched. I'll make the map again!"
+        },
+        {
+            "stringID": 57,
+            "value": "Obtain {0}  gold"
+        },
+        {
+            "stringID": 58,
+            "value": "\rObtain {0} time increasing item"
+        },
+        {
+            "stringID": 59,
+            "value": "\rObtain {0} movement increase items"
+        },
+        {
+            "stringID": 60,
+            "value": "Already purchased"
+        },
+        {
+            "stringID": 61,
+            "value": "Not Enough Gold"
+        },
+        {
+            "stringID": 62,
+            "value": "Purchase Success"
+        },
+        {
+            "stringID": 63,
+            "value": "\rRewarded"
+        },
+        {
+            "stringID": 64,
+            "value": "\rAlready Rewarded"
+        },
+        {
+            "stringID": 65,
+            "value": "Purchase Failed"
         }
     ]

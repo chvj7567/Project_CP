@@ -522,7 +522,7 @@ public class Game : MonoBehaviour
         {
             CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
-                alarmText = "CatPang!!!",
+                stringID = 55,
                 closeTime = 1
             });
 
@@ -985,7 +985,7 @@ public class Game : MonoBehaviour
                 {
                     CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {
-                        alarmText = $"Remake Map"
+                        stringID = 56
                     });
                 }
 

@@ -27,40 +27,45 @@ public class CHMData : CHSingleton<CHMData>
         {
             Debug.Log("Login Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
-            data.loginList[0].languageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English;
-            loginDataDic = data.MakeDict();
+            
+            if (data.Item1)
+            {
+                data.Item2.loginList[0].languageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English;
+            }
+
+            loginDataDic = data.Item2.MakeDict();
         }
 
         if (stageDataDic == null)
         {
             Debug.Log("Stage Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
-            stageDataDic = data.MakeDict();
+            stageDataDic = data.Item2.MakeDict();
         }
 
         if (collectionDataDic == null)
         {
             Debug.Log("Collection Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
-            collectionDataDic = data.MakeDict();
+            collectionDataDic = data.Item2.MakeDict();
         }
 
         if (missionDataDic == null)
         {
             Debug.Log("Mission Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
-            missionDataDic = data.MakeDict();
+            missionDataDic = data.Item2.MakeDict();
         }
 
         if (shopDataDic == null)
         {
             Debug.Log("Shop Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
-            shopDataDic = data.MakeDict();
+            shopDataDic = data.Item2.MakeDict();
         }
     }
 
-    async Task<Loader> LoadJsonToLocal<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
+    async Task<(bool, Loader)> LoadJsonToLocal<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
     {
         string path = $"{Application.persistentDataPath}/{_path}.json";
 
@@ -69,7 +74,7 @@ public class CHMData : CHSingleton<CHMData>
         {
             newUser = true;
             Debug.Log("Path is Null");
-            return await LoadDefaultData<Loader>(_name);
+            return (true, await LoadDefaultData<Loader>(_name));
         }
         else
         {
@@ -78,11 +83,11 @@ public class CHMData : CHSingleton<CHMData>
             // 데이터가 없을 경우 디폴트 데이터 저장
             if (data.Contains($"{_name.ToLower()}List") == false || data.Contains($"\"{_name.ToLower()}List\":[]"))
             {
-                return await LoadDefaultData<Loader>(_name);
+                return (false, await LoadDefaultData<Loader>(_name));
             }
             else
             {
-                return JsonUtility.FromJson<Loader>(File.ReadAllText(path));
+                return (false, JsonUtility.FromJson<Loader>(File.ReadAllText(path)));
             }
         }
     }
@@ -146,7 +151,7 @@ public class CHMData : CHSingleton<CHMData>
     }
 
 #if UNITY_EDITOR == false
-public async Task LoadCloudData(string _path)
+    public async Task LoadCloudData(string _path)
     {
         Debug.Log("Cloud Data Load");
 
@@ -185,7 +190,8 @@ public async Task LoadCloudData(string _path)
             shopDataDic = data.MakeDict();
         }
     }
-public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
+
+    public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
     {
         TaskCompletionSource<string> taskCompletionSource = new TaskCompletionSource<string>();
 

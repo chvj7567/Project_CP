@@ -46,7 +46,7 @@ public class ShopScrollViewItem : MonoBehaviour
             {
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
-                    alarmText = "Already Buy"
+                    stringID = 60
                 });
 
                 return;
@@ -56,7 +56,7 @@ public class ShopScrollViewItem : MonoBehaviour
             {
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
-                    alarmText = "Not Enough Gold"
+                    stringID = 61
                 });
 
                 return;
@@ -69,7 +69,7 @@ public class ShopScrollViewItem : MonoBehaviour
 
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
-                    alarmText = "Buy Success"
+                    stringID = 62
                 });
 
                 var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);

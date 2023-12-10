@@ -75,7 +75,7 @@ public class UIGameEnd : UIBase
 
             CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
-                alarmText = "Received Reward"
+                stringID = 63
             });
 
             Time.timeScale = 1;
@@ -98,7 +98,7 @@ public class UIGameEnd : UIBase
             {
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
-                    alarmText = "Already Received Reward"
+                    stringID = 64
                 });
 
                 return;
@@ -114,7 +114,7 @@ public class UIGameEnd : UIBase
 
             CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
-                alarmText = "Received Reward"
+                stringID = 63
             });
         };
     }
