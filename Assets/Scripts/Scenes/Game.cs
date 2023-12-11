@@ -1093,10 +1093,10 @@ public class Game : MonoBehaviour
         return false;
     }
 
-    void CheckMap(bool _test = false)
+    void CheckMap(bool test = false)
     // 3Match 블럭 확인
     {
-        if (_test == false)
+        if (test == false)
         {
             for (int i = 0; i < boardSize; ++i)
             {
@@ -1111,7 +1111,7 @@ public class Game : MonoBehaviour
         {
             for (int j = 0; j < boardSize; ++j)
             {
-                CheckSquareMatch(i, j, _test);
+                CheckSquareMatch(i, j, test);
             }
         }
 
@@ -1129,7 +1129,7 @@ public class Game : MonoBehaviour
                 }
             }
 
-            Check3Match(hBlockList, Defines.EDirection.Horizontal, _test);
+            Check3Match(hBlockList, Defines.EDirection.Horizontal, test);
         }
 
         for (int i = 0; i < boardSize; ++i)
@@ -1147,7 +1147,7 @@ public class Game : MonoBehaviour
                 }
             }
 
-            Check3Match(vBlockList, Defines.EDirection.Vertical, _test);
+            Check3Match(vBlockList, Defines.EDirection.Vertical, test);
         }
     }
 
@@ -1717,6 +1717,8 @@ public class Game : MonoBehaviour
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return false;
 
+        DamageBlock(row, col);
+
         if (boardArr[row, col].DisappearBlock() == false &&
             boardArr[row, col].IsFixdBlock() == false &&
             boardArr[row, col].GetBlockState() != Defines.EBlockState.PinkBomb)
@@ -1734,18 +1736,18 @@ public class Game : MonoBehaviour
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return;
 
-        DamageArround(row - 1, col);
-        DamageArround(row, col + 1);
-        DamageArround(row, col - 1);
-        DamageArround(row + 1, col);
+        DamageBlock(row - 1, col);
+        DamageBlock(row, col + 1);
+        DamageBlock(row, col - 1);
+        DamageBlock(row + 1, col);
     }
 
-    void DamageArround(int row, int col)
+    void DamageBlock(int row, int col)
     // hp가 있는 블럭이라면 hp - 1을 한다.
     {
         if (IsValidIndex(row, col) && boardArr[row, col] != null)
         {
-            if (boardArr[row, col].IsFixdBlock() == true)
+            if (boardArr[row, col].IsFixdBlock())
             {
                 boardArr[row, col].Damage(stageInfo.blockTypeCount);
             }
