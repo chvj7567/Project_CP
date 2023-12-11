@@ -509,7 +509,7 @@ public class Game : MonoBehaviour
             return;
         }
 
-        if (false == gameEnd)
+        if (gameEnd == false)
         {
             gameEnd = true;
         }
@@ -528,6 +528,12 @@ public class Game : MonoBehaviour
 
             await Task.Delay(1000);
             await CatPang();
+
+            // 게임결과 다시 체크하도록
+            gameEnd = false;
+            gameResult.Value = EGameResult.None;
+
+            return;
         }
 
         if (clear == false)
