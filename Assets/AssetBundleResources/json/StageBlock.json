@@ -273,6 +273,38 @@
         },
         {
             "stage": 11,
+            "blockState": 17,
+            "hp": -1,
+            "row": 2,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 11,
+            "blockState": 17,
+            "hp": -1,
+            "row": 2,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 11,
+            "blockState": 17,
+            "hp": -1,
+            "row": 2,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 11,
+            "blockState": 17,
+            "hp": -1,
+            "row": 2,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 11,
             "blockState": 16,
             "hp": -1,
             "row": 4,

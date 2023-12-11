@@ -105,7 +105,7 @@
             "blockTypeCount": 3,
             "boardSize": 5,
             "time": 30.0,
-            "targetScore": 300,
+            "targetScore": 500,
             "moveCount": -1,
             "tutorialID": -1
         },
