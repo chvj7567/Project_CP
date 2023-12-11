@@ -62,7 +62,7 @@ public class Game : MonoBehaviour
     [SerializeField] CHButton arrowPang1;
     [SerializeField] CHButton arrowPang2;
     [SerializeField] Image banView;
-    [SerializeField, ReadOnly] public ReactiveProperty<EGameResult> gameResult = new ReactiveProperty<EGameResult>();
+    [SerializeField, ReadOnly] public ReactiveProperty<EGameState> gameResult = new ReactiveProperty<EGameState>();
     [SerializeField, ReadOnly] int arrowPangIndex = 1;
 
     
@@ -80,7 +80,7 @@ public class Game : MonoBehaviour
     public List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
 
     bool oneTimeAlarm = false;
-    bool gameEnd = false;
+    public bool gameEnd = false;
     
     int helpTime = 0;
 
@@ -149,11 +149,9 @@ public class Game : MonoBehaviour
             curScoreText.SetText(_);
         });
 
-        gameResult.Value = EGameResult.None;
-
         gameResult.Subscribe(_ =>
         {
-            if (_ == EGameResult.GameOver || _ == EGameResult.GameClear)
+            if (_ == EGameState.GameOver || _ == EGameState.GameClear)
             {
                 if (tokenSource != null && !tokenSource.IsCancellationRequested)
                 {
@@ -215,18 +213,18 @@ public class Game : MonoBehaviour
         this.UpdateAsObservable()
             .Subscribe(_ =>
             {
-                if (gameResult.Value == EGameResult.GameClearWait)
+                if (gameResult.Value == EGameState.GameClearWait)
                 {
                     GameEnd(true);
                     return;
                 }
-                else if (gameResult.Value == EGameResult.GameOverWait)
+                else if (gameResult.Value == EGameState.GameOverWait)
                 {
                     GameEnd(false);
                     return;
                 }
 
-                if (gameResult.Value == EGameResult.None)
+                if (gameResult.Value == EGameState.Play)
                 {
                     bool clear = true;
 
@@ -336,7 +334,8 @@ public class Game : MonoBehaviour
                 guideDesc.SetStringID(tutorialInfo.descStringID);
             }
         }
-        //await AfterDrag(null, null);
+
+        gameResult.Value = EGameState.Play;
     }
 
     private async void Update()
@@ -499,11 +498,11 @@ public class Game : MonoBehaviour
         {
             if (clear)
             {
-                gameResult.Value = EGameResult.GameClearWait;
+                gameResult.Value = EGameState.GameClearWait;
             }
             else
             {
-                gameResult.Value = EGameResult.GameOverWait;
+                gameResult.Value = EGameState.GameOverWait;
             }
 
             return;
@@ -520,6 +519,8 @@ public class Game : MonoBehaviour
 
         if (CheckCatPang())
         {
+            gameResult.Value = EGameState.CatPang;
+
             CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
                 stringID = 55,
@@ -531,18 +532,18 @@ public class Game : MonoBehaviour
 
             // 게임결과 다시 체크하도록
             gameEnd = false;
-            gameResult.Value = EGameResult.None;
+            gameResult.Value = EGameState.Play;
 
             return;
         }
 
         if (clear == false)
         {
-            gameResult.Value = EGameResult.GameOver;
+            gameResult.Value = EGameState.GameOver;
         }
         else
         {
-            gameResult.Value = EGameResult.GameClear;
+            gameResult.Value = EGameState.GameClear;
         }
 
         CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
@@ -695,7 +696,7 @@ public class Game : MonoBehaviour
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
     // 블럭을 드래그하고 난 후 다음 드래그가 가능한 상태까지
     {
-        if (moveCount.Value == 0)
+        if (moveCount.Value == 0 && gameResult.Value != EGameState.CatPang)
             return;
 
         Time.timeScale = 1;
@@ -804,7 +805,7 @@ public class Game : MonoBehaviour
             CheckMap();
         } while (isMatch == true);
 
-        if ((block1 != null && block2 != null && back == false) || isBoom == true)
+        if ((block1 != null && block2 != null && back == false) || isBoom == true && gameResult.Value != EGameState.CatPang)
         {
             moveCount.Value -= 1;
         }
@@ -914,8 +915,42 @@ public class Game : MonoBehaviour
         isMatch = false;
         CheckMap();
 
+        bool canMatch = true;
+
         do
         {
+            if (canMatch == false)
+            {
+                foreach (var block in boardArr)
+                {
+                    if (block == null) continue;
+
+                    var stageBlockInfo = stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
+                    if (stageBlockInfo == null)
+                    {
+                        var random = (Defines.EBlockState)UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                        random = block.CheckSelectCatShop(random);
+                        block.SetBlockState(Defines.ELog.CreateMap, 3, blockSpriteList[(int)random], random);
+                        block.SetHp(-1);
+                    }
+                    else
+                    {
+                        var blockState = block.CheckSelectCatShop(stageBlockInfo.blockState);
+                        block.SetBlockState(Defines.ELog.CreateMap, 4, blockSpriteList[(int)blockState], blockState);
+                        block.tutorialBlock = stageBlockInfo.tutorialBlock;
+
+                        if (block.IsNormalBlock() == true)
+                        {
+                            block.SetHp(-1);
+                        }
+                        else
+                        {
+                            block.SetHp(stageBlockInfo.hp);
+                        }
+                    }
+                }
+            }
+
             for (int i = 0; i < boardSize; ++i)
             {
                 for (int j = 0; j < boardSize; ++j)
@@ -929,7 +964,7 @@ public class Game : MonoBehaviour
                     {
                         var random = (Defines.EBlockState)UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
                         random = block.CheckSelectCatShop(random);
-                        block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[(int)random], random);
+                        block.SetBlockState(Defines.ELog.CreateMap, 5, blockSpriteList[(int)random], random);
                         block.SetHp(-1);
                         block.ResetScore();
                         block.match = false;
@@ -941,7 +976,13 @@ public class Game : MonoBehaviour
             isMatch = false;
             CheckMap();
 
-        } while (isMatch == true);
+            if (isMatch == false)
+            {
+                canMatch = CanMatch();
+                isMatch = false;
+            }
+
+        } while (isMatch == true || canMatch == false);
 
         Debug.Log("Create Map End");
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);

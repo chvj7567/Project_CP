@@ -36,6 +36,15 @@ public class CHTMPro : MonoBehaviour
         if (text)
         {
             text.text = string.Format(CHMMain.String.GetString(stringID), _arrArg);
+
+            if (int.TryParse(text.text, out var intValue))
+            {
+                // 숫자일 경우 영어 폰트로
+                CHMMain.Resource.LoadFont(Defines.ELanguageType.English, (font) =>
+                {
+                    text.font = font;
+                });
+            }
         }
     }
 

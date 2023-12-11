@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UIGameEndArg : CHUIArg
 {
     public Defines.EClearState clearState = Defines.EClearState.None;
-    public Defines.EGameResult result = Defines.EGameResult.None;
+    public Defines.EGameState result = Defines.EGameState.None;
     public int gold;
 }
 
@@ -31,13 +31,13 @@ public class UIGameEnd : UIBase
 
     private void Start()
     {
-        if (arg.result == Defines.EGameResult.GameOver)
+        if (arg.result == Defines.EGameState.GameOver)
         {
             resultText.DOText("Game Over", 1f);
             goldText.SetText(0);
             goldx3Text.SetText(0);
         }
-        else if (arg.result == Defines.EGameResult.GameClear)
+        else if (arg.result == Defines.EGameState.GameClear)
         {
             resultText.DOText("Game Clear", 1f);
 

@@ -90,7 +90,7 @@ public class Block : MonoBehaviour
         {
             game.isDrag = false;
 
-            if (game.isLock || IsFixdBlock() || IsNotDragBlock())
+            if (game.gameEnd || game.isLock || IsFixdBlock() || IsNotDragBlock())
                 return;
 
             Vector2 rectPosition;

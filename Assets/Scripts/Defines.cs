@@ -224,10 +224,12 @@ public class Defines
         Max
     }
 
-    public enum EGameResult
+    public enum EGameState
     {
         None = -1,
 
+        Play,
+        CatPang,
         GameOver,
         GameClear,
         GameOverWait,
