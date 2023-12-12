@@ -542,7 +542,7 @@ public class Block : MonoBehaviour
         }
     }
 
-    public bool IsSpecialBlock()
+    public bool IsSpecialBombBlock()
     {
         switch (blockState)
         {
@@ -551,7 +551,6 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.OrangeBomb:
             case Defines.EBlockState.BlueBomb:
             case Defines.EBlockState.YellowBomb:
-            case Defines.EBlockState.Fish:
                 return true;
             default:
                 return false;
@@ -568,7 +567,7 @@ public class Block : MonoBehaviour
         return blockState != Defines.EBlockState.None;
     }
 
-    public bool DisappearBlock()
+    public bool IsDisappearBlock()
     {
         switch (blockState)
         {

@@ -237,7 +237,7 @@ public class Game : MonoBehaviour
                     {
                         for (int j = 0; j < boardSize; ++j)
                         {
-                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].DisappearBlock() == true)
+                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsDisappearBlock() == true)
                             {
                                 clear = false;
                                 break;
@@ -384,8 +384,8 @@ public class Game : MonoBehaviour
         }
         else
         {
-            // 5초 동안 드래그를 안하면 알려줌
-            if (teachTime + 5 < Time.time && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
+            // 3초 동안 드래그를 안하면 알려줌
+            if (teachTime + 3 < Time.time && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
             {
                 oneTimeAlarm = true;
 
@@ -605,10 +605,12 @@ public class Game : MonoBehaviour
         for (int i = 0; i < boardSize; ++i)
         {
             var block = boardArr[row, i];
-            if (block.DisappearBlock() == true)
+            if (block.IsDisappearBlock() == true)
             {
                 var random = UnityEngine.Random.Range((int)Defines.EBlockState.PinkBomb, (int)Defines.EBlockState.BlueBomb + 1);
                 block.changeBlockState = (Defines.EBlockState)random;
+
+                block.tutorialBlock = false;
             }
         }
     }
@@ -679,17 +681,17 @@ public class Game : MonoBehaviour
         return CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState;
     }
 
-    void SaveBombCollectionData(Block _block)
+    void SaveBombCollectionData(Block block)
     // 폭탄 콜렉션 데이터 저장
     {
-        if (_block.IsBombBlock() == false && _block.IsSpecialBlock() == false)
+        if (block.IsBombBlock() == false && block.IsSpecialBombBlock() == false)
             return;
 
         if (GetClearState() == Defines.EClearState.Clear)
             return;
 
         
-        var collectionData = CHMData.Instance.GetCollectionData(_block.GetBlockState().ToString());
+        var collectionData = CHMData.Instance.GetCollectionData(block.GetBlockState().ToString());
         collectionData.value += 1;
     }
 
@@ -718,7 +720,7 @@ public class Game : MonoBehaviour
             moveIndex2 = block2.index;
 
             // 두 블럭 모두 스페셜 블럭일 경우
-            if (block1.IsSpecialBlock() == true && block2.IsSpecialBlock() == true)
+            if (block1.IsSpecialBombBlock() == true && block2.IsSpecialBombBlock() == true)
             {
                 block1.match = true;
                 block2.match = true;
@@ -738,13 +740,13 @@ public class Game : MonoBehaviour
                 return;
             }
             // 한 블럭만 스페셜 블럭일 경우
-            else if (block1.IsSpecialBlock() == true)
+            else if (block1.IsSpecialBombBlock() == true)
             {
                 await block1.Boom();
                 return;
             }
             // 한 블럭만 스페셜 블럭일 경우
-            else if (block2.IsSpecialBlock() == true)
+            else if (block2.IsSpecialBombBlock() == true)
             {
                 await block2.Boom();
                 return;
@@ -1013,7 +1015,7 @@ public class Game : MonoBehaviour
                     }
                     else if (reupdate == true || block.IsMatch() == true)
                     {
-                        if (block.IsFixdBlock() == true || block.DisappearBlock() == true)
+                        if (block.IsFixdBlock() == true || block.IsDisappearBlock() == true)
                             continue;
 
                         var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
@@ -1064,10 +1066,10 @@ public class Game : MonoBehaviour
                     continue;
 
                 var curBlock = boardArr[i, j];
-                if (curBlock.IsFixdBlock() == true)
+                if (curBlock.IsNotDragBlock() == true)
                     continue;
 
-                if (curBlock.IsBombBlock() == true || curBlock.IsSpecialBlock() == true)
+                if (curBlock.IsBombBlock() == true || curBlock.IsSpecialBombBlock() == true)
                 {
                     canMatchRow = curBlock.row;
                     canMatchCol = curBlock.col;
@@ -1273,7 +1275,7 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.DisappearBlock() == true)
+                if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.IsDisappearBlock() == true)
                     continue;
 
                 // 없어져야 할 블럭
@@ -1579,7 +1581,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBombBlock() == true || blockList[i].IsSpecialBlock() == true)
+            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBombBlock() == true || blockList[i].IsSpecialBombBlock() == true)
             {
                 blockState = Defines.EBlockState.None;
                 matchCount = 0;
@@ -1745,8 +1747,8 @@ public class Game : MonoBehaviour
     // 유효한 일반 블럭인지 확인
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
-            boardArr[row, col].IsFixdBlock() == true || boardArr[row, col].IsBombBlock() == true ||
-            boardArr[row, col].IsSpecialBlock() == true)
+            boardArr[row, col].IsFixdBlock() || boardArr[row, col].IsBombBlock() ||
+            boardArr[row, col].IsSpecialBombBlock() || boardArr[row, col].IsDisappearBlock())
             return false;
 
         return true;
@@ -1766,7 +1768,7 @@ public class Game : MonoBehaviour
 
         DamageBlock(row, col);
 
-        if (boardArr[row, col].DisappearBlock() == false &&
+        if (boardArr[row, col].IsDisappearBlock() == false &&
             boardArr[row, col].IsFixdBlock() == false &&
             boardArr[row, col].GetBlockState() != Defines.EBlockState.PinkBomb)
         {
