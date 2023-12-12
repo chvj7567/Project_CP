@@ -1581,7 +1581,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].IsFixdBlock() == true || blockList[i].IsBombBlock() == true || blockList[i].IsSpecialBombBlock() == true)
+            if (blockList[i].IsFixdBlock() || blockList[i].IsBombBlock() || blockList[i].IsNormalBlock() == false)
             {
                 blockState = Defines.EBlockState.None;
                 matchCount = 0;
@@ -1646,7 +1646,7 @@ public class Game : MonoBehaviour
             int row = block.row;
             int col = block.col;
 
-            if (boardArr[row, col].IsMatch() == true || boardArr[row, col].IsFixdBlock() == true)
+            if (boardArr[row, col].IsMatch() || boardArr[row, col].IsFixdBlock())
                 continue;
 
             Block moveBlock = boardArr[row, col];

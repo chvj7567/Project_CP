@@ -18,7 +18,7 @@ public class UIGameEnd : UIBase
 
     [SerializeField] TMP_Text resultText;
     [SerializeField] CHTMPro goldText;
-    [SerializeField] CHTMPro goldx3Text;
+    [SerializeField] CHTMPro goldx2Text;
     [SerializeField] Button menuBtn;
     [SerializeField] Button adBtn;
 
@@ -35,7 +35,7 @@ public class UIGameEnd : UIBase
         {
             resultText.DOText("Game Over", 1f);
             goldText.SetText(0);
-            goldx3Text.SetText(0);
+            goldx2Text.SetText(0);
         }
         else if (arg.result == Defines.EGameState.GameClear)
         {
@@ -44,12 +44,12 @@ public class UIGameEnd : UIBase
             if (arg.clearState == Defines.EClearState.Clear)
             {
                 goldText.SetText(0);
-                goldx3Text.SetText(0);
+                goldx2Text.SetText(0);
             }
             else
             {
                 goldText.SetText(arg.gold);
-                goldx3Text.SetText(arg.gold * 3);
+                goldx2Text.SetText(arg.gold * 2);
             }
         }
 
@@ -89,33 +89,38 @@ public class UIGameEnd : UIBase
 
         adBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMAdmob.Instance.ShowRewardedAd();
+            if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).buyRemoveAD == false)
+                CHMAdmob.Instance.ShowRewardedAd();
+            else
+                AcquireReward();
         });
 
-        CHMAdmob.Instance.AcquireReward += () =>
+        CHMAdmob.Instance.AcquireReward += AcquireReward;
+    }
+
+    void AcquireReward()
+    {
+        if (received == true)
         {
-            if (received == true)
-            {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                {
-                    stringID = 64
-                });
-
-                return;
-            }
-
-            var before = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
-            var after = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += arg.gold * 3;
-
-            //adBtn.gameObject.SetActive(false);
-            received = true;
-
-            Debug.Log($"Gold {before} => {after}");
-
             CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
-                stringID = 63
+                stringID = 64
             });
-        };
+
+            return;
+        }
+
+        var before = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
+        var after = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += arg.gold * 3;
+
+        //adBtn.gameObject.SetActive(false);
+        received = true;
+
+        Debug.Log($"Gold {before} => {after}");
+
+        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+        {
+            stringID = 63
+        });
     }
 }
