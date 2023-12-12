@@ -1082,7 +1082,7 @@ public class Game : MonoBehaviour
                 var rightBlock = IsValidIndex(i, j + 1) == true ? boardArr[i, j + 1] : null;
 
                 if (upBlock != null &&
-                    upBlock.IsFixdBlock() == false)
+                    upBlock.IsNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, upBlock);
                     CheckMap(true);
@@ -1096,7 +1096,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (downBlock != null &&
-                    downBlock.IsFixdBlock() == false)
+                    downBlock.IsNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, downBlock);
                     CheckMap(true);
@@ -1110,7 +1110,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (leftBlock != null &&
-                    leftBlock.IsFixdBlock() == false)
+                    leftBlock.IsNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, leftBlock);
                     CheckMap(true);
@@ -1124,7 +1124,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (rightBlock != null &&
-                    rightBlock.IsFixdBlock() == false)
+                    rightBlock.IsNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, rightBlock);
                     CheckMap(true);
