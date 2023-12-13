@@ -24,7 +24,6 @@ public class Game : MonoBehaviour
     [SerializeField] Image viewImg1;
     [SerializeField] Image viewImg2;
     [SerializeField] Button backBtn;
-    [SerializeField] Toggle selectTog;
     [SerializeField] GameObject origin;
     [SerializeField] float margin = 0f;
     [SerializeField, Range(1, MAX)] int boardSize = 1;
@@ -49,14 +48,17 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] int moveIndex1 = 0;
     [SerializeField, ReadOnly] int moveIndex2 = 0;
 
-    [SerializeField] int maxPower = 99999;
-    [SerializeField] float minDelay = .1f;
-    [SerializeField] float maxSpeed = 30f;
     [SerializeField] CHTMPro targetScoreText;
     [SerializeField] CHTMPro moveCountText;
     [SerializeField] CHTMPro curScoreText;
+
+    [SerializeField] GameObject onlyNormalStageObject;
+    [SerializeField] GameObject onlyBossStageObject;
+    [SerializeField] CHTMPro hpText;
     [SerializeField] int selectScore;
     [SerializeField] int selectCurScore;
+
+    [SerializeField, ReadOnly] ReactiveProperty<int> hp = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> curScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
@@ -162,6 +164,11 @@ public class Game : MonoBehaviour
                     tokenSource.Cancel();
                 }
             }
+        });
+
+        hp.Subscribe(_ =>
+        {
+            hpText.SetText(hp);
         });
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
@@ -290,6 +297,18 @@ public class Game : MonoBehaviour
                 }
             });
 
+        if (bossStage)
+        {
+            hp.Value = loginData.hp;
+
+            Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
+            .Subscribe(_ =>
+            {
+                hp.Value -= 1;
+            })
+            .AddTo(gameObject);
+        }
+
 
         // 튜토리얼 및 가이드 부분
 
@@ -338,6 +357,15 @@ public class Game : MonoBehaviour
             {
                 guideDesc.SetStringID(tutorialInfo.descStringID);
             }
+        }
+
+        if (bossStage)
+        {
+            onlyNormalStageObject.SetActive(false);
+        }
+        else
+        {
+            onlyBossStageObject.SetActive(false);
         }
 
         gameResult.Value = EGameState.Play;
