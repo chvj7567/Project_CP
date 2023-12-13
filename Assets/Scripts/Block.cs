@@ -624,7 +624,7 @@ public class Block : MonoBehaviour
                     switch (upBlockState)
                     {
                         case Defines.EBlockState.Cat1:
-                        case Defines.EBlockState.Cat5:
+                        case Defines.EBlockState.Cat6:
                         case Defines.EBlockState.CatHat1:
                         case Defines.EBlockState.CatSkin1:
                         case Defines.EBlockState.Locker1:
@@ -638,7 +638,7 @@ public class Block : MonoBehaviour
                     switch (upBlockState)
                     {
                         case Defines.EBlockState.Cat2:
-                        case Defines.EBlockState.Cat6:
+                        case Defines.EBlockState.Cat7:
                         case Defines.EBlockState.CatHat2:
                         case Defines.EBlockState.CatSkin2:
                         case Defines.EBlockState.Locker2:

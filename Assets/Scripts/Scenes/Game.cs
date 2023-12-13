@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
@@ -808,7 +809,6 @@ public class Game : MonoBehaviour
             bonusScore.Value = 0;
 
             SetDissapearBlock();
-            await CatInTheBox();
             await UpdateMap();
             CheckMap();
         } while (isMatch == true);
@@ -1001,8 +1001,12 @@ public class Game : MonoBehaviour
     {
         try
         {
-            bool reupdate = false;
+            bool reUpdate = false;
+            bool matchUpdate = false;
             bool createDelay = false;
+
+            await CatInTheBox();
+
             do
             {
                 foreach (var block in boardArr)
@@ -1019,12 +1023,10 @@ public class Game : MonoBehaviour
                         block.SetOriginPos();
                         block.changeBlockState = Defines.EBlockState.None;
                     }
-                    else if (reupdate == true || block.IsMatch() == true)
+                    else if (reUpdate == true || block.IsMatch() == true)
                     {
                         if (block.IsFixdBlock() == true || block.IsBottomTouchDisappearBlock() == true)
                             continue;
-
-                        Debug.Log($"@@@2  {block.row}/{block.col}");
 
                         var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
@@ -1036,9 +1038,9 @@ public class Game : MonoBehaviour
                     }
                 }
 
-                reupdate = CanMatch() == false;
+                reUpdate = CanMatch() == false;
 
-                if (reupdate == true)
+                if (reUpdate)
                 {
                     CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {
@@ -1046,12 +1048,14 @@ public class Game : MonoBehaviour
                     });
                 }
 
-                if (createDelay == true)
+                if (createDelay)
                 {
                     await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
                 }
 
-            } while (reupdate == true);
+                matchUpdate = await CatInTheBox();
+
+            } while (reUpdate || matchUpdate);
 
             isMatch = false;
         }
@@ -2214,7 +2218,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task CatInTheBox()
+    public async Task<bool> CatInTheBox()
     {
         bool inDelay = false;
 
@@ -2237,6 +2241,8 @@ public class Game : MonoBehaviour
                 {
                     inDelay = true;
 
+                    Debug.Log($"CatInTheBox {upBlock.GetBlockState()}:{upBlock.row}/{upBlock.col}");
+
                     upBlock.match = true;
                     upBlock.rectTransform.DOAnchorPosY(block.rectTransform.anchoredPosition.y, delay);
                     upBlock.rectTransform.DOScale(0f, delay);
@@ -2247,6 +2253,9 @@ public class Game : MonoBehaviour
         if (inDelay)
         {
             await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+            return true;
         }
+
+        return false;
     }
 }
