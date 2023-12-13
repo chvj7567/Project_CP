@@ -45,6 +45,9 @@ public class First : MonoBehaviour
         {
             if (bundleDownload.Value == false || dataDownload.Value == false) return;
 
+            if (CHMData.Instance.newUser)
+                PlayerPrefs.SetInt(CHMMain.String.Stage, 1);
+
             pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.Stage));
             startBtn.gameObject.SetActive(false);
             missionBtn.gameObject.SetActive(true);

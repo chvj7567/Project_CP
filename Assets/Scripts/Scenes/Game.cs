@@ -673,13 +673,18 @@ public class Game : MonoBehaviour
     void SaveClearData()
     // 현재 스테이지를 클리어 상태로 저장
     {
-        CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState = Defines.EClearState.Clear;
+        CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
     }
 
     Defines.EClearState GetClearState()
     // 현재 스테이지의 클리어 상태
     {
-        return CHMData.Instance.GetStageData(PlayerPrefs.GetInt(CHMMain.String.Stage).ToString()).clearState;
+        if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= PlayerPrefs.GetInt(CHMMain.String.Stage))
+        {
+            return Defines.EClearState.Clear;
+        }
+
+        return Defines.EClearState.Doing;
     }
 
     void SaveBombCollectionData(Block block)

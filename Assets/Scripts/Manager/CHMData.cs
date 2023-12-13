@@ -14,7 +14,6 @@ public class CHMData : CHSingleton<CHMData>
 {
     public bool newUser = false;
     public Dictionary<string, Data.Login> loginDataDic = null;
-    public Dictionary<string, Data.Stage> stageDataDic = null;
     public Dictionary<string, Data.Collection> collectionDataDic = null;
     public Dictionary<string, Data.Mission> missionDataDic = null;
     public Dictionary<string, Data.Shop> shopDataDic = null;
@@ -34,13 +33,6 @@ public class CHMData : CHSingleton<CHMData>
             }
 
             loginDataDic = data.Item2.MakeDict();
-        }
-
-        if (stageDataDic == null)
-        {
-            Debug.Log("Stage Local Data Load");
-            var data = await LoadJsonToLocal<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
-            stageDataDic = data.Item2.MakeDict();
         }
 
         if (collectionDataDic == null)
@@ -115,9 +107,6 @@ public class CHMData : CHSingleton<CHMData>
 
         Data.ExtractData<Data.Login> loginData = new Data.ExtractData<Data.Login>();
         saveData.loginList = loginData.MakeList(loginDataDic);
-
-        Data.ExtractData<Data.Stage> stageData = new Data.ExtractData<Data.Stage>();
-        saveData.stageList = stageData.MakeList(stageDataDic);
 
         Data.ExtractData<Data.Collection> collectionData = new Data.ExtractData<Data.Collection>();
         saveData.collectionList = collectionData.MakeList(collectionDataDic);
@@ -230,23 +219,6 @@ public class CHMData : CHSingleton<CHMData>
         return data;
     }
 
-    Data.Stage CreateStageData(string _key)
-    {
-        Debug.Log($"Create Stage {_key}");
-
-        Data.Stage data = new Data.Stage
-        {
-            key = _key,
-            stage = int.Parse(_key),
-            clearState = Defines.EClearState.NotDoing,
-            boomAllCount = 0
-        };
-
-        stageDataDic.Add(_key, data);
-
-        return data;
-    }
-
     Data.Collection CreateCollectionData(string _key)
     {
         Debug.Log($"Create Collection {_key}");
@@ -299,16 +271,6 @@ public class CHMData : CHSingleton<CHMData>
         if (loginDataDic.TryGetValue(_key, out var data) == false)
         {
             return CreateLoginData(_key);
-        }
-
-        return data;
-    }
-
-    public Data.Stage GetStageData(string _key)
-    {
-        if (stageDataDic.TryGetValue(_key, out var data) == false)
-        {
-            data = CreateStageData(_key);
         }
 
         return data;

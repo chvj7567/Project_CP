@@ -65,16 +65,9 @@ public class StageSelect : MonoBehaviour
         if (int.TryParse(btnList[_index].text.text, out int stage) == false)
             return;
 
-        if (CHMData.Instance.stageDataDic.TryGetValue(stage.ToString(), out var data))
+        if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= stage)
         {
-            if (data.clearState == Defines.EClearState.Clear)
-            {
-                btnList[_index].clearObj.SetActive(true);
-            }
-            else
-            {
-                btnList[_index].clearObj.SetActive(false);
-            }
+            btnList[_index].clearObj.SetActive(true);
         }
         else
         {
@@ -97,13 +90,14 @@ public class StageSelect : MonoBehaviour
             return;
         }
 
-        var beforeStageData = CHMData.Instance.GetStageData((stage - 1).ToString());
-        var currentStageData = CHMData.Instance.GetStageData(stage.ToString());
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var beforeStage = stage - 1;
 
-        if (beforeStageData.clearState == Defines.EClearState.Clear)
+        // 이전 스테이지를 클리어했다면
+        if (loginData.stage >= beforeStage)
         {
             // 전 스테이지를 마지막으로 클리어하고 현 스테이지를 클리어하지 않은 상태라면
-            if (PlayerPrefs.GetInt(CHMMain.String.Stage) == stage - 1 && currentStageData.clearState != Defines.EClearState.Clear)
+            if (PlayerPrefs.GetInt(CHMMain.String.Stage) == beforeStage && loginData.stage < stage)
             {
                 btnList[_index].lockObj.SetActive(true);
                 await Task.Delay(1000);

@@ -9,6 +9,8 @@ namespace Data
     {
         public string key = "";
         public bool connectGPGS = false;
+        public int stage = 0;
+        public int bossStage = 0;
         public int selectCatShop = 0;
         public int tutorialIndex = 0;
         public Defines.ELanguageType languageType = Defines.ELanguageType.English;
@@ -56,7 +58,6 @@ namespace Data
     public class ExtractData<T> : ILoader<string, T> where T : class
     {
         public List<Login> loginList = new List<Login>();
-        public List<Stage> stageList = new List<Stage>();
         public List<Collection> collectionList = new List<Collection>();
         public List<Mission> missionList = new List<Mission>();
         public List<Shop> shopList = new List<Shop>();
@@ -68,11 +69,6 @@ namespace Data
             if (typeof(T) == typeof(Login))
             {
                 foreach (Login data in loginList)
-                    dict.Add(data.key, data as T);
-            }
-            else if (typeof(T) == typeof(Stage))
-            {
-                foreach (Stage data in stageList)
                     dict.Add(data.key, data as T);
             }
             else if (typeof(T) == typeof(Collection))
@@ -115,22 +111,6 @@ namespace Data
                         return false;
 
                     if (temp.key == "")
-                        return false;
-                }
-            }
-            else if (typeof(T) == typeof(Stage))
-            {
-                foreach (var data in dict)
-                {
-                    var temp = data.Value as Stage;
-                    if (temp == null)
-                        return false;
-
-                    if (temp.key == "")
-                        return false;
-
-                    if (temp.stage == -1 ||
-                        temp.boomAllCount == -1)
                         return false;
                 }
             }
