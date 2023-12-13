@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -237,7 +238,7 @@ public class Game : MonoBehaviour
                     {
                         for (int j = 0; j < boardSize; ++j)
                         {
-                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsDisappearBlock() == true)
+                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsBottomTouchDisappearBlock() == true)
                             {
                                 clear = false;
                                 break;
@@ -605,7 +606,7 @@ public class Game : MonoBehaviour
         for (int i = 0; i < boardSize; ++i)
         {
             var block = boardArr[row, i];
-            if (block.IsDisappearBlock() == true)
+            if (block.IsBottomTouchDisappearBlock() == true)
             {
                 var random = UnityEngine.Random.Range((int)Defines.EBlockState.PinkBomb, (int)Defines.EBlockState.BlueBomb + 1);
                 block.changeBlockState = (Defines.EBlockState)random;
@@ -802,7 +803,7 @@ public class Game : MonoBehaviour
             bonusScore.Value = 0;
 
             SetDissapearBlock();
-
+            await CatInTheBox();
             await UpdateMap();
             CheckMap();
         } while (isMatch == true);
@@ -1015,8 +1016,10 @@ public class Game : MonoBehaviour
                     }
                     else if (reupdate == true || block.IsMatch() == true)
                     {
-                        if (block.IsFixdBlock() == true || block.IsDisappearBlock() == true)
+                        if (block.IsFixdBlock() == true || block.IsBottomTouchDisappearBlock() == true)
                             continue;
+
+                        Debug.Log($"@@@2  {block.row}/{block.col}");
 
                         var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
 
@@ -1275,7 +1278,7 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.IsDisappearBlock() == true)
+                if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.IsBottomTouchDisappearBlock() == true)
                     continue;
 
                 // 없어져야 할 블럭
@@ -1748,7 +1751,7 @@ public class Game : MonoBehaviour
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
             boardArr[row, col].IsFixdBlock() || boardArr[row, col].IsBombBlock() ||
-            boardArr[row, col].IsSpecialBombBlock() || boardArr[row, col].IsDisappearBlock())
+            boardArr[row, col].IsSpecialBombBlock() || boardArr[row, col].IsBottomTouchDisappearBlock())
             return false;
 
         return true;
@@ -1768,7 +1771,7 @@ public class Game : MonoBehaviour
 
         DamageBlock(row, col);
 
-        if (boardArr[row, col].IsDisappearBlock() == false &&
+        if (boardArr[row, col].IsBottomTouchDisappearBlock() == false &&
             boardArr[row, col].IsFixdBlock() == false &&
             boardArr[row, col].GetBlockState() != Defines.EBlockState.PinkBomb)
         {
@@ -2203,6 +2206,42 @@ public class Game : MonoBehaviour
         if (ani)
         {
             await AfterDrag(null, null, true);
+        }
+    }
+
+    public async Task CatInTheBox()
+    {
+        bool inDelay = false;
+
+        for (int w = 0; w < boardSize; w++)
+        {
+            for (int h = 0; h < boardSize; h++)
+            {
+                var block = boardArr[w, h];
+                if (block == null)
+                    continue;
+
+                if (block.IsBoxBlock() == false)
+                    continue;
+
+                var upBlock = IsValidIndex(w - 1, h) == true ? boardArr[w - 1, h] : null;
+                if (upBlock == null)
+                    continue;
+
+                if (block.CatInTheBox(upBlock.GetBlockState()))
+                {
+                    inDelay = true;
+
+                    upBlock.match = true;
+                    upBlock.rectTransform.DOAnchorPosY(block.rectTransform.anchoredPosition.y, delay);
+                    upBlock.rectTransform.DOScale(0f, delay);
+                }
+            }
+        }
+
+        if (inDelay)
+        {
+            await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
         }
     }
 }

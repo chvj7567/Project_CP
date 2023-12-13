@@ -292,6 +292,14 @@ public class Block : MonoBehaviour
             case EBlockState.Locker5:
                 img.rectTransform.sizeDelta = new Vector2(70, 70);
                 break;
+            case EBlockState.CatBox1:
+            case EBlockState.CatBox2:
+            case EBlockState.CatBox3:
+            case EBlockState.CatBox4:
+            case EBlockState.CatBox5:
+                hpText.GetComponent<RectTransform>().DOAnchorPosY(30, .1f);
+                img.rectTransform.sizeDelta = new Vector2(10, 10);
+                break;
             default:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
                 break;
@@ -391,7 +399,7 @@ public class Block : MonoBehaviour
 
     public void Damage(int _blockMaxIndex)
     {
-        if (checkDamage == false && hp >= 1)
+        if (checkDamage == false && hp >= 1 && IsBoxBlock() == false)
         {
             checkDamage = true;
             hp -= 1;
@@ -523,6 +531,11 @@ public class Block : MonoBehaviour
         {
             case Defines.EBlockState.Wall:
             case Defines.EBlockState.Potal:
+            case Defines.EBlockState.CatBox1:
+            case Defines.EBlockState.CatBox2:
+            case Defines.EBlockState.CatBox3:
+            case Defines.EBlockState.CatBox4:
+            case Defines.EBlockState.CatBox5:
                 return true;
             default:
                 return false;
@@ -536,6 +549,11 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.Wall:
             case Defines.EBlockState.Potal:
             case Defines.EBlockState.Fish:
+            case Defines.EBlockState.CatBox1:
+            case Defines.EBlockState.CatBox2:
+            case Defines.EBlockState.CatBox3:
+            case Defines.EBlockState.CatBox4:
+            case Defines.EBlockState.CatBox5:
                 return true;
             default:
                 return false;
@@ -567,7 +585,7 @@ public class Block : MonoBehaviour
         return blockState != Defines.EBlockState.None;
     }
 
-    public bool IsDisappearBlock()
+    public bool IsBottomTouchDisappearBlock()
     {
         switch (blockState)
         {
@@ -576,5 +594,125 @@ public class Block : MonoBehaviour
             default:
                 return false;
         }
+    }
+
+    public bool IsBoxBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.CatBox1:
+            case Defines.EBlockState.CatBox2:
+            case Defines.EBlockState.CatBox3:
+            case Defines.EBlockState.CatBox4:
+            case Defines.EBlockState.CatBox5:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    bool CheckInBoxBlock(Defines.EBlockState upBlockState)
+    {
+        // 자기 자신이 박스 블럭이 아니면 확인 X
+        if (IsBoxBlock() == false)
+            return false;
+
+        switch (blockState)
+        {
+            case EBlockState.CatBox1:
+                {
+                    switch (upBlockState)
+                    {
+                        case Defines.EBlockState.Cat1:
+                        case Defines.EBlockState.Cat5:
+                        case Defines.EBlockState.CatHat1:
+                        case Defines.EBlockState.CatSkin1:
+                        case Defines.EBlockState.Locker1:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            case EBlockState.CatBox2:
+                {
+                    switch (upBlockState)
+                    {
+                        case Defines.EBlockState.Cat2:
+                        case Defines.EBlockState.Cat6:
+                        case Defines.EBlockState.CatHat2:
+                        case Defines.EBlockState.CatSkin2:
+                        case Defines.EBlockState.Locker2:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            case EBlockState.CatBox3:
+                {
+                    switch (upBlockState)
+                    {
+                        case Defines.EBlockState.Cat3:
+                        case Defines.EBlockState.Cat8:
+                        case Defines.EBlockState.CatHat3:
+                        case Defines.EBlockState.CatSkin3:
+                        case Defines.EBlockState.Locker3:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            case EBlockState.CatBox4:
+                {
+                    switch (upBlockState)
+                    {
+                        case Defines.EBlockState.Cat4:
+                        case Defines.EBlockState.Cat9:
+                        case Defines.EBlockState.CatHat4:
+                        case Defines.EBlockState.CatSkin4:
+                        case Defines.EBlockState.Locker4:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            case EBlockState.CatBox5:
+                {
+                    switch (upBlockState)
+                    {
+                        case Defines.EBlockState.Cat5:
+                        case Defines.EBlockState.Cat10:
+                        case Defines.EBlockState.CatHat5:
+                        case Defines.EBlockState.CatSkin5:
+                        case Defines.EBlockState.Locker5:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            default:
+                return false;
+        }
+    }
+
+    public bool CatInTheBox(Defines.EBlockState upBlockState)
+    {
+        if (CheckInBoxBlock(upBlockState) == false)
+            return false;
+
+        if (hp <= 0)
+            return true;
+
+        hp -= 1;
+
+        if (hp > 0)
+        {
+            hpText.SetText(hp);
+        }
+        else
+        {
+            hpText.gameObject.SetActive(false);
+        }
+
+        return true;
     }
 }

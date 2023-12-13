@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: AD X 3
+  m_text: AD X 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9b54ea3303e1f7442ac70dd3df5860c7, type: 2}
   m_sharedMaterial: {fileID: 3606320079389574382, guid: 9b54ea3303e1f7442ac70dd3df5860c7, type: 2}
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52
+  m_fontSize: 52.85
   m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -484,7 +484,7 @@ MonoBehaviour:
   backBtn: {fileID: 0}
   resultText: {fileID: 6541136462200984563}
   goldText: {fileID: 8205181815026363472}
-  goldx3Text: {fileID: 7269658502877152957}
+  goldx2Text: {fileID: 7269658502877152957}
   menuBtn: {fileID: 7673177068412121011}
   adBtn: {fileID: 3132494329897276627}
 --- !u!1 &3755172140362299380
@@ -1630,7 +1630,7 @@ GameObject:
   - component: {fileID: 7105673226716596766}
   - component: {fileID: 7269658502877152957}
   m_Layer: 5
-  m_Name: Goldx3
+  m_Name: AdGold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

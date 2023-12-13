@@ -89,7 +89,6 @@ public class Defines
     {
         None = -1,
 
-        // 일반 블럭은 앞에서 처리
         Cat1,
         Cat2,
         Cat3,
@@ -137,6 +136,12 @@ public class Defines
         Locker3,
         Locker4,
         Locker5,
+
+        CatBox1,
+        CatBox2,
+        CatBox3,
+        CatBox4,
+        CatBox5,
 
         Max
     }
