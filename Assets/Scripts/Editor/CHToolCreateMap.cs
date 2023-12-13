@@ -22,6 +22,7 @@ public class CHToolCreateMap : EditorWindow
     int tutorialID = -1;
     List<Infomation.StageInfo> stageInfoList = new List<Infomation.StageInfo>();
     List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
+    bool bossStage = false;
     int group;
     int stage;
     int blockTypeCount = 1;
@@ -88,6 +89,9 @@ public class CHToolCreateMap : EditorWindow
 
         EditorGUILayout.BeginHorizontal();
         {
+            EditorGUILayout.LabelField("BossStage");
+            bossStage = EditorGUILayout.Toggle(bossStage);
+
             EditorGUILayout.LabelField("Group");
             group = EditorGUILayout.IntField(group);
 
@@ -290,39 +294,6 @@ public class CHToolCreateMap : EditorWindow
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
-            /*if (GUILayout.Button(texture, GUILayout.Width(50), GUILayout.Height(50)))
-            {
-                if (texture == null)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Cat1].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat1].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Cat2].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat2].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Cat3].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat3].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Cat4].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat4].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Cat5].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat5].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.CatPang].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.CatPang].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.PinkBomb].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.PinkBomb].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.YellowBomb].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.YellowBomb].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.OrangeBomb].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.OrangeBomb].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.GreenBomb].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.GreenBomb].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.BlueBomb].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.BlueBomb].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Wall].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Wall].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Potal].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Potal].texture)
-                    texture = blockSpriteList[(int)Defines.EBlockState.Fish].texture;
-                else if (texture == blockSpriteList[(int)Defines.EBlockState.Fish].texture)
-                    texture = null;
-            }*/
         }
         EditorGUILayout.EndHorizontal();
 
@@ -368,8 +339,21 @@ public class CHToolCreateMap : EditorWindow
                 }
             }
 
-            var stageInfo = stageInfoList.Find(_ => _.stage == stage);
-            var stageBlockInfo = stageBlockInfoList.FindAll(_ => _.stage == stage);
+            int tempGroup = 0;
+            int tempStage = 0;
+            if (bossStage)
+            {
+                tempGroup = CHTool.BossStageStartValue + group;
+                tempStage = CHTool.BossStageStartValue + stage;
+            }
+            else
+            {
+                tempGroup = group;
+                tempStage = stage;
+            }
+
+            var stageInfo = stageInfoList.Find(_ => _.stage == tempStage);
+            var stageBlockInfo = stageBlockInfoList.FindAll(_ => _.stage == tempStage);
             if (stageInfo != null && stageBlockInfo != null)
             {
                 group = stageInfo.group;
@@ -404,13 +388,28 @@ public class CHToolCreateMap : EditorWindow
 
         if (GUILayout.Button("저장하기", GUILayout.Width(595), GUILayout.Height(30)))
         {
-            var stageInfo = stageInfoList.Find(_ => _.stage == stage);
+            int tempGroup = 0;
+            int tempStage = 0;
+            if (bossStage)
+            {
+                if (group <= CHTool.BossStageStartValue)
+                    tempGroup = CHTool.BossStageStartValue + group;
+
+                tempStage = CHTool.BossStageStartValue + stage;
+            }
+            else
+            {
+                tempGroup = group;
+                tempStage = stage;
+            }
+
+            var stageInfo = stageInfoList.Find(_ => _.stage == tempStage);
             if (stageInfo == null)
             {
                 stageInfoList.Add(new Infomation.StageInfo
                 {
-                    group = group,
-                    stage = stage,
+                    group = tempGroup,
+                    stage = tempStage,
                     blockTypeCount = blockTypeCount,
                     boardSize = boardSize,
                     time = time,
@@ -421,8 +420,8 @@ public class CHToolCreateMap : EditorWindow
             }
             else
             {
-                stageInfo.group = group;
-                stageInfo.stage = stage;
+                stageInfo.group = tempGroup;
+                stageInfo.stage = tempStage;
                 stageInfo.blockTypeCount = blockTypeCount;
                 stageInfo.boardSize = boardSize;
                 stageInfo.time = time;
@@ -431,7 +430,7 @@ public class CHToolCreateMap : EditorWindow
                 stageInfo.tutorialID = tutorialID;
             }
 
-            stageBlockInfoList.RemoveAll(_ => _.stage == stage);
+            stageBlockInfoList.RemoveAll(_ => _.stage == tempStage);
 
             for (int w = 0; w < boardSize; w++)
             {
@@ -442,7 +441,7 @@ public class CHToolCreateMap : EditorWindow
 
                     stageBlockInfoList.Add(new Infomation.StageBlockInfo
                     {
-                        stage = stage,
+                        stage = tempStage,
                         blockState = GetBlockState(textures[w, h]),
                         hp = hps[w, h],
                         row = w,

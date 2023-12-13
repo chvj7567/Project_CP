@@ -70,6 +70,7 @@ public class Defines
         UIGameStart,
         UIGameEnd,
         UISetting,
+        UIStageSelect,
 
         Max
     }
@@ -287,5 +288,11 @@ public class Defines
         
 
         Max
+    }
+
+    public enum ESelectStage
+    {
+        Normal = 1,
+        Boss = 2,
     }
 }

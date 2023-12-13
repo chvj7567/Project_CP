@@ -86,6 +86,8 @@ public class Game : MonoBehaviour
     
     int helpTime = 0;
 
+    bool bossStage = false;
+
     CancellationTokenSource tokenSource;
 
     private void Awake()
@@ -164,10 +166,11 @@ public class Game : MonoBehaviour
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
-        if (stage <= 0)
+
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
         {
-            stage = 1;
-            PlayerPrefs.SetInt(CHMMain.String.Stage, stage);
+            bossStage = true;
+            stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
         }
 
         stageInfo = CHMMain.Json.GetStageInfo(stage);
@@ -674,15 +677,32 @@ public class Game : MonoBehaviour
     void SaveClearData()
     // 현재 스테이지를 클리어 상태로 저장
     {
-        CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+        if (bossStage)
+        {
+            CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+        }
+        else
+        {
+            CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+        }
     }
 
     Defines.EClearState GetClearState()
     // 현재 스테이지의 클리어 상태
     {
-        if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= PlayerPrefs.GetInt(CHMMain.String.Stage))
+        if (bossStage)
         {
-            return Defines.EClearState.Clear;
+            if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage >= PlayerPrefs.GetInt(CHMMain.String.BossStage))
+            {
+                return Defines.EClearState.Clear;
+            }
+        }
+        else
+        {
+            if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= PlayerPrefs.GetInt(CHMMain.String.Stage))
+            {
+                return Defines.EClearState.Clear;
+            }
         }
 
         return Defines.EClearState.Doing;

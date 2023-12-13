@@ -12,6 +12,7 @@ public interface ILoader<Key, Value>
 
 public class CHMData : CHSingleton<CHMData>
 {
+    public readonly int BossStageStartValue = 100000;
     public bool newUser = false;
     public Dictionary<string, Data.Login> loginDataDic = null;
     public Dictionary<string, Data.Collection> collectionDataDic = null;

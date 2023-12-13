@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,9 +20,9 @@ public class First : MonoBehaviour
     [SerializeField] Button connectGPGSBtn;
     [SerializeField] Button logoutBtn;
     [SerializeField] Button shopBtn;
-    [SerializeField] Button boomBtn;
+    [SerializeField] Button bombBtn;
+    [SerializeField] Button MenuBtn;
     [SerializeField, ReadOnly] int backgroundIndex = 0;
-    [SerializeField] CHLoadingBarFromAssetBundle bundleLoadingScript;
     [SerializeField] CHAdvertise adScript;
     [SerializeField] ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
     [SerializeField] ReactiveProperty<bool> bundleDownload = new ReactiveProperty<bool>();
@@ -45,43 +46,13 @@ public class First : MonoBehaviour
         {
             if (bundleDownload.Value == false || dataDownload.Value == false) return;
 
-            if (CHMData.Instance.newUser)
-                PlayerPrefs.SetInt(CHMMain.String.Stage, 1);
-
-            pageMove.Init(PlayerPrefs.GetInt(CHMMain.String.Stage));
-            startBtn.gameObject.SetActive(false);
-            missionBtn.gameObject.SetActive(true);
-            shopBtn.gameObject.SetActive(true);
-            boomBtn.gameObject.SetActive(true);
-            stageSelect1.SetActive(true);
-            stageSelect2.SetActive(true);
-
-            // 기본 스킨
-            CHMData.Instance.GetShopData("1").buy = true;
-
-            PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
-
-            CHMMain.Sound.Play(Defines.ESound.Bgm);
-
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-            if (loginData.tutorialIndex == 0)
+            var arg = new UIStageSelectArg();
+            arg.stageSelect += async (select) =>
             {
-                Time.timeScale = 0;
+                await StageSelect(select);
+            };
 
-                guideBackground.SetActive(true);
-                guideBackground.transform.SetAsLastSibling();
-
-                tutorialBackgroundBtn.gameObject.SetActive(true);
-                tutorialBackgroundBtn.transform.SetAsLastSibling();
-
-                var tutorialIndex = await TutorialStart();
-                loginData.tutorialIndex = tutorialIndex;
-
-                guideBackground.SetActive(false);
-                tutorialBackgroundBtn.gameObject.SetActive(false);
-
-                CHMData.Instance.SaveData(CHMMain.String.CatPang);
-            }
+            CHMMain.UI.ShowUI(Defines.EUI.UIStageSelect, arg); 
         });
 
         missionBtn.OnClickAsObservable().Subscribe(_ =>
@@ -106,7 +77,7 @@ public class First : MonoBehaviour
             CHMMain.UI.ShowUI(Defines.EUI.UIShop, new CHUIArg());
         });
 
-        boomBtn.OnClickAsObservable().Subscribe(_ =>
+        bombBtn.OnClickAsObservable().Subscribe(_ =>
         {
             CHMMain.UI.ShowUI(Defines.EUI.UISetting, new CHUIArg());
         });
@@ -140,6 +111,17 @@ public class First : MonoBehaviour
 #endif
             }
         });
+
+        MenuBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            var arg = new UIStageSelectArg();
+            arg.stageSelect += async (select) =>
+            {
+                await StageSelect(select);
+            };
+
+            CHMMain.UI.ShowUI(Defines.EUI.UIStageSelect, arg);
+        });
     }
 
     async void Start()
@@ -153,7 +135,7 @@ public class First : MonoBehaviour
         connectGPGSBtn.gameObject.SetActive(false);
         logoutBtn.gameObject.SetActive(false);
         shopBtn.gameObject.SetActive(false);
-        boomBtn.gameObject.SetActive(false);
+        bombBtn.gameObject.SetActive(false);
 
         for (int i = 0; i < tutorialHoleList.Count; ++i)
         {
@@ -237,19 +219,18 @@ public class First : MonoBehaviour
             bundleDownload.Value = true;
             dataDownload.Value = true;
 
-            var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
-            pageMove.Init(stage);
+            pageMove.Init((Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage));
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
             missionBtn.gameObject.SetActive(true);
             shopBtn.gameObject.SetActive(true);
-            boomBtn.gameObject.SetActive(true);
+            bombBtn.gameObject.SetActive(true);
 
             var login = GetLoginState();
             connectGPGSBtn.gameObject.SetActive(login == false);
             logoutBtn.gameObject.SetActive(login);
 
-            adScript.GetAdvertise(stage);
+            adScript.GetAdvertise();
         }
 
         ChangeBackgroundLoop();
@@ -376,5 +357,51 @@ public class First : MonoBehaviour
         backgroundList[nextIndex].DOFade(1f, 5f);
 
         return nextIndex;
+    }
+
+    async Task StageSelect(int select)
+    {
+        PlayerPrefs.SetInt(CHMMain.String.SelectStage, select);
+
+        if (CHMData.Instance.newUser)
+        {
+            PlayerPrefs.SetInt(CHMMain.String.Stage, 1);
+            PlayerPrefs.SetInt(CHMMain.String.BossStage, 1 + CHMData.Instance.BossStageStartValue);
+        }
+
+        pageMove.Init((Defines.ESelectStage)select);
+        startBtn.gameObject.SetActive(false);
+        missionBtn.gameObject.SetActive(true);
+        shopBtn.gameObject.SetActive(true);
+        bombBtn.gameObject.SetActive(true);
+        stageSelect1.SetActive(true);
+        stageSelect2.SetActive(true);
+
+        // 기본 스킨
+        CHMData.Instance.GetShopData("1").buy = true;
+
+        PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
+
+        CHMMain.Sound.Play(Defines.ESound.Bgm);
+
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        if (loginData.tutorialIndex == 0)
+        {
+            Time.timeScale = 0;
+
+            guideBackground.SetActive(true);
+            guideBackground.transform.SetAsLastSibling();
+
+            tutorialBackgroundBtn.gameObject.SetActive(true);
+            tutorialBackgroundBtn.transform.SetAsLastSibling();
+
+            var tutorialIndex = await TutorialStart();
+            loginData.tutorialIndex = tutorialIndex;
+
+            guideBackground.SetActive(false);
+            tutorialBackgroundBtn.gameObject.SetActive(false);
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        }
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public static class CHTool
 {
+    public static readonly int BossStageStartValue = 100000;
+
     [Serializable]
     public class StageInfoJson
     {

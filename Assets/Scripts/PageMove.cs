@@ -27,6 +27,8 @@ public class PageMove : MonoBehaviour
     // stageSelect¿« index;
     int index;
 
+    Defines.ESelectStage curSelect;
+
     private void Start()
     {
         width = standard.rect.width;
@@ -46,25 +48,38 @@ public class PageMove : MonoBehaviour
         });
     }
 
-    public void Init(int _stage)
+    public void Init(Defines.ESelectStage select)
     {
-        Debug.Log($"Page Init Stage : {_stage}");
-        if (_stage <= 1)
+        var lastPlayStage = 0;
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+        }
+        else
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
+        }
+
+        curSelect = select;
+
+        if (lastPlayStage <= 1)
         {
             page = 1;
         }    
         else
         {
-            page = (_stage - 1) / stageCount + 1;
+            page = (lastPlayStage - 1) / stageCount + 1;
         }
 
-        stageSelect1.Init();
-        stageSelect2.Init();
+        stageSelect1.Init(select);
+        stageSelect2.Init(select);
 
-        stageSelect1.SetPage(page);
-        stageSelect2.SetPage(page);
+        stageSelect1.SetPage(page, select);
+        stageSelect2.SetPage(page, select);
 
         CheckCurrentPage();
+
+        Debug.Log($"PageMove_Init / Page:{page}, Stage:{lastPlayStage}");
     }
 
     public void ActiveMoveBtn(bool _active)
@@ -83,12 +98,22 @@ public class PageMove : MonoBehaviour
 
         ActiveMoveBtn(true);
 
+        int maxGroup = 0;
+        if (curSelect == Defines.ESelectStage.Normal)
+        {
+            maxGroup = CHMMain.Json.GetMaxStageGroup(CHMData.Instance.BossStageStartValue);
+        }
+        else
+        {
+            maxGroup = CHMMain.Json.GetMaxStageGroup();
+        }
+
         if (page == 1)
         {
             leftBtn.gameObject.SetActive(false);
         }
 
-        if (page == CHMMain.Json.GetMaxStageGroup())
+        if (page == maxGroup)
         {
             rightBtn.gameObject.SetActive(false);
         }
@@ -98,7 +123,7 @@ public class PageMove : MonoBehaviour
     {
         if (index == 1)
         {
-            if (moving == false && stageSelect2.SetPage(page - 1) == true)
+            if (moving == false && stageSelect2.SetPage(page - 1, curSelect) == true)
             {
                 index = 2;
                 stageSelect2RectTransform.anchoredPosition = new Vector2(-width, 0);
@@ -115,7 +140,7 @@ public class PageMove : MonoBehaviour
         }
         else
         {
-            if (moving == false && stageSelect1.SetPage(page - 1) == true)
+            if (moving == false && stageSelect1.SetPage(page - 1, curSelect) == true)
             {
                 index = 1;
                 stageSelect1RectTransform.anchoredPosition = new Vector2(-width, 0);
@@ -138,7 +163,7 @@ public class PageMove : MonoBehaviour
     {
         if (index == 1)
         {
-            if (moving == false && stageSelect2.SetPage(page + 1) == true)
+            if (moving == false && stageSelect2.SetPage(page + 1, curSelect) == true)
             {
                 index = 2;
                 stageSelect2RectTransform.anchoredPosition = new Vector2(width, 0);
@@ -155,7 +180,7 @@ public class PageMove : MonoBehaviour
         }
         else
         {
-            if (moving == false && stageSelect1.SetPage(page + 1) == true)
+            if (moving == false && stageSelect1.SetPage(page + 1, curSelect) == true)
             {
                 index = 1;
                 stageSelect1RectTransform.anchoredPosition = new Vector2(width, 0);

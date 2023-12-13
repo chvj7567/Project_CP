@@ -5,8 +5,18 @@ using UnityEngine;
 public class CHAdvertise : MonoBehaviour
 {
     List<int> adStageList = new List<int> { 2, 5, 8, 0 };
-    public bool GetAdvertise(int stage)
+    public bool GetAdvertise()
     {
+        var lastPlayStage = 0;
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+        }
+        else
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+        }
+
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData == null)
             return false;
@@ -16,7 +26,7 @@ public class CHAdvertise : MonoBehaviour
             return false;
         }
 
-        var checkAdStage = stage % 10;
+        var checkAdStage = lastPlayStage % 10;
         if (false == adStageList.Contains(checkAdStage))
         {
             return false;

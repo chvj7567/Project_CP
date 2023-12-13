@@ -342,6 +342,11 @@ public class CHMJson
         return stageInfoList.FindAll(_ => _.group == group);
     }
 
+    public int GetMaxStageGroup(int maxGroup)
+    {
+        return stageInfoList.FindAll(_ => _.group <= maxGroup).Max(_ => _.group);
+    }
+
     public int GetMaxStageGroup()
     {
         return stageInfoList.Max(_ => _.group);

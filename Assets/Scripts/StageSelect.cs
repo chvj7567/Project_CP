@@ -1,42 +1,63 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
-using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class StageSelect : MonoBehaviour
 {
     [SerializeField]
     List<CHButton> btnList = new List<CHButton>();
 
-    public void Init()
+    public void Init(Defines.ESelectStage select)
     {
+        Color color = Color.white;
+        if (select == Defines.ESelectStage.Boss)
+        {
+            color = Color.red;
+        }
+
         for (int i = 0; i < btnList.Count; i++)
         {
             int index = i;
             btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
-                PlayerPrefs.SetInt(CHMMain.String.Stage, int.Parse(btnList[index].text.text));
-
-                CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
                 {
-                    stage = PlayerPrefs.GetInt(CHMMain.String.Stage)
-                });
+                    PlayerPrefs.SetInt(CHMMain.String.BossStage, int.Parse(btnList[index].text.text) + CHMData.Instance.BossStageStartValue);
+
+                    CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                    {
+                        stage = PlayerPrefs.GetInt(CHMMain.String.BossStage)
+                    });
+                }
+                else
+                {
+                    PlayerPrefs.SetInt(CHMMain.String.Stage, int.Parse(btnList[index].text.text));
+
+                    CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                    {
+                        stage = PlayerPrefs.GetInt(CHMMain.String.Stage)
+                    });
+                }
             });
+
+            btnList[index].image.color = color;
 
             SetClearObj(index);
             SetLockObj(index);
         }
     }
 
-    public bool SetPage(int _page)
+    public bool SetPage(int page, Defines.ESelectStage select)
     {
-        var stageList = CHMMain.Json.GetStageInfoList(_page);
+        if (select == Defines.ESelectStage.Boss)
+        {
+            page += CHMData.Instance.BossStageStartValue;
+        }
+
+        var stageList = CHMMain.Json.GetStageInfoList(page);
         if (stageList == null || stageList.Count == 0)
             return false;
 
@@ -51,7 +72,15 @@ public class StageSelect : MonoBehaviour
             }
 
             btnList[i].gameObject.SetActive(true);
-            btnList[i].text.text = stageList[i].stage.ToString();
+
+            if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+            {
+                btnList[i].text.text = (stageList[i].stage - CHMData.Instance.BossStageStartValue).ToString();
+            }
+            else
+            {
+                btnList[i].text.text = stageList[i].stage.ToString();
+            }
 
             SetClearObj(i);
             SetLockObj(i);
@@ -65,7 +94,8 @@ public class StageSelect : MonoBehaviour
         if (int.TryParse(btnList[_index].text.text, out int stage) == false)
             return;
 
-        if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= stage)
+        int clearStage = GetClearStage();
+        if (clearStage >= stage)
         {
             btnList[_index].clearObj.SetActive(true);
         }
@@ -93,11 +123,14 @@ public class StageSelect : MonoBehaviour
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         var beforeStage = stage - 1;
 
+        var lastPlayStage = GetLastPlayStage();
+        int clearStage = GetClearStage();
+
         // 이전 스테이지를 클리어했다면
-        if (loginData.stage >= beforeStage)
+        if (clearStage >= beforeStage)
         {
             // 전 스테이지를 마지막으로 클리어하고 현 스테이지를 클리어하지 않은 상태라면
-            if (PlayerPrefs.GetInt(CHMMain.String.Stage) == beforeStage && loginData.stage < stage)
+            if (lastPlayStage == beforeStage && clearStage < stage)
             {
                 btnList[_index].lockObj.SetActive(true);
                 await Task.Delay(1000);
@@ -127,5 +160,35 @@ public class StageSelect : MonoBehaviour
         {
             btnList[_index].lockObj.SetActive(true);
         }
+    }
+
+    int GetLastPlayStage()
+    {
+        var lastPlayStage = 0;
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
+        }
+        else
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+        }
+
+        return lastPlayStage;
+    }
+
+    int GetClearStage()
+    {
+        int clearStage = 0;
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        {
+            clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage - CHMData.Instance.BossStageStartValue;
+        }
+        else
+        {
+            clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage;
+        }
+
+        return clearStage;
     }
 }

@@ -177,7 +177,7 @@
         },
         {
             "stringID": 44,
-            "value": "AD X 3"
+            "value": "AD X 2"
         },
         {
             "stringID": 45,
@@ -262,5 +262,21 @@
         {
             "stringID": 65,
             "value": "Purchase Failed"
+        },
+        {
+            "stringID": 66,
+            "value": "The fish block must be moved to the floor, and when it touches the floor, it turns into a random special block."
+        },
+        {
+            "stringID": 67,
+            "value": "For blocks with numbers engraved on them, you must explode surrounding blocks or use a special block to reduce the number to 0."
+        },
+        {
+            "stringID": 68,
+            "value": "Normal\nStage"
+        },
+        {
+            "stringID": 69,
+            "value": "Boss\nStage"
         }
     ]
