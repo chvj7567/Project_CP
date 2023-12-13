@@ -234,12 +234,13 @@ public class Defines
     {
         None = -1,
 
-        Play,
         CatPang,
         GameOver,
         GameClear,
         GameOverWait,
         GameClearWait,
+        NormalStagePlay,
+        BossStagePlay,
 
         Max
     }

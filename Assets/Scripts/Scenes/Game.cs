@@ -54,6 +54,8 @@ public class Game : MonoBehaviour
 
     [SerializeField] GameObject onlyNormalStageObject;
     [SerializeField] GameObject onlyBossStageObject;
+    [SerializeField] Image bossHpImage;
+    [SerializeField] CHTMPro bossHpText;
     [SerializeField] CHTMPro hpText;
     [SerializeField] int selectScore;
     [SerializeField] int selectCurScore;
@@ -113,9 +115,19 @@ public class Game : MonoBehaviour
 
         ChangeBackgroundLoop();
 
-        guideBackground.SetActive(false);
-        guideHole.gameObject.SetActive(false);
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
 
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        {
+            bossStage = true;
+            stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+        }
+
+        stageInfo = CHMMain.Json.GetStageInfo(stage);
+        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+        boardSize = stageInfo.boardSize;
+        
         if (backBtn)
         {
             backBtn.OnClickAsObservable().Subscribe(_ =>
@@ -132,6 +144,42 @@ public class Game : MonoBehaviour
                 PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 
                 SceneManager.LoadScene(1);
+            });
+        }
+
+        guideBackground.SetActive(false);
+        guideHole.gameObject.SetActive(false);
+
+        onlyNormalStageObject.SetActive(true);
+        onlyBossStageObject.SetActive(false);
+
+        // 보스 스테이지일 경우만
+        if (bossStage)
+        {
+            onlyBossStageObject.SetActive(true);
+            onlyNormalStageObject.SetActive(false);
+
+            hp.Subscribe(_ =>
+            {
+                if (_ >= 0)
+                    hpText.SetText(hp);
+            });
+
+            hp.Value = loginData.hp;
+
+            // 1초에 한 번씩 실행
+            Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
+            .Subscribe(_ =>
+            {
+                hp.Value -= 1;
+            })
+            .AddTo(this);
+
+            curScore.Subscribe(_ =>
+            {
+                var fillAmountValue = (stageInfo.targetScore - _) / (float)stageInfo.targetScore;
+                bossHpImage.DOFillAmount(fillAmountValue, .5f);
+                bossHpText.SetText(Mathf.Max(0, stageInfo.targetScore - _));
             });
         }
 
@@ -155,33 +203,10 @@ public class Game : MonoBehaviour
             curScoreText.SetText(_);
         });
 
-        gameResult.Subscribe(_ =>
+        moveCount.Subscribe(_ =>
         {
-            if (_ == EGameState.GameOver || _ == EGameState.GameClear)
-            {
-                if (tokenSource != null && !tokenSource.IsCancellationRequested)
-                {
-                    tokenSource.Cancel();
-                }
-            }
+            moveCountText.SetText(_);
         });
-
-        hp.Subscribe(_ =>
-        {
-            hpText.SetText(hp);
-        });
-
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
-
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
-        {
-            bossStage = true;
-            stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
-        }
-
-        stageInfo = CHMMain.Json.GetStageInfo(stage);
-        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
 
         targetScoreText.SetText(stageInfo.targetScore);
         if (stageInfo.targetScore < 0)
@@ -211,11 +236,15 @@ public class Game : MonoBehaviour
                 loginData.addTimeItemCount += loginData.useTimeItemCount;
         }
 
-        boardSize = stageInfo.boardSize;
-
-        moveCount.Subscribe(_ =>
+        gameResult.Subscribe(_ =>
         {
-            moveCountText.SetText(_);
+            if (_ == EGameState.GameOver || _ == EGameState.GameClear)
+            {
+                if (tokenSource != null && !tokenSource.IsCancellationRequested)
+                {
+                    tokenSource.Cancel();
+                }
+            }
         });
 
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
@@ -236,7 +265,7 @@ public class Game : MonoBehaviour
                     return;
                 }
 
-                if (gameResult.Value == EGameState.Play)
+                if (gameResult.Value == EGameState.NormalStagePlay)
                 {
                     bool clear = true;
 
@@ -295,23 +324,29 @@ public class Game : MonoBehaviour
                         }
                     }
                 }
+                else if (gameResult.Value == EGameState.BossStagePlay)
+                {
+                    if (hp.Value <= 0)
+                    {
+                        if (bossHpImage.fillAmount <= 0)
+                        {
+                            GameEnd(true);
+                            return;
+                        }
+
+                        GameEnd(false);
+                        return;
+                    }
+
+                    if (bossHpImage.fillAmount <= 0)
+                    {
+                        GameEnd(true);
+                        return;
+                    }
+                }
             });
 
-        if (bossStage)
-        {
-            hp.Value = loginData.hp;
-
-            Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
-            .Subscribe(_ =>
-            {
-                hp.Value -= 1;
-            })
-            .AddTo(gameObject);
-        }
-
-
         // 튜토리얼 및 가이드 부분
-
         for (int i = 0; i < tutorialHoleList.Count; ++i)
         {
             tutorialHoleList[i].gameObject.SetActive(false);
@@ -361,14 +396,12 @@ public class Game : MonoBehaviour
 
         if (bossStage)
         {
-            onlyNormalStageObject.SetActive(false);
+            gameResult.Value = EGameState.BossStagePlay;
         }
         else
         {
-            onlyBossStageObject.SetActive(false);
+            gameResult.Value = EGameState.NormalStagePlay;
         }
-
-        gameResult.Value = EGameState.Play;
     }
 
     private async void Update()
@@ -565,7 +598,14 @@ public class Game : MonoBehaviour
 
             // 게임결과 다시 체크하도록
             gameEnd = false;
-            gameResult.Value = EGameState.Play;
+            if (bossStage)
+            {
+                gameResult.Value = EGameState.BossStagePlay;
+            }
+            else
+            {
+                gameResult.Value = EGameState.NormalStagePlay;
+            }
 
             return;
         }

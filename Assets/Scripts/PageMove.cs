@@ -105,7 +105,7 @@ public class PageMove : MonoBehaviour
         }
         else
         {
-            maxGroup = CHMMain.Json.GetMaxStageGroup();
+            maxGroup = CHMMain.Json.GetMaxStageGroup() - CHMData.Instance.BossStageStartValue;
         }
 
         if (page == 1)

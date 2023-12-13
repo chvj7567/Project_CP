@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 286, y: 568}
+  m_AnchoredPosition: {x: 288, y: 621}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &22417173
@@ -497,11 +497,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 13
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -321.1, y: 913.3}
+  m_AnchoredPosition: {x: -321.1, y: 846}
   m_SizeDelta: {x: 415.7, y: 207.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &353511696
@@ -815,6 +815,8 @@ MonoBehaviour:
   curScoreText: {fileID: 2051093205}
   onlyNormalStageObject: {fileID: 434207310}
   onlyBossStageObject: {fileID: 379483543}
+  bossHpImage: {fileID: 625439253}
+  bossHpText: {fileID: 1976018825}
   hpText: {fileID: 517917050}
   selectScore: 30
   selectCurScore: 30
@@ -1151,13 +1153,12 @@ RectTransform:
   - {fileID: 869330595}
   - {fileID: 540686449}
   - {fileID: 1814382579}
-  - {fileID: 765759013}
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.79999, y: -69}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &440321187
@@ -1190,7 +1191,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2017,7 +2018,7 @@ GameObject:
   - component: {fileID: 625439254}
   - component: {fileID: 625439253}
   m_Layer: 5
-  m_Name: Timer
+  m_Name: BossHpImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2360,12 +2361,12 @@ RectTransform:
   - {fileID: 1421417802}
   - {fileID: 704152944}
   - {fileID: 1332946323}
-  m_Father: {fileID: 434207311}
-  m_RootOrder: 8
+  m_Father: {fileID: 2089328443}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 342.95, y: 572}
+  m_AnchoredPosition: {x: 342.9, y: 498}
   m_SizeDelta: {x: 220, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &765759014
@@ -2622,7 +2623,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 27
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2922,11 +2923,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 25
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -277.8, y: 567.5}
+  m_AnchoredPosition: {x: -277.8, y: 500.19998}
   m_SizeDelta: {x: 534.4, y: 164.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &897738915
@@ -4267,11 +4268,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 26
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 342.9, y: 577.6}
+  m_AnchoredPosition: {x: 342.9, y: 510.29996}
   m_SizeDelta: {x: 247.8, y: 144.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1539489565
@@ -4417,11 +4418,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.8, y: 742.4}
+  m_AnchoredPosition: {x: -0.8, y: 675.1}
   m_SizeDelta: {x: 1190.5, y: 111.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1605338126
@@ -4754,7 +4755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1745560285
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4767,7 +4768,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 28
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5098,7 +5099,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1855074203
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5112,7 +5113,7 @@ RectTransform:
   m_Children:
   - {fileID: 1693725881}
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 29
+  m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5377,7 +5378,7 @@ GameObject:
   - component: {fileID: 1976018826}
   - component: {fileID: 1976018825}
   m_Layer: 5
-  m_Name: TimerText
+  m_Name: BossHpText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5544,11 +5545,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2089328443}
-  m_RootOrder: 23
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 104.5, y: 913.3}
+  m_AnchoredPosition: {x: 104.5, y: 845.99994}
   m_SizeDelta: {x: 409, y: 207.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2045794761
@@ -5953,9 +5954,9 @@ RectTransform:
   - {fileID: 511509217}
   - {fileID: 1203002254}
   - {fileID: 379483544}
+  - {fileID: 765759013}
   - {fileID: 434207311}
   - {fileID: 440321188}
-  - {fileID: 353511695}
   - {fileID: 1300060332}
   - {fileID: 1350265751}
   - {fileID: 837858724}
@@ -5965,6 +5966,7 @@ RectTransform:
   - {fileID: 1135207850}
   - {fileID: 588721164}
   - {fileID: 2062342852}
+  - {fileID: 353511695}
   - {fileID: 2045794760}
   - {fileID: 1605338125}
   - {fileID: 897738914}

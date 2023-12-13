@@ -14,6 +14,8 @@ public class UIGameStart : UIBase
 {
     UIGameStartArg arg;
 
+    [SerializeField] GameObject banObj;
+
     [SerializeField] CHTMPro stageText;
     [SerializeField] CHTMPro myMoveItemCountText;
     [SerializeField] CHTMPro myTimeItemCountText;
@@ -44,7 +46,14 @@ public class UIGameStart : UIBase
     {
         InitBtn();
 
-        stageText.SetText(arg.stage);
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        {
+            stageText.SetText(arg.stage - CHMData.Instance.BossStageStartValue);
+        }
+        else
+        {
+            stageText.SetText(arg.stage);
+        }
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData == null)
@@ -66,6 +75,8 @@ public class UIGameStart : UIBase
             return;
 
         IsInitBtn = true;
+
+        banObj.SetActive(false);
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -125,5 +136,20 @@ public class UIGameStart : UIBase
             myTimeItemCountText.SetText(--myAddTimeItemCount);
             useAddTimeItemCountText.SetText(++useAddTimeItemCount);
         });
+
+        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        {
+            myMoveItemCountText.gameObject.SetActive(false);
+            myTimeItemCountText.gameObject.SetActive(false);
+            useAddMoveItemCountText.gameObject.SetActive(false);
+            useAddTimeItemCountText.gameObject.SetActive(false);
+
+            myAddMoveItemBtn.gameObject.SetActive(false);
+            myAddTimeItemBtn.gameObject.SetActive(false);
+            addMoveItemBtn.gameObject.SetActive(false);
+            addTimeItemBtn.gameObject.SetActive(false);
+
+            banObj.SetActive(true);
+        }
     }
 }

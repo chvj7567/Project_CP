@@ -278,5 +278,9 @@
         {
             "stringID": 69,
             "value": "보스\n스테이지"
+        },
+        {
+            "stringID": 70,
+            "value": "사용 불가"
         }
     ]

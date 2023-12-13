@@ -128,6 +128,7 @@ public class First : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
+        MenuBtn.gameObject.SetActive(false);
         stageSelect1.SetActive(false);
         stageSelect2.SetActive(false);
         startBtn.gameObject.SetActive(false);
@@ -225,6 +226,7 @@ public class First : MonoBehaviour
             missionBtn.gameObject.SetActive(true);
             shopBtn.gameObject.SetActive(true);
             bombBtn.gameObject.SetActive(true);
+            MenuBtn.gameObject.SetActive(true);
 
             var login = GetLoginState();
             connectGPGSBtn.gameObject.SetActive(login == false);
@@ -376,6 +378,7 @@ public class First : MonoBehaviour
         bombBtn.gameObject.SetActive(true);
         stageSelect1.SetActive(true);
         stageSelect2.SetActive(true);
+        MenuBtn.gameObject.SetActive(true);
 
         // 기본 스킨
         CHMData.Instance.GetShopData("1").buy = true;
