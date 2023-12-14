@@ -949,7 +949,7 @@ public class Game : MonoBehaviour
         do
         {
             await RemoveMatchBlock();
-            await CreateBoomBlock();
+            await CreateBombBlock();
             await DownBlock();
 
             curScore.Value += bonusScore.Value;
@@ -958,7 +958,8 @@ public class Game : MonoBehaviour
             SetDissapearBlock();
             await UpdateMap();
             CheckMap();
-        } while (isMatch == true);
+            
+        } while (isMatch || await CatInTheBox());
 
         if ((block1 != null && block2 != null && back == false) || isBoom == true && gameResult.Value != EGameState.CatPang)
         {
@@ -1152,8 +1153,6 @@ public class Game : MonoBehaviour
             bool matchUpdate = false;
             bool createDelay = false;
 
-            await CatInTheBox();
-
             do
             {
                 foreach (var block in boardArr)
@@ -1200,7 +1199,7 @@ public class Game : MonoBehaviour
                     await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
                 }
 
-                matchUpdate = await CatInTheBox();
+                //matchUpdate = await CatInTheBox();
 
             } while (reUpdate || matchUpdate);
 
@@ -1487,7 +1486,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    async Task CreateBoomBlock(bool boomBlock = true)
+    async Task CreateBombBlock(bool boomBlock = true)
     // 폭탄 블럭 생성
     {
         bool createDelay = false;
@@ -1814,7 +1813,8 @@ public class Game : MonoBehaviour
             int wallRow = -1;
             for (int i = boardSize - 1; i > row; --i)
             {
-                if (boardArr[i, col].GetBlockState() == Defines.EBlockState.Wall)
+                // 벽으로 사용하는 블럭인지 확인
+                if (boardArr[i, col].IsWallBlock())
                 {
                     wallRow = i;
                 }
@@ -2390,6 +2390,7 @@ public class Game : MonoBehaviour
 
                     Debug.Log($"CatInTheBox {upBlock.GetBlockState()}:{upBlock.row}/{upBlock.col}");
 
+                    upBlock.remove = true;
                     upBlock.match = true;
                     upBlock.rectTransform.DOAnchorPosY(block.rectTransform.anchoredPosition.y, delay);
                     upBlock.rectTransform.DOScale(0f, delay);

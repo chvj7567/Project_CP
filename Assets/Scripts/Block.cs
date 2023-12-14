@@ -542,6 +542,22 @@ public class Block : MonoBehaviour
         }
     }
 
+    public bool IsWallBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.Wall:
+            case Defines.EBlockState.CatBox1:
+            case Defines.EBlockState.CatBox2:
+            case Defines.EBlockState.CatBox3:
+            case Defines.EBlockState.CatBox4:
+            case Defines.EBlockState.CatBox5:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public bool IsNotDragBlock()
     {
         switch (blockState)
