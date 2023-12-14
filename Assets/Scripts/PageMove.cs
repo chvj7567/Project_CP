@@ -53,11 +53,11 @@ public class PageMove : MonoBehaviour
         var lastPlayStage = 0;
         if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
         }
         else
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
         }
 
         curSelect = select;
