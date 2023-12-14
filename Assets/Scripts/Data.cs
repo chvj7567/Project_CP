@@ -19,7 +19,7 @@ namespace Data
         public int addMoveItemCount = 0;
         public int useTimeItemCount = 0;
         public int useMoveItemCount = 0;
-        public int hp = 30;
+        public int hp = 100;
     }
 
     [Serializable]

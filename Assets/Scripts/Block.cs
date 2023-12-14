@@ -299,6 +299,7 @@ public class Block : MonoBehaviour
             case EBlockState.CatBox5:
                 hpText.GetComponent<RectTransform>().DOAnchorPosY(30, .1f);
                 img.rectTransform.sizeDelta = new Vector2(10, 10);
+                background.color = new Color(0, 0, 0, 0);
                 break;
             default:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);

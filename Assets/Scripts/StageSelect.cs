@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ public class StageSelect : MonoBehaviour
     [SerializeField]
     List<CHButton> btnList = new List<CHButton>();
 
+    List<IDisposable> disposeList = new List<IDisposable>();
     public void Init(Defines.ESelectStage select)
     {
         Color color = Color.white;
@@ -18,10 +20,17 @@ public class StageSelect : MonoBehaviour
             color = Color.red;
         }
 
+        for (int i = 0; i < disposeList.Count; i++)
+        {
+            disposeList[i].Dispose();
+        }
+
+        disposeList.Clear();
+
         for (int i = 0; i < btnList.Count; i++)
         {
             int index = i;
-            btnList[index].button.OnClickAsObservable().Subscribe(_ =>
+            var btnDispose = btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
                 if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
                 {
@@ -42,6 +51,8 @@ public class StageSelect : MonoBehaviour
                     });
                 }
             });
+
+            disposeList.Add(btnDispose);
 
             btnList[index].image.color = color;
 

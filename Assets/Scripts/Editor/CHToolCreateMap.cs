@@ -393,7 +393,13 @@ public class CHToolCreateMap : EditorWindow
             if (bossStage)
             {
                 if (group <= CHTool.BossStageStartValue)
+                {
                     tempGroup = CHTool.BossStageStartValue + group;
+                }
+                else
+                {
+                    tempGroup = group;
+                }
 
                 tempStage = CHTool.BossStageStartValue + stage;
             }
