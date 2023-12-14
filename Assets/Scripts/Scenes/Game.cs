@@ -168,8 +168,8 @@ public class Game : MonoBehaviour
 
             hp.Value = loginData.hp;
 
-            // 1초에 한 번씩 실행
-            Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
+            // 1초뒤에 1초에 한 번씩 실행
+            Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
                 hp.Value -= 1;
