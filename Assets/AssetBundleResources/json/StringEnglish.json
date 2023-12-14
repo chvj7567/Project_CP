@@ -298,5 +298,9 @@
         {
             "stringID": 74,
             "value": "This is the menu where you can select a stage."
+        },
+        {
+            "stringID": 75,
+            "value": "\rTo create a cat box, simply place the same cat block on the upper block the corresponding number of times."
         }
     ]

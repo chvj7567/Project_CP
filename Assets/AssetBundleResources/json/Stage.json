@@ -502,12 +502,12 @@
         {
             "group": 6,
             "stage": 51,
-            "blockTypeCount": 5,
-            "boardSize": 9,
-            "time": -1.0,
+            "blockTypeCount": 3,
+            "boardSize": 5,
+            "time": 30.0,
             "targetScore": -1,
-            "moveCount": 10,
-            "tutorialID": -1
+            "moveCount": -1,
+            "tutorialID": 51
         },
         {
             "group": 6,
@@ -515,8 +515,8 @@
             "blockTypeCount": 5,
             "boardSize": 9,
             "time": -1.0,
-            "targetScore": 10000,
-            "moveCount": 30,
+            "targetScore": -1,
+            "moveCount": 50,
             "tutorialID": -1
         },
         {
@@ -622,10 +622,20 @@
         {
             "group": 100001,
             "stage": 100002,
-            "blockTypeCount": 1,
+            "blockTypeCount": 5,
             "boardSize": 6,
             "time": -1.0,
             "targetScore": 20,
+            "moveCount": -1,
+            "tutorialID": -1
+        },
+        {
+            "group": 100001,
+            "stage": 100003,
+            "blockTypeCount": 5,
+            "boardSize": 6,
+            "time": -1.0,
+            "targetScore": 300,
             "moveCount": -1,
             "tutorialID": -1
         }
