@@ -75,14 +75,14 @@ public class Infomation
     }
 
     [Serializable]
-    public class TutorialInfo
+    public class GuideInfo
     {
-        public int tutorialIndex = -1;
+        public int guideIndex = -1;
         public int descStringID = -1;
     }
 
     [Serializable]
-    public class TutorialStageInfo
+    public class TutorialInfo
     {
         public int tutorialStageID = -1;
         public int descStringID = -1;

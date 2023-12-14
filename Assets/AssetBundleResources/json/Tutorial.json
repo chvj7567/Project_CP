@@ -1,12 +1,9 @@
 [
-  {"tutorialIndex":1, "descStringID":51},
-  {"tutorialIndex":2, "descStringID":52},
-  {"tutorialIndex":3, "descStringID":53},
-  {"tutorialIndex":4, "descStringID":54},
-  {"tutorialIndex":5, "descStringID":33},
-  {"tutorialIndex":6, "descStringID":34},
-  {"tutorialIndex":7, "descStringID":35},
-  {"tutorialIndex":8, "descStringID":36},
-  {"tutorialIndex":9, "descStringID":37},
-  {"tutorialIndex":10, "descStringID":38}
+  {"tutorialStageID":1, "descStringID":28, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":2, "descStringID":29, "connectNextBlock":18, "descNextBlockStringID":30},
+  {"tutorialStageID":3, "descStringID":39, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":4, "descStringID":49, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":5, "descStringID":50, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":8, "descStringID":67, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":31, "descStringID":66, "connectNextBlock":-1, "descNextBlockStringID":-1}
 ]

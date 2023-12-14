@@ -27,8 +27,8 @@ public class First : MonoBehaviour
     [SerializeField] ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
     [SerializeField] ReactiveProperty<bool> bundleDownload = new ReactiveProperty<bool>();
     [SerializeField] GameObject guideBackground;
-    [SerializeField] Button tutorialBackgroundBtn;
-    [SerializeField] List<RectTransform> tutorialHoleList = new List<RectTransform>();
+    [SerializeField] Button guideBackgroundBtn;
+    [SerializeField] List<RectTransform> guideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
 
     CancellationTokenSource tokenSource;
@@ -138,13 +138,13 @@ public class First : MonoBehaviour
         shopBtn.gameObject.SetActive(false);
         bombBtn.gameObject.SetActive(false);
 
-        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        for (int i = 0; i < guideHoleList.Count; ++i)
         {
-            tutorialHoleList[i].gameObject.SetActive(false);
+            guideHoleList[i].gameObject.SetActive(false);
         }
 
         guideBackground.SetActive(false);
-        tutorialBackgroundBtn.gameObject.SetActive(false);
+        guideBackgroundBtn.gameObject.SetActive(false);
 
         CHMIAP.Instance.Init();
         CHMAdmob.Instance.Init();
@@ -248,30 +248,30 @@ public class First : MonoBehaviour
 
         guideBackground.SetActive(true);
 
-        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        for (int i = 0; i < guideHoleList.Count; ++i)
         {
-            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 1);
+            var tutorialInfo = CHMMain.Json.GetGuideInfo(i + 1);
             if (tutorialInfo == null)
                 break;
 
-            tutorialHoleList[i].gameObject.SetActive(true);
+            guideHoleList[i].gameObject.SetActive(true);
             guideDesc.SetStringID(tutorialInfo.descStringID);
 
             TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
 
-            var btnComplete = tutorialBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
+            var btnComplete = guideBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
             {
                 buttonClicktask.SetResult(true);
             });
 
             await buttonClicktask.Task;
 
-            tutorialHoleList[i].gameObject.SetActive(false);
+            guideHoleList[i].gameObject.SetActive(false);
 
             btnComplete.Dispose();
         }
 
-        tutorialCompleteTask.SetResult(tutorialHoleList.Count);
+        tutorialCompleteTask.SetResult(guideHoleList.Count);
 
         return await tutorialCompleteTask.Task;
     }
@@ -388,21 +388,21 @@ public class First : MonoBehaviour
         CHMMain.Sound.Play(Defines.ESound.Bgm);
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        if (loginData.tutorialIndex == 0)
+        if (loginData.guideIndex == 0)
         {
             Time.timeScale = 0;
 
             guideBackground.SetActive(true);
             guideBackground.transform.SetAsLastSibling();
 
-            tutorialBackgroundBtn.gameObject.SetActive(true);
-            tutorialBackgroundBtn.transform.SetAsLastSibling();
+            guideBackgroundBtn.gameObject.SetActive(true);
+            guideBackgroundBtn.transform.SetAsLastSibling();
 
             var tutorialIndex = await TutorialStart();
-            loginData.tutorialIndex = tutorialIndex;
+            loginData.guideIndex = tutorialIndex;
 
             guideBackground.SetActive(false);
-            tutorialBackgroundBtn.gameObject.SetActive(false);
+            guideBackgroundBtn.gameObject.SetActive(false);
 
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }

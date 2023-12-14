@@ -19,8 +19,8 @@ public class CHMJson
         public StageBlockInfo[] stageBlockInfoArr;
         public MissionInfo[] missionInfoArr;
         public ShopInfo[] shopInfoArr;
+        public GuideInfo[] guideInfoArr;
         public TutorialInfo[] tutorialInfoArr;
-        public TutorialStageInfo[] tutorialStageInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -36,8 +36,8 @@ public class CHMJson
     List<StageBlockInfo> stageBlockInfoList = new List<StageBlockInfo>();
     List<MissionInfo> missionInfoList = new List<MissionInfo>();
     List<ShopInfo> shopInfoList = new List<ShopInfo>();
+    List<GuideInfo> guideInfoList = new List<GuideInfo>();
     List<TutorialInfo> tutorialInfoList = new List<TutorialInfo>();
-    List<TutorialStageInfo> tutorialStageInfoList = new List<TutorialStageInfo>();
 
     public async Task Init()
     {
@@ -54,7 +54,7 @@ public class CHMJson
         stageBlockInfoList.Clear();
         missionInfoList.Clear();
         shopInfoList.Clear();
-        tutorialStageInfoList.Clear();
+        tutorialInfoList.Clear();
     }
 
     async Task LoadJsonData()
@@ -69,8 +69,8 @@ public class CHMJson
         await LoadStageBlockInfo();
         await LoadMissionInfo();
         await LoadShopInfo();
+        await LoadGuideInfo();
         await LoadTutorialInfo();
-        await LoadTutorialStageInfo();
 
         /*actionList.Add(LoadStringInfo());
         actionList.Add(LoadSelectInfo());
@@ -231,6 +231,29 @@ public class CHMJson
         return await taskCompletionSource.Task;
     }
 
+    async Task<TextAsset> LoadGuideInfo()
+    {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
+        Action<TextAsset> callback;
+
+        guideInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.Guide, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"guideInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.guideInfoArr)
+            {
+                guideInfoList.Add(data);
+            }
+
+            taskCompletionSource.SetResult(textAsset);
+            ++loadCompleteFileCount;
+        });
+
+        return await taskCompletionSource.Task;
+    }
+
     async Task<TextAsset> LoadTutorialInfo()
     {
         TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
@@ -245,29 +268,6 @@ public class CHMJson
             foreach (var data in jsonData.tutorialInfoArr)
             {
                 tutorialInfoList.Add(data);
-            }
-
-            taskCompletionSource.SetResult(textAsset);
-            ++loadCompleteFileCount;
-        });
-
-        return await taskCompletionSource.Task;
-    }
-
-    async Task<TextAsset> LoadTutorialStageInfo()
-    {
-        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
-
-        Action<TextAsset> callback;
-
-        tutorialStageInfoList.Clear();
-
-        CHMMain.Resource.LoadJson(Defines.EJsonType.TutorialStage, callback = (TextAsset textAsset) =>
-        {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"tutorialStageInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.tutorialStageInfoArr)
-            {
-                tutorialStageInfoList.Add(data);
             }
 
             taskCompletionSource.SetResult(textAsset);
@@ -367,23 +367,13 @@ public class CHMJson
         return shopInfoList;
     }
 
-    public List<TutorialInfo> GetTutorialInfoListAll()
+    public GuideInfo GetGuideInfo(int tutorialIndex)
     {
-        return tutorialInfoList;
+        return guideInfoList.Find(_ => _.guideIndex == tutorialIndex);
     }
 
-    public TutorialInfo GetTutorialInfo(int tutorialIndex)
+    public TutorialInfo GetTutorialInfo(int tutorialID)
     {
-        return tutorialInfoList.Find(_ => _.tutorialIndex == tutorialIndex);
-    }
-
-    public List<TutorialStageInfo> GetTutorialStageInfoListAll()
-    {
-        return tutorialStageInfoList;
-    }
-
-    public TutorialStageInfo GetTutorialStageInfo(int tutorialID)
-    {
-        return tutorialStageInfoList.Find(_ => _.tutorialStageID == tutorialID);
+        return tutorialInfoList.Find(_ => _.tutorialStageID == tutorialID);
     }
 }

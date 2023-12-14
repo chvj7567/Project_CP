@@ -74,8 +74,9 @@ public class Game : MonoBehaviour
     
     [SerializeField] RectTransform guideHole;
     [SerializeField] GameObject guideBackground;
-    [SerializeField] Button tutorialBackgroundBtn;
-    [SerializeField] List<RectTransform> tutorialHoleList = new List<RectTransform>();
+    [SerializeField] Button guideBackgroundBtn;
+    [SerializeField] List<RectTransform> normalStageGuideHoleList = new List<RectTransform>();
+    [SerializeField] List<RectTransform> bossStageGuideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
 
     [SerializeField] int delayMillisecond;
@@ -346,29 +347,53 @@ public class Game : MonoBehaviour
                 }
             });
 
-        // 튜토리얼 및 가이드 부분
-        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        // 가이드 부분
+        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
-            tutorialHoleList[i].gameObject.SetActive(false);
+            normalStageGuideHoleList[i].gameObject.SetActive(false);
         }
 
-        tutorialBackgroundBtn.gameObject.SetActive(false);
+        for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
+        {
+            bossStageGuideHoleList[i].gameObject.SetActive(false);
+        }
 
-        if (loginData.tutorialIndex == 4)
+        guideBackgroundBtn.gameObject.SetActive(false);
+
+        if (bossStage == false && loginData.guideIndex == 5)
         {
             Time.timeScale = 0;
 
             guideBackground.SetActive(true);
             guideBackground.transform.SetAsLastSibling();
 
-            tutorialBackgroundBtn.gameObject.SetActive(true);
-            tutorialBackgroundBtn.transform.SetAsLastSibling();
+            guideBackgroundBtn.gameObject.SetActive(true);
+            guideBackgroundBtn.transform.SetAsLastSibling();
 
-            var tutorialIndex = await TutorialStart();
-            loginData.tutorialIndex = tutorialIndex;
+            var guideIndex = await NormalStageGuideStart();
+            loginData.guideIndex += guideIndex;
 
             guideBackground.SetActive(false);
-            tutorialBackgroundBtn.gameObject.SetActive(false);
+            guideBackgroundBtn.gameObject.SetActive(false);
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        }
+
+        if (bossStage && loginData.guideIndex == 11)
+        {
+            Time.timeScale = 0;
+
+            guideBackground.SetActive(true);
+            guideBackground.transform.SetAsLastSibling();
+
+            guideBackgroundBtn.gameObject.SetActive(true);
+            guideBackgroundBtn.transform.SetAsLastSibling();
+
+            var guideIndex = await BossStageGuideStart();
+            loginData.guideIndex += guideIndex;
+
+            guideBackground.SetActive(false);
+            guideBackgroundBtn.gameObject.SetActive(false);
 
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
@@ -387,7 +412,7 @@ public class Game : MonoBehaviour
             guideHole.sizeDelta = holeValue.Item1;
             guideHole.anchoredPosition = holeValue.Item2;
 
-            var tutorialInfo = CHMMain.Json.GetTutorialStageInfo(stageInfo.tutorialID);
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
             if (tutorialInfo != null)
             {
                 guideDesc.SetStringID(tutorialInfo.descStringID);
@@ -480,41 +505,75 @@ public class Game : MonoBehaviour
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
-    async Task<int> TutorialStart()
+    async Task<int> NormalStageGuideStart()
     // Game UI 튜토리얼 시작
     {
         TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
 
         guideBackground.SetActive(true);
 
-        for (int i = 0; i < tutorialHoleList.Count; ++i)
+        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
-            var tutorialInfo = CHMMain.Json.GetTutorialInfo(i + 5);
-            if (tutorialInfo == null)
+            var guideInfo = CHMMain.Json.GetGuideInfo(i + 5);
+            if (guideInfo == null)
                 break;
 
-            tutorialHoleList[i].gameObject.SetActive(true);
-            guideDesc.SetStringID(tutorialInfo.descStringID);
+            normalStageGuideHoleList[i].gameObject.SetActive(true);
+            guideDesc.SetStringID(guideInfo.descStringID);
 
             TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
 
-            var btnComplete = tutorialBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
+            var btnComplete = guideBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
             {
                 buttonClicktask.SetResult(true);
             });
 
             await buttonClicktask.Task;
 
-            tutorialHoleList[i].gameObject.SetActive(false);
+            normalStageGuideHoleList[i].gameObject.SetActive(false);
 
             btnComplete.Dispose();
         }
 
-        tutorialCompleteTask.SetResult(tutorialHoleList.Count);
+        tutorialCompleteTask.SetResult(normalStageGuideHoleList.Count);
 
         return await tutorialCompleteTask.Task;
     }
 
+    async Task<int> BossStageGuideStart()
+    // Game UI 튜토리얼 시작
+    {
+        TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
+
+        guideBackground.SetActive(true);
+
+        for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
+        {
+            var guideInfo = CHMMain.Json.GetGuideInfo(i + 12);
+            if (guideInfo == null)
+                break;
+
+            bossStageGuideHoleList[i].gameObject.SetActive(true);
+            guideDesc.SetStringID(guideInfo.descStringID);
+
+            TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
+
+            var btnComplete = guideBackgroundBtn.OnClickAsObservable().Subscribe(_ =>
+            {
+                buttonClicktask.SetResult(true);
+            });
+
+            await buttonClicktask.Task;
+
+            bossStageGuideHoleList[i].gameObject.SetActive(false);
+
+            btnComplete.Dispose();
+        }
+
+        tutorialCompleteTask.SetResult(bossStageGuideHoleList.Count);
+
+        return await tutorialCompleteTask.Task;
+    }
     (Vector2, Vector2) GetTutorialStageImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
     // 튜토리얼에서 밝게 보이는 부분 크기과 위치 지정
     {
@@ -917,7 +976,7 @@ public class Game : MonoBehaviour
 
                 if (stageInfo.tutorialID > 0)
                 {
-                    var tutorialInfo = CHMMain.Json.GetTutorialStageInfo(stageInfo.tutorialID);
+                    var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
                     if (tutorialInfo == null || tutorialInfo.connectNextBlock == Defines.EBlockState.None)
                         break;
 

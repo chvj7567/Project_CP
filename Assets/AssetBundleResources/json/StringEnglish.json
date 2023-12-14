@@ -282,5 +282,21 @@
         {
             "stringID": 70,
             "value": "\rNot available"
+        },
+        {
+            "stringID": 71,
+            "value": "It is cleared if you match the block with the boss's HP and reduce the boss's HP to 0."
+        },
+        {
+            "stringID": 72,
+            "value": "Be careful when the mouse boss's eyes turn red."
+        },
+        {
+            "stringID": 73,
+            "value": "This is the player's HP and they will continue to take damage from the boss. Defeat the boss before it reaches 0."
+        },
+        {
+            "stringID": 74,
+            "value": "This is the menu where you can select a stage."
         }
     ]

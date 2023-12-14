@@ -211,7 +211,7 @@ public class CHMData : CHSingleton<CHMData>
             key = _key,
             connectGPGS = false,
             selectCatShop = 0,
-            tutorialIndex = 0,
+            guideIndex = 0,
             languageType = Defines.ELanguageType.English,
         };
 
