@@ -10,11 +10,11 @@ public class CHAdvertise : MonoBehaviour
         var lastPlayStage = 0;
         if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
         }
         else
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
         }
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
