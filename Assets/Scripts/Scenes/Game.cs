@@ -993,6 +993,9 @@ public class Game : MonoBehaviour
             }
         } while (false);
 
+        BlockCreatorBlock(Defines.EBlockState.WallCreator, Defines.EBlockState.Wall);
+        await UpdateMap();
+
         isLock = false;
     }
 
@@ -1164,7 +1167,7 @@ public class Game : MonoBehaviour
                     {
                         createDelay = true;
                         CreateNewBlock(block, Defines.ELog.UpdateMap, 1, block.changeBlockState);
-                        block.SetHp(-1);
+                        block.SetHp(block.changeHp);
                         block.ResetScore();
                         block.SetOriginPos();
                         block.changeBlockState = Defines.EBlockState.None;
@@ -2405,5 +2408,80 @@ public class Game : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void BlockCreatorBlock(Defines.EBlockState creatorBlock, Defines.EBlockState changeBlock)
+    {
+        for (int w = 0; w < boardSize; w++)
+        {
+            for (int h = 0; h < boardSize; h++)
+            {
+                var block = boardArr[w, h];
+                if (block == null)
+                    continue;
+
+                if (block.GetBlockState() != creatorBlock)
+                    continue;
+
+                if (block.GetHp() <= 0)
+                    continue;
+
+                block.Damage();
+
+                bool change = false;
+
+                do
+                {
+                    var random = UnityEngine.Random.Range(0, 4);
+                    switch (random)
+                    {
+                        case 0:
+                            {
+                                var upBlock = IsValidIndex(w - 1, h) == true ? boardArr[w - 1, h] : null;
+                                if (upBlock != null)
+                                {
+                                    change = true;
+                                    upBlock.changeHp = 1;
+                                    upBlock.changeBlockState = changeBlock;
+                                }
+                            }
+                            break;
+                        case 1:
+                            {
+                                var downBlock = IsValidIndex(w + 1, h) == true ? boardArr[w + 1, h] : null;
+                                if (downBlock != null)
+                                {
+                                    change = true;
+                                    downBlock.changeHp = 1;
+                                    downBlock.changeBlockState = changeBlock;
+                                }
+                            }
+                            break;
+                        case 2:
+                            {
+                                var leftBlock = IsValidIndex(w, h - 1) == true ? boardArr[w, h - 1] : null;
+                                if (leftBlock != null)
+                                {
+                                    change = true;
+                                    leftBlock.changeHp = 1;
+                                    leftBlock.changeBlockState = changeBlock;
+                                }
+                            }
+                            break;
+                        case 3:
+                            {
+                                var rightBlock = IsValidIndex(w, h + 1) == true ? boardArr[w, h + 1] : null;
+                                if (rightBlock != null)
+                                {
+                                    change = true;
+                                    rightBlock.changeHp = 1;
+                                    rightBlock.changeBlockState = changeBlock;
+                                }
+                            }
+                            break;
+                    }
+                } while (change == false);
+            }
+        }
     }
 }

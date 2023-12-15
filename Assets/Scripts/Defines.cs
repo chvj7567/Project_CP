@@ -144,6 +144,8 @@ public class Defines
         CatBox4,
         CatBox5,
 
+        WallCreator,
+
         Max
     }
 

@@ -290,6 +290,16 @@ public class CHToolCreateMap : EditorWindow
                     {
                         texture = blockSpriteList[(int)Defines.EBlockState.CatBox5].texture;
                     }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.CatBox5].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.CatBox5].texture;
+                    }
+
+                    if (GUILayout.Button(blockSpriteList[(int)Defines.EBlockState.WallCreator].texture, GUILayout.Width(50), GUILayout.Height(50)))
+                    {
+                        texture = blockSpriteList[(int)Defines.EBlockState.WallCreator].texture;
+                    }
                 }
                 EditorGUILayout.EndHorizontal();
             }
@@ -550,6 +560,8 @@ public class CHToolCreateMap : EditorWindow
             return Defines.EBlockState.CatBox4;
         else if (texture == blockSpriteList[(int)Defines.EBlockState.CatBox5].texture)
             return Defines.EBlockState.CatBox5;
+        else if (texture == blockSpriteList[(int)Defines.EBlockState.WallCreator].texture)
+            return Defines.EBlockState.WallCreator;
 
         return Defines.EBlockState.None;
     }

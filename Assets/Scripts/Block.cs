@@ -52,6 +52,8 @@ public class Block : MonoBehaviour
 
     // 벽HP
     [SerializeField, ReadOnly] int hp = 0;
+    public int changeHp = -1;
+
     // 벽은 한 턴에 한 번만 데미지를 입음
     [SerializeField, ReadOnly] bool checkDamage = false;
 
@@ -256,6 +258,8 @@ public class Block : MonoBehaviour
 
         hp = _hp;
         hpText.SetText(hp);
+
+        changeHp = -1;
     }
 
     public int GetHp()
@@ -398,7 +402,7 @@ public class Block : MonoBehaviour
         }
     }
 
-    public void Damage(int _blockMaxIndex)
+    public void Damage(int _blockMaxIndex = 0, bool changeNormalBlock = true)
     {
         if (checkDamage == false && hp >= 1 && IsBoxBlock() == false)
         {
@@ -411,8 +415,11 @@ public class Block : MonoBehaviour
             }
             else
             {
-                var random = UnityEngine.Random.Range(0, _blockMaxIndex);
-                changeBlockState = (Defines.EBlockState)random;
+                if (changeNormalBlock)
+                {
+                    var random = UnityEngine.Random.Range(0, _blockMaxIndex);
+                    changeBlockState = (Defines.EBlockState)random;
+                }
             }
         }
     }
