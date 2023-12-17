@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -16,9 +17,17 @@ public class StageSelect : MonoBehaviour
     public void Init(Defines.ESelectStage select)
     {
         Color color = Color.white;
-        if (select == Defines.ESelectStage.Boss)
+        switch (select)
         {
-            color = Color.red;
+            case ESelectStage.Normal:
+                color = Color.cyan;
+                break;
+            case ESelectStage.Boss:
+                color = Color.red;
+                break;
+            case ESelectStage.Easy:
+                color = Color.white;
+                break;
         }
 
         for (int i = 0; i < disposeList.Count; i++)
