@@ -527,6 +527,7 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.OrangeBomb:
             case Defines.EBlockState.BlueBomb:
             case Defines.EBlockState.YellowBomb:
+            case Defines.EBlockState.PinkBomb:
                 return true;
             default:
                 return false;

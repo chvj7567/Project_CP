@@ -302,5 +302,9 @@
         {
             "stringID": 75,
             "value": "\rTo create a cat box, simply place the same cat block on the upper block the corresponding number of times."
+        },
+        {
+            "stringID": 76,
+            "value": "+{0}"
         }
     ]

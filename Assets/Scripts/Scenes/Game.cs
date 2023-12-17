@@ -51,6 +51,7 @@ public class Game : MonoBehaviour
     [SerializeField] CHTMPro targetScoreText;
     [SerializeField] CHTMPro moveCountText;
     [SerializeField] CHTMPro curScoreText;
+    [SerializeField] CHTMPro bonusScoreText;
 
     [SerializeField] GameObject onlyNormalStageObject;
     [SerializeField] GameObject onlyBossStageObject;
@@ -147,6 +148,8 @@ public class Game : MonoBehaviour
                 SceneManager.LoadScene(1);
             });
         }
+
+        bonusScoreText.gameObject.SetActive(false);
 
         guideBackground.SetActive(false);
         guideHole.gameObject.SetActive(false);
@@ -480,11 +483,14 @@ public class Game : MonoBehaviour
             {
                 oneTimeAlarm = true;
 
-                var block = boardArr[canMatchRow, canMatchCol];
-                block.transform.DOScale(1.5f, 0.25f).OnComplete(() =>
+                try
                 {
-                    block.transform.DOScale(1f, 0.25f);
-                });
+                    var block = boardArr[canMatchRow, canMatchCol];
+                    block.transform.DOScale(1.5f, 0.25f).OnComplete(() =>
+                    {
+                        block.transform.DOScale(1f, 0.25f);
+                    });
+                } catch (TaskCanceledException) {}
 
                 await Task.Delay(3000, tokenSource.Token);
                 oneTimeAlarm = false;
@@ -514,7 +520,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMMain.Json.GetGuideInfo(i + 5);
+            var guideInfo = CHMMain.Json.GetGuideInfo(i + 6);
             if (guideInfo == null)
                 break;
 
@@ -953,6 +959,13 @@ public class Game : MonoBehaviour
             await DownBlock();
 
             curScore.Value += bonusScore.Value;
+            if (bonusScore.Value > 0)
+            {
+                bonusScoreText.gameObject.SetActive(true);
+                bonusScoreText.SetText(bonusScore.Value);
+                await Task.Delay((int)(delay * delayMillisecond));
+                bonusScoreText.gameObject.SetActive(false);
+            }
             bonusScore.Value = 0;
 
             SetDissapearBlock();
@@ -967,6 +980,13 @@ public class Game : MonoBehaviour
         }
 
         curScore.Value += bonusScore.Value;
+        if (bonusScore.Value > 0)
+        {
+            bonusScoreText.gameObject.SetActive(true);
+            bonusScoreText.SetText(bonusScore.Value);
+            await Task.Delay((int)(delay * delayMillisecond));
+            bonusScoreText.gameObject.SetActive(false);
+        }
         bonusScore.Value = 0;
 
         do
@@ -1436,8 +1456,8 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.IsBottomTouchDisappearBlock() == true)
-                    continue;
+                /*if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.IsBottomTouchDisappearBlock() == true)
+                    continue;*/
 
                 // ¾ø¾îÁ®¾ß ÇÒ ºí·°
                 if (block.IsMatch() == true && block.remove == false)
@@ -1742,7 +1762,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].IsFixdBlock() || blockList[i].IsBombBlock() || blockList[i].IsNormalBlock() == false)
+            if (blockList[i].IsFixdBlock() || blockList[i].IsBombBlock() || blockList[i].IsBottomTouchDisappearBlock() || blockList[i].IsNormalBlock() == false)
             {
                 blockState = Defines.EBlockState.None;
                 matchCount = 0;
@@ -2016,7 +2036,7 @@ public class Game : MonoBehaviour
     public async Task Boom2(Block block, bool ani = true)
     // ½ÊÀÚ°¡ ÆøÅº
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
 
@@ -2045,7 +2065,7 @@ public class Game : MonoBehaviour
     public async Task Boom3(Block _specialBlock, Defines.EBlockState _blockState, bool _ani = true)
     // °°Àº ºí·° ÆøÅº
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         _specialBlock.match = true;
         _specialBlock.boom = true;
 
@@ -2090,7 +2110,7 @@ public class Game : MonoBehaviour
     public async Task Boom4(Block block, bool ani = true)
     // °¡·Î ÁÙ ÆøÅº
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
 
@@ -2118,7 +2138,7 @@ public class Game : MonoBehaviour
     public async Task Boom5(Block block, bool ani = true)
     // ¼¼·Î ÁÙ ÆøÅº
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
 
@@ -2146,7 +2166,7 @@ public class Game : MonoBehaviour
     public async Task Boom6(Block block, bool ani = true)
     // XÀÚ ÆøÅº
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
 
@@ -2174,7 +2194,7 @@ public class Game : MonoBehaviour
     public async Task Boom7(Block block, bool ani = true)
     // ÁÂÇÏ¿ì»ó ´ë°¢¼± ÁÙ ÆøÅº
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
 
@@ -2203,7 +2223,7 @@ public class Game : MonoBehaviour
     public async Task Boom8(Block block, bool ani = true)
     // ÁÂ»ó¿ìÇÏ ´ë°¢¼± ÁÙ ÆøÅº
     {
-        bonusScore.Value += 5;
+        bonusScore.Value += 10;
         block.match = true;
         block.boom = true;
 
