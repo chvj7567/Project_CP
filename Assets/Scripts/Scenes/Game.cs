@@ -140,23 +140,41 @@ public class Game : MonoBehaviour
         }
 
         stageInfo = CHMMain.Json.GetStageInfo(stage);
-        if (selectStage == Defines.ESelectStage.Easy)
+        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+
+        switch (selectStage)
         {
-            if (stageInfo.time > 0)
-            {
-                stageInfo.time *= 2;
-            }
-            else if (stageInfo.targetScore > 0)
-            {
-                stageInfo.targetScore /= 2;
-            }
-            else if (stageInfo.moveCount > 0)
-            {
-                stageInfo.moveCount *= 2;
-            }
+            case ESelectStage.Normal:
+                {
+                    // 튜토리얼은 Easy(일반)에서 진행함으로 삭제
+                    stageInfo.tutorialID = -1;
+                    for (int i = 0; i < stageBlockInfoList.Count; ++i)
+                    {
+                        stageBlockInfoList[i].tutorialBlock = false;
+                    }
+                }
+                break;
+            case ESelectStage.Boss:
+                break;
+            case ESelectStage.Easy:
+                {
+                    // 난이도 조정
+                    if (stageInfo.time > 0)
+                    {
+                        stageInfo.time *= 2;
+                    }
+                    else if (stageInfo.targetScore > 0)
+                    {
+                        stageInfo.targetScore /= 2;
+                    }
+                    else if (stageInfo.moveCount > 0)
+                    {
+                        stageInfo.moveCount *= 2;
+                    }
+                }
+                break;
         }
 
-        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
         boardSize = stageInfo.boardSize;
         
         if (backBtn)
@@ -402,7 +420,7 @@ public class Game : MonoBehaviour
             guideBackgroundBtn.gameObject.SetActive(true);
             guideBackgroundBtn.transform.SetAsLastSibling();
 
-            var guideIndex = await NormalStageGuideStart();
+            var guideIndex = await EasyStageGuideStart();
             loginData.guideIndex += guideIndex;
 
             guideBackground.SetActive(false);
@@ -540,7 +558,7 @@ public class Game : MonoBehaviour
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
-    async Task<int> NormalStageGuideStart()
+    async Task<int> EasyStageGuideStart()
     // Game UI 튜토리얼 시작
     {
         TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
@@ -1035,7 +1053,7 @@ public class Game : MonoBehaviour
             {
                 tutorialNextBlock = true;
 
-                if (stageInfo.tutorialID > 0)
+                if (selectStage != Defines.ESelectStage.Normal && stageInfo.tutorialID > 0)
                 {
                     var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
                     if (tutorialInfo == null || tutorialInfo.connectNextBlock == Defines.EBlockState.None)

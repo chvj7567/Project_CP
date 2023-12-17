@@ -273,11 +273,11 @@
         },
         {
             "stringID": 68,
-            "value": "Normal\nStage"
+            "value": "Normal"
         },
         {
             "stringID": 69,
-            "value": "Boss\nStage"
+            "value": "Boss"
         },
         {
             "stringID": 70,
@@ -309,6 +309,6 @@
         },
         {
             "stringID": 77,
-            "value": "Hard\nStage"
+            "value": "Hard"
         }
     ]

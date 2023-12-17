@@ -273,11 +273,11 @@
         },
         {
             "stringID": 68,
-            "value": "일반\n스테이지"
+            "value": "일반"
         },
         {
             "stringID": 69,
-            "value": "보스\n스테이지"
+            "value": "보스"
         },
         {
             "stringID": 70,
@@ -309,6 +309,6 @@
         },
         {
             "stringID": 77,
-            "value": "하드\n스테이지"
+            "value": "하드"
         }
     ]

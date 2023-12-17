@@ -152,13 +152,6 @@ public class CHMData : CHSingleton<CHMData>
             loginDataDic = data.MakeDict();
         }
 
-        if (stageDataDic == null)
-        {
-            Debug.Log("Stage Cloud Data Load");
-            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Stage>, string, Data.Stage>(_path, Defines.EData.Stage.ToString());
-            stageDataDic = data.MakeDict();
-        }
-
         if (collectionDataDic == null)
         {
             Debug.Log("Collection Cloud Data Load");
