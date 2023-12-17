@@ -241,7 +241,7 @@ public class Defines
         GameClear,
         GameOverWait,
         GameClearWait,
-        NormalStagePlay,
+        EasyOrNormalStagePlay,
         BossStagePlay,
 
         Max
@@ -297,5 +297,6 @@ public class Defines
     {
         Normal = 1,
         Boss = 2,
+        Easy = 3,
     }
 }

@@ -50,15 +50,7 @@ public class PageMove : MonoBehaviour
 
     public void Init(Defines.ESelectStage select)
     {
-        var lastPlayStage = 0;
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
-        {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
-        }
-        else
-        {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
-        }
+        var lastPlayStage = stageSelect1.GetLastPlayStage();
 
         curSelect = select;
 
@@ -99,13 +91,13 @@ public class PageMove : MonoBehaviour
         ActiveMoveBtn(true);
 
         int maxGroup = 0;
-        if (curSelect == Defines.ESelectStage.Normal)
+        if (curSelect == Defines.ESelectStage.Boss)
         {
-            maxGroup = CHMMain.Json.GetMaxStageGroup(CHMData.Instance.BossStageStartValue);
+            maxGroup = CHMMain.Json.GetMaxStageGroup() - CHMData.Instance.BossStageStartValue;
         }
         else
         {
-            maxGroup = CHMMain.Json.GetMaxStageGroup() - CHMData.Instance.BossStageStartValue;
+            maxGroup = CHMMain.Json.GetMaxStageGroup(CHMData.Instance.BossStageStartValue);
         }
 
         if (page == 1)

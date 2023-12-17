@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using static Defines;
 
 public class StageSelect : MonoBehaviour
 {
@@ -32,23 +33,39 @@ public class StageSelect : MonoBehaviour
             int index = i;
             var btnDispose = btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
-                if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+                var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+                switch (selectStage)
                 {
-                    PlayerPrefs.SetInt(CHMMain.String.BossStage, int.Parse(btnList[index].text.text) + CHMData.Instance.BossStageStartValue);
+                    case ESelectStage.Normal:
+                        {
+                            PlayerPrefs.SetInt(CHMMain.String.Stage, int.Parse(btnList[index].text.text));
 
-                    CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
-                    {
-                        stage = PlayerPrefs.GetInt(CHMMain.String.BossStage)
-                    });
-                }
-                else
-                {
-                    PlayerPrefs.SetInt(CHMMain.String.Stage, int.Parse(btnList[index].text.text));
+                            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                            {
+                                stage = PlayerPrefs.GetInt(CHMMain.String.Stage)
+                            });
+                        }
+                        break;
+                    case ESelectStage.Boss:
+                        {
+                            PlayerPrefs.SetInt(CHMMain.String.BossStage, int.Parse(btnList[index].text.text) + CHMData.Instance.BossStageStartValue);
 
-                    CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
-                    {
-                        stage = PlayerPrefs.GetInt(CHMMain.String.Stage)
-                    });
+                            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                            {
+                                stage = PlayerPrefs.GetInt(CHMMain.String.BossStage)
+                            });
+                        }
+                        break;
+                    case ESelectStage.Easy:
+                        {
+                            PlayerPrefs.SetInt(CHMMain.String.EasyStage, int.Parse(btnList[index].text.text));
+
+                            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                            {
+                                stage = PlayerPrefs.GetInt(CHMMain.String.EasyStage)
+                            });
+                        }
+                        break;
                 }
             });
 
@@ -173,31 +190,43 @@ public class StageSelect : MonoBehaviour
         }
     }
 
-    int GetLastPlayStage()
+    public int GetLastPlayStage()
     {
         var lastPlayStage = 0;
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+
+        switch (selectStage)
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
-        }
-        else
-        {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+            case Defines.ESelectStage.Normal:
+                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+                break;
+            case Defines.ESelectStage.Boss:
+                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
+                break;
+            case Defines.ESelectStage.Easy:
+                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+                break;
         }
 
         return lastPlayStage;
     }
 
-    int GetClearStage()
+    public int GetClearStage()
     {
         int clearStage = 0;
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+
+        switch (selectStage)
         {
-            clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage - CHMData.Instance.BossStageStartValue;
-        }
-        else
-        {
-            clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage;
+            case Defines.ESelectStage.Normal:
+                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage;
+                break;
+            case Defines.ESelectStage.Boss:
+                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage - CHMData.Instance.BossStageStartValue;
+                break;
+            case Defines.ESelectStage.Easy:
+                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage;
+                break;
         }
 
         return clearStage;

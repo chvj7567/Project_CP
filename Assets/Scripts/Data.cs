@@ -10,6 +10,7 @@ namespace Data
         public string key = "";
         public bool connectGPGS = false;
         public int stage = 0;
+        public int easyStage = 0;
         public int bossStage = 0;
         public int selectCatShop = 0;
         public int guideIndex = 0;

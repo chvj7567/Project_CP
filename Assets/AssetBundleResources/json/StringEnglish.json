@@ -306,5 +306,9 @@
         {
             "stringID": 76,
             "value": "+{0}"
+        },
+        {
+            "stringID": 77,
+            "value": "Hard\nStage"
         }
     ]

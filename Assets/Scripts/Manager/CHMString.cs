@@ -9,6 +9,7 @@ public class CHMString
     public string Login = "Login";
     public string SelectStage = "SelectStage";
     public string Stage = "Stage";
+    public string EasyStage = "EasyStage";
     public string BossStage = "BossStage";
     public string Background = "Background";
     public string Gold = "Gold";

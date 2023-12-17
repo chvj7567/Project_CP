@@ -3,7 +3,6 @@ using System;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIStageSelectArg : CHUIArg
@@ -17,6 +16,7 @@ public class UIStageSelect : UIBase
 
     [SerializeField] Button normalStageBtn;
     [SerializeField] Button bossStageBtn;
+    [SerializeField] Button easyStageBtn;
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -27,13 +27,19 @@ public class UIStageSelect : UIBase
     {
         normalStageBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            arg.stageSelect?.Invoke(1);
+            arg.stageSelect?.Invoke((int)Defines.ESelectStage.Normal);
             CHMMain.UI.CloseUI(gameObject);
         });
         
         bossStageBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            arg.stageSelect?.Invoke(2);
+            arg.stageSelect?.Invoke((int)Defines.ESelectStage.Boss);
+            CHMMain.UI.CloseUI(gameObject);
+        });
+
+        easyStageBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            arg.stageSelect?.Invoke((int)Defines.ESelectStage.Easy);
             CHMMain.UI.CloseUI(gameObject);
         });
     }

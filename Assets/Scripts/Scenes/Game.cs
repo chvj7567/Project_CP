@@ -1,12 +1,10 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -92,7 +90,7 @@ public class Game : MonoBehaviour
     
     int helpTime = 0;
 
-    bool bossStage = false;
+    Defines.ESelectStage selectStage = Defines.ESelectStage.Normal;
 
     CancellationTokenSource tokenSource;
 
@@ -118,15 +116,46 @@ public class Game : MonoBehaviour
         ChangeBackgroundLoop();
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        var stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+        var stage = 0;
 
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+
+        switch (selectStage)
         {
-            bossStage = true;
-            stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+            case ESelectStage.Normal:
+                {
+                    stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+                }
+                break;
+            case ESelectStage.Boss:
+                {
+                    stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+                }
+                break;
+            case ESelectStage.Easy:
+                {
+                    stage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+                }
+                break;
         }
 
         stageInfo = CHMMain.Json.GetStageInfo(stage);
+        if (selectStage == Defines.ESelectStage.Easy)
+        {
+            if (stageInfo.time > 0)
+            {
+                stageInfo.time *= 2;
+            }
+            else if (stageInfo.targetScore > 0)
+            {
+                stageInfo.targetScore /= 2;
+            }
+            else if (stageInfo.moveCount > 0)
+            {
+                stageInfo.moveCount *= 2;
+            }
+        }
+
         stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
         boardSize = stageInfo.boardSize;
         
@@ -158,7 +187,7 @@ public class Game : MonoBehaviour
         onlyBossStageObject.SetActive(false);
 
         // 보스 스테이지일 경우만
-        if (bossStage)
+        if (selectStage == Defines.ESelectStage.Boss)
         {
             onlyBossStageObject.SetActive(true);
             onlyNormalStageObject.SetActive(false);
@@ -269,7 +298,7 @@ public class Game : MonoBehaviour
                     return;
                 }
 
-                if (gameResult.Value == EGameState.NormalStagePlay)
+                if (gameResult.Value == EGameState.EasyOrNormalStagePlay)
                 {
                     bool clear = true;
 
@@ -363,7 +392,7 @@ public class Game : MonoBehaviour
 
         guideBackgroundBtn.gameObject.SetActive(false);
 
-        if (bossStage == false && loginData.guideIndex == 5)
+        if (selectStage == Defines.ESelectStage.Easy && loginData.guideIndex == 5)
         {
             Time.timeScale = 0;
 
@@ -382,7 +411,7 @@ public class Game : MonoBehaviour
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
 
-        if (bossStage && loginData.guideIndex == 11)
+        if (selectStage == Defines.ESelectStage.Boss && loginData.guideIndex == 11)
         {
             Time.timeScale = 0;
 
@@ -401,7 +430,7 @@ public class Game : MonoBehaviour
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
 
-        if (stageInfo.tutorialID > 0)
+        if (selectStage != Defines.ESelectStage.Normal && stageInfo.tutorialID > 0)
         {
             Time.timeScale = 0;
 
@@ -422,13 +451,13 @@ public class Game : MonoBehaviour
             }
         }
 
-        if (bossStage)
+        if (selectStage == Defines.ESelectStage.Boss)
         {
             gameResult.Value = EGameState.BossStagePlay;
         }
         else
         {
-            gameResult.Value = EGameState.NormalStagePlay;
+            gameResult.Value = EGameState.EasyOrNormalStagePlay;
         }
     }
 
@@ -490,9 +519,9 @@ public class Game : MonoBehaviour
                     {
                         block.transform.DOScale(1f, 0.25f);
                     });
+                    await Task.Delay(3000, tokenSource.Token);
                 } catch (TaskCanceledException) {}
-
-                await Task.Delay(3000, tokenSource.Token);
+                
                 oneTimeAlarm = false;
             }
         }
@@ -663,13 +692,13 @@ public class Game : MonoBehaviour
 
             // 게임결과 다시 체크하도록
             gameEnd = false;
-            if (bossStage)
+            if (selectStage == Defines.ESelectStage.Boss)
             {
                 gameResult.Value = EGameState.BossStagePlay;
             }
             else
             {
-                gameResult.Value = EGameState.NormalStagePlay;
+                gameResult.Value = EGameState.EasyOrNormalStagePlay;
             }
 
             return;
@@ -810,32 +839,43 @@ public class Game : MonoBehaviour
     void SaveClearData()
     // 현재 스테이지를 클리어 상태로 저장
     {
-        if (bossStage)
+        switch (selectStage)
         {
-            CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
-        }
-        else
-        {
-            CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+            case ESelectStage.Normal:
+                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+                break;
+            case ESelectStage.Boss:
+                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+                break;
+            case ESelectStage.Easy:
+                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+                break;
         }
     }
 
     Defines.EClearState GetClearState()
     // 현재 스테이지의 클리어 상태
     {
-        if (bossStage)
+        switch (selectStage)
         {
-            if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage >= PlayerPrefs.GetInt(CHMMain.String.BossStage))
-            {
-                return Defines.EClearState.Clear;
-            }
-        }
-        else
-        {
-            if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= PlayerPrefs.GetInt(CHMMain.String.Stage))
-            {
-                return Defines.EClearState.Clear;
-            }
+            case ESelectStage.Normal:
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= PlayerPrefs.GetInt(CHMMain.String.Stage))
+                {
+                    return Defines.EClearState.Clear;
+                }
+                break;
+            case ESelectStage.Boss:
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage >= PlayerPrefs.GetInt(CHMMain.String.BossStage))
+                {
+                    return Defines.EClearState.Clear;
+                }
+                break;
+            case ESelectStage.Easy:
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage >= PlayerPrefs.GetInt(CHMMain.String.EasyStage))
+                {
+                    return Defines.EClearState.Clear;
+                }
+                break;
         }
 
         return Defines.EClearState.Doing;
