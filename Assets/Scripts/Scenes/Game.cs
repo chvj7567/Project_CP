@@ -356,6 +356,7 @@ public class Game : MonoBehaviour
     }
 
     async Task LoadImage()
+    // 블럭 이미지 로드
     {
         for (EBlockState i = 0; i < EBlockState.Max; ++i)
         {
@@ -373,6 +374,7 @@ public class Game : MonoBehaviour
     }
 
     void InitData()
+    // 데이터 초기화
     {
         if (init)
             return;
@@ -512,6 +514,7 @@ public class Game : MonoBehaviour
     }
 
     async Task StartGuide()
+    // 가이드 시작
     {
         if (selectStage == Defines.ESelectStage.Easy && loginData.guideIndex == 5)
         {
@@ -553,6 +556,7 @@ public class Game : MonoBehaviour
     }
 
     void StartTutorial()
+    // 튜토리얼 시작
     {
         if (selectStage != Defines.ESelectStage.Normal && stageInfo.tutorialID > 0)
         {
@@ -577,7 +581,7 @@ public class Game : MonoBehaviour
     }
 
     async Task<int> EasyStageGuideStart()
-    // Game UI 튜토리얼 시작
+    // 일반 스테이지 Game UI 가이드 시작
     {
         TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
 
@@ -612,7 +616,7 @@ public class Game : MonoBehaviour
     }
 
     async Task<int> BossStageGuideStart()
-    // Game UI 튜토리얼 시작
+    // 보스 스테이지 Game UI 가이드 시작
     {
         TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
 
@@ -645,6 +649,7 @@ public class Game : MonoBehaviour
 
         return await tutorialCompleteTask.Task;
     }
+
     (Vector2, Vector2) GetTutorialStageImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
     // 튜토리얼에서 밝게 보이는 부분 크기과 위치 지정
     {
