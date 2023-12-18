@@ -45,7 +45,7 @@ public class CHToolCreateMap : EditorWindow
         {
             for (Defines.EBlockState i = 0; i < Defines.EBlockState.Max; ++i)
             {
-                CHTool.LoadAssetOnEditor<Sprite>(Defines.EResourceType.Sprite.ToString(), i.ToString(), (sprite) =>
+                CHStatic.LoadAssetOnEditor<Sprite>(Defines.EResourceType.Sprite.ToString(), i.ToString(), (sprite) =>
                 {
                     if (sprite != null)
                         blockSpriteList.Add(sprite);
@@ -57,7 +57,7 @@ public class CHToolCreateMap : EditorWindow
 
         if (stageInfoList != null && stageInfoList.Count <= 0)
         {
-            CHTool.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.Stage.ToString(), (textAsset) =>
+            CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.Stage.ToString(), (textAsset) =>
             {
                 var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stageInfoArr)
@@ -71,7 +71,7 @@ public class CHToolCreateMap : EditorWindow
 
         if (stageBlockInfoList != null && stageBlockInfoList.Count <= 0)
         {
-            CHTool.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StageBlock.ToString(), (textAsset) =>
+            CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StageBlock.ToString(), (textAsset) =>
             {
                 var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageBlockInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stageBlockInfoArr)

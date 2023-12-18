@@ -31,7 +31,7 @@ public class CHToolString : EditorWindow
     {
         if (stringKoreaList != null && stringKoreaList.Count <= 0)
         {
-            CHTool.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StringKorea.ToString(), (textAsset) =>
+            CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StringKorea.ToString(), (textAsset) =>
             {
                 var jsonData = JsonUtility.FromJson<JsonData>("{\"stringKoreaInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stringKoreaInfoArr)
@@ -45,7 +45,7 @@ public class CHToolString : EditorWindow
 
         if (stringEnglishList != null && stringEnglishList.Count <= 0)
         {
-            CHTool.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StringEnglish.ToString(), (textAsset) =>
+            CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StringEnglish.ToString(), (textAsset) =>
             {
                 var jsonData = JsonUtility.FromJson<JsonData>("{\"stringEnglishInfoArr\":" + textAsset.text + "}");
                 foreach (var data in jsonData.stringEnglishInfoArr)

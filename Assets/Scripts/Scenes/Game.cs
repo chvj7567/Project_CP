@@ -91,92 +91,34 @@ public class Game : MonoBehaviour
     int helpTime = 0;
 
     Defines.ESelectStage selectStage = Defines.ESelectStage.Normal;
+    Data.Login loginData;
 
     CancellationTokenSource tokenSource;
 
-    private void Awake()
-    {
-        for (EBlockState i = 0; i < EBlockState.Max; ++i)
-        {
-            Debug.Log(i);
-            CHMMain.Resource.LoadSprite(i, (sprite) =>
-            {
-                if (sprite != null)
-                    blockSpriteList.Add(sprite);
-            });
-        }
-    }
+    bool init = false;
 
     async void Start()
     {
-        tokenSource = new CancellationTokenSource();
+        bonusScoreText.gameObject.SetActive(false);
 
-        backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.Background);
+        guideBackground.SetActive(false);
+        guideHole.gameObject.SetActive(false);
 
-        ChangeBackgroundLoop();
+        onlyNormalStageObject.SetActive(true);
+        onlyBossStageObject.SetActive(false);
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        var stage = 0;
-
-        selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
-
-        switch (selectStage)
+        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
-            case ESelectStage.Normal:
-                {
-                    stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
-                }
-                break;
-            case ESelectStage.Boss:
-                {
-                    stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
-                }
-                break;
-            case ESelectStage.Easy:
-                {
-                    stage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
-                }
-                break;
+            normalStageGuideHoleList[i].gameObject.SetActive(false);
         }
 
-        stageInfo = CHMMain.Json.GetStageInfo(stage);
-        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
-
-        switch (selectStage)
+        for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
         {
-            case ESelectStage.Normal:
-                {
-                    // 튜토리얼은 Easy(일반)에서 진행함으로 삭제
-                    stageInfo.tutorialID = -1;
-                    for (int i = 0; i < stageBlockInfoList.Count; ++i)
-                    {
-                        stageBlockInfoList[i].tutorialBlock = false;
-                    }
-                }
-                break;
-            case ESelectStage.Boss:
-                break;
-            case ESelectStage.Easy:
-                {
-                    // 난이도 조정
-                    if (stageInfo.time > 0)
-                    {
-                        stageInfo.time *= 2;
-                    }
-                    else if (stageInfo.targetScore > 0)
-                    {
-                        stageInfo.targetScore /= 2;
-                    }
-                    else if (stageInfo.moveCount > 0)
-                    {
-                        stageInfo.moveCount *= 2;
-                    }
-                }
-                break;
+            bossStageGuideHoleList[i].gameObject.SetActive(false);
         }
 
-        boardSize = stageInfo.boardSize;
-        
+        guideBackgroundBtn.gameObject.SetActive(false);
+
         if (backBtn)
         {
             backBtn.OnClickAsObservable().Subscribe(_ =>
@@ -193,44 +135,6 @@ public class Game : MonoBehaviour
                 PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 
                 SceneManager.LoadScene(1);
-            });
-        }
-
-        bonusScoreText.gameObject.SetActive(false);
-
-        guideBackground.SetActive(false);
-        guideHole.gameObject.SetActive(false);
-
-        onlyNormalStageObject.SetActive(true);
-        onlyBossStageObject.SetActive(false);
-
-        // 보스 스테이지일 경우만
-        if (selectStage == Defines.ESelectStage.Boss)
-        {
-            onlyBossStageObject.SetActive(true);
-            onlyNormalStageObject.SetActive(false);
-
-            hp.Subscribe(_ =>
-            {
-                if (_ >= 0)
-                    hpText.SetText(hp);
-            });
-
-            hp.Value = loginData.hp;
-
-            // 1초뒤에 1초에 한 번씩 실행
-            Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
-            .Subscribe(_ =>
-            {
-                hp.Value -= 1;
-            })
-            .AddTo(this);
-
-            curScore.Subscribe(_ =>
-            {
-                var fillAmountValue = (stageInfo.targetScore - _) / (float)stageInfo.targetScore;
-                bossHpImage.DOFillAmount(fillAmountValue, .5f);
-                bossHpText.SetText(Mathf.Max(0, stageInfo.targetScore - _));
             });
         }
 
@@ -259,34 +163,6 @@ public class Game : MonoBehaviour
             moveCountText.SetText(_);
         });
 
-        targetScoreText.SetText(stageInfo.targetScore);
-        if (stageInfo.targetScore < 0)
-        {
-            targetScoreText.gameObject.SetActive(false);
-        }
-
-        if (stageInfo.moveCount > 0)
-        {
-            moveCount.Value = stageInfo.moveCount + loginData.useMoveItemCount;
-        }
-        else
-        {
-            moveCount.Value = 9999;
-
-            if (loginData.useMoveItemCount > 0)
-                loginData.addMoveItemCount += loginData.useMoveItemCount;
-        }
-
-        if (stageInfo.time > 0)
-        {
-            stageInfo.time += loginData.useTimeItemCount * 10;
-        }
-        else
-        {
-            if (loginData.useTimeItemCount > 0)
-                loginData.addTimeItemCount += loginData.useTimeItemCount;
-        }
-
         gameResult.Subscribe(_ =>
         {
             if (_ == EGameState.GameOver || _ == EGameState.GameClear)
@@ -297,10 +173,6 @@ public class Game : MonoBehaviour
                 }
             }
         });
-
-        instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
-
-        await CreateMap();
 
         this.UpdateAsObservable()
             .Subscribe(_ =>
@@ -397,86 +269,11 @@ public class Game : MonoBehaviour
                 }
             });
 
-        // 가이드 부분
-        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
-        {
-            normalStageGuideHoleList[i].gameObject.SetActive(false);
-        }
-
-        for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
-        {
-            bossStageGuideHoleList[i].gameObject.SetActive(false);
-        }
-
-        guideBackgroundBtn.gameObject.SetActive(false);
-
-        if (selectStage == Defines.ESelectStage.Easy && loginData.guideIndex == 5)
-        {
-            Time.timeScale = 0;
-
-            guideBackground.SetActive(true);
-            guideBackground.transform.SetAsLastSibling();
-
-            guideBackgroundBtn.gameObject.SetActive(true);
-            guideBackgroundBtn.transform.SetAsLastSibling();
-
-            var guideIndex = await EasyStageGuideStart();
-            loginData.guideIndex += guideIndex;
-
-            guideBackground.SetActive(false);
-            guideBackgroundBtn.gameObject.SetActive(false);
-
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
-        }
-
-        if (selectStage == Defines.ESelectStage.Boss && loginData.guideIndex == 11)
-        {
-            Time.timeScale = 0;
-
-            guideBackground.SetActive(true);
-            guideBackground.transform.SetAsLastSibling();
-
-            guideBackgroundBtn.gameObject.SetActive(true);
-            guideBackgroundBtn.transform.SetAsLastSibling();
-
-            var guideIndex = await BossStageGuideStart();
-            loginData.guideIndex += guideIndex;
-
-            guideBackground.SetActive(false);
-            guideBackgroundBtn.gameObject.SetActive(false);
-
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
-        }
-
-        if (selectStage != Defines.ESelectStage.Normal && stageInfo.tutorialID > 0)
-        {
-            Time.timeScale = 0;
-
-            guideBackground.SetActive(true);
-            guideHole.gameObject.SetActive(true);
-
-            guideHole.SetAsLastSibling();
-            guideBackground.transform.SetAsLastSibling();
-
-            var holeValue = GetTutorialStageImgSettingValue(boardArr, stageBlockInfoList);
-            guideHole.sizeDelta = holeValue.Item1;
-            guideHole.anchoredPosition = holeValue.Item2;
-
-            var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
-            if (tutorialInfo != null)
-            {
-                guideDesc.SetStringID(tutorialInfo.descStringID);
-            }
-        }
-
-        if (selectStage == Defines.ESelectStage.Boss)
-        {
-            gameResult.Value = EGameState.BossStagePlay;
-        }
-        else
-        {
-            gameResult.Value = EGameState.EasyOrNormalStagePlay;
-        }
+        await LoadImage();
+        InitData();
+        await CreateMap();
+        await StartGuide();
+        StartTutorial();
     }
 
     private async void Update()
@@ -556,6 +353,227 @@ public class Game : MonoBehaviour
     private void OnApplicationQuit()
     {
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
+    }
+
+    async Task LoadImage()
+    {
+        for (EBlockState i = 0; i < EBlockState.Max; ++i)
+        {
+            TaskCompletionSource<Sprite> imageTask = new TaskCompletionSource<Sprite>();
+            CHMMain.Resource.LoadSprite(i, (sprite) =>
+            {
+                if (sprite != null)
+                    blockSpriteList.Add(sprite);
+
+                imageTask.SetResult(sprite);
+            });
+
+            await imageTask.Task;
+        }
+    }
+
+    void InitData()
+    {
+        if (init)
+            return;
+
+        init = true;
+
+        tokenSource = new CancellationTokenSource();
+        backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.Background);
+        loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+
+        ChangeBackgroundLoop();
+
+        var stage = 0;
+        switch (selectStage)
+        {
+            case ESelectStage.Normal:
+                {
+                    stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+                }
+                break;
+            case ESelectStage.Boss:
+                {
+                    stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+                }
+                break;
+            case ESelectStage.Easy:
+                {
+                    stage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+                }
+                break;
+        }
+
+        stageInfo = CHMMain.Json.GetStageInfo(stage);
+        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+        boardSize = stageInfo.boardSize;
+
+        switch (selectStage)
+        {
+            case ESelectStage.Normal:
+                {
+                    // 튜토리얼은 Easy(일반)에서 진행함으로 삭제
+                    stageInfo.tutorialID = -1;
+                    for (int i = 0; i < stageBlockInfoList.Count; ++i)
+                    {
+                        stageBlockInfoList[i].tutorialBlock = false;
+                    }
+                }
+                break;
+            case ESelectStage.Boss:
+                break;
+            case ESelectStage.Easy:
+                {
+                    // 난이도 조정
+                    if (stageInfo.time > 0)
+                    {
+                        stageInfo.time *= 2;
+                    }
+                    else if (stageInfo.targetScore > 0)
+                    {
+                        stageInfo.targetScore /= 2;
+                    }
+                    else if (stageInfo.moveCount > 0)
+                    {
+                        stageInfo.moveCount *= 2;
+                    }
+                }
+                break;
+        }
+
+        targetScoreText.SetText(stageInfo.targetScore);
+        if (stageInfo.targetScore < 0)
+        {
+            targetScoreText.gameObject.SetActive(false);
+        }
+
+        if (stageInfo.moveCount > 0)
+        {
+            moveCount.Value = stageInfo.moveCount + loginData.useMoveItemCount;
+        }
+        else
+        {
+            moveCount.Value = 9999;
+
+            if (loginData.useMoveItemCount > 0)
+                loginData.addMoveItemCount += loginData.useMoveItemCount;
+        }
+
+        if (stageInfo.time > 0)
+        {
+            stageInfo.time += loginData.useTimeItemCount * 10;
+        }
+        else
+        {
+            if (loginData.useTimeItemCount > 0)
+                loginData.addTimeItemCount += loginData.useTimeItemCount;
+        }
+
+        if (selectStage == Defines.ESelectStage.Boss)
+        {
+            gameResult.Value = EGameState.BossStagePlay;
+        }
+        else
+        {
+            gameResult.Value = EGameState.EasyOrNormalStagePlay;
+        }
+
+        // 보스 스테이지일 경우만
+        if (selectStage == Defines.ESelectStage.Boss)
+        {
+            onlyBossStageObject.SetActive(true);
+            onlyNormalStageObject.SetActive(false);
+
+            hp.Subscribe(_ =>
+            {
+                if (_ >= 0)
+                    hpText.SetText(hp);
+            });
+
+            hp.Value = loginData.hp;
+
+            // 1초뒤에 1초에 한 번씩 실행
+            Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
+            .Subscribe(_ =>
+            {
+                hp.Value -= 1;
+            })
+            .AddTo(this);
+
+            curScore.Subscribe(_ =>
+            {
+                var fillAmountValue = (stageInfo.targetScore - _) / (float)stageInfo.targetScore;
+                bossHpImage.DOFillAmount(fillAmountValue, .5f);
+                bossHpText.SetText(Mathf.Max(0, stageInfo.targetScore - _));
+            });
+        }
+    }
+
+    async Task StartGuide()
+    {
+        if (selectStage == Defines.ESelectStage.Easy && loginData.guideIndex == 5)
+        {
+            Time.timeScale = 0;
+
+            guideBackground.SetActive(true);
+            guideBackground.transform.SetAsLastSibling();
+
+            guideBackgroundBtn.gameObject.SetActive(true);
+            guideBackgroundBtn.transform.SetAsLastSibling();
+
+            var guideIndex = await EasyStageGuideStart();
+            loginData.guideIndex += guideIndex;
+
+            guideBackground.SetActive(false);
+            guideBackgroundBtn.gameObject.SetActive(false);
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        }
+
+        if (selectStage == Defines.ESelectStage.Boss && loginData.guideIndex == 11)
+        {
+            Time.timeScale = 0;
+
+            guideBackground.SetActive(true);
+            guideBackground.transform.SetAsLastSibling();
+
+            guideBackgroundBtn.gameObject.SetActive(true);
+            guideBackgroundBtn.transform.SetAsLastSibling();
+
+            var guideIndex = await BossStageGuideStart();
+            loginData.guideIndex += guideIndex;
+
+            guideBackground.SetActive(false);
+            guideBackgroundBtn.gameObject.SetActive(false);
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        }
+    }
+
+    void StartTutorial()
+    {
+        if (selectStage != Defines.ESelectStage.Normal && stageInfo.tutorialID > 0)
+        {
+            Time.timeScale = 0;
+
+            guideBackground.SetActive(true);
+            guideHole.gameObject.SetActive(true);
+
+            guideHole.SetAsLastSibling();
+            guideBackground.transform.SetAsLastSibling();
+
+            var holeValue = GetTutorialStageImgSettingValue(boardArr, stageBlockInfoList);
+            guideHole.sizeDelta = holeValue.Item1;
+            guideHole.anchoredPosition = holeValue.Item2;
+
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
+            if (tutorialInfo != null)
+            {
+                guideDesc.SetStringID(tutorialInfo.descStringID);
+            }
+        }
     }
 
     async Task<int> EasyStageGuideStart()
@@ -1115,6 +1133,8 @@ public class Game : MonoBehaviour
     async Task CreateMap()
     // 스테이지 시작 시 맵 생성
     {
+        instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
+
         foreach (var block in boardArr)
         {
             if (block == null) continue;
