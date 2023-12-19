@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using static Defines;
 
 public class CHToolCreateMap : EditorWindow
 {
@@ -14,6 +15,8 @@ public class CHToolCreateMap : EditorWindow
     Texture emptyTexture = null;
     Texture texture = null;
     Texture[,] textures = new Texture[9, 9];
+    Defines.EBlockState blockState = Defines.EBlockState.None;
+    Defines.EBlockState[,] blockStates = new Defines.EBlockState[9, 9];
     int[,] hps = new int[9, 9];
     bool[,] tutorialBlocks = new bool[9, 9];
 
@@ -148,52 +151,54 @@ public class CHToolCreateMap : EditorWindow
             {
                 EditorGUILayout.BeginHorizontal();
                 {
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Cat1]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Cat2]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Cat3]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Cat4]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Cat5]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.CatPang]);
+                    CreateBlockButton(Defines.EBlockState.Cat1);
+                    CreateBlockButton(Defines.EBlockState.Cat2);
+                    CreateBlockButton(Defines.EBlockState.Cat3);
+                    CreateBlockButton(Defines.EBlockState.Cat4);
+                    CreateBlockButton(Defines.EBlockState.Cat5);
+                    CreateBlockButton(Defines.EBlockState.CatPang);
 
                     if (GUILayout.Button(emptyTexture, GUILayout.Width(50), GUILayout.Height(50)))
                     {
                         texture = null;
+                        blockState = Defines.EBlockState.None;
                     }
                 }
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
                 {
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Arrow1]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Arrow2]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Arrow3]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Arrow4]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Arrow5]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Arrow6]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Potal]);
+                    CreateBlockButton(Defines.EBlockState.Arrow1);
+                    CreateBlockButton(Defines.EBlockState.Arrow2);
+                    CreateBlockButton(Defines.EBlockState.Arrow3);
+                    CreateBlockButton(Defines.EBlockState.Arrow4);
+                    CreateBlockButton(Defines.EBlockState.Arrow5);
+                    CreateBlockButton(Defines.EBlockState.Arrow6);
+                    CreateBlockButton(Defines.EBlockState.Potal);
                 }
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
                 {
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.PinkBomb]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.YellowBomb]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.OrangeBomb]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.GreenBomb]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.BlueBomb]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Fish]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.Wall]);
+                    CreateBlockButton(Defines.EBlockState.PinkBomb);
+                    CreateBlockButton(Defines.EBlockState.YellowBomb);
+                    CreateBlockButton(Defines.EBlockState.OrangeBomb);
+                    CreateBlockButton(Defines.EBlockState.GreenBomb);
+                    CreateBlockButton(Defines.EBlockState.BlueBomb);
+                    CreateBlockButton(Defines.EBlockState.Fish);
+                    CreateBlockButton(Defines.EBlockState.Wall);
                 }
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
                 {
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.CatBox1]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.CatBox2]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.CatBox3]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.CatBox4]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.CatBox5]);
-                    CreateBlockButton(blockSpriteList[(int)Defines.EBlockState.WallCreator]);
+                    CreateBlockButton(Defines.EBlockState.CatBox1);
+                    CreateBlockButton(Defines.EBlockState.CatBox2);
+                    CreateBlockButton(Defines.EBlockState.CatBox3);
+                    CreateBlockButton(Defines.EBlockState.CatBox4);
+                    CreateBlockButton(Defines.EBlockState.CatBox5);
+                    CreateBlockButton(Defines.EBlockState.WallCreator);
+                    CreateBlockButton(Defines.EBlockState.PotalCreator);
                 }
                 EditorGUILayout.EndHorizontal();
             }
@@ -210,6 +215,7 @@ public class CHToolCreateMap : EditorWindow
                     if (GUILayout.Button(textures[w, h], GUILayout.Width(50), GUILayout.Height(50)))
                     {
                         textures[w, h] = texture;
+                        blockStates[w, h] = blockState;
                         hps[w, h] = hp;
                         tutorialBlocks[w, h] = tutorialID > 0;
                     }
@@ -220,28 +226,12 @@ public class CHToolCreateMap : EditorWindow
 
         if (GUILayout.Button("판 리셋", GUILayout.Width(595), GUILayout.Height(30)))
         {
-            for (int w = 0; w < 9; w++)
-            {
-                for (int h = 0; h < 9; h++)
-                {
-                    textures[w, h] = null;
-                    hps[w, h] = -1;
-                    tutorialBlocks[w, h] = false;
-                }
-            }
+            ResetBoard();
         }
 
         if (GUILayout.Button("불러오기(Stage 값 기준)", GUILayout.Width(595), GUILayout.Height(30)))
         {
-            for (int w = 0; w < 9; w++)
-            {
-                for (int h = 0; h < 9; h++)
-                {
-                    textures[w, h] = null;
-                    hps[w, h] = -1;
-                    tutorialBlocks[w, h] = false;
-                }
-            }
+            ResetBoard();
 
             int tempGroup = 0;
             int tempStage = 0;
@@ -276,12 +266,17 @@ public class CHToolCreateMap : EditorWindow
                         if (findBlock == null)
                         {
                             textures[w, h] = null;
+                            blockStates[w, h] = Defines.EBlockState.None;
                             hps[w, h] = -1;
                             tutorialBlocks[w, h] = false;
                         }
                         else
                         {
-                            textures[w, h] = blockSpriteList[(int)findBlock.blockState].texture;
+                            if (blockSpriteList[(int)findBlock.blockState] == null)
+                                textures[w, h] = MakeBackgroundTexture(50, 50, Color.white);
+                            else
+                                textures[w, h] = blockSpriteList[(int)findBlock.blockState].texture;
+                            blockStates[w, h] = findBlock.blockState;
                             hps[w, h] = findBlock.hp;
                             tutorialBlocks[w, h] = findBlock.tutorialBlock;
                         }
@@ -346,13 +341,13 @@ public class CHToolCreateMap : EditorWindow
             {
                 for (int h = 0; h < boardSize; h++)
                 {
-                    if (textures[w, h] == null)
+                    if (textures[w, h] == null || blockState == Defines.EBlockState.None)
                         continue;
 
                     stageBlockInfoList.Add(new Infomation.StageBlockInfo
                     {
                         stage = tempStage,
-                        blockState = GetBlockState(textures[w, h]),
+                        blockState = blockStates[w, h],
                         hp = hps[w, h],
                         row = w,
                         col = h,
@@ -385,17 +380,18 @@ public class CHToolCreateMap : EditorWindow
         }
     }
 
-    void CreateBlockButton(Sprite sprite)
+    void CreateBlockButton(Defines.EBlockState blockState)
     {
         Texture2D texture;
-        if (sprite == null)
+        if (blockSpriteList[(int)blockState] == null)
             texture = MakeBackgroundTexture(50, 50, Color.white);
         else
-            texture = sprite.texture;
+            texture = blockSpriteList[(int)blockState].texture;
 
         if (GUILayout.Button(texture, GUILayout.Width(50), GUILayout.Height(50)))
         {
             this.texture = texture;
+            this.blockState = blockState;
         }
     }
 
@@ -416,61 +412,17 @@ public class CHToolCreateMap : EditorWindow
         return backgroundTexture;
     }
 
-    Defines.EBlockState GetBlockState(Texture texture)
+    void ResetBoard()
     {
-        if (texture == blockSpriteList[(int)Defines.EBlockState.Cat1].texture)
-            return Defines.EBlockState.Cat1;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat2].texture)
-            return Defines.EBlockState.Cat2;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat3].texture)
-            return Defines.EBlockState.Cat3;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat4].texture)
-            return Defines.EBlockState.Cat5;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Cat5].texture)
-            return Defines.EBlockState.Cat5;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.CatPang].texture)
-            return Defines.EBlockState.CatPang;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.PinkBomb].texture)
-            return Defines.EBlockState.PinkBomb;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.YellowBomb].texture)
-            return Defines.EBlockState.YellowBomb;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.OrangeBomb].texture)
-            return Defines.EBlockState.OrangeBomb;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.GreenBomb].texture)
-            return Defines.EBlockState.GreenBomb;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.BlueBomb].texture)
-            return Defines.EBlockState.BlueBomb;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Wall].texture)
-            return Defines.EBlockState.Wall;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Potal].texture)
-            return Defines.EBlockState.Potal;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Fish].texture)
-            return Defines.EBlockState.Fish;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Arrow1].texture)
-            return Defines.EBlockState.Arrow1;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Arrow2].texture)
-            return Defines.EBlockState.Arrow2;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Arrow3].texture)
-            return Defines.EBlockState.Arrow3;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Arrow4].texture)
-            return Defines.EBlockState.Arrow4;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Arrow5].texture)
-            return Defines.EBlockState.Arrow5;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.Arrow6].texture)
-            return Defines.EBlockState.Arrow6;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.CatBox1].texture)
-            return Defines.EBlockState.CatBox1;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.CatBox2].texture)
-            return Defines.EBlockState.CatBox2;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.CatBox3].texture)
-            return Defines.EBlockState.CatBox3;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.CatBox4].texture)
-            return Defines.EBlockState.CatBox4;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.CatBox5].texture)
-            return Defines.EBlockState.CatBox5;
-        else if (texture == blockSpriteList[(int)Defines.EBlockState.WallCreator].texture)
-            return Defines.EBlockState.WallCreator;
-
-        return Defines.EBlockState.None;
+        for (int w = 0; w < 9; w++)
+        {
+            for (int h = 0; h < 9; h++)
+            {
+                textures[w, h] = null;
+                blockStates[w, h] = Defines.EBlockState.None;
+                hps[w, h] = -1;
+                tutorialBlocks[w, h] = false;
+            }
+        }
     }
 }
