@@ -883,13 +883,16 @@ public class Game : MonoBehaviour
         switch (selectStage)
         {
             case ESelectStage.Normal:
-                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage < PlayerPrefs.GetInt(CHMMain.String.Stage))
+                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
                 break;
             case ESelectStage.Boss:
-                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage < PlayerPrefs.GetInt(CHMMain.String.BossStage))
+                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
                 break;
             case ESelectStage.Easy:
-                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage < PlayerPrefs.GetInt(CHMMain.String.EasyStage))
+                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
                 break;
         }
     }
