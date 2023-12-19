@@ -1,5 +1,6 @@
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UISettingArg : CHUIArg
@@ -58,6 +59,8 @@ public class UISetting : UIBase
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
 
             Debug.Log(loginData.languageType);
+
+            SceneManager.LoadScene(1);
         });
 
         englishBtn.OnClickAsObservable().Subscribe(_ =>
@@ -68,6 +71,8 @@ public class UISetting : UIBase
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
 
             Debug.Log(loginData.languageType);
+
+            SceneManager.LoadScene(1);
         });
 
         bgmSlider.value = CHMMain.Sound.bgmVolume;
