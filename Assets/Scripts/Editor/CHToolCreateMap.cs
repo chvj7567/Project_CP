@@ -341,7 +341,7 @@ public class CHToolCreateMap : EditorWindow
             {
                 for (int h = 0; h < boardSize; h++)
                 {
-                    if (textures[w, h] == null || blockState == Defines.EBlockState.None)
+                    if (textures[w, h] == null || blockStates[w, h] == Defines.EBlockState.None)
                         continue;
 
                     stageBlockInfoList.Add(new Infomation.StageBlockInfo
