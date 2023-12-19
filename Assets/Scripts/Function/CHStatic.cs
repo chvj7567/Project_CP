@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -40,12 +41,16 @@ public class CHStatic : MonoBehaviour
                 path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.mp3";
             }
         }
+        else if (typeof(T) == typeof(TMP_FontAsset))
+        {
+            path = $"Assets/AssetBundleResources/{_bundleName.ToLower()}/{_assetName}.asset";
+        }
 
         T original = AssetDatabase.LoadAssetAtPath<T>(path);
 
         if (original == null)
         {
-            Debug.Log($"Null : {_assetName}\n{path}");
+            Debug.Log($"Null : {_assetName}");
         }
 
         _callback(original);
