@@ -310,5 +310,9 @@
         {
             "stringID": 77,
             "value": "Hard"
+        },
+        {
+            "stringID": 78,
+            "value": "\rThe boss starts disturbing the player!!!"
         }
     ]

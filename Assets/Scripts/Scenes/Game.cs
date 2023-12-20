@@ -104,6 +104,7 @@ public class Game : MonoBehaviour
 
     int helpTime = 0;
     bool tutorialNextBlock = false;
+    bool bossSkill = false;
     bool init = false;
 
     async void Start()
@@ -496,13 +497,6 @@ public class Game : MonoBehaviour
             })
             .AddTo(this);
 
-            Observable.Timer(TimeSpan.FromSeconds(50), TimeSpan.FromSeconds(10))
-            .Subscribe(_ =>
-            {
-                BossSkill();
-            })
-            .AddTo(this);
-
             curScore.Subscribe(_ =>
             {
                 var fillAmountValue = (_stageInfo.targetScore - _) / (float)_stageInfo.targetScore;
@@ -510,8 +504,15 @@ public class Game : MonoBehaviour
                 var bossHp = Mathf.Max(0, _stageInfo.targetScore - _);
                 bossHpText.SetText(bossHp);
 
-                if (fillAmountValue <= .5f)
+                if (bossSkill == false && fillAmountValue <= .5f)
                 {
+                    bossSkill = true;
+
+                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    {
+                        stringID = 78
+                    });
+
                     // 10초에 한 번씩 실행
                     Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(10))
                     .Subscribe(_ =>
