@@ -718,7 +718,7 @@ public class Game : MonoBehaviour
             return;
         }
 
-        if (CheckCatPang())
+        if (await CatPang(true))
         {
             gameResult.Value = EGameState.CatPang;
 
@@ -767,24 +767,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    bool CheckCatPang()
-    // 마지막에 터지는 캣팡을 실행할지 확인
-    {
-        for (int w = 0; w < boardSize; ++w)
-        {
-            for (int h = 0; h < boardSize; ++h)
-            {
-                if (boardArr[w, h].IsBombBlock())
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    async Task CatPang()
+    async Task<bool> CatPang(bool check = false)
     // 마지막에 터지는 캣팡!!!
     {
         isLock = true;
@@ -793,9 +776,12 @@ public class Game : MonoBehaviour
         {
             for (int h = 0; h < boardSize; ++h)
             {
-                if (boardArr[w, h].IsBombBlock())
+                if (boardArr[w, h].IsBombBlock() && boardArr[w, h].GetBlockState() != Defines.EBlockState.PinkBomb)
                 {
                     await boardArr[w, h].Boom();
+
+                    if (check)
+                        return true;
 
                     w = -1; break;
                 }
@@ -803,6 +789,8 @@ public class Game : MonoBehaviour
         }
 
         isLock = false;
+
+        return false;
     }
 
     void SetDissapearBlock()
