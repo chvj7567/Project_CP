@@ -15,86 +15,95 @@ public class Game : MonoBehaviour
 {
     const int MAX = 9;
 
+    [Header("뒤로 가기")]
+    [SerializeField] Button backBtn;
+
+    [Header("타이머")]
     [SerializeField] Image timerImg;
     [SerializeField] CHTMPro timerText;
     [SerializeField, ReadOnly] float curTimer;
+
+    [Header("골드")]
     [SerializeField] Image goldImg;
-    [SerializeField] Image viewImg1;
-    [SerializeField] Image viewImg2;
-    [SerializeField] Button backBtn;
+
+    [Header("블럭")]
+    [SerializeField] Transform parent;
+    [SerializeField] CHInstantiateButton instBtn;
     [SerializeField] GameObject origin;
     [SerializeField] float margin = 0f;
-    [SerializeField, Range(1, MAX)] int boardSize = 1;
-    [SerializeField] Transform parent;
-    [SerializeField] ParticleSystem bombEffectPS;
+
+    [Header("배경")]
     [SerializeField] List<Image> backgroundList = new List<Image>();
-    [SerializeField] List<ParticleSystem> pangEffectList = new List<ParticleSystem>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
+    [Header("폭탄 이펙트")]
+    [SerializeField] ParticleSystem bombEffectPS;
+    [SerializeField] List<ParticleSystem> pangEffectList = new List<ParticleSystem>();
+
+    [Header("게임 속도")]
     [SerializeField] public float delay;
-    [SerializeField] CHInstantiateButton instBtn;
+    [SerializeField] int delayMillisecond;
 
-    [ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
-    [ReadOnly] public bool isDrag = false;
-    [ReadOnly] public bool isLock = false;
-    [ReadOnly] bool isMatch = false;
-
-    [SerializeField, ReadOnly] float teachTime;
-    [SerializeField, ReadOnly] int canMatchRow = -1;
-    [SerializeField, ReadOnly] int canMatchCol = -1;
-
+    [Header("게임 상태")]
+    [SerializeField, ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
+    [SerializeField, ReadOnly] public bool isDrag = false;
+    [SerializeField, ReadOnly] public bool isLock = false;
+    [SerializeField, ReadOnly] bool isMatch = false;
+    [SerializeField, ReadOnly] bool oneTimeAlarm = false;
     [SerializeField, ReadOnly] int moveIndex1 = 0;
     [SerializeField, ReadOnly] int moveIndex2 = 0;
+    [SerializeField, ReadOnly] int boardSize = 1;
+    [SerializeField, ReadOnly] public ReactiveProperty<EGameState> gameResult = new ReactiveProperty<EGameState>();
+    [SerializeField, ReadOnly] public bool gameEnd = false;
+    [Space(20)]
 
     [SerializeField] CHTMPro targetScoreText;
     [SerializeField] CHTMPro moveCountText;
     [SerializeField] CHTMPro curScoreText;
     [SerializeField] CHTMPro bonusScoreText;
-
-    [SerializeField] GameObject onlyNormalStageObject;
-    [SerializeField] GameObject onlyBossStageObject;
-    [SerializeField] Image bossHpImage;
-    [SerializeField] CHTMPro bossHpText;
-    [SerializeField] CHTMPro hpText;
-    [SerializeField] int selectScore;
-    [SerializeField] int selectCurScore;
-
-    [SerializeField, ReadOnly] ReactiveProperty<int> hp = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> curScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
+    [Header("유저 도와주기")]
+    [SerializeField, ReadOnly] float teachTime;
+    [SerializeField, ReadOnly] int canMatchRow = -1;
+    [SerializeField, ReadOnly] int canMatchCol = -1;
+
+    [Header("보스 스테이지")]
+    [SerializeField] Image bossHpImage;
+    [SerializeField] CHTMPro bossHpText;
+    [SerializeField] CHTMPro hpText;
+    [SerializeField, ReadOnly] ReactiveProperty<int> hp = new ReactiveProperty<int>();
+
+    [Header("각 스테이지 UI 오브젝트")]
+    [SerializeField] GameObject onlyNormalStageObject;
+    [SerializeField] GameObject onlyBossStageObject;
+
+    [Header("폭탄 선택 바")]
+    [SerializeField, ReadOnly] int arrowPangIndex = 1;
     [SerializeField] CHButton arrowPang1;
     [SerializeField] CHButton arrowPang2;
     [SerializeField] Image banView;
-    [SerializeField, ReadOnly] public ReactiveProperty<EGameState> gameResult = new ReactiveProperty<EGameState>();
-    [SerializeField, ReadOnly] int arrowPangIndex = 1;
 
-    
+    [Header("가이드")]
     [SerializeField] RectTransform guideHole;
     [SerializeField] GameObject guideBackground;
     [SerializeField] Button guideBackgroundBtn;
-    [SerializeField] List<RectTransform> normalStageGuideHoleList = new List<RectTransform>();
+    [SerializeField] List<RectTransform> easyStageGuideHoleList = new List<RectTransform>();
     [SerializeField] List<RectTransform> bossStageGuideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
 
-    [SerializeField] int delayMillisecond;
-
-    public bool tutorialNextBlock = false;
-    List<Sprite> blockSpriteList = new List<Sprite>();
-    public Infomation.StageInfo stageInfo;
-    public List<Infomation.StageBlockInfo> stageBlockInfoList = new List<Infomation.StageBlockInfo>();
-
-    bool oneTimeAlarm = false;
-    public bool gameEnd = false;
-    
-    int helpTime = 0;
-
-    Defines.ESelectStage selectStage = Defines.ESelectStage.Normal;
-    Data.Login loginData;
+    List<Sprite> _blockSpriteList = new List<Sprite>();
+    Infomation.StageInfo _stageInfo;
+    List<Infomation.StageBlockInfo> _stageBlockInfoList = new List<Infomation.StageBlockInfo>();
+    Defines.ESelectStage _selectStage = Defines.ESelectStage.Normal;
+    Data.Login _loginData;
 
     CancellationTokenSource tokenSource;
 
+    int helpTime = 0;
+    bool tutorialNextBlock = false;
     bool init = false;
 
     async void Start()
@@ -107,9 +116,9 @@ public class Game : MonoBehaviour
         onlyNormalStageObject.SetActive(true);
         onlyBossStageObject.SetActive(false);
 
-        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
+        for (int i = 0; i < easyStageGuideHoleList.Count; ++i)
         {
-            normalStageGuideHoleList[i].gameObject.SetActive(false);
+            easyStageGuideHoleList[i].gameObject.SetActive(false);
         }
 
         for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
@@ -192,9 +201,9 @@ public class Game : MonoBehaviour
                 {
                     bool clear = true;
 
-                    bool useTime = stageInfo.time > 0;
-                    bool useTargetScore = stageInfo.targetScore > 0;
-                    bool useMoveCount = stageInfo.moveCount > 0;
+                    bool useTime = _stageInfo.time > 0;
+                    bool useTargetScore = _stageInfo.targetScore > 0;
+                    bool useMoveCount = _stageInfo.moveCount > 0;
 
                     // 체력이 있는 블럭이 있거나 없어져야 되는 블럭이 있으면 미클리어
                     for (int i = 0; i < boardSize; ++i)
@@ -216,7 +225,7 @@ public class Game : MonoBehaviour
                     if (useTime == true && timerImg.fillAmount >= 1)
                     {
                         // 목표 점수를 사용하는 경우 목표 점수 달성 확인
-                        if (useTargetScore == true && curScore.Value < stageInfo.targetScore)
+                        if (useTargetScore == true && curScore.Value < _stageInfo.targetScore)
                         {
                             clear = false;
                         }
@@ -227,7 +236,7 @@ public class Game : MonoBehaviour
                     else
                     {
                         // 목표 점수를 사용하는 경우 목표 점수 달성 확인
-                        if (useTargetScore == true && curScore.Value < stageInfo.targetScore)
+                        if (useTargetScore == true && curScore.Value < _stageInfo.targetScore)
                         {
                             clear = false;
                         }
@@ -278,35 +287,17 @@ public class Game : MonoBehaviour
 
     private async void Update()
     {
-        /*if (isAni == true)
-        {
-            viewImg1.color = Color.red;
-        }
-        else
-        {
-            viewImg1.color = Color.green;
-        }
-
-        if (isDrag == true)
-        {
-            viewImg2.color = Color.red;
-        }
-        else
-        {
-            viewImg2.color = Color.green;
-        }*/
-
         if (isLock == false)
         {
             curTimer += Time.deltaTime;
-            timerImg.fillAmount = curTimer / stageInfo.time;
+            timerImg.fillAmount = curTimer / _stageInfo.time;
 
             if (curTimer >= helpTime)
             {
-                if (stageInfo.time >= helpTime)
+                if (_stageInfo.time >= helpTime)
                 {
                     timerText.gameObject.SetActive(true);
-                    timerText.SetText(stageInfo.time - helpTime);
+                    timerText.SetText(_stageInfo.time - helpTime);
                     ++helpTime;
                 }
                 else
@@ -335,8 +326,9 @@ public class Game : MonoBehaviour
                         block.transform.DOScale(1f, 0.25f);
                     });
                     await Task.Delay(3000, tokenSource.Token);
-                } catch (TaskCanceledException) {}
-                
+                }
+                catch (TaskCanceledException) { }
+
                 oneTimeAlarm = false;
             }
         }
@@ -364,7 +356,7 @@ public class Game : MonoBehaviour
             CHMMain.Resource.LoadSprite(i, (sprite) =>
             {
                 if (sprite != null)
-                    blockSpriteList.Add(sprite);
+                    _blockSpriteList.Add(sprite);
 
                 imageTask.SetResult(sprite);
             });
@@ -383,13 +375,13 @@ public class Game : MonoBehaviour
 
         tokenSource = new CancellationTokenSource();
         backgroundIndex = PlayerPrefs.GetInt(CHMMain.String.Background);
-        loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+        _loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        _selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
 
         ChangeBackgroundLoop();
 
         var stage = 0;
-        switch (selectStage)
+        switch (_selectStage)
         {
             case ESelectStage.Normal:
                 {
@@ -408,19 +400,19 @@ public class Game : MonoBehaviour
                 break;
         }
 
-        stageInfo = CHMMain.Json.GetStageInfo(stage);
-        stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
-        boardSize = stageInfo.boardSize;
+        _stageInfo = CHMMain.Json.GetStageInfo(stage);
+        _stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+        boardSize = _stageInfo.boardSize;
 
-        switch (selectStage)
+        switch (_selectStage)
         {
             case ESelectStage.Normal:
                 {
                     // 튜토리얼은 Easy(일반)에서 진행함으로 삭제
-                    stageInfo.tutorialID = -1;
-                    for (int i = 0; i < stageBlockInfoList.Count; ++i)
+                    _stageInfo.tutorialID = -1;
+                    for (int i = 0; i < _stageBlockInfoList.Count; ++i)
                     {
-                        stageBlockInfoList[i].tutorialBlock = false;
+                        _stageBlockInfoList[i].tutorialBlock = false;
                     }
                 }
                 break;
@@ -429,51 +421,51 @@ public class Game : MonoBehaviour
             case ESelectStage.Easy:
                 {
                     // 난이도 조정
-                    if (stageInfo.time > 0)
+                    if (_stageInfo.time > 0)
                     {
-                        stageInfo.time *= 2;
+                        _stageInfo.time *= 2;
                     }
-                    else if (stageInfo.targetScore > 0)
+                    else if (_stageInfo.targetScore > 0)
                     {
-                        stageInfo.targetScore /= 2;
+                        _stageInfo.targetScore /= 2;
                     }
-                    else if (stageInfo.moveCount > 0)
+                    else if (_stageInfo.moveCount > 0)
                     {
-                        stageInfo.moveCount *= 2;
+                        _stageInfo.moveCount *= 2;
                     }
                 }
                 break;
         }
 
-        targetScoreText.SetText(stageInfo.targetScore);
-        if (stageInfo.targetScore < 0)
+        targetScoreText.SetText(_stageInfo.targetScore);
+        if (_stageInfo.targetScore < 0)
         {
             targetScoreText.gameObject.SetActive(false);
         }
 
-        if (stageInfo.moveCount > 0)
+        if (_stageInfo.moveCount > 0)
         {
-            moveCount.Value = stageInfo.moveCount + loginData.useMoveItemCount;
+            moveCount.Value = _stageInfo.moveCount + _loginData.useMoveItemCount;
         }
         else
         {
             moveCount.Value = 9999;
 
-            if (loginData.useMoveItemCount > 0)
-                loginData.addMoveItemCount += loginData.useMoveItemCount;
+            if (_loginData.useMoveItemCount > 0)
+                _loginData.addMoveItemCount += _loginData.useMoveItemCount;
         }
 
-        if (stageInfo.time > 0)
+        if (_stageInfo.time > 0)
         {
-            stageInfo.time += loginData.useTimeItemCount * 10;
+            _stageInfo.time += _loginData.useTimeItemCount * 10;
         }
         else
         {
-            if (loginData.useTimeItemCount > 0)
-                loginData.addTimeItemCount += loginData.useTimeItemCount;
+            if (_loginData.useTimeItemCount > 0)
+                _loginData.addTimeItemCount += _loginData.useTimeItemCount;
         }
 
-        if (selectStage == Defines.ESelectStage.Boss)
+        if (_selectStage == Defines.ESelectStage.Boss)
         {
             gameResult.Value = EGameState.BossStagePlay;
         }
@@ -483,7 +475,7 @@ public class Game : MonoBehaviour
         }
 
         // 보스 스테이지일 경우만
-        if (selectStage == Defines.ESelectStage.Boss)
+        if (_selectStage == Defines.ESelectStage.Boss)
         {
             onlyBossStageObject.SetActive(true);
             onlyNormalStageObject.SetActive(false);
@@ -494,7 +486,7 @@ public class Game : MonoBehaviour
                     hpText.SetText(hp);
             });
 
-            hp.Value = loginData.hp;
+            hp.Value = _loginData.hp;
 
             // 1초뒤에 1초에 한 번씩 실행
             Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
@@ -504,11 +496,30 @@ public class Game : MonoBehaviour
             })
             .AddTo(this);
 
+            Observable.Timer(TimeSpan.FromSeconds(50), TimeSpan.FromSeconds(10))
+            .Subscribe(_ =>
+            {
+                BossSkill();
+            })
+            .AddTo(this);
+
             curScore.Subscribe(_ =>
             {
-                var fillAmountValue = (stageInfo.targetScore - _) / (float)stageInfo.targetScore;
+                var fillAmountValue = (_stageInfo.targetScore - _) / (float)_stageInfo.targetScore;
                 bossHpImage.DOFillAmount(fillAmountValue, .5f);
-                bossHpText.SetText(Mathf.Max(0, stageInfo.targetScore - _));
+                var bossHp = Mathf.Max(0, _stageInfo.targetScore - _);
+                bossHpText.SetText(bossHp);
+
+                if (fillAmountValue <= .5f)
+                {
+                    // 10초에 한 번씩 실행
+                    Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(10))
+                    .Subscribe(_ =>
+                    {
+                       BossSkill();
+                    })
+                    .AddTo(this);
+                }
             });
         }
     }
@@ -516,7 +527,7 @@ public class Game : MonoBehaviour
     async Task StartGuide()
     // 가이드 시작
     {
-        if (selectStage == Defines.ESelectStage.Easy && loginData.guideIndex == 5)
+        if (_selectStage == Defines.ESelectStage.Easy && _loginData.guideIndex == 5)
         {
             Time.timeScale = 0;
 
@@ -527,7 +538,7 @@ public class Game : MonoBehaviour
             guideBackgroundBtn.transform.SetAsLastSibling();
 
             var guideIndex = await EasyStageGuideStart();
-            loginData.guideIndex += guideIndex;
+            _loginData.guideIndex += guideIndex;
 
             guideBackground.SetActive(false);
             guideBackgroundBtn.gameObject.SetActive(false);
@@ -535,7 +546,7 @@ public class Game : MonoBehaviour
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
 
-        if (selectStage == Defines.ESelectStage.Boss && loginData.guideIndex == 11)
+        if (_selectStage == Defines.ESelectStage.Boss && _loginData.guideIndex == 11)
         {
             Time.timeScale = 0;
 
@@ -546,7 +557,7 @@ public class Game : MonoBehaviour
             guideBackgroundBtn.transform.SetAsLastSibling();
 
             var guideIndex = await BossStageGuideStart();
-            loginData.guideIndex += guideIndex;
+            _loginData.guideIndex += guideIndex;
 
             guideBackground.SetActive(false);
             guideBackgroundBtn.gameObject.SetActive(false);
@@ -558,7 +569,7 @@ public class Game : MonoBehaviour
     void StartTutorial()
     // 튜토리얼 시작
     {
-        if (selectStage != Defines.ESelectStage.Normal && stageInfo.tutorialID > 0)
+        if (_selectStage != Defines.ESelectStage.Normal && _stageInfo.tutorialID > 0)
         {
             Time.timeScale = 0;
 
@@ -568,11 +579,11 @@ public class Game : MonoBehaviour
             guideHole.SetAsLastSibling();
             guideBackground.transform.SetAsLastSibling();
 
-            var holeValue = GetTutorialStageImgSettingValue(boardArr, stageBlockInfoList);
+            var holeValue = GetTutorialStageImgSettingValue(boardArr, _stageBlockInfoList);
             guideHole.sizeDelta = holeValue.Item1;
             guideHole.anchoredPosition = holeValue.Item2;
 
-            var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
+            var tutorialInfo = CHMMain.Json.GetTutorialInfo(_stageInfo.tutorialID);
             if (tutorialInfo != null)
             {
                 guideDesc.SetStringID(tutorialInfo.descStringID);
@@ -587,13 +598,13 @@ public class Game : MonoBehaviour
 
         guideBackground.SetActive(true);
 
-        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
+        for (int i = 0; i < easyStageGuideHoleList.Count; ++i)
         {
             var guideInfo = CHMMain.Json.GetGuideInfo(i + 6);
             if (guideInfo == null)
                 break;
 
-            normalStageGuideHoleList[i].gameObject.SetActive(true);
+            easyStageGuideHoleList[i].gameObject.SetActive(true);
             guideDesc.SetStringID(guideInfo.descStringID);
 
             TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
@@ -605,12 +616,12 @@ public class Game : MonoBehaviour
 
             await buttonClicktask.Task;
 
-            normalStageGuideHoleList[i].gameObject.SetActive(false);
+            easyStageGuideHoleList[i].gameObject.SetActive(false);
 
             btnComplete.Dispose();
         }
 
-        tutorialCompleteTask.SetResult(normalStageGuideHoleList.Count);
+        tutorialCompleteTask.SetResult(easyStageGuideHoleList.Count);
 
         return await tutorialCompleteTask.Task;
     }
@@ -733,7 +744,7 @@ public class Game : MonoBehaviour
 
             // 게임결과 다시 체크하도록
             gameEnd = false;
-            if (selectStage == Defines.ESelectStage.Boss)
+            if (_selectStage == Defines.ESelectStage.Boss)
             {
                 gameResult.Value = EGameState.BossStagePlay;
             }
@@ -868,7 +879,7 @@ public class Game : MonoBehaviour
     void SaveClearData()
     // 현재 스테이지를 클리어 상태로 저장
     {
-        switch (selectStage)
+        switch (_selectStage)
         {
             case ESelectStage.Normal:
                 if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage < PlayerPrefs.GetInt(CHMMain.String.Stage))
@@ -888,7 +899,7 @@ public class Game : MonoBehaviour
     Defines.EClearState GetClearState()
     // 현재 스테이지의 클리어 상태
     {
-        switch (selectStage)
+        switch (_selectStage)
         {
             case ESelectStage.Normal:
                 if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= PlayerPrefs.GetInt(CHMMain.String.Stage))
@@ -922,7 +933,7 @@ public class Game : MonoBehaviour
         if (GetClearState() == Defines.EClearState.Clear)
             return;
 
-        
+
         var collectionData = CHMData.Instance.GetCollectionData(block.GetBlockState().ToString());
         collectionData.value += 1;
     }
@@ -1043,7 +1054,7 @@ public class Game : MonoBehaviour
             SetDissapearBlock();
             await UpdateMap();
             CheckMap();
-            
+
         } while (isMatch || await CatInTheBox());
 
         if ((block1 != null && block2 != null && back == false) || isBoom == true && gameResult.Value != EGameState.CatPang)
@@ -1067,9 +1078,9 @@ public class Game : MonoBehaviour
             {
                 tutorialNextBlock = true;
 
-                if (selectStage != Defines.ESelectStage.Normal && stageInfo.tutorialID > 0)
+                if (_selectStage != Defines.ESelectStage.Normal && _stageInfo.tutorialID > 0)
                 {
-                    var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
+                    var tutorialInfo = CHMMain.Json.GetTutorialInfo(_stageInfo.tutorialID);
                     if (tutorialInfo == null || tutorialInfo.connectNextBlock == Defines.EBlockState.None)
                         break;
 
@@ -1122,7 +1133,7 @@ public class Game : MonoBehaviour
                 }
             }
         }
-            
+
         return (Vector2.zero, Vector2.zero);
     }
 
@@ -1140,18 +1151,18 @@ public class Game : MonoBehaviour
 
             block.rectTransform.DOScale(1f, delay);
 
-            var stageBlockInfo = stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
+            var stageBlockInfo = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
             if (stageBlockInfo == null)
             {
-                var random = (Defines.EBlockState)UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                var random = (Defines.EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                 random = block.CheckSelectCatShop(random);
-                block.SetBlockState(Defines.ELog.CreateMap, 1, blockSpriteList[(int)random], random);
+                block.SetBlockState(Defines.ELog.CreateMap, 1, _blockSpriteList[(int)random], random);
                 block.SetHp(-1);
             }
             else
             {
                 var blockState = block.CheckSelectCatShop(stageBlockInfo.blockState);
-                block.SetBlockState(Defines.ELog.CreateMap, 2, blockSpriteList[(int)blockState], blockState);
+                block.SetBlockState(Defines.ELog.CreateMap, 2, _blockSpriteList[(int)blockState], blockState);
                 block.tutorialBlock = stageBlockInfo.tutorialBlock;
 
                 if (block.IsNormalBlock() == true)
@@ -1178,18 +1189,18 @@ public class Game : MonoBehaviour
                 {
                     if (block == null) continue;
 
-                    var stageBlockInfo = stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
+                    var stageBlockInfo = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
                     if (stageBlockInfo == null)
                     {
-                        var random = (Defines.EBlockState)UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                        var random = (Defines.EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                         random = block.CheckSelectCatShop(random);
-                        block.SetBlockState(Defines.ELog.CreateMap, 3, blockSpriteList[(int)random], random);
+                        block.SetBlockState(Defines.ELog.CreateMap, 3, _blockSpriteList[(int)random], random);
                         block.SetHp(-1);
                     }
                     else
                     {
                         var blockState = block.CheckSelectCatShop(stageBlockInfo.blockState);
-                        block.SetBlockState(Defines.ELog.CreateMap, 4, blockSpriteList[(int)blockState], blockState);
+                        block.SetBlockState(Defines.ELog.CreateMap, 4, _blockSpriteList[(int)blockState], blockState);
                         block.tutorialBlock = stageBlockInfo.tutorialBlock;
 
                         if (block.IsNormalBlock() == true)
@@ -1215,9 +1226,9 @@ public class Game : MonoBehaviour
 
                     if (block.squareMatch == true || block.IsMatch() == true)
                     {
-                        var random = (Defines.EBlockState)UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                        var random = (Defines.EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                         random = block.CheckSelectCatShop(random);
-                        block.SetBlockState(Defines.ELog.CreateMap, 5, blockSpriteList[(int)random], random);
+                        block.SetBlockState(Defines.ELog.CreateMap, 5, _blockSpriteList[(int)random], random);
                         block.SetHp(-1);
                         block.ResetScore();
                         block.match = false;
@@ -1271,7 +1282,7 @@ public class Game : MonoBehaviour
                         if (block.IsFixdBlock() == true || block.IsBottomTouchDisappearBlock() == true)
                             continue;
 
-                        var random = UnityEngine.Random.Range(0, stageInfo.blockTypeCount);
+                        var random = UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
 
                         createDelay = true;
                         CreateNewBlock(block, Defines.ELog.UpdateMap, 2, (Defines.EBlockState)random);
@@ -1603,7 +1614,7 @@ public class Game : MonoBehaviour
                 if (block.squareMatch == true)
                 {
                     createDelay = true;
-                    
+
                     CreateNewBlock(block, Defines.ELog.CreateBoomBlock, 1, block.GetPangType());
                     block.ResetScore();
                     block.SetOriginPos();
@@ -1816,7 +1827,7 @@ public class Game : MonoBehaviour
     {
         _blockState = _block.CheckSelectCatShop(_blockState);
 
-        _block.SetBlockState(_log, _key, blockSpriteList[(int)_blockState], _blockState);
+        _block.SetBlockState(_log, _key, _blockSpriteList[(int)_blockState], _blockState);
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;
@@ -2054,7 +2065,7 @@ public class Game : MonoBehaviour
         {
             if (boardArr[row, col].IsFixdBlock())
             {
-                boardArr[row, col].Damage(stageInfo.blockTypeCount);
+                boardArr[row, col].Damage(_stageInfo.blockTypeCount);
             }
         }
     }
@@ -2576,6 +2587,43 @@ public class Game : MonoBehaviour
                     }
                 } while (change == false);
             }
+        }
+    }
+
+    void BossSkill()
+    // 랜덤한 블럭 벽 또는 포탈로 변경
+    {
+        // 벽 or 포탈
+        var block = UnityEngine.Random.Range(0, 2);
+        // hp는 0부터 10까지
+        var blockHp = UnityEngine.Random.Range(0, 10);
+        if (blockHp == 0)
+            blockHp = -1;
+
+        int w = 0, h = 0;
+
+        do
+        {
+            w = UnityEngine.Random.Range(0, boardSize);
+            h = UnityEngine.Random.Range(0, boardSize);
+        } while (boardArr[w, h].IsNormalBlock() == false);
+
+
+
+        switch (block)
+        {
+            case 0:
+                {
+                    boardArr[w, h].changeBlockState = Defines.EBlockState.Wall;
+                    boardArr[w, h].changeHp = blockHp;
+                }
+                break;
+            case 1:
+                {
+                    boardArr[w, h].changeBlockState = Defines.EBlockState.Potal;
+                    boardArr[w, h].changeHp = blockHp;
+                }
+                break;
         }
     }
 }

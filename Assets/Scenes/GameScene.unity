@@ -773,23 +773,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329192db83b2b814da2f25deadfe853c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backBtn: {fileID: 1485385161}
   timerImg: {fileID: 957118122}
   timerText: {fileID: 390776629}
   curTimer: 0
   goldImg: {fileID: 7980698764611561927, guid: f7479b53761e56149a8b48a58d56b0d9, type: 3}
-  viewImg1: {fileID: 1897689331}
-  viewImg2: {fileID: 1468065045}
-  backBtn: {fileID: 1485385161}
+  parent: {fileID: 2089328443}
+  instBtn: {fileID: 2089328444}
   origin: {fileID: 1975192477}
   margin: 3.75
-  boardSize: 9
-  parent: {fileID: 2089328443}
-  bombEffectPS: {fileID: 330975173}
   backgroundList:
   - {fileID: 1523202583}
   - {fileID: 122077973}
   - {fileID: 821146452}
   - {fileID: 1420461829}
+  backgroundIndex: 0
+  bombEffectPS: {fileID: 330975173}
   pangEffectList:
   - {fileID: 1300060333}
   - {fileID: 1350265752}
@@ -800,45 +799,46 @@ MonoBehaviour:
   - {fileID: 837858725}
   - {fileID: 634807760}
   - {fileID: 1135207851}
-  backgroundIndex: 0
   delay: 0.35
-  instBtn: {fileID: 2089328444}
+  delayMillisecond: 1000
   isDrag: 0
   isLock: 0
-  teachTime: 0
-  canMatchRow: -1
-  canMatchCol: -1
+  isMatch: 0
+  oneTimeAlarm: 0
   moveIndex1: 0
   moveIndex2: 0
+  boardSize: 9
+  gameResult:
+    value: 0
+  gameEnd: 0
   targetScoreText: {fileID: 869330596}
   moveCountText: {fileID: 1814382580}
   curScoreText: {fileID: 2051093205}
   bonusScoreText: {fileID: 584283305}
-  onlyNormalStageObject: {fileID: 434207310}
-  onlyBossStageObject: {fileID: 379483543}
-  bossHpImage: {fileID: 625439253}
-  bossHpText: {fileID: 1976018825}
-  hpText: {fileID: 517917050}
-  selectScore: 30
-  selectCurScore: 30
-  hp:
-    value: 0
   curScore:
     value: 0
   bonusScore:
     value: 0
   moveCount:
     value: 0
+  teachTime: 0
+  canMatchRow: -1
+  canMatchCol: -1
+  bossHpImage: {fileID: 625439253}
+  bossHpText: {fileID: 1976018825}
+  hpText: {fileID: 517917050}
+  hp:
+    value: 0
+  onlyNormalStageObject: {fileID: 434207310}
+  onlyBossStageObject: {fileID: 379483543}
+  arrowPangIndex: 1
   arrowPang1: {fileID: 1421417805}
   arrowPang2: {fileID: 704152947}
   banView: {fileID: 1332946324}
-  gameResult:
-    value: 0
-  arrowPangIndex: 1
   guideHole: {fileID: 440321188}
   guideBackground: {fileID: 1855074202}
   guideBackgroundBtn: {fileID: 1745560286}
-  normalStageGuideHoleList:
+  easyStageGuideHoleList:
   - {fileID: 353511695}
   - {fileID: 2045794760}
   - {fileID: 1605338125}
@@ -850,19 +850,6 @@ MonoBehaviour:
   - {fileID: 1496137840}
   - {fileID: 2109414780}
   guideDesc: {fileID: 1693725884}
-  delayMillisecond: 1000
-  tutorialNextBlock: 0
-  stageInfo:
-    group: -1
-    stage: -1
-    blockTypeCount: -1
-    boardSize: -1
-    time: -1
-    targetScore: -1
-    moveCount: -1
-    tutorialID: -1
-  stageBlockInfoList: []
-  gameEnd: 0
 --- !u!1001 &390423386
 PrefabInstance:
   m_ObjectHideFlags: 0
