@@ -79,7 +79,7 @@ public class Block : MonoBehaviour
 
         btn.OnBeginDragAsObservable().Subscribe(_ =>
         {
-            if (game.isDrag || IsFixdBlock() || IsNotDragBlock())
+            if (game.isDrag || IsFixdBlock() || CanNotDragBlock())
                 return;
 
             game.isDrag = true;
@@ -94,7 +94,7 @@ public class Block : MonoBehaviour
         {
             game.isDrag = false;
 
-            if (game.gameEnd || game.isLock || IsFixdBlock() || IsNotDragBlock())
+            if (game.gameEnd || game.isLock || IsFixdBlock() || CanNotDragBlock())
                 return;
 
             Vector2 rectPosition;
@@ -115,7 +115,7 @@ public class Block : MonoBehaviour
                         
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
                                 break;
 
                             if (game.CheckTutorial() &&
@@ -138,7 +138,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
                                 break;
 
                             if (game.CheckTutorial() &&
@@ -161,7 +161,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
                                 break;
 
                             if (game.CheckTutorial() &&
@@ -184,7 +184,7 @@ public class Block : MonoBehaviour
                         var ret = CHInstantiateButton.GetBlockInfo(movePos);
                         if (ret.Item1 != null)
                         {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.IsNotDragBlock())
+                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
                                 break;
 
                             if (game.CheckTutorial() &&
@@ -600,7 +600,7 @@ public class Block : MonoBehaviour
         }
     }
 
-    public bool IsNotDragBlock()
+    public bool CanNotDragBlock()
     {
         switch (blockState)
         {

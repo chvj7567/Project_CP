@@ -1253,7 +1253,7 @@ public class Game : MonoBehaviour
 
             if (isMatch == false)
             {
-                canMatch = CanMatch();
+                canMatch = CanPlay();
                 isMatch = false;
             }
 
@@ -1303,7 +1303,7 @@ public class Game : MonoBehaviour
                     }
                 }
 
-                reUpdate = CanMatch() == false;
+                reUpdate = CanPlay() == false;
 
                 if (reUpdate)
                 {
@@ -1327,8 +1327,8 @@ public class Game : MonoBehaviour
         }
     }
 
-    bool CanMatch()
-    // Match가 가능한 맵인지 검사
+    bool CanPlay()
+    // 플레이가 가능한 맵인지 검사
     {
         isMatch = false;
 
@@ -1340,8 +1340,11 @@ public class Game : MonoBehaviour
                     continue;
 
                 var curBlock = boardArr[i, j];
-                if (curBlock.IsNotDragBlock() == true)
+                if (curBlock.CanNotDragBlock() == true)
                     continue;
+
+                if (curBlock.GetBlockState() == Defines.EBlockState.PinkBomb && CanDragBlock(curBlock))
+                    return true;
 
                 if (curBlock.IsBombBlock() == true || curBlock.IsSpecialBombBlock() == true)
                 {
@@ -1356,7 +1359,7 @@ public class Game : MonoBehaviour
                 var rightBlock = IsValidIndex(i, j + 1) == true ? boardArr[i, j + 1] : null;
 
                 if (upBlock != null &&
-                    upBlock.IsNotDragBlock() == false)
+                    upBlock.CanNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, upBlock);
                     CheckMap(true);
@@ -1370,7 +1373,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (downBlock != null &&
-                    downBlock.IsNotDragBlock() == false)
+                    downBlock.CanNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, downBlock);
                     CheckMap(true);
@@ -1384,7 +1387,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (leftBlock != null &&
-                    leftBlock.IsNotDragBlock() == false)
+                    leftBlock.CanNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, leftBlock);
                     CheckMap(true);
@@ -1398,7 +1401,7 @@ public class Game : MonoBehaviour
                 }
 
                 if (rightBlock != null &&
-                    rightBlock.IsNotDragBlock() == false)
+                    rightBlock.CanNotDragBlock() == false)
                 {
                     ChangeBlock(curBlock, rightBlock);
                     CheckMap(true);
@@ -2031,9 +2034,9 @@ public class Game : MonoBehaviour
     }
 
     bool IsValidIndex(int row, int col)
-    // 인덱스가 최대 값을 벗어나는지 확인
+    // 인덱스가 해당 스테이지에서 유효한지 확인
     {
-        return row >= 0 && row < MAX && col >= 0 && col < MAX;
+        return row >= 0 && row < boardSize && col >= 0 && col < boardSize;
     }
 
     bool ChangeMatchState(int row, int col)
@@ -2649,5 +2652,18 @@ public class Game : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    bool CanDragBlock(Block block)
+    {
+        int w = block.row;
+        int h = block.col;
+
+        bool upCheck = IsValidIndex(w - 1, h) && boardArr[w - 1, h].CanNotDragBlock() == false;
+        bool downCheck = IsValidIndex(w + 1, h) && boardArr[w + 1, h].CanNotDragBlock() == false;
+        bool leftCheck = IsValidIndex(w, h - 1) && boardArr[w, h - 1].CanNotDragBlock() == false;
+        bool rightCheck = IsValidIndex(w, h + 1) && boardArr[w, h + 1].CanNotDragBlock() == false;
+
+        return upCheck || downCheck || leftCheck || rightCheck;
     }
 }
