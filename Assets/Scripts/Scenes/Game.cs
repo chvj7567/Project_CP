@@ -211,6 +211,9 @@ public class Game : MonoBehaviour
                     {
                         for (int j = 0; j < boardSize; ++j)
                         {
+                            if (boardArr[i, j].checkHp == false)
+                                continue;
+
                             if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsBottomTouchDisappearBlock() == true)
                             {
                                 clear = false;
@@ -790,10 +793,10 @@ public class Game : MonoBehaviour
             {
                 if (boardArr[w, h].IsBombBlock() && boardArr[w, h].GetBlockState() != Defines.EBlockState.PinkBomb)
                 {
-                    await boardArr[w, h].Boom();
-
                     if (check)
                         return true;
+
+                    await boardArr[w, h].Boom();
 
                     w = -1; break;
                 }
@@ -942,6 +945,9 @@ public class Game : MonoBehaviour
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
     // 블럭을 드래그하고 난 후 다음 드래그가 가능한 상태까지
     {
+        // 블럭 생성기는 드래그 후 한 번만 동작해야 함.
+        bool checkCreateBlock = false;
+
         if (moveCount.Value == 0 && gameResult.Value != EGameState.CatPang)
             return;
 
@@ -1052,6 +1058,13 @@ public class Game : MonoBehaviour
             }
             bonusScore.Value = 0;
 
+            if (checkCreateBlock == false)
+            {
+                checkCreateBlock = true;
+                BlockCreatorBlock(Defines.EBlockState.WallCreator, Defines.EBlockState.Wall);
+                BlockCreatorBlock(Defines.EBlockState.PotalCreator, Defines.EBlockState.Potal);
+            }
+
             SetDissapearBlock();
             await UpdateMap();
             CheckMap();
@@ -1096,9 +1109,6 @@ public class Game : MonoBehaviour
                 }
             }
         } while (false);
-
-        BlockCreatorBlock(Defines.EBlockState.WallCreator, Defines.EBlockState.Wall);
-        await UpdateMap();
 
         isLock = false;
     }
@@ -1259,7 +1269,6 @@ public class Game : MonoBehaviour
         try
         {
             bool reUpdate = false;
-            bool matchUpdate = false;
             bool createDelay = false;
 
             do
@@ -1277,6 +1286,7 @@ public class Game : MonoBehaviour
                         block.ResetScore();
                         block.SetOriginPos();
                         block.changeBlockState = Defines.EBlockState.None;
+                        block.checkHp = false;
                     }
                     else if (reUpdate == true || block.IsMatch() == true)
                     {
@@ -1307,10 +1317,7 @@ public class Game : MonoBehaviour
                 {
                     await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
                 }
-
-                //matchUpdate = await CatInTheBox();
-
-            } while (reUpdate || matchUpdate);
+            } while (reUpdate);
 
             isMatch = false;
         }
@@ -1829,6 +1836,7 @@ public class Game : MonoBehaviour
         _blockState = _block.CheckSelectCatShop(_blockState);
 
         _block.SetBlockState(_log, _key, _blockSpriteList[(int)_blockState], _blockState);
+        _block.checkHp = true;
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;
@@ -2529,22 +2537,27 @@ public class Game : MonoBehaviour
                 if (block.GetBlockState() != creatorBlock)
                     continue;
 
-                if (block.GetHp() <= 0)
+                if (block.GetHp() == 0)
                     continue;
 
                 block.Damage();
 
                 bool change = false;
+                var random = UnityEngine.Random.Range(0, 4);
+
+                int tempW = w;
+                int tempH = h;
 
                 do
                 {
-                    var random = UnityEngine.Random.Range(0, 4);
                     switch (random)
                     {
                         case 0:
                             {
-                                var upBlock = IsValidIndex(w - 1, h) == true ? boardArr[w - 1, h] : null;
-                                if (upBlock != null)
+                                tempW -= 1;
+
+                                var upBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
+                                if (upBlock != null && upBlock.IsNormalBlock())
                                 {
                                     change = true;
                                     upBlock.changeHp = 1;
@@ -2554,8 +2567,10 @@ public class Game : MonoBehaviour
                             break;
                         case 1:
                             {
-                                var downBlock = IsValidIndex(w + 1, h) == true ? boardArr[w + 1, h] : null;
-                                if (downBlock != null)
+                                tempW += 1;
+
+                                var downBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
+                                if (downBlock != null && downBlock.IsNormalBlock())
                                 {
                                     change = true;
                                     downBlock.changeHp = 1;
@@ -2565,8 +2580,10 @@ public class Game : MonoBehaviour
                             break;
                         case 2:
                             {
-                                var leftBlock = IsValidIndex(w, h - 1) == true ? boardArr[w, h - 1] : null;
-                                if (leftBlock != null)
+                                tempH -= 1;
+
+                                var leftBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
+                                if (leftBlock != null && leftBlock.IsNormalBlock())
                                 {
                                     change = true;
                                     leftBlock.changeHp = 1;
@@ -2576,8 +2593,10 @@ public class Game : MonoBehaviour
                             break;
                         case 3:
                             {
-                                var rightBlock = IsValidIndex(w, h + 1) == true ? boardArr[w, h + 1] : null;
-                                if (rightBlock != null)
+                                tempH += 1;
+
+                                var rightBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
+                                if (rightBlock != null && rightBlock.IsNormalBlock())
                                 {
                                     change = true;
                                     rightBlock.changeHp = 1;
@@ -2586,6 +2605,10 @@ public class Game : MonoBehaviour
                             }
                             break;
                     }
+
+                    if (tempW < 0 || tempW > boardSize || tempH < 0 || tempH > boardSize)
+                        break;
+
                 } while (change == false);
             }
         }

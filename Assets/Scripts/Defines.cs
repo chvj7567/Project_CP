@@ -147,6 +147,12 @@ public class Defines
         WallCreator,
         PotalCreator,
 
+        LockerBox1,
+        LockerBox2,
+        LockerBox3,
+        LockerBox4,
+        LockerBox5,
+
         Max
     }
 

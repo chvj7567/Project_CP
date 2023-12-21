@@ -67,19 +67,31 @@ public class ShopScrollViewItem : MonoBehaviour
                 shopData.buy = true;
                 collectionData.value -= info.gold;
 
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                if (info.skinIndex > 0)
                 {
-                    stringID = 62
-                });
+                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                    if (loginData != null)
+                    {
+                        loginData.selectCatShop = info.skinIndex;
+                    }
+                }
 
-                var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-                if (loginData != null)
+                if (info.skinIndex > 0)
                 {
-                    loginData.selectCatShop = info.skinIndex;
+                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                    if (loginData != null)
+                    {
+                        loginData.selectCatShop = info.skinIndex;
+                    }
                 }
 
                 CHMData.Instance.SaveData(CHMMain.String.CatPang);
                 CHMMain.UI.CloseUI(Defines.EUI.UIShop);
+
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    stringID = 62
+                });
             }
             else
             {

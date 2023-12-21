@@ -49,6 +49,8 @@ public class Block : MonoBehaviour
     public bool remove = false;
     // 튜토리얼 블럭 유무
     public bool tutorialBlock = false;
+    // hp가 게임 클리어에 영향 가는지
+    public bool checkHp = true;
 
     // 벽HP
     [SerializeField, ReadOnly] int hp = 0;
@@ -283,6 +285,8 @@ public class Block : MonoBehaviour
                 background.color = new Color(0, 0, 0, .5f);
                 break;
             case EBlockState.Potal:
+            case EBlockState.PotalCreator:
+            case EBlockState.WallCreator:
                 img.rectTransform.sizeDelta = new Vector2(-20, -20);
                 background.color = new Color(0, 0, 0, .2f);
                 break;
@@ -301,6 +305,11 @@ public class Block : MonoBehaviour
             case EBlockState.CatBox3:
             case EBlockState.CatBox4:
             case EBlockState.CatBox5:
+            case EBlockState.LockerBox1:
+            case EBlockState.LockerBox2:
+            case EBlockState.LockerBox3:
+            case EBlockState.LockerBox4:
+            case EBlockState.LockerBox5:
                 hpText.GetComponent<RectTransform>().DOAnchorPosY(30, .1f);
                 img.rectTransform.sizeDelta = new Vector2(10, 10);
                 background.color = new Color(0, 0, 0, 0);
@@ -383,6 +392,16 @@ public class Block : MonoBehaviour
                     return EBlockState.Locker4;
                 case EBlockState.Cat5:
                     return EBlockState.Locker5;
+                case EBlockState.CatBox1:
+                    return EBlockState.LockerBox1;
+                case EBlockState.CatBox2:
+                    return EBlockState.LockerBox2;
+                case EBlockState.CatBox3:
+                    return EBlockState.LockerBox3;
+                case EBlockState.CatBox4:
+                    return EBlockState.LockerBox4;
+                case EBlockState.CatBox5:
+                    return EBlockState.LockerBox5;
             }
         }
 
@@ -545,6 +564,13 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
+            case Defines.EBlockState.LockerBox1:
+            case Defines.EBlockState.LockerBox2:
+            case Defines.EBlockState.LockerBox3:
+            case Defines.EBlockState.LockerBox4:
+            case Defines.EBlockState.LockerBox5:
+            case Defines.EBlockState.WallCreator:
+            case Defines.EBlockState.PotalCreator:
                 return true;
             default:
                 return false;
@@ -561,6 +587,13 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
+            case Defines.EBlockState.LockerBox1:
+            case Defines.EBlockState.LockerBox2:
+            case Defines.EBlockState.LockerBox3:
+            case Defines.EBlockState.LockerBox4:
+            case Defines.EBlockState.LockerBox5:
+            case Defines.EBlockState.WallCreator:
+            case Defines.EBlockState.PotalCreator:
                 return true;
             default:
                 return false;
@@ -579,6 +612,13 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
+            case Defines.EBlockState.LockerBox1:
+            case Defines.EBlockState.LockerBox2:
+            case Defines.EBlockState.LockerBox3:
+            case Defines.EBlockState.LockerBox4:
+            case Defines.EBlockState.LockerBox5:
+            case Defines.EBlockState.WallCreator:
+            case Defines.EBlockState.PotalCreator:
                 return true;
             default:
                 return false;
@@ -630,6 +670,11 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
+            case Defines.EBlockState.LockerBox1:
+            case Defines.EBlockState.LockerBox2:
+            case Defines.EBlockState.LockerBox3:
+            case Defines.EBlockState.LockerBox4:
+            case Defines.EBlockState.LockerBox5:
                 return true;
             default:
                 return false;
@@ -645,6 +690,7 @@ public class Block : MonoBehaviour
         switch (blockState)
         {
             case EBlockState.CatBox1:
+            case EBlockState.LockerBox1:
                 {
                     switch (upBlockState)
                     {
@@ -659,6 +705,7 @@ public class Block : MonoBehaviour
                     }
                 }
             case EBlockState.CatBox2:
+            case EBlockState.LockerBox2:
                 {
                     switch (upBlockState)
                     {
@@ -673,6 +720,7 @@ public class Block : MonoBehaviour
                     }
                 }
             case EBlockState.CatBox3:
+            case EBlockState.LockerBox3:
                 {
                     switch (upBlockState)
                     {
@@ -687,6 +735,7 @@ public class Block : MonoBehaviour
                     }
                 }
             case EBlockState.CatBox4:
+            case EBlockState.LockerBox4:
                 {
                     switch (upBlockState)
                     {
@@ -701,6 +750,7 @@ public class Block : MonoBehaviour
                     }
                 }
             case EBlockState.CatBox5:
+            case EBlockState.LockerBox5:
                 {
                     switch (upBlockState)
                     {
