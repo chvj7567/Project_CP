@@ -1177,7 +1177,6 @@ public class Game : MonoBehaviour
             float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
             block.originPos.x -= moveDis;
             block.SetOriginPos();
-
             block.rectTransform.DOScale(1f, delay);
 
             var stageBlockInfo = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
@@ -1186,12 +1185,14 @@ public class Game : MonoBehaviour
                 var random = (Defines.EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                 random = block.CheckSelectCatShop(random);
                 block.SetBlockState(Defines.ELog.CreateMap, 1, _blockSpriteList[(int)random], random);
+                block.checkHp = block.CheckHpBlock();
                 block.SetHp(-1);
             }
             else
             {
                 var blockState = block.CheckSelectCatShop(stageBlockInfo.blockState);
                 block.SetBlockState(Defines.ELog.CreateMap, 2, _blockSpriteList[(int)blockState], blockState);
+                block.checkHp = block.CheckHpBlock();
                 block.tutorialBlock = stageBlockInfo.tutorialBlock;
 
                 if (block.IsNormalBlock() == true)
@@ -1857,7 +1858,7 @@ public class Game : MonoBehaviour
         _blockState = _block.CheckSelectCatShop(_blockState);
 
         _block.SetBlockState(_log, _key, _blockSpriteList[(int)_blockState], _blockState);
-        _block.checkHp = true;
+        _block.checkHp = _block.CheckHpBlock();
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;

@@ -790,4 +790,16 @@ public class Block : MonoBehaviour
 
         return true;
     }
+
+    public bool CheckHpBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.WallCreator:
+            case Defines.EBlockState.PotalCreator:
+                return false;
+            default:
+                return true;
+        }
+    }
 }
