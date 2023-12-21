@@ -314,5 +314,13 @@
         {
             "stringID": 78,
             "value": "\rThe boss starts disturbing the player!!!"
+        },
+        {
+            "stringID": 79,
+            "value": "Blocks with a + sign generate blocks in a random direction, and if there is no space to create them, blocks are not created."
+        },
+        {
+            "stringID": 80,
+            "value": "Since making a map is difficult, I'll give you a bomb!"
         }
     ]

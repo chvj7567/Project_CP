@@ -6,5 +6,6 @@
   {"tutorialStageID":5, "descStringID":50, "connectNextBlock":-1, "descNextBlockStringID":-1},
   {"tutorialStageID":8, "descStringID":67, "connectNextBlock":-1, "descNextBlockStringID":-1},
   {"tutorialStageID":31, "descStringID":66, "connectNextBlock":-1, "descNextBlockStringID":-1},
-  {"tutorialStageID":51, "descStringID":75, "connectNextBlock":-1, "descNextBlockStringID":-1}
+  {"tutorialStageID":51, "descStringID":75, "connectNextBlock":-1, "descNextBlockStringID":-1},
+  {"tutorialStageID":71, "descStringID":79, "connectNextBlock":-1, "descNextBlockStringID":-1}
 ]

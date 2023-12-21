@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -66,6 +67,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
     [Header("蜡历 档客林扁")]
+    [SerializeField, ReadOnly] int updateMapCount = 5;
     [SerializeField, ReadOnly] float teachTime;
     [SerializeField, ReadOnly] int canMatchRow = -1;
     [SerializeField, ReadOnly] int canMatchCol = -1;
@@ -174,17 +176,6 @@ public class Game : MonoBehaviour
         moveCount.Subscribe(_ =>
         {
             moveCountText.SetText(_);
-        });
-
-        gameResult.Subscribe(_ =>
-        {
-            if (_ == EGameState.GameOver || _ == EGameState.GameClear)
-            {
-                if (tokenSource != null && !tokenSource.IsCancellationRequested)
-                {
-                    tokenSource.Cancel();
-                }
-            }
         });
 
         this.UpdateAsObservable()
@@ -1287,9 +1278,12 @@ public class Game : MonoBehaviour
     {
         try
         {
+            int count = 0;
             bool reUpdate = false;
             bool createDelay = false;
 
+            int firstRow = 0;
+            int firstCol = 0;
             do
             {
                 foreach (var block in boardArr)
@@ -1311,6 +1305,9 @@ public class Game : MonoBehaviour
                     {
                         if (block.IsFixdBlock() == true || block.IsBottomTouchDisappearBlock() == true)
                             continue;
+
+                        firstRow = block.row;
+                        firstCol = block.col;
 
                         var random = UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
 
@@ -1335,6 +1332,17 @@ public class Game : MonoBehaviour
                 if (createDelay)
                 {
                     await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+                }
+
+                if (count++ > updateMapCount)
+                {
+                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    {
+                        stringID = 80
+                    });
+
+                    CreateNewBlock(boardArr[firstRow, firstCol], Defines.ELog.UpdateMap, 3, Defines.EBlockState.YellowBomb);
+                    break;
                 }
             } while (reUpdate);
 
@@ -2559,10 +2567,9 @@ public class Game : MonoBehaviour
                 if (block.GetBlockState() != creatorBlock)
                     continue;
 
+                // -老 版快 拌加 积己
                 if (block.GetHp() == 0)
                     continue;
-
-                block.Damage();
 
                 bool change = false;
                 var random = UnityEngine.Random.Range(0, 4);
@@ -2581,6 +2588,7 @@ public class Game : MonoBehaviour
                                 var upBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
                                 if (upBlock != null && upBlock.IsNormalBlock())
                                 {
+                                    block.Damage();
                                     change = true;
                                     upBlock.changeHp = 1;
                                     upBlock.changeBlockState = changeBlock;
@@ -2594,6 +2602,7 @@ public class Game : MonoBehaviour
                                 var downBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
                                 if (downBlock != null && downBlock.IsNormalBlock())
                                 {
+                                    block.Damage();
                                     change = true;
                                     downBlock.changeHp = 1;
                                     downBlock.changeBlockState = changeBlock;
@@ -2607,6 +2616,7 @@ public class Game : MonoBehaviour
                                 var leftBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
                                 if (leftBlock != null && leftBlock.IsNormalBlock())
                                 {
+                                    block.Damage();
                                     change = true;
                                     leftBlock.changeHp = 1;
                                     leftBlock.changeBlockState = changeBlock;
@@ -2620,6 +2630,7 @@ public class Game : MonoBehaviour
                                 var rightBlock = IsValidIndex(tempW, tempH) == true ? boardArr[tempW, tempH] : null;
                                 if (rightBlock != null && rightBlock.IsNormalBlock())
                                 {
+                                    block.Damage();
                                     change = true;
                                     rightBlock.changeHp = 1;
                                     rightBlock.changeBlockState = changeBlock;
