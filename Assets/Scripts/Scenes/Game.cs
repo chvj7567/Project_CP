@@ -71,6 +71,9 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] int canMatchCol = -1;
 
     [Header("보스 스테이지")]
+    [SerializeField] GameObject normalBossObj;
+    [SerializeField] GameObject angryBossObj;
+    [SerializeField] GameObject cryBossObj;
     [SerializeField] Image bossHpImage;
     [SerializeField] CHTMPro bossHpText;
     [SerializeField] CHTMPro hpText;
@@ -484,6 +487,10 @@ public class Game : MonoBehaviour
             onlyBossStageObject.SetActive(true);
             onlyNormalStageObject.SetActive(false);
 
+            normalBossObj.SetActive(true);
+            angryBossObj.SetActive(false);
+            cryBossObj.SetActive(false);
+
             hp.Subscribe(_ =>
             {
                 if (_ >= 0)
@@ -510,6 +517,10 @@ public class Game : MonoBehaviour
                 if (bossSkill == false && fillAmountValue <= .5f)
                 {
                     bossSkill = true;
+
+                    normalBossObj.SetActive(false);
+                    angryBossObj.SetActive(true);
+                    cryBossObj.SetActive(false);
 
                     CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {
@@ -733,6 +744,22 @@ public class Game : MonoBehaviour
             return;
         }
 
+        if (clear == false)
+        {
+            gameResult.Value = EGameState.GameOver;
+        }
+        else
+        {
+            gameResult.Value = EGameState.GameClear;
+
+            if (_selectStage == Defines.ESelectStage.Boss)
+            {
+                normalBossObj.SetActive(false);
+                angryBossObj.SetActive(false);
+                cryBossObj.SetActive(true);
+            }
+        }
+
         if (await CatPang(true))
         {
             gameResult.Value = EGameState.CatPang;
@@ -758,15 +785,6 @@ public class Game : MonoBehaviour
             }
 
             return;
-        }
-
-        if (clear == false)
-        {
-            gameResult.Value = EGameState.GameOver;
-        }
-        else
-        {
-            gameResult.Value = EGameState.GameClear;
         }
 
         CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
