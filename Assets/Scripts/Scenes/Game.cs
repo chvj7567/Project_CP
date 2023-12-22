@@ -1057,6 +1057,11 @@ public class Game : MonoBehaviour
             await CreateBombBlock();
             await DownBlock();
 
+            if (_selectStage == Defines.ESelectStage.Boss)
+            {
+                bonusScore.Value += _loginData.attack;
+            }
+
             curScore.Value += bonusScore.Value;
             if (bonusScore.Value > 0)
             {
@@ -1371,7 +1376,11 @@ public class Game : MonoBehaviour
                     continue;
 
                 if (curBlock.GetBlockState() == Defines.EBlockState.PinkBomb && CanDragBlock(curBlock))
+                {
+                    canMatchRow = curBlock.row;
+                    canMatchCol = curBlock.col;
                     return true;
+                }
 
                 if (curBlock.IsBombBlock() == true || curBlock.IsSpecialBombBlock() == true)
                 {

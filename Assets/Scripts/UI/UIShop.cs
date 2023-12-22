@@ -14,6 +14,8 @@ public class UIShop : UIBase
     UIShopArg arg;
 
     [SerializeField] CHTMPro goldText;
+    [SerializeField] CHTMPro hpText;
+    [SerializeField] CHTMPro attackText;
     [SerializeField] Button tap1Btn;
     [SerializeField] Button tap2Btn;
     [SerializeField] ShopScrollView scrollView;
@@ -32,6 +34,9 @@ public class UIShop : UIBase
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData == null)
             return;
+
+        hpText.SetText(loginData.hp);
+        attackText.SetText(loginData.attack);
 
         if (checkPurchase)
         {

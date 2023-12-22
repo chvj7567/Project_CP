@@ -366,5 +366,13 @@
         {
             "stringID": 91,
             "value": "Our cat came dressed up!"
+        },
+        {
+            "stringID": 92,
+            "value": "Drag or touch the section to try it!"
+        },
+        {
+            "stringID": 93,
+            "value": "Tip. If you explode the bomb at once, you can get extra points!"
         }
     ]

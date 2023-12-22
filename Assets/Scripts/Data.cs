@@ -21,6 +21,7 @@ namespace Data
         public int useTimeItemCount = 0;
         public int useMoveItemCount = 0;
         public int hp = 100;
+        public int attack = 0;
     }
 
     [Serializable]

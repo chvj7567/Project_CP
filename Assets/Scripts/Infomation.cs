@@ -71,6 +71,7 @@ public class Infomation
         public string productName = "";
         public int gold = -1;
         public int titleStringID = -1;
+        public int descStringID = -1;
         public int tapIndex = -1;
     }
 
