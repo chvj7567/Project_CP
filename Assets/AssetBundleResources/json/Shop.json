@@ -1,10 +1,11 @@
 [
-  {"shopID":"0", "skinIndex":-1, "productName":"RemoveAD", "gold":-1, "titleStringID":23, "tapIndex":2},
-  {"shopID":"1", "skinIndex":0, "productName":"", "gold":0, "titleStringID":24, "tapIndex":1},
-  {"shopID":"2", "skinIndex":1, "productName":"", "gold":10, "titleStringID":24, "tapIndex":1},
-  {"shopID":"3", "skinIndex":2, "productName":"", "gold":30, "titleStringID":24, "tapIndex":1},
-  {"shopID":"4", "skinIndex":3, "productName":"", "gold":50, "titleStringID":24, "tapIndex":1},
-  {"shopID":"5", "skinIndex":-1, "productName":"AddTime", "gold":-1, "titleStringID":25, "tapIndex":2},
-  {"shopID":"6", "skinIndex":-1, "productName":"AddMove", "gold":-1, "titleStringID":26, "tapIndex":2},
-  {"shopID":"7", "skinIndex":4, "productName":"", "gold":70, "titleStringID":24, "tapIndex":1}
+  {"shopID":"0", "skinIndex":-1, "productName":"RemoveAD", "gold":-1, "titleStringID":23, "descStringID":88, "tapIndex":2},
+  {"shopID":"1", "skinIndex":0, "productName":"", "gold":0, "titleStringID":24, "descStringID":83, "tapIndex":1},
+  {"shopID":"2", "skinIndex":1, "productName":"", "gold":30, "titleStringID":24, "descStringID":84, "tapIndex":1},
+  {"shopID":"3", "skinIndex":2, "productName":"", "gold":50, "titleStringID":24, "descStringID":91, "tapIndex":1},
+  {"shopID":"4", "skinIndex":-1, "productName":"AddTime", "gold":-1, "titleStringID":25, "descStringID":89, "tapIndex":2},
+  {"shopID":"5", "skinIndex":-1, "productName":"AddMove", "gold":-1, "titleStringID":26, "descStringID":90, "tapIndex":2},
+  {"shopID":"6", "skinIndex":3, "productName":"", "gold":70, "titleStringID":24, "descStringID":85, "tapIndex":1},
+  {"shopID":"7", "skinIndex":-1, "productName":"", "gold":10000, "titleStringID":81, "descStringID":86, "tapIndex":1},
+  {"shopID":"8", "skinIndex":-1, "productName":"", "gold":10000, "titleStringID":82, "descStringID":87, "tapIndex":1}
 ]

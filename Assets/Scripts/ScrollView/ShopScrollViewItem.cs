@@ -12,6 +12,7 @@ public class ShopScrollViewItem : MonoBehaviour
     [SerializeField] CHTMPro productName;
     [SerializeField] CHTMPro costText;
     [SerializeField] Button skinSelectBtn;
+    [SerializeField] CHTMPro descText;
 
     Infomation.ShopInfo info;
 
@@ -42,7 +43,7 @@ public class ShopScrollViewItem : MonoBehaviour
             if (shopData == null || collectionData == null)
                 return;
 
-            if (false == CHMIAP.Instance.IsConsumableType(info.productName) && shopData.buy)
+            if (CanBuy() == false)
             {
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
@@ -70,24 +71,14 @@ public class ShopScrollViewItem : MonoBehaviour
                 if (info.skinIndex > 0)
                 {
                     var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-                    if (loginData != null)
-                    {
-                        loginData.selectCatShop = info.skinIndex;
-                    }
+                    loginData.selectCatShop = info.skinIndex;
                 }
 
-                if (info.skinIndex > 0)
-                {
-                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-                    if (loginData != null)
-                    {
-                        loginData.selectCatShop = info.skinIndex;
-                    }
-                }
+                BuyGoods(info.shopID);
 
                 CHMData.Instance.SaveData(CHMMain.String.CatPang);
                 CHMMain.UI.CloseUI(Defines.EUI.UIShop);
-
+                
                 CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
                     stringID = 62
@@ -112,12 +103,13 @@ public class ShopScrollViewItem : MonoBehaviour
         collectionData = CHMData.Instance.GetCollectionData(CHMMain.String.Gold);
         shopData = CHMData.Instance.GetShopData(info.shopID.ToString());
 
+        descText.SetStringID(info.descStringID);
+
         Debug.Log($"ShopID {shopData.key} {shopData.buy}");
 
         if (info.gold >= 0)
         {
             costText.SetText(info.gold, "Gold");
-            skinSelectBtn.gameObject.SetActive(shopData.buy);
         }
         else
         {
@@ -125,20 +117,12 @@ public class ShopScrollViewItem : MonoBehaviour
             var priceUnit = CHMIAP.Instance.GetPriceUnit(info.productName);
 
             costText.SetText(price, priceUnit);
-
-            if (false == CHMIAP.Instance.IsConsumableType(info.productName))
-            {
-                skinSelectBtn.gameObject.SetActive(shopData.buy);
-            }
-            else
-            {
-                skinSelectBtn.gameObject.SetActive(false);
-            }
         }
 
         SetImage(info.shopID);
 
         productName.SetStringID(info.titleStringID);
+        skinSelectBtn.gameObject.SetActive(CanBuy() == false);
     }
 
     void SetImage(int selectCatShop)
@@ -153,6 +137,45 @@ public class ShopScrollViewItem : MonoBehaviour
             {
                 shopImgList[i].SetActive(false);
             }
+        }
+    }
+
+    bool CanBuy()
+    {
+        if (info.productName == "")
+        {
+            if (info.skinIndex >= 0 && shopData.buy)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (false == CHMIAP.Instance.IsConsumableType(info.productName) && shopData.buy)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    void BuyGoods(int shopID)
+    {
+        switch (shopID)
+        {
+            case 7:
+                {
+                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                    loginData.hp += 10;
+                }
+                break;
+            case 8:
+                {
+                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                    loginData.attack += 1;
+                }
+                break;
         }
     }
 }

@@ -322,5 +322,49 @@
         {
             "stringID": 80,
             "value": "Since making a map is difficult, I'll give you a bomb!"
+        },
+        {
+            "stringID": 81,
+            "value": "Hp\n+10"
+        },
+        {
+            "stringID": 82,
+            "value": "Attack\n+1"
+        },
+        {
+            "stringID": 83,
+            "value": "It's our cute cat~"
+        },
+        {
+            "stringID": 84,
+            "value": "The cat is wearing a hat!"
+        },
+        {
+            "stringID": 85,
+            "value": "It's not a cat. Where did you see it?"
+        },
+        {
+            "stringID": 86,
+            "value": "HP increases in boss stages."
+        },
+        {
+            "stringID": 87,
+            "value": "\rAdditional damage per turn on boss stages."
+        },
+        {
+            "stringID": 88,
+            "value": "\rYou can receive double rewards every time, without ads."
+        },
+        {
+            "stringID": 89,
+            "value": "Each item adds 10 seconds!\r\n(Only time-limited stages are used.)"
+        },
+        {
+            "stringID": 90,
+            "value": "\rOne more time per item!\r\n(Only stages with limited movement are used.)"
+        },
+        {
+            "stringID": 91,
+            "value": "Our cat came dressed up!"
         }
     ]
