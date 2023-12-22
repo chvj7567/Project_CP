@@ -805,7 +805,7 @@ public class Game : MonoBehaviour
                     if (check)
                         return true;
 
-                    await boardArr[w, h].Boom();
+                    await boardArr[w, h].Bomb();
 
                     w = -1; break;
                 }
@@ -984,30 +984,40 @@ public class Game : MonoBehaviour
                 block1.match = true;
                 block2.match = true;
                 await BoomAll();
+
+                isLock = false;
                 return;
             }
             // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·° Áß Æ¯º°ÇÑ °æ¿ì
             else if (block1.GetBlockState() == Defines.EBlockState.PinkBomb)
             {
                 await Boom3(block1, block2.GetBlockState());
+
+                isLock = false;
                 return;
             }
             // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·° Áß Æ¯º°ÇÑ °æ¿ì
             else if (block2.GetBlockState() == Defines.EBlockState.PinkBomb)
             {
                 await Boom3(block2, block1.GetBlockState());
+
+                isLock = false;
                 return;
             }
             // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·°ÀÏ °æ¿ì
             else if (block1.IsSpecialBombBlock() == true)
             {
-                await block1.Boom();
+                await block1.Bomb();
+
+                isLock = false;
                 return;
             }
             // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·°ÀÏ °æ¿ì
             else if (block2.IsSpecialBombBlock() == true)
             {
-                await block2.Boom();
+                await block2.Bomb();
+
+                isLock = false;
                 return;
             }
             // µÎ ºí·° ¸ðµÎ ÆøÅº ºí·°ÀÏ °æ¿ì
@@ -1022,13 +1032,17 @@ public class Game : MonoBehaviour
             // ÇÑ ºí·°¸¸ ÆøÅº ºí·°ÀÏ °æ¿ì
             else if (block1.IsBombBlock() == true)
             {
-                await block1.Boom();
+                await block1.Bomb();
+
+                isLock = false;
                 return;
             }
             // ÇÑ ºí·°¸¸ ÆøÅº ºí·°ÀÏ °æ¿ì
             else if (block2.IsBombBlock() == true)
             {
-                await block2.Boom();
+                await block2.Bomb();
+
+                isLock = false;
                 return;
             }
         }
@@ -1624,7 +1638,7 @@ public class Game : MonoBehaviour
                     if (block.IsBombBlock() == true && block.boom == false)
                     {
                         bonusScore.Value += 20;
-                        await block.Boom(false);
+                        await block.Bomb(false);
 
                         // Match °Ë»ç¸¦ ´Ù½Ã ÇØ¾ßÇÔ
                         i = -1;
@@ -2083,6 +2097,12 @@ public class Game : MonoBehaviour
 
         DamageBlock(row, col);
 
+        if (boardArr[row, col].GetBlockState() == Defines.EBlockState.RainbowPang &&
+            boardArr[row, col].GetHp() > 0)
+        {
+            return false;
+        }
+
         if (boardArr[row, col].IsBottomTouchDisappearBlock() == false &&
             boardArr[row, col].IsFixdBlock() == false &&
             boardArr[row, col].GetBlockState() != Defines.EBlockState.PinkBomb)
@@ -2111,7 +2131,11 @@ public class Game : MonoBehaviour
     {
         if (IsValidIndex(row, col) && boardArr[row, col] != null)
         {
-            if (boardArr[row, col].IsFixdBlock())
+            if (boardArr[row, col].GetBlockState() == Defines.EBlockState.RainbowPang)
+            {
+                boardArr[row, col].Damage(_stageInfo.blockTypeCount, false);
+            }
+            else
             {
                 boardArr[row, col].Damage(_stageInfo.blockTypeCount);
             }
@@ -2137,7 +2161,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom1(Block block, bool ani = true)
+    public async Task Bomb1(Block block, bool ani = true)
     // ÀÚ±â ÁÖº¯ 1Ä­ ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2166,7 +2190,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom2(Block block, bool ani = true)
+    public async Task Bomb2(Block block, bool ani = true)
     // ½ÊÀÚ°¡ ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2240,7 +2264,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom4(Block block, bool ani = true)
+    public async Task Bomb4(Block block, bool ani = true)
     // °¡·Î ÁÙ ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2268,7 +2292,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom5(Block block, bool ani = true)
+    public async Task Bomb5(Block block, bool ani = true)
     // ¼¼·Î ÁÙ ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2296,7 +2320,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom6(Block block, bool ani = true)
+    public async Task Bomb6(Block block, bool ani = true)
     // XÀÚ ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2324,7 +2348,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom7(Block block, bool ani = true)
+    public async Task Bomb7(Block block, bool ani = true)
     // ÁÂÇÏ¿ì»ó ´ë°¢¼± ÁÙ ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2353,7 +2377,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom8(Block block, bool ani = true)
+    public async Task Bomb8(Block block, bool ani = true)
     // ÁÂ»ó¿ìÇÏ ´ë°¢¼± ÁÙ ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2382,7 +2406,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom9(Block block, bool ani = true)
+    public async Task Bomb9(Block block, bool ani = true)
     // ¸¶¸§¸ð ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2415,7 +2439,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom10(Block block, bool ani = true)
+    public async Task Bomb10(Block block, bool ani = true)
     // ÀÚ±â ÁÖº¯ 1Ä­ ¶ç¿î »ç°¢Çü ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2452,7 +2476,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom11(Block block, bool ani = true)
+    public async Task Bomb11(Block block, bool ani = true)
     // ºüÁ÷ ¸ð¾ç ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2488,7 +2512,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    public async Task Boom12(Block block, bool ani = true)
+    public async Task Bomb12(Block block, bool ani = true)
     // Z ¸ð¾ç ÆøÅº
     {
         bonusScore.Value += 10;
@@ -2674,8 +2698,6 @@ public class Game : MonoBehaviour
             h = UnityEngine.Random.Range(0, boardSize);
         } while (boardArr[w, h].IsNormalBlock() == false);
 
-
-
         switch (block)
         {
             case 0:
@@ -2694,6 +2716,7 @@ public class Game : MonoBehaviour
     }
 
     bool CanDragBlock(Block block)
+    // µå·¡±×°¡ °¡´ÉÇÑ ºí·°ÀÎÁö È®ÀÎ
     {
         int w = block.row;
         int h = block.col;
@@ -2704,5 +2727,41 @@ public class Game : MonoBehaviour
         bool rightCheck = IsValidIndex(w, h + 1) && boardArr[w, h + 1].CanNotDragBlock() == false;
 
         return upCheck || downCheck || leftCheck || rightCheck;
+    }
+
+    public async Task RainbowPang(Block block, bool ani = true)
+    // ¹«Áö°³ ÆÎÀº °¢ Æ¯¼ö ÆøÅº 1°³ ¾¿À» ¸Ê¿¡ ·£´ýÀ¸·Î »Ñ·ÁÁÜ
+    {
+        if (block.GetHp() > 0)
+            return;
+
+        bonusScore.Value += 10;
+        block.match = true;
+        block.boom = true;
+
+        Defines.EBlockState blockState = Defines.EBlockState.PinkBomb;
+        for (;blockState <= Defines.EBlockState.BlueBomb; ++blockState)
+        {
+            do
+            {
+                int w = UnityEngine.Random.Range(0, boardSize);
+                int h = UnityEngine.Random.Range(0, boardSize);
+
+                if (boardArr[w, h].IsNormalBlock() == false)
+                    continue;
+
+                if (boardArr[w, h].changeBlockState != EBlockState.None)
+                    continue;
+
+                boardArr[w, h].changeBlockState = blockState;
+                break;
+
+            } while (true);
+        }
+
+        if (ani)
+        {
+            await AfterDrag(null, null, true);
+        }
     }
 }

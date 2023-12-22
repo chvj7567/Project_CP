@@ -153,6 +153,8 @@ public class Defines
         LockerBox4,
         LockerBox5,
 
+        RainbowPang,
+
         Max
     }
 

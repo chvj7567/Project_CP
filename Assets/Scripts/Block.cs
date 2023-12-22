@@ -73,7 +73,7 @@ public class Block : MonoBehaviour
             if (false == game.isDrag && false == game.isLock)
             {
                 tutorialBlock = false;
-                await Boom();
+                await Bomb();
             }
         });
 
@@ -335,22 +335,6 @@ public class Block : MonoBehaviour
             switch (_blockState)
             {
                 case EBlockState.Cat1:
-                    return EBlockState.Cat6;
-                case EBlockState.Cat2:
-                    return EBlockState.Cat7;
-                case EBlockState.Cat3:
-                    return EBlockState.Cat8;
-                case EBlockState.Cat4:
-                    return EBlockState.Cat9;
-                case EBlockState.Cat5:
-                    return EBlockState.Cat10;
-            }
-        }
-        else if (data.selectCatShop == 2)
-        {
-            switch (_blockState)
-            {
-                case EBlockState.Cat1:
                     return EBlockState.CatHat1;
                 case EBlockState.Cat2:
                     return EBlockState.CatHat2;
@@ -362,7 +346,7 @@ public class Block : MonoBehaviour
                     return EBlockState.CatHat5;
             }
         }
-        else if (data.selectCatShop == 3)
+        else if (data.selectCatShop == 2)
         {
             switch (_blockState)
             {
@@ -378,7 +362,7 @@ public class Block : MonoBehaviour
                     return EBlockState.CatSkin5;
             }
         }
-        else if (data.selectCatShop == 4)
+        else if (data.selectCatShop == 3)
         {
             switch (_blockState)
             {
@@ -448,45 +432,48 @@ public class Block : MonoBehaviour
         checkDamage = false;
     }
 
-    public async Task Boom(bool ani = true)
+    public async Task Bomb(bool ani = true)
     {
         switch (blockState)
         {
             case Defines.EBlockState.CatPang:
-                await game.Boom1(this, ani);
+                await game.Bomb1(this, ani);
                 break;
             case Defines.EBlockState.Arrow1:
-                await game.Boom4(this, ani);
+                await game.Bomb4(this, ani);
                 break;
             case Defines.EBlockState.Arrow2:
-                await game.Boom7(this, ani);
+                await game.Bomb7(this, ani);
                 break;
             case Defines.EBlockState.Arrow3:
-                await game.Boom5(this, ani);
+                await game.Bomb5(this, ani);
                 break;
             case Defines.EBlockState.Arrow4:
-                await game.Boom8(this, ani);
+                await game.Bomb8(this, ani);
                 break;
             case Defines.EBlockState.Arrow5:
-                await game.Boom2(this, ani);
+                await game.Bomb2(this, ani);
                 break;
             case Defines.EBlockState.Arrow6:
-                await game.Boom6(this, ani);
+                await game.Bomb6(this, ani);
                 break;
             case Defines.EBlockState.PinkBomb:
                 // 드래그 해야 함
                 break;
             case Defines.EBlockState.YellowBomb:
-                await game.Boom9(this, ani);
+                await game.Bomb9(this, ani);
                 break;
             case Defines.EBlockState.OrangeBomb:
-                await game.Boom10(this, ani);
+                await game.Bomb10(this, ani);
                 break;
             case Defines.EBlockState.BlueBomb:
-                await game.Boom11(this, ani);
+                await game.Bomb11(this, ani);
                 break;
             case Defines.EBlockState.GreenBomb:
-                await game.Boom12(this, ani);
+                await game.Bomb12(this, ani);
+                break;
+            case Defines.EBlockState.RainbowPang:
+                await game.RainbowPang(this, ani);
                 break;
         }
     }
@@ -547,6 +534,7 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.BlueBomb:
             case Defines.EBlockState.YellowBomb:
             case Defines.EBlockState.PinkBomb:
+            case Defines.EBlockState.RainbowPang:
                 return true;
             default:
                 return false;
@@ -619,6 +607,7 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.LockerBox5:
             case Defines.EBlockState.WallCreator:
             case Defines.EBlockState.PotalCreator:
+            case Defines.EBlockState.RainbowPang:
                 return true;
             default:
                 return false;
