@@ -800,7 +800,9 @@ public class Game : MonoBehaviour
         {
             for (int h = 0; h < boardSize; ++h)
             {
-                if (boardArr[w, h].IsBombBlock() && boardArr[w, h].GetBlockState() != Defines.EBlockState.PinkBomb)
+                if (boardArr[w, h].IsBombBlock() &&
+                    boardArr[w, h].GetBlockState() != Defines.EBlockState.PinkBomb &&
+                    boardArr[w, h].GetBlockState() != Defines.EBlockState.RainbowPang)
                 {
                     if (check)
                         return true;
@@ -1320,9 +1322,12 @@ public class Game : MonoBehaviour
                         block.changeBlockState = Defines.EBlockState.None;
                         block.checkHp = false;
                     }
-                    else if (reUpdate == true || block.IsMatch() == true)
+                    else if (reUpdate || block.IsMatch())
                     {
-                        if (block.IsFixdBlock() == true || block.IsBottomTouchDisappearBlock() == true)
+                        if (block.IsFixdBlock() || block.IsBottomTouchDisappearBlock())
+                            continue;
+
+                        if (reUpdate && block.GetBlockState() == Defines.EBlockState.RainbowPang)
                             continue;
 
                         firstRow = block.row;
