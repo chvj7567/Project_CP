@@ -207,6 +207,9 @@ public class Game : MonoBehaviour
                     {
                         for (int j = 0; j < boardSize; ++j)
                         {
+                            if (boardArr[i, j].GetBlockState() == Defines.EBlockState.RainbowPang)
+                                continue;
+
                             if (boardArr[i, j].checkHp == false)
                                 continue;
 
