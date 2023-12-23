@@ -900,6 +900,16 @@
             "tutorialID": -1
         },
         {
+            "group": 10,
+            "stage": 91,
+            "blockTypeCount": 5,
+            "boardSize": 6,
+            "time": 30.0,
+            "targetScore": 300,
+            "moveCount": -1,
+            "tutorialID": 91
+        },
+        {
             "group": 100001,
             "stage": 100001,
             "blockTypeCount": 5,

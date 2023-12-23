@@ -374,5 +374,13 @@
         {
             "stringID": 93,
             "value": "Tip. If you explode the bomb at once, you can get extra points!"
+        },
+        {
+            "stringID": 94,
+            "value": "When the rainbow bomb explodes when HP becomes 0, one bomb of each color is placed on the map."
+        },
+        {
+            "stringID": 95,
+            "value": "\rWhen HP reaches 1, you can only explode in the area of ​​the color bomb.\r\nYou've entered the realm of the black bomb!"
         }
     ]
