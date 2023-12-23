@@ -66,7 +66,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
     [Header("유저 도와주기")]
-    [SerializeField] bool autoPlay = true;
+    [SerializeField] bool autoPlay = false;
     [SerializeField, ReadOnly] int updateMapCount = 5;
     [SerializeField, ReadOnly] float teachTime;
     [SerializeField, ReadOnly] float dragTime;
