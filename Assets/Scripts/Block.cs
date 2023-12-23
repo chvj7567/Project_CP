@@ -70,7 +70,8 @@ public class Block : MonoBehaviour
             if (IsFixdBlock())
                 return;
 
-            if (false == game.isDrag && false == game.isLock)
+            if (game.isDrag == false && game.isLock == false &&
+            blockState != Defines.EBlockState.RainbowPang)
             {
                 tutorialBlock = false;
                 await Bomb();
@@ -108,99 +109,127 @@ public class Block : MonoBehaviour
             {
                 // Right
                 case 0:
-                    {
-                        var addDis = CHInstantiateButton.GetHorizontalDistance();
-                        var movePos = new Vector2(originPos.x + addDis, originPos.y);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
-                        
-                        if (ret.Item1 != null)
-                        {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
-                                break;
-
-                            if (game.CheckTutorial() &&
-                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
-                                break;
-
-                            rectTransform.DOAnchorPosX(movePos.x, game.delay);
-                            ret.Item1.DOAnchorPosX(originPos.x, game.delay);
-
-                            ChangeBlock(ret.Item2);
-                            await game.AfterDrag(this, ret.Item2);
-                        }
-                    }
+                    await Drag(EDrag.Right);
                     break;
                 // Up
                 case 1:
-                    {
-                        var addDis = CHInstantiateButton.GetVerticalDistance();
-                        var movePos = new Vector2(originPos.x, originPos.y + addDis);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
-                        if (ret.Item1 != null)
-                        {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
-                                break;
-
-                            if (game.CheckTutorial() &&
-                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
-                                break;
-
-                            rectTransform.DOAnchorPosY(movePos.y, game.delay);
-                            ret.Item1.DOAnchorPosY(originPos.y, game.delay);
-
-                            ChangeBlock(ret.Item2);
-                            await game.AfterDrag(this, ret.Item2);
-                        }
-                    }
+                    await Drag(EDrag.Up);
                     break;
                 // Left
                 case 2:
-                    {
-                        var addDis = CHInstantiateButton.GetHorizontalDistance();
-                        var movePos = new Vector2(originPos.x - addDis, originPos.y);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
-                        if (ret.Item1 != null)
-                        {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
-                                break;
-
-                            if (game.CheckTutorial() &&
-                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
-                                break;
-
-                            rectTransform.DOAnchorPosX(movePos.x, game.delay);
-                            ret.Item1.DOAnchorPosX(originPos.x, game.delay);
-
-                            ChangeBlock(ret.Item2);
-                            await game.AfterDrag(this, ret.Item2);
-                        }
-                    }
+                    await Drag(EDrag.Left);
                     break;
                 // Down
                 case 3:
-                    {
-                        var addDis = CHInstantiateButton.GetVerticalDistance();
-                        var movePos = new Vector2(originPos.x, originPos.y - addDis);
-                        var ret = CHInstantiateButton.GetBlockInfo(movePos);
-                        if (ret.Item1 != null)
-                        {
-                            if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
-                                break;
-
-                            if (game.CheckTutorial() &&
-                            (tutorialBlock == false || ret.Item2.tutorialBlock == false))
-                                break;
-
-                            rectTransform.DOAnchorPosY(movePos.y, game.delay);
-                            ret.Item1.DOAnchorPosY(originPos.y, game.delay);
-
-                            ChangeBlock(ret.Item2);
-                            await game.AfterDrag(this, ret.Item2);
-                        }
-                    }
+                    await Drag(EDrag.Down);
                     break;
             }
         });
+    }
+
+    public async Task Drag(Defines.EDrag drag)
+    {
+        switch (drag)
+        {
+            // Right
+            case Defines.EDrag.Right:
+                {
+                    var addDis = CHInstantiateButton.GetHorizontalDistance();
+                    var movePos = new Vector2(originPos.x + addDis, originPos.y);
+                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+
+                    if (ret.Item1 != null)
+                    {
+                        if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
+                            break;
+
+                        if (game.CheckTutorial() &&
+                        (tutorialBlock == false || ret.Item2.tutorialBlock == false))
+                            break;
+
+                        rectTransform.DOAnchorPosX(movePos.x, game.delay);
+                        ret.Item1.DOAnchorPosX(originPos.x, game.delay);
+
+                        ChangeBlock(ret.Item2);
+                        await game.AfterDrag(this, ret.Item2);
+                    }
+                }
+                break;
+            // Up
+            case Defines.EDrag.Up:
+                {
+                    var addDis = CHInstantiateButton.GetVerticalDistance();
+                    var movePos = new Vector2(originPos.x, originPos.y + addDis);
+                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                    if (ret.Item1 != null)
+                    {
+                        if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
+                            break;
+
+                        if (game.CheckTutorial() &&
+                        (tutorialBlock == false || ret.Item2.tutorialBlock == false))
+                            break;
+
+                        rectTransform.DOAnchorPosY(movePos.y, game.delay);
+                        ret.Item1.DOAnchorPosY(originPos.y, game.delay);
+
+                        ChangeBlock(ret.Item2);
+                        await game.AfterDrag(this, ret.Item2);
+                    }
+                }
+                break;
+            // Left
+            case Defines.EDrag.Left:
+                {
+                    var addDis = CHInstantiateButton.GetHorizontalDistance();
+                    var movePos = new Vector2(originPos.x - addDis, originPos.y);
+                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                    if (ret.Item1 != null)
+                    {
+                        if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
+                            break;
+
+                        if (game.CheckTutorial() &&
+                        (tutorialBlock == false || ret.Item2.tutorialBlock == false))
+                            break;
+
+                        rectTransform.DOAnchorPosX(movePos.x, game.delay);
+                        ret.Item1.DOAnchorPosX(originPos.x, game.delay);
+
+                        ChangeBlock(ret.Item2);
+                        await game.AfterDrag(this, ret.Item2);
+                    }
+                }
+                break;
+            // Down
+            case Defines.EDrag.Down:
+                {
+                    var addDis = CHInstantiateButton.GetVerticalDistance();
+                    var movePos = new Vector2(originPos.x, originPos.y - addDis);
+                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                    if (ret.Item1 != null)
+                    {
+                        if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
+                            break;
+
+                        if (game.CheckTutorial() &&
+                        (tutorialBlock == false || ret.Item2.tutorialBlock == false))
+                            break;
+
+                        rectTransform.DOAnchorPosY(movePos.y, game.delay);
+                        ret.Item1.DOAnchorPosY(originPos.y, game.delay);
+
+                        ChangeBlock(ret.Item2);
+                        await game.AfterDrag(this, ret.Item2);
+                    }
+                }
+                break;
+            case Defines.EDrag.Click:
+                {
+                    await Bomb();
+                }
+                break;
+        }
     }
 
     float EvalDragAngle(Vector2 vtStart, Vector2 vtEnd)

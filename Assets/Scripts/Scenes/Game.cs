@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -67,10 +66,13 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
     [Header("유저 도와주기")]
+    [SerializeField] bool autoPlay = true;
     [SerializeField, ReadOnly] int updateMapCount = 5;
     [SerializeField, ReadOnly] float teachTime;
+    [SerializeField, ReadOnly] float dragTime;
     [SerializeField, ReadOnly] int canMatchRow = -1;
     [SerializeField, ReadOnly] int canMatchCol = -1;
+    [SerializeField, ReadOnly] Defines.EDrag canMatchDrag = Defines.EDrag.None;
 
     [Header("보스 스테이지")]
     [SerializeField] GameObject normalBossObj;
@@ -308,9 +310,19 @@ public class Game : MonoBehaviour
         if (isLock == true)
         {
             teachTime = Time.time;
+            dragTime = Time.time;
         }
         else
         {
+            
+
+            // .5초 동안 드래그를 안하면 알려줌
+            if (autoPlay && dragTime + .5f < Time.time)
+            {
+                var block = boardArr[canMatchRow, canMatchCol];
+                block.Drag(canMatchDrag);
+            }
+
             // 3초 동안 드래그를 안하면 알려줌
             if (teachTime + 3 < Time.time && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
             {
@@ -1394,10 +1406,12 @@ public class Game : MonoBehaviour
                 if (curBlock.CanNotDragBlock() == true)
                     continue;
 
-                if (curBlock.GetBlockState() == Defines.EBlockState.PinkBomb && CanDragBlock(curBlock))
+                var canDrag = CanDragBlock(curBlock);
+                if (curBlock.GetBlockState() == Defines.EBlockState.PinkBomb && canDrag != Defines.EDrag.None)
                 {
                     canMatchRow = curBlock.row;
                     canMatchCol = curBlock.col;
+                    canMatchDrag = canDrag;
                     return true;
                 }
 
@@ -1405,6 +1419,7 @@ public class Game : MonoBehaviour
                 {
                     canMatchRow = curBlock.row;
                     canMatchCol = curBlock.col;
+                    canMatchDrag = Defines.EDrag.Click;
                     return true;
                 }
 
@@ -1423,6 +1438,7 @@ public class Game : MonoBehaviour
                     {
                         canMatchRow = curBlock.row;
                         canMatchCol = curBlock.col;
+                        canMatchDrag = Defines.EDrag.Up;
                         return true;
                     }
                 }
@@ -1437,6 +1453,7 @@ public class Game : MonoBehaviour
                     {
                         canMatchRow = curBlock.row;
                         canMatchCol = curBlock.col;
+                        canMatchDrag = Defines.EDrag.Down;
                         return true;
                     }
                 }
@@ -1451,6 +1468,7 @@ public class Game : MonoBehaviour
                     {
                         canMatchRow = curBlock.row;
                         canMatchCol = curBlock.col;
+                        canMatchDrag = Defines.EDrag.Left;
                         return true;
                     }
                 }
@@ -1465,6 +1483,7 @@ public class Game : MonoBehaviour
                     {
                         canMatchRow = curBlock.row;
                         canMatchCol = curBlock.col;
+                        canMatchDrag = Defines.EDrag.Right;
                         return true;
                     }
                 }
@@ -2072,6 +2091,8 @@ public class Game : MonoBehaviour
 
         moveBlock.name = $"Block{moveBlock.row}/{moveBlock.col}";
         targetBlock.name = $"Block{targetBlock.row}/{targetBlock.col}";
+
+        Debug.Log($"{moveBlock.row}/{moveBlock.col} <=> {targetBlock.row}/{targetBlock.col}");
 
         boardArr[moveBlock.row, moveBlock.col] = moveBlock;
         boardArr[targetBlock.row, targetBlock.col] = targetBlock;
@@ -2720,7 +2741,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    bool CanDragBlock(Block block)
+    Defines.EDrag CanDragBlock(Block block)
     // 드래그가 가능한 블럭인지 확인
     {
         int w = block.row;
@@ -2731,7 +2752,16 @@ public class Game : MonoBehaviour
         bool leftCheck = IsValidIndex(w, h - 1) && boardArr[w, h - 1].CanNotDragBlock() == false;
         bool rightCheck = IsValidIndex(w, h + 1) && boardArr[w, h + 1].CanNotDragBlock() == false;
 
-        return upCheck || downCheck || leftCheck || rightCheck;
+        if (upCheck)
+            return Defines.EDrag.Up;
+        if (downCheck)
+            return Defines.EDrag.Down;
+        if (leftCheck)
+            return Defines.EDrag.Left;
+        if (rightCheck)
+            return Defines.EDrag.Right;
+
+        return Defines.EDrag.None;
     }
 
     public async Task RainbowPang(Block block, bool ani = true)

@@ -308,4 +308,15 @@ public class Defines
         Boss = 2,
         Easy = 3,
     }
+
+    public enum EDrag
+    {
+        None = -1,
+
+        Click,
+        Up,
+        Down,
+        Left,
+        Right
+    }
 }

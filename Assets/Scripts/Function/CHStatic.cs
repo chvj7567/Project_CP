@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class CHStatic : MonoBehaviour
 {
+#if UNITY_EDITOR
     public static void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {
         string path = null;
@@ -55,4 +59,5 @@ public class CHStatic : MonoBehaviour
 
         _callback(original);
     }
+#endif
 }
