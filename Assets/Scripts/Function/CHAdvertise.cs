@@ -8,13 +8,18 @@ public class CHAdvertise : MonoBehaviour
     public bool GetAdvertise()
     {
         var lastPlayStage = 0;
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        var selectStage = PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+        if (selectStage == (int)Defines.ESelectStage.Boss)
         {
             lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
         }
-        else
+        else if (selectStage == (int)Defines.ESelectStage.Normal)
         {
             lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+        }
+        else if (selectStage == (int)Defines.ESelectStage.Easy)
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
         }
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);

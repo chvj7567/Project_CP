@@ -368,6 +368,7 @@ public class First : MonoBehaviour
         if (CHMData.Instance.newUser)
         {
             PlayerPrefs.SetInt(CHMMain.String.Stage, 1);
+            PlayerPrefs.SetInt(CHMMain.String.EasyStage, 1);
             PlayerPrefs.SetInt(CHMMain.String.BossStage, 1 + CHMData.Instance.BossStageStartValue);
         }
 
