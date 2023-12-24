@@ -30,7 +30,6 @@ public class First : MonoBehaviour
     [SerializeField] Button guideBackgroundBtn;
     [SerializeField] List<RectTransform> guideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
-
     CancellationTokenSource tokenSource;
 
     bool initButton = false;
@@ -44,7 +43,8 @@ public class First : MonoBehaviour
 
         startBtn.OnClickAsObservable().Subscribe(async _ =>
         {
-            if (bundleDownload.Value == false || dataDownload.Value == false) return;
+            if (bundleDownload.Value == false || dataDownload.Value == false)
+                return;
 
             var arg = new UIStageSelectArg();
             arg.stageSelect += async (select) =>
@@ -52,7 +52,7 @@ public class First : MonoBehaviour
                 await StageSelect(select);
             };
 
-            CHMMain.UI.ShowUI(Defines.EUI.UIStageSelect, arg); 
+            CHMMain.UI.ShowUI(Defines.EUI.UIStageSelect, arg);
         });
 
         missionBtn.OnClickAsObservable().Subscribe(_ =>
@@ -99,6 +99,10 @@ public class First : MonoBehaviour
                         dataDownload.Value = true;
 
                         SetLoginState(true);
+
+                        data.connectGPGS == true;
+
+                        CHMData.Instance.SaveData(CHMMain.String.CatPang);
                     }
                     else
                     {
