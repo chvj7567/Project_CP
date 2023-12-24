@@ -317,7 +317,7 @@ public class Game : MonoBehaviour
         }
         else
         {
-            
+
 
             // .5초 동안 드래그를 안하면 알려줌
             if (autoPlay && dragTime + .5f < Time.time)
@@ -533,13 +533,51 @@ public class Game : MonoBehaviour
                         stringID = 78
                     });
 
-                    // 10초에 한 번씩 실행
-                    Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(10))
-                    .Subscribe(_ =>
+                    int bossSkillCoolTime = 0;
+                    int tenStageCoolTime = 10;
+                    switch (_stageInfo.stage % 10)
                     {
-                       BossSkill();
-                    })
-                    .AddTo(this);
+                        case 0:
+                            {
+                                bossSkillCoolTime = tenStageCoolTime;
+
+                                Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(bossSkillCoolTime)).Subscribe(_ =>
+                                {
+                                    BossSkill(1);
+                                    BossSkill(2);
+                                    BossSkill(3);
+                                }).AddTo(this);
+                            }
+                            break;
+                        case 9:
+                        case 8:
+                        case 7:
+                        case 6:
+                            {
+                                bossSkillCoolTime = tenStageCoolTime - (_stageInfo.stage % 10) + 10;
+
+                                Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(bossSkillCoolTime)).Subscribe(_ =>
+                                {
+                                    BossSkill(1);
+                                    BossSkill(2);
+                                }).AddTo(this);
+                            }
+                            break;
+                        case 5:
+                        case 4:
+                        case 3:
+                        case 2:
+                        case 1:
+                            {
+                                bossSkillCoolTime = tenStageCoolTime - (_stageInfo.stage % 10) + 10;
+
+                                Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(bossSkillCoolTime)).Subscribe(_ =>
+                                {
+                                    BossSkill(1);
+                                }).AddTo(this);
+                            }
+                            break;
+                    }
                 }
             });
         }
@@ -2709,11 +2747,9 @@ public class Game : MonoBehaviour
         }
     }
 
-    void BossSkill()
-    // 랜덤한 블럭 벽 또는 포탈로 변경
+    void BossSkill(int type)
+    // 랜덤한 블럭 변경
     {
-        // 벽 or 포탈
-        var block = UnityEngine.Random.Range(0, 2);
         // hp는 0부터 10까지
         var blockHp = UnityEngine.Random.Range(0, 10);
         if (blockHp == 0)
@@ -2727,20 +2763,29 @@ public class Game : MonoBehaviour
             h = UnityEngine.Random.Range(0, boardSize);
         } while (boardArr[w, h].IsNormalBlock() == false);
 
-        switch (block)
+        if (type == 1)
         {
-            case 0:
-                {
-                    boardArr[w, h].changeBlockState = Defines.EBlockState.Wall;
-                    boardArr[w, h].changeHp = blockHp;
-                }
-                break;
-            case 1:
-                {
-                    boardArr[w, h].changeBlockState = Defines.EBlockState.Potal;
-                    boardArr[w, h].changeHp = blockHp;
-                }
-                break;
+            // 벽 or 포탈
+            var block = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.Wall, (int)Defines.EBlockState.Potal + 1);
+
+            boardArr[w, h].changeBlockState = block;
+            boardArr[w, h].changeHp = blockHp;
+        }
+        else if (type == 2)
+        {
+            // 벽 생성기 or 포탈 생성기
+            var block = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.WallCreator, (int)Defines.EBlockState.PotalCreator + 1);
+
+            boardArr[w, h].changeBlockState = block;
+            boardArr[w, h].changeHp = blockHp;
+        }
+        else if (type == 3)
+        {
+            // 캣 박스
+            var block = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.CatBox1, (int)Defines.EBlockState.CatBox5 + 1);
+
+            boardArr[w, h].changeBlockState = block;
+            boardArr[w, h].changeHp = blockHp;
         }
     }
 
@@ -2778,7 +2823,7 @@ public class Game : MonoBehaviour
         block.boom = true;
 
         Defines.EBlockState blockState = Defines.EBlockState.PinkBomb;
-        for (;blockState <= Defines.EBlockState.BlueBomb; ++blockState)
+        for (; blockState <= Defines.EBlockState.BlueBomb; ++blockState)
         {
             do
             {
