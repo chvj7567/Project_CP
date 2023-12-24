@@ -390,5 +390,17 @@
         {
             "stringID": 97,
             "value": "Replay"
+        },
+        {
+            "stringID": 98,
+            "value": "Normal stage, easier difficulty than hard"
+        },
+        {
+            "stringID": 99,
+            "value": "Difficult level of difficulty that can be solved only if you know how to get bonus points"
+        },
+        {
+            "stringID": 100,
+            "value": "A stage where the player must defeat the boss before his HP runs out.\r\n(You can increase HP and attack power in the store.)"
         }
     ]
