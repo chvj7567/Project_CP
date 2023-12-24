@@ -100,7 +100,7 @@ public class First : MonoBehaviour
 
                         SetLoginState(true);
 
-                        data.connectGPGS == true;
+                        data.connectGPGS = true;
 
                         CHMData.Instance.SaveData(CHMMain.String.CatPang);
                     }
