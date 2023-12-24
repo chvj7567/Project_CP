@@ -99,10 +99,6 @@ public class First : MonoBehaviour
                         dataDownload.Value = true;
 
                         SetLoginState(true);
-
-                        data.connectGPGS = true;
-
-                        CHMData.Instance.SaveData(CHMMain.String.CatPang);
                     }
                     else
                     {
@@ -305,17 +301,21 @@ public class First : MonoBehaviour
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
-    bool SetLoginState(bool _active)
+    bool SetLoginState(bool active)
     {
         if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data) == false)
             return false;
 
-        data.connectGPGS = _active;
+        data.connectGPGS = active;
 
-        PlayerPrefs.SetInt(CHMMain.String.Login, 0);
+        Debug.Log($"SetLoginState : {data.connectGPGS}");
 
-        connectGPGSBtn.gameObject.SetActive(_active == false);
-        logoutBtn.gameObject.SetActive(_active);
+        PlayerPrefs.SetInt(CHMMain.String.Login, active ? 1 : 0);
+
+        CHMData.Instance.SaveData(CHMMain.String.CatPang);
+
+        connectGPGSBtn.gameObject.SetActive(active == false);
+        logoutBtn.gameObject.SetActive(active);
 
         return true;
     }
@@ -324,6 +324,8 @@ public class First : MonoBehaviour
     {
         if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data) == false)
             return false;
+
+        Debug.Log($"GetLoginState : {data.connectGPGS}");
 
         return data.connectGPGS;
     }
