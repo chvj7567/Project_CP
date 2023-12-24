@@ -801,7 +801,7 @@ MonoBehaviour:
   - {fileID: 837858725}
   - {fileID: 634807760}
   - {fileID: 1135207851}
-  delay: 0.35
+  delay: 0.2
   delayMillisecond: 1000
   isDrag: 0
   isLock: 0
@@ -823,10 +823,13 @@ MonoBehaviour:
     value: 0
   moveCount:
     value: 0
+  autoPlay: 0
   updateMapCount: 5
   teachTime: 0
+  dragTime: 0
   canMatchRow: -1
   canMatchCol: -1
+  canMatchDrag: -1
   normalBossObj: {fileID: 1548086880}
   angryBossObj: {fileID: 1303018031}
   cryBossObj: {fileID: 399737641}
