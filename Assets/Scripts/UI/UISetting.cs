@@ -23,6 +23,7 @@ public class UISetting : UIBase
     [SerializeField] GameObject languageObj;
     [SerializeField] Button koreanBtn;
     [SerializeField] Button englishBtn;
+    [SerializeField] Button guideInitBtn;
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -86,6 +87,16 @@ public class UISetting : UIBase
         effectSlider.OnValueChangedAsObservable().Subscribe(_ =>
         {
             CHMMain.Sound.SetEffectVolume(_);
+        });
+
+        guideInitBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            loginData.guideIndex = 0;
+
+            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+
+            SceneManager.LoadScene(1);
         });
     }
 }

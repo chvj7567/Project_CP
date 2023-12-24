@@ -233,6 +233,26 @@ public class First : MonoBehaviour
             logoutBtn.gameObject.SetActive(login);
 
             adScript.GetAdvertise();
+
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            if (loginData.guideIndex == 0)
+            {
+                Time.timeScale = 0;
+
+                guideBackground.SetActive(true);
+                guideBackground.transform.SetAsLastSibling();
+
+                guideBackgroundBtn.gameObject.SetActive(true);
+                guideBackgroundBtn.transform.SetAsLastSibling();
+
+                var tutorialIndex = await TutorialStart();
+                loginData.guideIndex = tutorialIndex;
+
+                guideBackground.SetActive(false);
+                guideBackgroundBtn.gameObject.SetActive(false);
+
+                CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            }
         }
 
         ChangeBackgroundLoop();

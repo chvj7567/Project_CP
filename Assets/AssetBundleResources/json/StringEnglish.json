@@ -382,5 +382,13 @@
         {
             "stringID": 95,
             "value": "\rWhen HP reaches 1, you can only explode in the area of ​​the color bomb.\r\nYou've entered the realm of the black bomb!"
+        },
+        {
+            "stringID": 96,
+            "value": "Game Guide"
+        },
+        {
+            "stringID": 97,
+            "value": "Replay"
         }
     ]
