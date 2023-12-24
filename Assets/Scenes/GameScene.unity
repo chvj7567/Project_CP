@@ -801,7 +801,7 @@ MonoBehaviour:
   - {fileID: 837858725}
   - {fileID: 634807760}
   - {fileID: 1135207851}
-  delay: 0.2
+  delay: 0.25
   delayMillisecond: 1000
   isDrag: 0
   isLock: 0
