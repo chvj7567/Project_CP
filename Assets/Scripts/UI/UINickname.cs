@@ -29,12 +29,6 @@ public class UINickname : UIBase
     {
         nameText.SetText("");
 
-        CHMGPGS.Instance.LoadAllLeaderboardArray(GPGSIds.leaderboard_normal_stage_rank, scores =>
-        {
-            for (int i = 0; i < scores.Length; i++)
-                Debug.Log($"{i}, {scores[i].rank}, {scores[i].value}, {scores[i].userID}, {scores[i].date}\n");
-        });
-
         enterBtn.OnClickAsObservable().Subscribe(_ =>
         {
             var userID = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID;

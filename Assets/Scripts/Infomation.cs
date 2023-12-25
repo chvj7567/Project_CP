@@ -90,4 +90,12 @@ public class Infomation
         public Defines.EBlockState connectNextBlock = Defines.EBlockState.None;
         public int descNextBlockStringID = -1;
     }
+
+    [Serializable]
+    public class RankInfo
+    {
+        public string nickname = "";
+        public int stageRank = -1;
+        public int stage = -1;
+    }
 }
