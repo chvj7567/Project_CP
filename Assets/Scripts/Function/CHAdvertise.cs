@@ -13,13 +13,13 @@ public class CHAdvertise : MonoBehaviour
         {
             lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
         }
+        else if (selectStage == (int)Defines.ESelectStage.Hard)
+        {
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
+        }
         else if (selectStage == (int)Defines.ESelectStage.Normal)
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
-        }
-        else if (selectStage == (int)Defines.ESelectStage.Easy)
-        {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
         }
 
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);

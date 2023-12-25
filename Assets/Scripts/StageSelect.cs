@@ -19,13 +19,13 @@ public class StageSelect : MonoBehaviour
         Color color = Color.white;
         switch (select)
         {
-            case ESelectStage.Normal:
+            case ESelectStage.Hard:
                 color = Color.cyan;
                 break;
             case ESelectStage.Boss:
                 color = Color.red;
                 break;
-            case ESelectStage.Easy:
+            case ESelectStage.Normal:
                 color = Color.white;
                 break;
         }
@@ -45,13 +45,13 @@ public class StageSelect : MonoBehaviour
                 var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
                 switch (selectStage)
                 {
-                    case ESelectStage.Normal:
+                    case ESelectStage.Hard:
                         {
-                            PlayerPrefs.SetInt(CHMMain.String.Stage, int.Parse(btnList[index].text.text));
+                            PlayerPrefs.SetInt(CHMMain.String.HardStage, int.Parse(btnList[index].text.text));
 
                             CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
                             {
-                                stage = PlayerPrefs.GetInt(CHMMain.String.Stage)
+                                stage = PlayerPrefs.GetInt(CHMMain.String.HardStage)
                             });
                         }
                         break;
@@ -65,13 +65,13 @@ public class StageSelect : MonoBehaviour
                             });
                         }
                         break;
-                    case ESelectStage.Easy:
+                    case ESelectStage.Normal:
                         {
-                            PlayerPrefs.SetInt(CHMMain.String.EasyStage, int.Parse(btnList[index].text.text));
+                            PlayerPrefs.SetInt(CHMMain.String.NormalStage, int.Parse(btnList[index].text.text));
 
                             CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
                             {
-                                stage = PlayerPrefs.GetInt(CHMMain.String.EasyStage)
+                                stage = PlayerPrefs.GetInt(CHMMain.String.NormalStage)
                             });
                         }
                         break;
@@ -206,14 +206,14 @@ public class StageSelect : MonoBehaviour
 
         switch (selectStage)
         {
-            case Defines.ESelectStage.Normal:
-                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+            case Defines.ESelectStage.Hard:
+                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
                 break;
             case Defines.ESelectStage.Boss:
                 lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
                 break;
-            case Defines.ESelectStage.Easy:
-                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+            case Defines.ESelectStage.Normal:
+                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
                 break;
         }
 
@@ -227,14 +227,14 @@ public class StageSelect : MonoBehaviour
 
         switch (selectStage)
         {
-            case Defines.ESelectStage.Normal:
-                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage;
+            case Defines.ESelectStage.Hard:
+                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage;
                 break;
             case Defines.ESelectStage.Boss:
                 clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage - CHMData.Instance.BossStageStartValue;
                 break;
-            case Defines.ESelectStage.Easy:
-                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage;
+            case Defines.ESelectStage.Normal:
+                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage;
                 break;
         }
 

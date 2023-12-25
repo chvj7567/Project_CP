@@ -8,9 +8,11 @@ namespace Data
     public class Login
     {
         public string key = "";
+        public string userID = "";
+        public string nickname = "";
         public bool connectGPGS = false;
-        public int stage = 0;
-        public int easyStage = 0;
+        public int hardStage = 0;
+        public int normalStage = 0;
         public int bossStage = 0;
         public int selectCatShop = 0;
         public int guideIndex = 0;

@@ -71,6 +71,7 @@ public class Defines
         UIGameEnd,
         UISetting,
         UIStageSelect,
+        UINickname,
 
         Max
     }
@@ -304,9 +305,9 @@ public class Defines
 
     public enum ESelectStage
     {
-        Normal = 1,
+        Hard = 1,
         Boss = 2,
-        Easy = 3,
+        Normal = 3,
     }
 
     public enum EDrag

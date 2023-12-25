@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Defines;
 using static Infomation;
+using static Reporter;
 
 public class Game : MonoBehaviour
 {
@@ -97,14 +98,14 @@ public class Game : MonoBehaviour
     [SerializeField] RectTransform guideHole;
     [SerializeField] GameObject guideBackground;
     [SerializeField] Button guideBackgroundBtn;
-    [SerializeField] List<RectTransform> easyStageGuideHoleList = new List<RectTransform>();
+    [SerializeField] List<RectTransform> normalStageGuideHoleList = new List<RectTransform>();
     [SerializeField] List<RectTransform> bossStageGuideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
 
     List<Sprite> _blockSpriteList = new List<Sprite>();
     Infomation.StageInfo _stageInfo;
     List<Infomation.StageBlockInfo> _stageBlockInfoList = new List<Infomation.StageBlockInfo>();
-    Defines.ESelectStage _selectStage = Defines.ESelectStage.Normal;
+    Defines.ESelectStage _selectStage = Defines.ESelectStage.Hard;
     Data.Login _loginData;
 
     CancellationTokenSource tokenSource;
@@ -124,9 +125,9 @@ public class Game : MonoBehaviour
         onlyNormalStageObject.SetActive(true);
         onlyBossStageObject.SetActive(false);
 
-        for (int i = 0; i < easyStageGuideHoleList.Count; ++i)
+        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
-            easyStageGuideHoleList[i].gameObject.SetActive(false);
+            normalStageGuideHoleList[i].gameObject.SetActive(false);
         }
 
         for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
@@ -396,9 +397,9 @@ public class Game : MonoBehaviour
         var stage = 0;
         switch (_selectStage)
         {
-            case ESelectStage.Normal:
+            case ESelectStage.Hard:
                 {
-                    stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+                    stage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
                 }
                 break;
             case ESelectStage.Boss:
@@ -406,9 +407,9 @@ public class Game : MonoBehaviour
                     stage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
                 }
                 break;
-            case ESelectStage.Easy:
+            case ESelectStage.Normal:
                 {
-                    stage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+                    stage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
                 }
                 break;
         }
@@ -419,7 +420,7 @@ public class Game : MonoBehaviour
 
         switch (_selectStage)
         {
-            case ESelectStage.Normal:
+            case ESelectStage.Hard:
                 {
                     // 튜토리얼은 Easy(일반)에서 진행함으로 삭제
                     _stageInfo.tutorialID = -1;
@@ -431,7 +432,7 @@ public class Game : MonoBehaviour
                 break;
             case ESelectStage.Boss:
                 break;
-            case ESelectStage.Easy:
+            case ESelectStage.Normal:
                 {
                     // 난이도 조정
                     if (_stageInfo.time > 0)
@@ -586,7 +587,7 @@ public class Game : MonoBehaviour
     async Task StartGuide()
     // 가이드 시작
     {
-        if (_selectStage == Defines.ESelectStage.Easy && _loginData.guideIndex == 5)
+        if (_selectStage == Defines.ESelectStage.Normal && _loginData.guideIndex == 5)
         {
             Time.timeScale = 0;
 
@@ -628,7 +629,7 @@ public class Game : MonoBehaviour
     void StartTutorial()
     // 튜토리얼 시작
     {
-        if (_selectStage != Defines.ESelectStage.Normal && _stageInfo.tutorialID > 0)
+        if (_selectStage != Defines.ESelectStage.Hard && _stageInfo.tutorialID > 0)
         {
             Time.timeScale = 0;
 
@@ -657,13 +658,13 @@ public class Game : MonoBehaviour
 
         guideBackground.SetActive(true);
 
-        for (int i = 0; i < easyStageGuideHoleList.Count; ++i)
+        for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
             var guideInfo = CHMMain.Json.GetGuideInfo(i + 6);
             if (guideInfo == null)
                 break;
 
-            easyStageGuideHoleList[i].gameObject.SetActive(true);
+            normalStageGuideHoleList[i].gameObject.SetActive(true);
             guideDesc.SetStringID(guideInfo.descStringID);
 
             TaskCompletionSource<bool> buttonClicktask = new TaskCompletionSource<bool>();
@@ -675,12 +676,12 @@ public class Game : MonoBehaviour
 
             await buttonClicktask.Task;
 
-            easyStageGuideHoleList[i].gameObject.SetActive(false);
+            normalStageGuideHoleList[i].gameObject.SetActive(false);
 
             btnComplete.Dispose();
         }
 
-        tutorialCompleteTask.SetResult(easyStageGuideHoleList.Count);
+        tutorialCompleteTask.SetResult(normalStageGuideHoleList.Count);
 
         return await tutorialCompleteTask.Task;
     }
@@ -949,17 +950,26 @@ public class Game : MonoBehaviour
     {
         switch (_selectStage)
         {
-            case ESelectStage.Normal:
-                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage < PlayerPrefs.GetInt(CHMMain.String.Stage))
-                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage = PlayerPrefs.GetInt(CHMMain.String.Stage);
+            case ESelectStage.Hard:
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage < PlayerPrefs.GetInt(CHMMain.String.HardStage))
+                {
+                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
+                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_hard_stage_rank, PlayerPrefs.GetInt(CHMMain.String.HardStage));
+                }
                 break;
             case ESelectStage.Boss:
                 if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage < PlayerPrefs.GetInt(CHMMain.String.BossStage))
+                {
                     CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_boss_stage_rank, PlayerPrefs.GetInt(CHMMain.String.BossStage));
+                }
                 break;
-            case ESelectStage.Easy:
-                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage < PlayerPrefs.GetInt(CHMMain.String.EasyStage))
-                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage = PlayerPrefs.GetInt(CHMMain.String.EasyStage);
+            case ESelectStage.Normal:
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage < PlayerPrefs.GetInt(CHMMain.String.NormalStage))
+                {
+                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
+                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, PlayerPrefs.GetInt(CHMMain.String.NormalStage));
+                }
                 break;
         }
     }
@@ -969,8 +979,8 @@ public class Game : MonoBehaviour
     {
         switch (_selectStage)
         {
-            case ESelectStage.Normal:
-                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).stage >= PlayerPrefs.GetInt(CHMMain.String.Stage))
+            case ESelectStage.Hard:
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage >= PlayerPrefs.GetInt(CHMMain.String.HardStage))
                 {
                     return Defines.EClearState.Clear;
                 }
@@ -981,8 +991,8 @@ public class Game : MonoBehaviour
                     return Defines.EClearState.Clear;
                 }
                 break;
-            case ESelectStage.Easy:
-                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).easyStage >= PlayerPrefs.GetInt(CHMMain.String.EasyStage))
+            case ESelectStage.Normal:
+                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage >= PlayerPrefs.GetInt(CHMMain.String.NormalStage))
                 {
                     return Defines.EClearState.Clear;
                 }
@@ -1175,7 +1185,7 @@ public class Game : MonoBehaviour
             {
                 tutorialNextBlock = true;
 
-                if (_selectStage != Defines.ESelectStage.Normal && _stageInfo.tutorialID > 0)
+                if (_selectStage != Defines.ESelectStage.Hard && _stageInfo.tutorialID > 0)
                 {
                     var tutorialInfo = CHMMain.Json.GetTutorialInfo(_stageInfo.tutorialID);
                     if (tutorialInfo == null || tutorialInfo.connectNextBlock == Defines.EBlockState.None)

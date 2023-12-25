@@ -8,8 +8,8 @@ public class CHMString
     public string CatPang = "CatPang";
     public string Login = "Login";
     public string SelectStage = "SelectStage";
-    public string Stage = "Stage";
-    public string EasyStage = "EasyStage";
+    public string HardStage = "HardStage";
+    public string NormalStage = "NormalStage";
     public string BossStage = "BossStage";
     public string Background = "Background";
     public string Gold = "Gold";

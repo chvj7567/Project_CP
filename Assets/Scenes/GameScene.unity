@@ -847,7 +847,7 @@ MonoBehaviour:
   guideHole: {fileID: 440321188}
   guideBackground: {fileID: 1855074202}
   guideBackgroundBtn: {fileID: 1745560286}
-  easyStageGuideHoleList:
+  normalStageGuideHoleList:
   - {fileID: 353511695}
   - {fileID: 2045794760}
   - {fileID: 1605338125}

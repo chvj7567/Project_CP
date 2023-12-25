@@ -402,5 +402,13 @@
         {
             "stringID": 100,
             "value": "A stage where the player must defeat the boss before his HP runs out.\r\n(You can increase HP and attack power in the store.)"
+        },
+        {
+            "stringID": 101,
+            "value": "Please choose a nickname."
+        },
+        {
+            "stringID": 102,
+            "value": "Enter"
         }
     ]

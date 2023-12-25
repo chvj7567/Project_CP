@@ -30,6 +30,8 @@ public class First : MonoBehaviour
     [SerializeField] Button guideBackgroundBtn;
     [SerializeField] List<RectTransform> guideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
+    [SerializeField] CHTMPro userNickname;
+
     CancellationTokenSource tokenSource;
 
     bool initButton = false;
@@ -128,6 +130,11 @@ public class First : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
+        if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname == "")
+        {
+            CHMMain.UI.ShowUI(Defines.EUI.UINickname, new CHUIArg());
+        }
+
         MenuBtn.gameObject.SetActive(false);
         stageSelect1.SetActive(false);
         stageSelect2.SetActive(false);
@@ -169,7 +176,7 @@ public class First : MonoBehaviour
                 {
                     if (success)
                     {
-                        Debug.Log("GPGS Login Success");
+                        Debug.Log($"GPGS Login Success : {localUser.userName}/{localUser.id}");
                         await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
                         dataDownload.Value = true;
 
@@ -258,6 +265,8 @@ public class First : MonoBehaviour
         ChangeBackgroundLoop();
 
         bundleDownload.Value = true;
+
+        userNickname.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname);
 
         InitButton();
     }
@@ -393,8 +402,8 @@ public class First : MonoBehaviour
 
         if (CHMData.Instance.newUser)
         {
-            PlayerPrefs.SetInt(CHMMain.String.Stage, 1);
-            PlayerPrefs.SetInt(CHMMain.String.EasyStage, 1);
+            PlayerPrefs.SetInt(CHMMain.String.HardStage, 1);
+            PlayerPrefs.SetInt(CHMMain.String.NormalStage, 1);
             PlayerPrefs.SetInt(CHMMain.String.BossStage, 1 + CHMData.Instance.BossStageStartValue);
         }
 
