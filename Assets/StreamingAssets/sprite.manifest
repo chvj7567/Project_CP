@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3922248171
+CRC: 4085961789
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b8c896ffcd0110b5f3afe65c1767c02c
+    Hash: 491e0d2f2bfe4dd8d800e26dec3c8387
   TypeTreeHash:
     serializedVersion: 2
     Hash: 4df8c69f2c8a6ad9e3cbf82bb83e4dc3
@@ -59,7 +59,7 @@ Assets:
 - Assets/AssetBundleResources/sprite/Arrow6.png
 - Assets/AssetBundleResources/sprite/BlueBomb.png
 - Assets/AssetBundleResources/sprite/Tutorial_BlueBomb_Bomb.png
-- Assets/AssetBundleResources/sprite/Background4.png
+- Assets/AssetBundleResources/sprite/BackGround4.png
 - Assets/AssetBundleResources/sprite/Tutorial_Arrow6.png
 - Assets/AssetBundleResources/sprite/PinkBomb.png
 - Assets/AssetBundleResources/sprite/OrangeBomb.png

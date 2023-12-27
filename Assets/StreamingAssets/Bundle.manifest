@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 483181482
+CRC: 4127682469
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -19,14 +19,14 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: sprite
     Info_4:
-      Name: sound
-      Dependencies: {}
-    Info_5:
       Name: material
       Dependencies:
         Dependency_0: texture
-    Info_6:
+    Info_5:
       Name: texture
+      Dependencies: {}
+    Info_6:
+      Name: sound
       Dependencies: {}
     Info_7:
       Name: effect
