@@ -21,7 +21,8 @@ public class First : MonoBehaviour
     [SerializeField] Button logoutBtn;
     [SerializeField] Button shopBtn;
     [SerializeField] Button bombBtn;
-    [SerializeField] Button MenuBtn;
+    [SerializeField] Button menuBtn;
+    [SerializeField] Button rankingBtn;
     [SerializeField, ReadOnly] int backgroundIndex = 0;
     [SerializeField] CHAdvertise adScript;
     [SerializeField] ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
@@ -30,7 +31,7 @@ public class First : MonoBehaviour
     [SerializeField] Button guideBackgroundBtn;
     [SerializeField] List<RectTransform> guideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
-    [SerializeField] CHTMPro userNickname;
+    [SerializeField] CHTMPro userID;
 
     CancellationTokenSource tokenSource;
 
@@ -84,6 +85,21 @@ public class First : MonoBehaviour
             CHMMain.UI.ShowUI(Defines.EUI.UISetting, new CHUIArg());
         });
 
+        rankingBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).connectGPGS == false)
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                   stringID = 107
+                });
+            }
+            else
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIRank, new CHUIArg());
+            }
+        });
+
         connectGPGSBtn.OnPointerClickAsObservable().Subscribe(_ =>
         {
             if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data))
@@ -101,6 +117,8 @@ public class First : MonoBehaviour
                         dataDownload.Value = true;
 
                         SetLoginState(true);
+
+                        CHMMain.UI.ShowUI(Defines.EUI.UIRank, new UIRankArg());
                     }
                     else
                     {
@@ -114,7 +132,7 @@ public class First : MonoBehaviour
             }
         });
 
-        MenuBtn.OnClickAsObservable().Subscribe(_ =>
+        menuBtn.OnClickAsObservable().Subscribe(_ =>
         {
             var arg = new UIStageSelectArg();
             arg.stageSelect += async (select) =>
@@ -130,12 +148,13 @@ public class First : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
-        if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname == "")
+        // DB 미사용으로 인해 닉네임은 미사용(랭킹에 다른 유저 닉네임 못 가져옴)
+        /*if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname == "")
         {
             CHMMain.UI.ShowUI(Defines.EUI.UINickname, new CHUIArg());
-        }
+        }*/
 
-        MenuBtn.gameObject.SetActive(false);
+        menuBtn.gameObject.SetActive(false);
         stageSelect1.SetActive(false);
         stageSelect2.SetActive(false);
         startBtn.gameObject.SetActive(false);
@@ -144,6 +163,7 @@ public class First : MonoBehaviour
         logoutBtn.gameObject.SetActive(false);
         shopBtn.gameObject.SetActive(false);
         bombBtn.gameObject.SetActive(false);
+        rankingBtn.gameObject.SetActive(false);
 
         for (int i = 0; i < guideHoleList.Count; ++i)
         {
@@ -233,7 +253,8 @@ public class First : MonoBehaviour
             missionBtn.gameObject.SetActive(true);
             shopBtn.gameObject.SetActive(true);
             bombBtn.gameObject.SetActive(true);
-            MenuBtn.gameObject.SetActive(true);
+            menuBtn.gameObject.SetActive(true);
+            rankingBtn.gameObject.SetActive(true);
 
             var login = GetLoginState();
             connectGPGSBtn.gameObject.SetActive(login == false);
@@ -266,7 +287,7 @@ public class First : MonoBehaviour
 
         bundleDownload.Value = true;
 
-        userNickname.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname);
+        userID.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID);
 
         InitButton();
     }
@@ -414,7 +435,8 @@ public class First : MonoBehaviour
         bombBtn.gameObject.SetActive(true);
         stageSelect1.SetActive(true);
         stageSelect2.SetActive(true);
-        MenuBtn.gameObject.SetActive(true);
+        menuBtn.gameObject.SetActive(true);
+        rankingBtn.gameObject.SetActive(true);
 
         // 기본 스킨
         CHMData.Instance.GetShopData("1").buy = true;

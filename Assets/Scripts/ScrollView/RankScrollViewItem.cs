@@ -6,15 +6,11 @@ using UniRx;
 
 public class RankScrollViewItem : MonoBehaviour
 {
-    [SerializeField] CHTMPro missionValueText;
-    [SerializeField] List<GameObject> missionImgList = new List<GameObject>();
-    [SerializeField] List<GameObject> rewardImgList = new List<GameObject>();
-    [SerializeField] Button rewardBtn;
-    [SerializeField] GameObject clearObj;
+    [SerializeField] CHTMPro userID;
+    [SerializeField] CHTMPro stage;
+    [SerializeField] CHTMPro stageRank;
 
     Infomation.RankInfo info;
-    Data.Mission missionData;
-    Data.Collection collectionData;
 
     void Start()
     {
@@ -23,6 +19,8 @@ public class RankScrollViewItem : MonoBehaviour
 
     public void Init(int index, Infomation.RankInfo info)
     {
-
+        userID.SetText(info.userID);
+        stageRank.SetText(info.stageRank);
+        stage.SetText(info.stage);
     }
 }

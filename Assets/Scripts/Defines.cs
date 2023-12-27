@@ -72,6 +72,7 @@ public class Defines
         UISetting,
         UIStageSelect,
         UINickname,
+        UIRank,
 
         Max
     }

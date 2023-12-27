@@ -51,7 +51,7 @@ public class AssetBundleMenuItem
         BuildPipeline.BuildAssetBundles(directory, BuildAssetBundleOptions.None, BuildTarget.Android);
     }
 
-    [Serializable]
+    /*[Serializable]
     public class Temp
     {
         public List<StageInfo> stageList = new List<StageInfo>();
@@ -98,5 +98,5 @@ public class AssetBundleMenuItem
         File.WriteAllText(filePath, jsonData);
 
         Debug.Log("JSON 데이터 생성이 완료되었습니다.");
-    }
+    }*/
 }

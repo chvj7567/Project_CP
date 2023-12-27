@@ -6,6 +6,7 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using static Defines;
 
 public class UINicknameArg : CHUIArg
 {
@@ -31,28 +32,40 @@ public class UINickname : UIBase
 
         enterBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var userID = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID;
-            if (userID == "")
+            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            if (loginData.userID == "")
             {
-                CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, 0, (success) =>
+                if (loginData.connectGPGS)
                 {
-                    if (success)
+                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, 0, (success) =>
                     {
-                        CHMGPGS.Instance.LoadCustomLeaderboardArray(GPGSIds.leaderboard_normal_stage_rank, 1, LeaderboardStart.PlayerCentered, LeaderboardTimeSpan.AllTime, (success, data) =>
+                        if (success)
                         {
-                            if (success)
+                            CHMGPGS.Instance.LoadCustomLeaderboardArray(GPGSIds.leaderboard_normal_stage_rank, 1, LeaderboardStart.PlayerCentered, LeaderboardTimeSpan.AllTime, (success, data) =>
                             {
-                                Debug.Log($"Save ID / Name : {data.Id} / {name.text}");
-                                nameText.SetText(name.text);
-                                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID = data.Id;
-                                CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname = name.text;
-                                CHMData.Instance.SaveData(CHMMain.String.CatPang);
+                                if (success)
+                                {
+                                    Debug.Log($"Save ID / Name : {data.Id} / {name.text}");
+                                    nameText.SetText(name.text);
+                                    loginData.userID = data.Id;
+                                    loginData.nickname = name.text;
+                                    CHMData.Instance.SaveData(CHMMain.String.CatPang);
 
-                                CHMMain.UI.CloseUI(gameObject);
-                            }
-                        });
-                    }
-                });
+                                    CHMMain.UI.CloseUI(gameObject);
+                                }
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    Debug.Log($"Save ID / Name : {name.text}");
+                    nameText.SetText(name.text);
+                    loginData.nickname = name.text;
+                    CHMData.Instance.SaveData(CHMMain.String.CatPang);
+
+                    CHMMain.UI.CloseUI(gameObject);
+                }
             }
             else
             {

@@ -94,8 +94,8 @@ public class Infomation
     [Serializable]
     public class RankInfo
     {
-        public string nickname = "";
+        public string userID = "";
         public int stageRank = -1;
-        public int stage = -1;
+        public Int64 stage = -1;
     }
 }

@@ -410,5 +410,25 @@
         {
             "stringID": 102,
             "value": "Enter"
+        },
+        {
+            "stringID": 103,
+            "value": "Rankig : {0}"
+        },
+        {
+            "stringID": 104,
+            "value": "Stage : {0}"
+        },
+        {
+            "stringID": 105,
+            "value": "Ranking"
+        },
+        {
+            "stringID": 106,
+            "value": "You can check the ranking for each mode."
+        },
+        {
+            "stringID": 107,
+            "value": "You can check your ranking by logging in to Google."
         }
     ]

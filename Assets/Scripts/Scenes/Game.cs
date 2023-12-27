@@ -587,7 +587,7 @@ public class Game : MonoBehaviour
     async Task StartGuide()
     // 가이드 시작
     {
-        if (_selectStage == Defines.ESelectStage.Normal && _loginData.guideIndex == 5)
+        if (_selectStage == Defines.ESelectStage.Normal && _loginData.guideIndex == 6)
         {
             Time.timeScale = 0;
 
@@ -597,7 +597,7 @@ public class Game : MonoBehaviour
             guideBackgroundBtn.gameObject.SetActive(true);
             guideBackgroundBtn.transform.SetAsLastSibling();
 
-            var guideIndex = await EasyStageGuideStart();
+            var guideIndex = await NormalStageGuideStart();
             _loginData.guideIndex += guideIndex;
 
             guideBackground.SetActive(false);
@@ -606,7 +606,7 @@ public class Game : MonoBehaviour
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
 
-        if (_selectStage == Defines.ESelectStage.Boss && _loginData.guideIndex == 11)
+        if (_selectStage == Defines.ESelectStage.Boss && _loginData.guideIndex == 12)
         {
             Time.timeScale = 0;
 
@@ -651,7 +651,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    async Task<int> EasyStageGuideStart()
+    async Task<int> NormalStageGuideStart()
     // 일반 스테이지 Game UI 가이드 시작
     {
         TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
@@ -660,7 +660,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMMain.Json.GetGuideInfo(i + 6);
+            var guideInfo = CHMMain.Json.GetGuideInfo(i + 7);
             if (guideInfo == null)
                 break;
 
@@ -695,7 +695,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMMain.Json.GetGuideInfo(i + 12);
+            var guideInfo = CHMMain.Json.GetGuideInfo(i + 13);
             if (guideInfo == null)
                 break;
 
