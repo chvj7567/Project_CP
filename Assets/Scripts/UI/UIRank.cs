@@ -24,6 +24,9 @@ public class UIRank : UIBase
 
     [SerializeField] CHTMPro curRankDesc;
 
+    [SerializeField] int aiCount;
+
+    [SerializeField, ReadOnly] public Defines.ESelectStage curTap;
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIRankArg;
@@ -34,6 +37,7 @@ public class UIRank : UIBase
         normalRankTapBtn.OnClickAsObservable().Subscribe(async _ =>
         {
             curRankDesc.SetStringID(68);
+            curTap = Defines.ESelectStage.Normal;
             var rankList = await GetRankList(Defines.ESelectStage.Normal);
             scrollView.SetItemList(rankList);
         });
@@ -41,6 +45,7 @@ public class UIRank : UIBase
         hardRankTapBtn.OnClickAsObservable().Subscribe(async _ =>
         {
             curRankDesc.SetStringID(77);
+            curTap = Defines.ESelectStage.Hard;
             var rankList = await GetRankList(Defines.ESelectStage.Hard);
             scrollView.SetItemList(rankList);
         });
@@ -48,11 +53,13 @@ public class UIRank : UIBase
         bossRankTapBtn.OnClickAsObservable().Subscribe(async _ =>
         {
             curRankDesc.SetStringID(69);
+            curTap = Defines.ESelectStage.Boss;
             var rankList = await GetRankList(Defines.ESelectStage.Boss);
             scrollView.SetItemList(rankList);
         });
 
         curRankDesc.SetStringID(68);
+        curTap = Defines.ESelectStage.Normal;
         scrollView.SetItemList(await GetRankList(Defines.ESelectStage.Normal));
     }
 
@@ -92,7 +99,7 @@ public class UIRank : UIBase
                             {
                                 if (success)
                                 {
-                                    Debug.Log("InsertMyFirstRank Success");
+                                    Debug.Log("Insert MyFirstRank Success");
                                 }
 
                                 myFirstRankTask.SetResult(true);
@@ -114,13 +121,27 @@ public class UIRank : UIBase
             {
                 CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
                 {
-                    for (int i = 0; i < userProfiles.Length; i++)
+                    int lastRank = 0;
+                    for (int i = 0; i < userProfiles.Length; ++i)
                     {
                         rankList.Add(new Infomation.RankInfo
                         {
                             userID = userProfiles[i].userName,
+                            profileTexture = userProfiles[i].image,
                             stageRank = scores[i].rank,
                             stage = scores[i].value
+                        });
+
+                        lastRank = scores[i].rank;
+                    }
+
+                    for (int i = 0; i < aiCount; ++i)
+                    {
+                        rankList.Add(new Infomation.RankInfo
+                        {
+                            userID = $"AI {i + 1}",
+                            stageRank = ++lastRank,
+                            stage = 0
                         });
                     }
 

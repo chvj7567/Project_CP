@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Infomation
 {
@@ -95,6 +96,7 @@ public class Infomation
     public class RankInfo
     {
         public string userID = "";
+        public Texture2D profileTexture;
         public int stageRank = -1;
         public Int64 stage = -1;
     }

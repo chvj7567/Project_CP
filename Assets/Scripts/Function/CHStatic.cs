@@ -10,6 +10,8 @@ using UnityEditor;
 
 public class CHStatic : MonoBehaviour
 {
+    public static readonly int BossStageStartValue = 100000;
+
 #if UNITY_EDITOR
     public static void LoadAssetOnEditor<T>(string _bundleName, string _assetName, Action<T> _callback) where T : UnityEngine.Object
     {

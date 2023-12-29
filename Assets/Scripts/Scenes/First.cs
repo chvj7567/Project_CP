@@ -32,6 +32,7 @@ public class First : MonoBehaviour
     [SerializeField] List<RectTransform> guideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
     [SerializeField] CHTMPro userID;
+    [SerializeField] CHTMPro waitText;
 
     CancellationTokenSource tokenSource;
 
@@ -113,12 +114,13 @@ public class First : MonoBehaviour
                     if (success)
                     {
                         PlayerPrefs.SetInt(CHMMain.String.Login, 1);
-                        Debug.Log("GPGS Login Success");
+                        Debug.Log($"GPGS Login Success : {localUser.userName}/{localUser.id}");
                         dataDownload.Value = true;
 
                         SetLoginState(true);
 
-                        CHMMain.UI.ShowUI(Defines.EUI.UIRank, new UIRankArg());
+                        CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID = localUser.userName;
+                        userID.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID);
                     }
                     else
                     {
@@ -164,6 +166,7 @@ public class First : MonoBehaviour
         shopBtn.gameObject.SetActive(false);
         bombBtn.gameObject.SetActive(false);
         rankingBtn.gameObject.SetActive(false);
+        waitText.gameObject.SetActive(false);
 
         for (int i = 0; i < guideHoleList.Count; ++i)
         {
@@ -190,17 +193,23 @@ public class First : MonoBehaviour
             if (_ == true && dataDownload.Value == false)
             {
 #if UNITY_EDITOR == false
+            waitText.gameObject.SetActive(true);
+
             if (GetPhoneLoginState() == true)
             {
                 CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
                     if (success)
                     {
+                        waitText.gameObject.SetActive(false);
                         Debug.Log($"GPGS Login Success : {localUser.userName}/{localUser.id}");
                         await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
                         dataDownload.Value = true;
 
                         SetLoginState(true);
+
+                        CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID = localUser.userName;
+                        userID.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID);
                     }
                     else
                     {

@@ -238,8 +238,8 @@ public class CHToolCreateMap : EditorWindow
             int tempStage = 0;
             if (bossStage)
             {
-                tempGroup = CHTool.BossStageStartValue + group;
-                tempStage = CHTool.BossStageStartValue + stage;
+                tempGroup = CHStatic.BossStageStartValue + group;
+                tempStage = CHStatic.BossStageStartValue + stage;
             }
             else
             {
@@ -292,16 +292,16 @@ public class CHToolCreateMap : EditorWindow
             int tempStage = 0;
             if (bossStage)
             {
-                if (group <= CHTool.BossStageStartValue)
+                if (group <= CHStatic.BossStageStartValue)
                 {
-                    tempGroup = CHTool.BossStageStartValue + group;
+                    tempGroup = CHStatic.BossStageStartValue + group;
                 }
                 else
                 {
                     tempGroup = group;
                 }
 
-                tempStage = CHTool.BossStageStartValue + stage;
+                tempStage = CHStatic.BossStageStartValue + stage;
             }
             else
             {

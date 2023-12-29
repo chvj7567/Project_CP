@@ -23,6 +23,8 @@ public class UISetting : UIBase
     [SerializeField] GameObject languageObj;
     [SerializeField] Button koreanBtn;
     [SerializeField] Button englishBtn;
+
+    [SerializeField] GameObject guideInitObj;
     [SerializeField] Button guideInitBtn;
 
     public override void InitUI(CHUIArg _uiArg)
@@ -39,6 +41,7 @@ public class UISetting : UIBase
                 soundObj.SetActive(true);
                 boomObj.SetActive(false);
                 languageObj.SetActive(true);
+                guideInitObj.SetActive(true);
             }
         });
 
@@ -49,6 +52,7 @@ public class UISetting : UIBase
                 boomObj.SetActive(true);
                 soundObj.SetActive(false);
                 languageObj.SetActive(false);
+                guideInitObj.SetActive(false);
             }
         });
 

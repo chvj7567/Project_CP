@@ -24,8 +24,9 @@ public class Game : MonoBehaviour
     [SerializeField] CHTMPro timerText;
     [SerializeField, ReadOnly] float curTimer;
 
-    [Header("골드")]
+    [Header("블럭 터진 후 이미지")]
     [SerializeField] Image goldImg;
+    [SerializeField] List<Image> catFootImgList = new List<Image>();
 
     [Header("블럭")]
     [SerializeField] Transform parent;
@@ -1692,7 +1693,18 @@ public class Game : MonoBehaviour
                     block.remove = true;
                     block.rectTransform.DOScale(0f, delay);
 
-                    var gold = CHMMain.Resource.Instantiate(goldImg.gameObject, transform.parent);
+                    Image img = null;
+                    if (_selectStage == Defines.ESelectStage.Boss)
+                    {
+                        var randomImg = UnityEngine.Random.Range(0, catFootImgList.Count);
+                        img = catFootImgList[randomImg];
+                    }
+                    else
+                    {
+                        img = goldImg;
+                    }
+
+                    var gold = CHMMain.Resource.Instantiate(img.gameObject, transform.parent);
                     if (gold != null)
                     {
                         var rect = gold.GetComponent<RectTransform>();
@@ -1701,7 +1713,7 @@ public class Game : MonoBehaviour
                             rect.anchoredPosition = block.rectTransform.anchoredPosition;
                             rect.DOAnchorPosY(rect.anchoredPosition.y + UnityEngine.Random.Range(30f, 50f), .5f).OnComplete(() =>
                             {
-                                rect.DOAnchorPos(goldImg.rectTransform.anchoredPosition, UnityEngine.Random.Range(.2f, 1f)).OnComplete(() =>
+                                rect.DOAnchorPos(img.rectTransform.anchoredPosition, UnityEngine.Random.Range(.2f, 1f)).OnComplete(() =>
                                 {
                                     CHMMain.Resource.Destroy(gold);
                                 });
@@ -2247,8 +2259,7 @@ public class Game : MonoBehaviour
 
         CHMMain.Sound.Play(ESound.Ching);
 
-        int random = UnityEngine.Random.Range((int)Defines.EPangEffect.Blue, (int)Defines.EPangEffect.Green + 1);
-        CreateEffect(pangEffectList[random], block.rectTransform.anchoredPosition);
+        CreateEffect(pangEffectList[(int)Defines.EPangEffect.Explosion], block.rectTransform.anchoredPosition);
 
         ChangeMatchState(block.row - 1, block.col - 1);
         ChangeMatchState(block.row - 1, block.col);

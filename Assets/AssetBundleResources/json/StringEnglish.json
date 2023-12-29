@@ -430,5 +430,9 @@
         {
             "stringID": 107,
             "value": "You can check your ranking by logging in to Google."
+        },
+        {
+            "stringID": 108,
+            "value": "Logging in..."
         }
     ]
