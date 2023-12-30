@@ -118,7 +118,7 @@ public class CHMData : CHSingleton<CHMData>
         Data.ExtractData<Data.Shop> shopData = new Data.ExtractData<Data.Shop>();
         saveData.shopList = shopData.MakeList(shopDataDic);
 
-#if UNITY_EDITOR == false
+#if UNITY_ANDROID
         json = JsonUtility.ToJson(saveData);
 #else
         json = JsonUtility.ToJson(saveData, true);
@@ -129,7 +129,7 @@ public class CHMData : CHSingleton<CHMData>
         File.WriteAllText($"{Application.persistentDataPath}/{_path}.json", json);
 
 
-#if UNITY_EDITOR == false
+#if UNITY_ANDROID
         if (saveData.loginList.First().connectGPGS == true)
         {
             CHMGPGS.Instance.SaveCloud(_path, json, success =>
@@ -140,7 +140,7 @@ public class CHMData : CHSingleton<CHMData>
 #endif
     }
 
-#if UNITY_EDITOR == false
+#if UNITY_ANDROID
     public async Task LoadCloudData(string _path)
     {
         Debug.Log("Cloud Data Load");

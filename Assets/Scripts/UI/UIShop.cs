@@ -62,6 +62,17 @@ public class UIShop : UIBase
         {
             var shopList = shopScriptList.FindAll(_ => _.tapIndex == tapIndex);
 
+            if (tapIndex == 2 && CHMIAP.Instance.IsInitialized == false)
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    stringID = 109
+                });
+
+                CHMIAP.Instance.Init();
+                return;
+            }
+
             scrollView.SetItemList(shopList);
         });
 
