@@ -42,7 +42,7 @@ public class RankScrollViewItem : MonoBehaviour
 
         stageRank.SetText(info.stageRank);
         
-        if (uiRank.curTap == Defines.ESelectStage.Boss)
+        if (uiRank.curTap == Defines.ESelectStage.Boss && info.stage > 0)
         {
             stage.SetText(info.stage - CHStatic.BossStageStartValue);
         }
