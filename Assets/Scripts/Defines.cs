@@ -253,7 +253,7 @@ public class Defines
         GameClear,
         GameOverWait,
         GameClearWait,
-        EasyOrNormalStagePlay,
+        NormalOrHardStagePlay,
         BossStagePlay,
 
         Max

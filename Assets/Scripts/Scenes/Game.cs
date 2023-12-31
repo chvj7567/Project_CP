@@ -196,7 +196,7 @@ public class Game : MonoBehaviour
                     return;
                 }
 
-                if (gameResult.Value == EGameState.EasyOrNormalStagePlay)
+                if (gameResult.Value == EGameState.NormalOrHardStagePlay)
                 {
                     bool clear = true;
 
@@ -486,7 +486,7 @@ public class Game : MonoBehaviour
         }
         else
         {
-            gameResult.Value = EGameState.EasyOrNormalStagePlay;
+            gameResult.Value = EGameState.NormalOrHardStagePlay;
         }
 
         // 보스 스테이지일 경우만
@@ -827,7 +827,7 @@ public class Game : MonoBehaviour
             }
             else
             {
-                gameResult.Value = EGameState.EasyOrNormalStagePlay;
+                gameResult.Value = EGameState.NormalOrHardStagePlay;
             }
 
             return;
