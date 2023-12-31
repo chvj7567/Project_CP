@@ -18,6 +18,13 @@ public class UIStageSelect : UIBase
     [SerializeField] Button hardStageBtn;
     [SerializeField] Button bossStageBtn;
 
+    [SerializeField] GameObject normalLockObj;
+    [SerializeField] GameObject hardLockObj;
+    [SerializeField] GameObject bossLockObj;
+
+    bool hardStageLock = false;
+    bool bossStageLock = false;
+
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIStageSelectArg;
@@ -25,6 +32,26 @@ public class UIStageSelect : UIBase
 
     private void Start()
     {
+        normalLockObj.SetActive(false);
+        hardLockObj.SetActive(false);
+        bossLockObj.SetActive(false);
+
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+
+        var hardLockValue = CHMMain.Json.GetConstValueInfo(Defines.EConstValue.HardStage_NormalStageLock);
+        if (hardLockValue > loginData.normalStage)
+        {
+            hardStageLock = true;
+            hardLockObj.SetActive(true);
+        }
+
+        var bossLockValue = CHMMain.Json.GetConstValueInfo(Defines.EConstValue.BossStage_HardStageLock);
+        if (bossLockValue > loginData.hardStage)
+        {
+            bossStageLock = true;
+            bossLockObj.SetActive(true);
+        }
+
         normalStageBtn.OnClickAsObservable().Subscribe(_ =>
         {
             arg.stageSelect?.Invoke((int)Defines.ESelectStage.Normal);
@@ -33,12 +60,34 @@ public class UIStageSelect : UIBase
 
         hardStageBtn.OnClickAsObservable().Subscribe(_ =>
         {
+            if (hardStageLock)
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    stringID = 110,
+                    intValue = (int)hardLockValue
+                });
+
+                return;
+            }
+
             arg.stageSelect?.Invoke((int)Defines.ESelectStage.Hard);
             CHMMain.UI.CloseUI(gameObject);
         });
         
         bossStageBtn.OnClickAsObservable().Subscribe(_ =>
         {
+            if (bossStageLock)
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    stringID = 111,
+                    intValue = (int)bossLockValue
+                });
+
+                return;
+            }
+
             arg.stageSelect?.Invoke((int)Defines.ESelectStage.Boss);
             CHMMain.UI.CloseUI(gameObject);
         });

@@ -1,4 +1,6 @@
 [
   {"variable":1, "value":6},
-  {"variable":2, "value":12}
+  {"variable":2, "value":12},
+  {"variable":3, "value":100},
+  {"variable":4, "value":100}
 ]

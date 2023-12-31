@@ -327,5 +327,7 @@ public class Defines
     {
         NormalStageGuideMaxIndex = 1,
         BossStageGuideMaxIndex = 2,
+        HardStage_NormalStageLock = 3,
+        BossStage_HardStageLock = 4
     }
 }

@@ -401,7 +401,7 @@
         },
         {
             "stringID": 100,
-            "value": "A stage where the player must defeat the boss before his HP runs out.\r\n(You can increase HP and attack power in the store.)"
+            "value": "A stage where the player must defeat the boss before his HP runs out.\r"
         },
         {
             "stringID": 101,
@@ -438,5 +438,13 @@
         {
             "stringID": 109,
             "value": "\rFailed to load paid store information."
+        },
+        {
+            "stringID": 110,
+            "value": "You must clear stage {0} in normal mode."
+        },
+        {
+            "stringID": 111,
+            "value": "You must clear stage {0} in hard mode."
         }
     ]
