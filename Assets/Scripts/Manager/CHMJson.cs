@@ -21,6 +21,7 @@ public class CHMJson
         public ShopInfo[] shopInfoArr;
         public GuideInfo[] guideInfoArr;
         public TutorialInfo[] tutorialInfoArr;
+        public ConstValueInfo[] constValueInfoArr;
     }
 
     int loadCompleteFileCount = 0;
@@ -38,6 +39,7 @@ public class CHMJson
     List<ShopInfo> shopInfoList = new List<ShopInfo>();
     List<GuideInfo> guideInfoList = new List<GuideInfo>();
     List<TutorialInfo> tutorialInfoList = new List<TutorialInfo>();
+    List<ConstValueInfo> constValueInfoList = new List<ConstValueInfo>();
 
     public async Task Init()
     {
@@ -55,6 +57,7 @@ public class CHMJson
         missionInfoList.Clear();
         shopInfoList.Clear();
         tutorialInfoList.Clear();
+        constValueInfoList.Clear();
     }
 
     async Task LoadJsonData()
@@ -71,6 +74,7 @@ public class CHMJson
         await LoadShopInfo();
         await LoadGuideInfo();
         await LoadTutorialInfo();
+        await LoadConstValueInfo();
 
         /*actionList.Add(LoadStringInfo());
         actionList.Add(LoadSelectInfo());
@@ -277,6 +281,29 @@ public class CHMJson
         return await taskCompletionSource.Task;
     }
 
+    async Task<TextAsset> LoadConstValueInfo()
+    {
+        TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
+
+        Action<TextAsset> callback;
+
+        constValueInfoList.Clear();
+
+        CHMMain.Resource.LoadJson(Defines.EJsonType.ConstValue, callback = (TextAsset textAsset) =>
+        {
+            var jsonData = JsonUtility.FromJson<JsonData>(("{\"constValueInfoArr\":" + textAsset.text + "}"));
+            foreach (var data in jsonData.constValueInfoArr)
+            {
+                constValueInfoList.Add(data);
+            }
+
+            taskCompletionSource.SetResult(textAsset);
+            ++loadCompleteFileCount;
+        });
+
+        return await taskCompletionSource.Task;
+    }
+
     public string GetStringInfo(int stringID, Defines.ELanguageType languageType)
     {
         switch (languageType)
@@ -375,5 +402,14 @@ public class CHMJson
     public TutorialInfo GetTutorialInfo(int tutorialID)
     {
         return tutorialInfoList.Find(_ => _.tutorialStageID == tutorialID);
+    }
+
+    public Int64 GetConstValueInfo(Defines.EConstValue variable)
+    {
+        var constValueInfo = constValueInfoList.Find(_ => _.variable == variable);
+        if (constValueInfo == null)
+            return 0;
+
+        return constValueInfo.value;
     }
 }

@@ -17,6 +17,7 @@ public class Defines
         Shop,
         Guide,
         Tutorial,
+        ConstValue,
 
         Max
     }
@@ -320,5 +321,11 @@ public class Defines
         Down,
         Left,
         Right
+    }
+
+    public enum EConstValue
+    {
+        NormalStageGuideMaxIndex = 1,
+        BossStageGuideMaxIndex = 2,
     }
 }

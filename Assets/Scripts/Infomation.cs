@@ -100,4 +100,11 @@ public class Infomation
         public int stageRank = -1;
         public Int64 stage = -1;
     }
+
+    [Serializable]
+    public class ConstValueInfo
+    {
+        public Defines.EConstValue variable;
+        public Int64 value;
+    }
 }

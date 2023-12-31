@@ -588,7 +588,7 @@ public class Game : MonoBehaviour
     async Task StartGuide()
     // 가이드 시작
     {
-        if (_selectStage == Defines.ESelectStage.Normal && _loginData.guideIndex == 6)
+        if (_selectStage == Defines.ESelectStage.Normal && _loginData.guideIndex == (int)CHMMain.Json.GetConstValueInfo(Defines.EConstValue.NormalStageGuideMaxIndex))
         {
             Time.timeScale = 0;
 
@@ -607,7 +607,7 @@ public class Game : MonoBehaviour
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
 
-        if (_selectStage == Defines.ESelectStage.Boss && _loginData.guideIndex == 12)
+        if (_selectStage == Defines.ESelectStage.Boss && _loginData.guideIndex == (int)CHMMain.Json.GetConstValueInfo(Defines.EConstValue.BossStageGuideMaxIndex))
         {
             Time.timeScale = 0;
 
@@ -661,7 +661,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < normalStageGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMMain.Json.GetGuideInfo(i + 7);
+            var guideInfo = CHMMain.Json.GetGuideInfo(i + 1 + (int)CHMMain.Json.GetConstValueInfo(Defines.EConstValue.NormalStageGuideMaxIndex));
             if (guideInfo == null)
                 break;
 
@@ -696,7 +696,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < bossStageGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMMain.Json.GetGuideInfo(i + 13);
+            var guideInfo = CHMMain.Json.GetGuideInfo(i + 1 + (int)CHMMain.Json.GetConstValueInfo(Defines.EConstValue.BossStageGuideMaxIndex));
             if (guideInfo == null)
                 break;
 
