@@ -16856,6 +16856,1678 @@
             "tutorialBlock": false
         },
         {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 0,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 0,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 0,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 1,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 1,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": 10,
+            "row": 1,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 1,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 1,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 2,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": 10,
+            "row": 2,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 2,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": 10,
+            "row": 3,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": 10,
+            "row": 4,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": 10,
+            "row": 5,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 6,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": 10,
+            "row": 6,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 6,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": 10,
+            "row": 7,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 112,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 52,
+            "hp": 10,
+            "row": 0,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 52,
+            "hp": 10,
+            "row": 0,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 19,
+            "hp": -1,
+            "row": 6,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 40,
+            "hp": 3,
+            "row": 6,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 41,
+            "hp": 3,
+            "row": 6,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 42,
+            "hp": 3,
+            "row": 6,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 43,
+            "hp": 3,
+            "row": 6,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 44,
+            "hp": 3,
+            "row": 6,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 113,
+            "blockState": 19,
+            "hp": -1,
+            "row": 6,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 19,
+            "hp": -1,
+            "row": 4,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 19,
+            "hp": -1,
+            "row": 4,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 114,
+            "blockState": 19,
+            "hp": -1,
+            "row": 4,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 0,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 1,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 52,
+            "hp": 25,
+            "row": 4,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 52,
+            "hp": 25,
+            "row": 4,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 52,
+            "hp": 25,
+            "row": 4,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 16,
+            "hp": -1,
+            "row": 5,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 16,
+            "hp": -1,
+            "row": 5,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 16,
+            "hp": -1,
+            "row": 5,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 7,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 115,
+            "blockState": 17,
+            "hp": -1,
+            "row": 8,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 0,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 1,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 1,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 1,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 3,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 3,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 3,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 3,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 3,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 3,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 17,
+            "hp": 5,
+            "row": 4,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 17,
+            "hp": 5,
+            "row": 4,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 17,
+            "hp": 5,
+            "row": 4,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 17,
+            "hp": 5,
+            "row": 4,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 17,
+            "hp": 5,
+            "row": 4,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 17,
+            "hp": 5,
+            "row": 4,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 6,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 6,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 6,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 6,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 6,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 24,
+            "hp": -1,
+            "row": 6,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 7,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 7,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 7,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 7,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 7,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 116,
+            "blockState": 16,
+            "hp": 5,
+            "row": 7,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 46,
+            "hp": -1,
+            "row": 0,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 46,
+            "hp": -1,
+            "row": 0,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 52,
+            "hp": 20,
+            "row": 2,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 3,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 52,
+            "hp": 20,
+            "row": 4,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 4,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 52,
+            "hp": 20,
+            "row": 4,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 5,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 5,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 5,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 52,
+            "hp": 20,
+            "row": 6,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 6,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 6,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 6,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 52,
+            "hp": 20,
+            "row": 6,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 7,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 117,
+            "blockState": 16,
+            "hp": -1,
+            "row": 8,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 0,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 0,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 1,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 1,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 2,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 41,
+            "hp": 2,
+            "row": 2,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 41,
+            "hp": 2,
+            "row": 2,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 41,
+            "hp": 2,
+            "row": 2,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 2,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 3,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 3,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 4,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 43,
+            "hp": 2,
+            "row": 4,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 43,
+            "hp": 2,
+            "row": 4,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 43,
+            "hp": 2,
+            "row": 4,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 4,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 5,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 5,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 6,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 44,
+            "hp": 2,
+            "row": 6,
+            "col": 1,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 44,
+            "hp": 2,
+            "row": 6,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 44,
+            "hp": 2,
+            "row": 6,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 6,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 7,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 7,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 8,
+            "col": 0,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 40,
+            "hp": 2,
+            "row": 8,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 40,
+            "hp": 2,
+            "row": 8,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 40,
+            "hp": 2,
+            "row": 8,
+            "col": 7,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 118,
+            "blockState": 52,
+            "hp": 999,
+            "row": 8,
+            "col": 8,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 3,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 3,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 3,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 4,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 46,
+            "hp": -1,
+            "row": 4,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 4,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 5,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 5,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 119,
+            "blockState": 45,
+            "hp": -1,
+            "row": 5,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 2,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 2,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 2,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 2,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 2,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 3,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 22,
+            "hp": -1,
+            "row": 4,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 5,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 6,
+            "col": 2,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 6,
+            "col": 3,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 6,
+            "col": 4,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 6,
+            "col": 5,
+            "tutorialBlock": false
+        },
+        {
+            "stage": 120,
+            "blockState": 52,
+            "hp": 1,
+            "row": 6,
+            "col": 6,
+            "tutorialBlock": false
+        },
+        {
             "stage": 100011,
             "blockState": 16,
             "hp": -1,
