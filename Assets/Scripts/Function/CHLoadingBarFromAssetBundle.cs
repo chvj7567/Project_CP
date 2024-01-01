@@ -30,10 +30,10 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
     string googleDriveDownloadURL = "https://docs.google.com/uc?export=download&id=";
     string url = "";
 
-    public void Init()
+    public bool Init()
     {
         if (CHMAssetBundle.Instance.firstDownload == false)
-            return;
+            return false;
 
         if (loadingBar) loadingBar.fillAmount = 0f;
 
@@ -76,6 +76,8 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
                 StartCoroutine(LoadAssetBundle(key));
             }
         };
+
+        return true;
     }
 
     IEnumerator LoadAssetBundleAll()

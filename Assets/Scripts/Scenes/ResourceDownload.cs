@@ -21,9 +21,14 @@ public class ResourceDownload : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
-        script.Init();
-
         ChangeBackgroundLoop();
+
+        var initialize = script.Init();
+        if (initialize == false)
+        {
+            SceneManager.LoadScene(1);
+            return;
+        }
         
         script.bundleLoadSuccess += async () =>
         {

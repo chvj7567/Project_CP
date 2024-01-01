@@ -27,7 +27,7 @@ public class PageMove : MonoBehaviour
     // stageSelect¿« index;
     int index;
 
-    Defines.ESelectStage curSelect;
+    public Defines.ESelectStage curSelect;
 
     private void Start()
     {

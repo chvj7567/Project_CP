@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class First : MonoBehaviour
@@ -36,6 +38,7 @@ public class First : MonoBehaviour
     CancellationTokenSource tokenSource;
 
     bool initButton = false;
+    bool firstStartBtnClick = false;
 
     void InitButton()
     {
@@ -48,6 +51,8 @@ public class First : MonoBehaviour
         {
             if (bundleDownload.Value == false || dataDownload.Value == false)
                 return;
+
+            firstStartBtnClick = true;
 
             var arg = new UIStageSelectArg();
             arg.stageSelect += async (select) =>
@@ -63,12 +68,12 @@ public class First : MonoBehaviour
             CHMMain.UI.ShowUI(Defines.EUI.UIMission, new CHUIArg());
         });
 
-        logoutBtn.OnClickAsObservable().Subscribe(_ =>
+        logoutBtn.OnClickAsObservable().Subscribe(async _ =>
         {
-            if (GetLoginState() == false)
+            if (GetGPGSLogin() == false)
                 return;
 
-            SetLoginState(false);
+            await SetGPGSLogin(false, "");
 
 #if UNITY_ANDROID
             CHMGPGS.Instance.Logout();
@@ -111,21 +116,7 @@ public class First : MonoBehaviour
                 {
                     waitText.gameObject.SetActive(false);
 
-                    if (success)
-                    {
-                        PlayerPrefs.SetInt(CHMMain.String.Login, 1);
-                        Debug.Log($"GPGS Login Success : {localUser.userName}/{localUser.id}");
-                        dataDownload.Value = true;
-
-                        SetLoginState(true);
-
-                        CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID = localUser.userName;
-                        userID.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID);
-                    }
-                    else
-                    {
-                        Debug.Log("GPGS Login Failed");
-                    }
+                    await SetGPGSLogin(success, localUser.userName);
                 });
             }
 #endif
@@ -176,9 +167,9 @@ public class First : MonoBehaviour
         CHMIAP.Instance.Init();
         CHMAdmob.Instance.Init();
 
-        dataDownload.Subscribe(_ =>
+        dataDownload.Subscribe(async dataDownload =>
         {
-            if (CHMAssetBundle.Instance.firstDownload == true && _ == true && bundleDownload.Value == true)
+            if (CHMAssetBundle.Instance.firstDownload && dataDownload && bundleDownload.Value)
             {
                 CHMAssetBundle.Instance.firstDownload = false;
                 startBtn.gameObject.SetActive(true);
@@ -189,7 +180,6 @@ public class First : MonoBehaviour
         {
             if (bundleDownload && dataDownload.Value == false)
             {
-#if UNITY_ANDROID
                 if (GetPhoneLoginState())
                 {
                     waitText.gameObject.SetActive(true);
@@ -198,44 +188,13 @@ public class First : MonoBehaviour
                     {
                         waitText.gameObject.SetActive(false);
 
-                        if (success)
-                        {
-                            Debug.Log($"GPGS Login Success : {localUser.userName}/{localUser.id}");
-                            await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
-                            dataDownload.Value = true;
-
-                            SetLoginState(true);
-
-                            CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID = localUser.userName;
-                            userID.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID);
-                        }
-                        else
-                        {
-                            Debug.Log($"GPGS Login Failed {success.ToString()}");
-
-                            await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
-                            SetLoginState(false);
-                            dataDownload.Value = true;
-                        }
+                        await SetGPGSLogin(success, localUser.userName);
                     });
                 }
                 else
                 {
-                    await CHMMain.Json.Init();
-                    Debug.Log($"@JsonPercent{CHMMain.Json.GetJsonLoadingPercent()}");
-                    await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
-                    SetLoginState(false);
-                    dataDownload.Value = true;
+                    await SetGPGSLogin(false, "");
                 }
-#endif
-
-#if UNITY_EDITOR
-                await CHMMain.Json.Init();
-                Debug.Log($"@JsonPercent{CHMMain.Json.GetJsonLoadingPercent()}");
-                await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
-                SetLoginState(false);
-                dataDownload.Value = true;
-#endif
             }
             else if (CHMAssetBundle.Instance.firstDownload == true && bundleDownload == true && dataDownload.Value == true)
             {
@@ -265,7 +224,7 @@ public class First : MonoBehaviour
             menuBtn.gameObject.SetActive(true);
             rankingBtn.gameObject.SetActive(true);
 
-            var login = GetLoginState();
+            var login = GetGPGSLogin();
             connectGPGSBtn.gameObject.SetActive(login == false);
             logoutBtn.gameObject.SetActive(login);
 
@@ -340,33 +299,45 @@ public class First : MonoBehaviour
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
     }
 
-    bool SetLoginState(bool active)
+    async Task<bool> SetGPGSLogin(bool success, string gpgsUserName)
     {
-        if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data) == false)
-            return false;
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        loginData.connectGPGS = success;
 
-        data.connectGPGS = active;
+        Debug.Log($"SetLoginState : {loginData.connectGPGS}");
 
-        Debug.Log($"SetLoginState : {data.connectGPGS}");
+        if (success)
+        {
+            Debug.Log($"GPGS Login Success : {gpgsUserName}");
+            await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
 
-        PlayerPrefs.SetInt(CHMMain.String.Login, active ? 1 : 0);
+            if (firstStartBtnClick)
+                await StageSelect(PlayerPrefs.GetInt(CHMMain.String.SelectStage));
+        }
+        else
+        {
+            Debug.Log($"GPGS Login Failed {success.ToString()}");
+            await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
+        }
+
+        PlayerPrefs.SetInt(CHMMain.String.Login, success ? 1 : 0);
+
+        connectGPGSBtn.gameObject.SetActive(success == false);
+        logoutBtn.gameObject.SetActive(success);
+        dataDownload.Value = true;
 
         CHMData.Instance.SaveData(CHMMain.String.CatPang);
-
-        connectGPGSBtn.gameObject.SetActive(active == false);
-        logoutBtn.gameObject.SetActive(active);
 
         return true;
     }
 
-    bool GetLoginState()
+    bool GetGPGSLogin()
     {
-        if (CHMData.Instance.loginDataDic.TryGetValue(CHMMain.String.CatPang, out var data) == false)
-            return false;
+        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
 
-        Debug.Log($"GetLoginState : {data.connectGPGS}");
+        Debug.Log($"GetLoginState : {loginData.connectGPGS}");
 
-        return data.connectGPGS;
+        return loginData.connectGPGS;
     }
 
     bool GetPhoneLoginState()
@@ -430,11 +401,16 @@ public class First : MonoBehaviour
     {
         PlayerPrefs.SetInt(CHMMain.String.SelectStage, select);
 
-        if (CHMData.Instance.newUser)
+        if (CHMData.Instance.firstData)
         {
-            PlayerPrefs.SetInt(CHMMain.String.HardStage, 1);
-            PlayerPrefs.SetInt(CHMMain.String.NormalStage, 1);
-            PlayerPrefs.SetInt(CHMMain.String.BossStage, 1 + CHMData.Instance.BossStageStartValue);
+            CHMData.Instance.firstData = false;
+
+            // 기본 스킨
+            CHMData.Instance.GetShopData("1").buy = true;
+
+            PlayerPrefs.SetInt(CHMMain.String.HardStage, 0);
+            PlayerPrefs.SetInt(CHMMain.String.NormalStage, 0);
+            PlayerPrefs.SetInt(CHMMain.String.BossStage, 0 + CHMData.Instance.BossStageStartValue);
         }
 
         pageMove.Init((Defines.ESelectStage)select);
@@ -446,9 +422,6 @@ public class First : MonoBehaviour
         stageSelect2.SetActive(true);
         menuBtn.gameObject.SetActive(true);
         rankingBtn.gameObject.SetActive(true);
-
-        // 기본 스킨
-        CHMData.Instance.GetShopData("1").buy = true;
 
         PlayerPrefs.SetInt(CHMMain.String.Background, backgroundIndex);
 

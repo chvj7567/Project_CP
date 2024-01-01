@@ -13,17 +13,23 @@ public interface ILoader<Key, Value>
 public class CHMData : CHSingleton<CHMData>
 {
     public readonly int BossStageStartValue = 100000;
-    public bool newUser = false;
-    public Dictionary<string, Data.Login> loginDataDic = null;
-    public Dictionary<string, Data.Collection> collectionDataDic = null;
-    public Dictionary<string, Data.Mission> missionDataDic = null;
-    public Dictionary<string, Data.Shop> shopDataDic = null;
+    public bool firstData = false;
+
+    public Dictionary<string, Data.Login> loginLocalDataDic = null;
+    public Dictionary<string, Data.Collection> collectionLocalDataDic = null;
+    public Dictionary<string, Data.Mission> missionLocalDataDic = null;
+    public Dictionary<string, Data.Shop> shopLocalDataDic = null;
+
+    public Dictionary<string, Data.Login> loginCloudDataDic = null;
+    public Dictionary<string, Data.Collection> collectionCloudDataDic = null;
+    public Dictionary<string, Data.Mission> missionCloudDataDic = null;
+    public Dictionary<string, Data.Shop> shopCloudDataDic = null;
 
     public async Task LoadLocalData(string _path)
     {
         Debug.Log("Local Data Load");
 
-        if (loginDataDic == null)
+        if (loginLocalDataDic == null)
         {
             Debug.Log("Login Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
@@ -33,28 +39,28 @@ public class CHMData : CHSingleton<CHMData>
                 data.Item2.loginList[0].languageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English;
             }
 
-            loginDataDic = data.Item2.MakeDict();
+            loginLocalDataDic = data.Item2.MakeDict();
         }
 
-        if (collectionDataDic == null)
+        if (collectionLocalDataDic == null)
         {
             Debug.Log("Collection Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
-            collectionDataDic = data.Item2.MakeDict();
+            collectionLocalDataDic = data.Item2.MakeDict();
         }
 
-        if (missionDataDic == null)
+        if (missionLocalDataDic == null)
         {
             Debug.Log("Mission Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
-            missionDataDic = data.Item2.MakeDict();
+            missionLocalDataDic = data.Item2.MakeDict();
         }
 
-        if (shopDataDic == null)
+        if (shopLocalDataDic == null)
         {
             Debug.Log("Shop Local Data Load");
             var data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
-            shopDataDic = data.Item2.MakeDict();
+            shopLocalDataDic = data.Item2.MakeDict();
         }
     }
 
@@ -66,7 +72,7 @@ public class CHMData : CHSingleton<CHMData>
         if (File.Exists(path) == false)
         {
             // 신규 유저
-            newUser = true;
+            firstData = true;
 
             PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, .2f);
             PlayerPrefs.SetFloat(CHMMain.String.EffectVolume, .2f);
@@ -116,16 +122,16 @@ public class CHMData : CHSingleton<CHMData>
         Data.ExtractData<Object> saveData = new Data.ExtractData<Object>();
 
         Data.ExtractData<Data.Login> loginData = new Data.ExtractData<Data.Login>();
-        saveData.loginList = loginData.MakeList(loginDataDic);
+        saveData.loginList = loginData.MakeList(loginLocalDataDic);
 
         Data.ExtractData<Data.Collection> collectionData = new Data.ExtractData<Data.Collection>();
-        saveData.collectionList = collectionData.MakeList(collectionDataDic);
+        saveData.collectionList = collectionData.MakeList(collectionLocalDataDic);
 
         Data.ExtractData<Data.Mission> missionData = new Data.ExtractData<Data.Mission>();
-        saveData.missionList = missionData.MakeList(missionDataDic);
+        saveData.missionList = missionData.MakeList(missionLocalDataDic);
 
         Data.ExtractData<Data.Shop> shopData = new Data.ExtractData<Data.Shop>();
-        saveData.shopList = shopData.MakeList(shopDataDic);
+        saveData.shopList = shopData.MakeList(shopLocalDataDic);
 
 #if UNITY_ANDROID
         json = JsonUtility.ToJson(saveData);
@@ -154,32 +160,32 @@ public class CHMData : CHSingleton<CHMData>
     {
         Debug.Log("Cloud Data Load");
 
-        if (loginDataDic == null)
+        if (loginCloudDataDic == null)
         {
             Debug.Log("Login Cloud Data Load");
             var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
-            loginDataDic = data.MakeDict();
+            loginLocalDataDic = loginCloudDataDic = data.MakeDict();
         }
 
-        if (collectionDataDic == null)
+        if (collectionCloudDataDic == null)
         {
             Debug.Log("Collection Cloud Data Load");
-            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
-            collectionDataDic = data.MakeDict();
+            var data2 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
+            collectionLocalDataDic = collectionCloudDataDic = data2.MakeDict();
         }
 
-        if (missionDataDic == null)
+        if (missionCloudDataDic == null)
         {
             Debug.Log("Mission Cloud Data Load");
-            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
-            missionDataDic = data.MakeDict();
+            var data3 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
+            missionLocalDataDic = missionCloudDataDic = data3.MakeDict();
         }
 
-        if (shopDataDic == null)
+        if (shopCloudDataDic == null)
         {
-            Debug.Log("Mission Local Data Load");
-            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
-            shopDataDic = data.MakeDict();
+            Debug.Log("Shop Cloud Data Load");
+            var data4 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
+            shopLocalDataDic = shopCloudDataDic = data4.MakeDict();
         }
     }
 
@@ -217,7 +223,7 @@ public class CHMData : CHSingleton<CHMData>
             languageType = Defines.ELanguageType.English,
         };
 
-        loginDataDic.Add(_key, data);
+        loginLocalDataDic.Add(_key, data);
 
         return data;
     }
@@ -232,7 +238,7 @@ public class CHMData : CHSingleton<CHMData>
             value = 0
         };
 
-        collectionDataDic.Add(_key, data);
+        collectionLocalDataDic.Add(_key, data);
 
         return data;
     }
@@ -249,7 +255,7 @@ public class CHMData : CHSingleton<CHMData>
             repeatCount = 0
         };
 
-        missionDataDic.Add(_key, data);
+        missionLocalDataDic.Add(_key, data);
 
         return data;
     }
@@ -264,14 +270,14 @@ public class CHMData : CHSingleton<CHMData>
             buy = false
         };
 
-        shopDataDic.Add(_key, data);
+        shopLocalDataDic.Add(_key, data);
 
         return data;
     }
 
     public Data.Login GetLoginData(string _key)
     {
-        if (loginDataDic.TryGetValue(_key, out var data) == false)
+        if (loginLocalDataDic.TryGetValue(_key, out var data) == false)
         {
             return CreateLoginData(_key);
         }
@@ -281,7 +287,7 @@ public class CHMData : CHSingleton<CHMData>
 
     public Data.Collection GetCollectionData(string _key)
     {
-        if (collectionDataDic.TryGetValue(_key, out var data) == false)
+        if (collectionLocalDataDic.TryGetValue(_key, out var data) == false)
         {
             data = CreateCollectionData(_key);
         }
@@ -291,7 +297,7 @@ public class CHMData : CHSingleton<CHMData>
 
     public Data.Mission GetMissionData(string _key)
     {
-        if (missionDataDic.TryGetValue(_key, out var data) == false)
+        if (missionLocalDataDic.TryGetValue(_key, out var data) == false)
         {
             data = CreateMissionData(_key);
         }
@@ -301,7 +307,7 @@ public class CHMData : CHSingleton<CHMData>
 
     public Data.Shop GetShopData(string _key)
     {
-        if (shopDataDic.TryGetValue(_key, out var data) == false)
+        if (shopLocalDataDic.TryGetValue(_key, out var data) == false)
         {
             data = CreateShopData(_key);
         }

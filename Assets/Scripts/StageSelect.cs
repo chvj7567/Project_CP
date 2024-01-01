@@ -14,8 +14,16 @@ public class StageSelect : MonoBehaviour
     List<CHButton> btnList = new List<CHButton>();
 
     List<IDisposable> disposeList = new List<IDisposable>();
+
+    bool initialize = false;
+
     public void Init(Defines.ESelectStage select)
     {
+        if (initialize)
+            return;
+
+        initialize = true;
+
         Color color = Color.white;
         switch (select)
         {
@@ -142,18 +150,18 @@ public class StageSelect : MonoBehaviour
         }
     }
 
-    async void SetLockObj(int _index)
+    async void SetLockObj(int index)
     {
-        if (int.TryParse(btnList[_index].text.text, out int stage) == false)
+        if (int.TryParse(btnList[index].text.text, out int stage) == false)
             return;
 
-        btnList[_index].button.interactable = false;
-
+        btnList[index].button.interactable = false;
+        
         if (stage == 1)
         {
-            btnList[_index].button.interactable = true;
-            btnList[_index].lockObj.SetActive(false);
-            btnList[_index].unlockObj.SetActive(false);
+            btnList[index].button.interactable = true;
+            btnList[index].lockObj.SetActive(false);
+            btnList[index].unlockObj.SetActive(false);
             return;
         }
 
@@ -169,33 +177,35 @@ public class StageSelect : MonoBehaviour
             // 전 스테이지를 마지막으로 클리어하고 현 스테이지를 클리어하지 않은 상태라면
             if (lastPlayStage == beforeStage && clearStage < stage)
             {
-                btnList[_index].lockObj.SetActive(true);
+                btnList[index].lockObj.SetActive(true);
                 await Task.Delay(1000);
 
-                if (btnList[_index] == null)
-                    return;
-
-                btnList[_index].lockObj.SetActive(false);
-                btnList[_index].unlockObj.SetActive(true);
-                var rectTransform = btnList[_index].unlockObj.GetComponent<RectTransform>();
-                if (rectTransform != null)
+                if (btnList[index] == null)
                 {
-                    rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + 30f, 1f).OnComplete(() =>
-                    {
-                        btnList[_index].button.interactable = true;
-                        btnList[_index].unlockObj.SetActive(false);
-                    });
+                    Debug.Log($"Task Null");
+                    return;
                 }
+
+                btnList[index].lockObj.SetActive(false);
+                btnList[index].unlockObj.SetActive(true);
+                var rectTransform = btnList[index].unlockObj.GetComponent<RectTransform>();
+                rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + 30f, 1f).OnComplete(() =>
+                {
+                    btnList[index].button.interactable = true;
+                    btnList[index].unlockObj.SetActive(false);
+                });
             }
             else
             {
-                btnList[_index].button.interactable = true;
-                btnList[_index].lockObj.SetActive(false);
+                btnList[index].button.interactable = true;
+                btnList[index].lockObj.SetActive(false);
+                btnList[index].unlockObj.SetActive(false);
             }
         }
         else
         {
-            btnList[_index].lockObj.SetActive(true);
+            btnList[index].lockObj.SetActive(true);
+            btnList[index].unlockObj.SetActive(false);
         }
     }
 
