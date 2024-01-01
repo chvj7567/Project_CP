@@ -65,8 +65,17 @@ public class CHMData : CHSingleton<CHMData>
         Debug.Log($"Local Path : {path}");
         if (File.Exists(path) == false)
         {
+            // 신규 유저
             newUser = true;
-            Debug.Log("Path is Null");
+
+            PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, .2f);
+            PlayerPrefs.SetFloat(CHMMain.String.EffectVolume, .2f);
+            PlayerPrefs.SetFloat(CHMMain.String.Red, .5f);
+            PlayerPrefs.SetFloat(CHMMain.String.Green, .5f);
+            PlayerPrefs.SetFloat(CHMMain.String.Blue, .5f);
+            PlayerPrefs.SetFloat(CHMMain.String.Alpha, .5f);
+
+            Debug.Log("New User");
             return (true, await LoadDefaultData<Loader>(_name));
         }
         else

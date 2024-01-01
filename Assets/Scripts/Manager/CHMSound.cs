@@ -10,9 +10,9 @@ public class CHMSound
     AudioSource[] audioSourceArr = new AudioSource[(int)Defines.ESound.Max];
     Dictionary<string, AudioClip> audioClipDict = new Dictionary<string, AudioClip>();
 
-    public float bgmVolume { get; private set; } = 0.2f;
+    public float bgmVolume { get { return PlayerPrefs.GetFloat(CHMMain.String.BGMVolume); } private set { } }
 
-    public float effectVolume { get; private set; } = 0.2f;
+    public float effectVolume { get { return PlayerPrefs.GetFloat(CHMMain.String.EffectVolume); } private set { } }
 
     public float Ratio { get; private set; } = 0.5f;
 

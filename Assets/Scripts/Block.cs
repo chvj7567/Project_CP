@@ -304,7 +304,7 @@ public class Block : MonoBehaviour
         match = false;
         img.sprite = _sprite;
         img.color = new Color(1, 1, 1, 1);
-        background.color = new Color(1, 1, 1, 1);
+        background.color = new Color(PlayerPrefs.GetFloat(CHMMain.String.Red), PlayerPrefs.GetFloat(CHMMain.String.Green), PlayerPrefs.GetFloat(CHMMain.String.Blue), PlayerPrefs.GetFloat(CHMMain.String.Alpha));
 
         switch (blockState)
         {

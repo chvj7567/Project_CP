@@ -446,5 +446,29 @@
         {
             "stringID": 111,
             "value": "하드 모드의 {0} 스테이지를 클리어 해야합니다."
+        },
+        {
+            "stringID": 112,
+            "value": "배경 색상"
+        },
+        {
+            "stringID": 113,
+            "value": "빨강"
+        },
+        {
+            "stringID": 114,
+            "value": "초록"
+        },
+        {
+            "stringID": 115,
+            "value": "파랑"
+        },
+        {
+            "stringID": 116,
+            "value": "투명도"
+        },
+        {
+            "stringID": 117,
+            "value": "미리보기"
         }
     ]

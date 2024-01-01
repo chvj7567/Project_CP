@@ -1,4 +1,5 @@
 using UniRx;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -27,6 +28,12 @@ public class UISetting : UIBase
     [SerializeField] GameObject guideInitObj;
     [SerializeField] Button guideInitBtn;
 
+    [SerializeField] Slider redSlider;
+    [SerializeField] Slider greenSlider;
+    [SerializeField] Slider blueSlider;
+    [SerializeField] Slider alphaSlider;
+    [SerializeField] Image blockBackground;
+
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UISettingArg;
@@ -34,6 +41,16 @@ public class UISetting : UIBase
 
     private void Start()
     {
+        backAction += () =>
+        {
+            PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, bgmSlider.value);
+            PlayerPrefs.SetFloat(CHMMain.String.EffectVolume, effectSlider.value);
+            PlayerPrefs.SetFloat(CHMMain.String.Red, redSlider.value);
+            PlayerPrefs.SetFloat(CHMMain.String.Green, greenSlider.value);
+            PlayerPrefs.SetFloat(CHMMain.String.Blue, blueSlider.value);
+            PlayerPrefs.SetFloat(CHMMain.String.Alpha, alphaSlider.value);
+        };
+
         etcBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (false == soundObj.activeSelf)
@@ -102,5 +119,31 @@ public class UISetting : UIBase
 
             SceneManager.LoadScene(1);
         });
+
+        redSlider.OnValueChangedAsObservable().Subscribe(_ =>
+        {
+            blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
+        });
+
+        greenSlider.OnValueChangedAsObservable().Subscribe(_ =>
+        {
+            blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
+        });
+
+        blueSlider.OnValueChangedAsObservable().Subscribe(_ =>
+        {
+            blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
+        });
+
+        alphaSlider.OnValueChangedAsObservable().Subscribe(_ =>
+        {
+            blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
+        });
+
+        redSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Red);
+        greenSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Green);
+        blueSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Blue);
+        alphaSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Alpha);
+        blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
     }
 }

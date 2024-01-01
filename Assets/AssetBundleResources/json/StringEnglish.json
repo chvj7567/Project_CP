@@ -446,5 +446,29 @@
         {
             "stringID": 111,
             "value": "You must clear stage {0} in hard mode."
+        },
+        {
+            "stringID": 112,
+            "value": "Background Color"
+        },
+        {
+            "stringID": 113,
+            "value": "Red"
+        },
+        {
+            "stringID": 114,
+            "value": "Green"
+        },
+        {
+            "stringID": 115,
+            "value": "Blue"
+        },
+        {
+            "stringID": 116,
+            "value": "Alpha"
+        },
+        {
+            "stringID": 117,
+            "value": "Preview"
         }
     ]

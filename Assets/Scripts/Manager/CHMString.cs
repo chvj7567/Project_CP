@@ -14,6 +14,13 @@ public class CHMString
     public string Background = "Background";
     public string Gold = "Gold";
 
+    public string BGMVolume = "BGMVolume";
+    public string EffectVolume = "EffectVolume";
+    public string Red = "Red";
+    public string Green = "Green";
+    public string Blue = "Blue";
+    public string Alpha = "Alpha";
+
     public string Product_Name_RemoveAD = "RemoveAD";
     public string Product_ID_RemoveAD = "com.catpang.product1";
     public string Product_Name_AddTime = "AddTime";
