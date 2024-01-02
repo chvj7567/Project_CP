@@ -15,15 +15,8 @@ public class StageSelect : MonoBehaviour
 
     List<IDisposable> disposeList = new List<IDisposable>();
 
-    bool initialize = false;
-
     public void Init(Defines.ESelectStage select)
     {
-        if (initialize)
-            return;
-
-        initialize = true;
-
         Color color = Color.white;
         switch (select)
         {
