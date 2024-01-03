@@ -1200,6 +1200,106 @@
             "tutorialID": -1
         },
         {
+            "group": 13,
+            "stage": 121,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": 1500,
+            "moveCount": 50,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 122,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": 2500,
+            "moveCount": 50,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 123,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 15,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 124,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 5,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 125,
+            "blockTypeCount": 5,
+            "boardSize": 7,
+            "time": -1.0,
+            "targetScore": 500,
+            "moveCount": 30,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 126,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": 950,
+            "moveCount": 20,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 127,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 50,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 128,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": 750,
+            "moveCount": 25,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 129,
+            "blockTypeCount": 5,
+            "boardSize": 7,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 40,
+            "tutorialID": -1
+        },
+        {
+            "group": 13,
+            "stage": 130,
+            "blockTypeCount": 5,
+            "boardSize": 7,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 4,
+            "tutorialID": -1
+        },
+        {
             "group": 100001,
             "stage": 100001,
             "blockTypeCount": 5,
