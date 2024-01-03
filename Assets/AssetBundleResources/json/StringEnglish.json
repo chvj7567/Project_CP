@@ -470,5 +470,13 @@
         {
             "stringID": 117,
             "value": "Preview"
+        },
+        {
+            "stringID": 118,
+            "value": "When the yarn block touches the floor, it spreads to both sides."
+        },
+        {
+            "stringID": 119,
+            "value": "\rIt can be eliminated with a bomb before it hits the floor."
         }
     ]

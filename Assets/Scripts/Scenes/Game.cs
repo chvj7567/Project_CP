@@ -215,7 +215,7 @@ public class Game : MonoBehaviour
                             if (boardArr[i, j].checkHp == false)
                                 continue;
 
-                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsBottomTouchDisappearBlock() == true)
+                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsFishBlock() == true)
                             {
                                 clear = false;
                                 break;
@@ -882,12 +882,54 @@ public class Game : MonoBehaviour
         for (int i = 0; i < boardSize; ++i)
         {
             var block = boardArr[row, i];
-            if (block.IsBottomTouchDisappearBlock() == true)
+            if (block.IsFishBlock())
             {
+                block.tutorialBlock = false;
+
                 var random = UnityEngine.Random.Range((int)Defines.EBlockState.PinkBomb, (int)Defines.EBlockState.BlueBomb + 1);
                 block.changeBlockState = (Defines.EBlockState)random;
-
+            }
+            else if (block.IsBallBlock())
+            {
                 block.tutorialBlock = false;
+
+                block.changeBlockState = Defines.EBlockState.Potal;
+                block.changeHp = 5;
+
+                int ballHp = 4;
+                for (int k = i + 1; k < boardSize; ++k)
+                {
+                    var changeBlock = boardArr[row, k];
+
+                    if (ballHp <= 0)
+                        break;
+
+                    if (changeBlock.IsNormalBlock() || changeBlock.remove)
+                    {
+                        changeBlock.changeBlockState = Defines.EBlockState.Potal;
+                        changeBlock.changeHp = ballHp--;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                ballHp = 4;
+                for (int k = i - 1; k >= 0; --k)
+                {
+                    var changeBlock = boardArr[row, k];
+
+                    if (changeBlock.IsNormalBlock() || changeBlock.remove)
+                    {
+                        changeBlock.changeBlockState = Defines.EBlockState.Potal;
+                        changeBlock.changeHp = ballHp--;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
         }
     }
@@ -1388,10 +1430,10 @@ public class Game : MonoBehaviour
                     }
                     else if (reUpdate || block.IsMatch())
                     {
-                        if (block.IsFixdBlock() || block.IsBottomTouchDisappearBlock())
+                        if (block.IsFixdBlock() || block.IsFishBlock())
                             continue;
 
-                        if (reUpdate && block.GetBlockState() == Defines.EBlockState.RainbowPang)
+                        if (reUpdate && (block.GetBlockState() == Defines.EBlockState.RainbowPang || block.IsBallBlock()))
                             continue;
 
                         firstRow = block.row;
@@ -1996,7 +2038,7 @@ public class Game : MonoBehaviour
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            if (blockList[i].IsFixdBlock() || blockList[i].IsBombBlock() || blockList[i].IsBottomTouchDisappearBlock() || blockList[i].IsNormalBlock() == false)
+            if (blockList[i].IsNormalBlock() == false || blockList[i].IsFixdBlock() || blockList[i].IsBombBlock() || blockList[i].IsFishBlock())
             {
                 blockState = Defines.EBlockState.None;
                 matchCount = 0;
@@ -2166,7 +2208,7 @@ public class Game : MonoBehaviour
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
             boardArr[row, col].IsFixdBlock() || boardArr[row, col].IsBombBlock() ||
-            boardArr[row, col].IsSpecialBombBlock() || boardArr[row, col].IsBottomTouchDisappearBlock())
+            boardArr[row, col].IsSpecialBombBlock() || boardArr[row, col].IsFishBlock() || boardArr[row, col].IsBallBlock())
             return false;
 
         return true;
@@ -2192,7 +2234,7 @@ public class Game : MonoBehaviour
             return false;
         }
 
-        if (boardArr[row, col].IsBottomTouchDisappearBlock() == false &&
+        if (boardArr[row, col].IsFishBlock() == false &&
             boardArr[row, col].IsFixdBlock() == false &&
             boardArr[row, col].GetBlockState() != Defines.EBlockState.PinkBomb)
         {
@@ -2848,14 +2890,20 @@ public class Game : MonoBehaviour
         {
             do
             {
+                if (CheckRainbowTargetBlock() == false)
+                    break;
+
                 int w = UnityEngine.Random.Range(0, boardSize);
                 int h = UnityEngine.Random.Range(0, boardSize);
 
-                if (boardArr[w, h].IsNormalBlock() == false)
-                    continue;
+                if (boardArr[w, h].remove == false)
+                {
+                    if (boardArr[w, h].IsNormalBlock() == false)
+                        continue;
 
-                if (boardArr[w, h].changeBlockState != EBlockState.None)
-                    continue;
+                    if (boardArr[w, h].changeBlockState != EBlockState.None)
+                        continue;
+                }
 
                 boardArr[w, h].changeBlockState = blockState;
                 break;
@@ -2867,5 +2915,19 @@ public class Game : MonoBehaviour
         {
             await AfterDrag(null, null, true);
         }
+    }
+
+    bool CheckRainbowTargetBlock()
+    {
+        for (int i = 0; i < boardSize; ++i)
+        {
+            for (int j = 0; j < boardSize; ++j)
+            {
+                if (boardArr[i, j].remove == true || (boardArr[i, j].IsNormalBlock() && boardArr[i, j].changeBlockState == EBlockState.None))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }

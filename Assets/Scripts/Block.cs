@@ -343,6 +343,9 @@ public class Block : MonoBehaviour
                 img.rectTransform.sizeDelta = new Vector2(10, 10);
                 background.color = new Color(0, 0, 0, 0);
                 break;
+            case EBlockState.Ball:
+                img.rectTransform.sizeDelta = new Vector2(-10, -10);
+                break;
             default:
                 img.rectTransform.sizeDelta = new Vector2(30, 30);
                 break;
@@ -668,11 +671,22 @@ public class Block : MonoBehaviour
         return blockState != Defines.EBlockState.None;
     }
 
-    public bool IsBottomTouchDisappearBlock()
+    public bool IsFishBlock()
     {
         switch (blockState)
         {
             case Defines.EBlockState.Fish:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool IsBallBlock()
+    {
+        switch (blockState)
+        {
+            case Defines.EBlockState.Ball:
                 return true;
             default:
                 return false;

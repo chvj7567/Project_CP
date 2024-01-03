@@ -1300,6 +1300,16 @@
             "tutorialID": -1
         },
         {
+            "group": 14,
+            "stage": 131,
+            "blockTypeCount": 5,
+            "boardSize": 5,
+            "time": -1.0,
+            "targetScore": 9999,
+            "moveCount": 4,
+            "tutorialID": 131
+        },
+        {
             "group": 100001,
             "stage": 100001,
             "blockTypeCount": 5,

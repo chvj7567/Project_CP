@@ -8,5 +8,6 @@
   {"tutorialStageID":31, "descStringID":66, "connectNextBlock":-1, "descNextBlockStringID":-1},
   {"tutorialStageID":51, "descStringID":75, "connectNextBlock":-1, "descNextBlockStringID":-1},
   {"tutorialStageID":71, "descStringID":79, "connectNextBlock":-1, "descNextBlockStringID":-1},
-  {"tutorialStageID":91, "descStringID":94, "connectNextBlock":18, "descNextBlockStringID":95}
+  {"tutorialStageID":91, "descStringID":94, "connectNextBlock":18, "descNextBlockStringID":95},
+  {"tutorialStageID":131, "descStringID":118, "connectNextBlock":14, "descNextBlockStringID":119}
 ]

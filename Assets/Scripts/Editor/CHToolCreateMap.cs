@@ -187,6 +187,7 @@ public class CHToolCreateMap : EditorWindow
                     CreateBlockButton(Defines.EBlockState.BlueBomb);
                     CreateBlockButton(Defines.EBlockState.Fish);
                     CreateBlockButton(Defines.EBlockState.Wall);
+                    CreateBlockButton(Defines.EBlockState.Ball);
                 }
                 EditorGUILayout.EndHorizontal();
 
