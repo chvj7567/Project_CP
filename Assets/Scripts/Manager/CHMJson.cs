@@ -361,7 +361,21 @@ public class CHMJson
 
     public StageInfo GetStageInfo(int stage)
     {
-        return stageInfoList.Find(_ => _.stage == stage);
+        var stageInfo = stageInfoList.Find(_ => _.stage == stage);
+        if (stageInfo == null)
+            return null;
+
+        return new StageInfo
+        {
+            group = stageInfo.group,
+            stage = stageInfo.stage,
+            blockTypeCount =stageInfo.blockTypeCount,
+            boardSize = stageInfo.boardSize,
+            time = stageInfo.time,
+            targetScore = stageInfo.targetScore,
+            moveCount = stageInfo.moveCount,
+            tutorialID = stageInfo.tutorialID,
+        };
     }
 
     public List<StageInfo> GetStageInfoList(int group)
