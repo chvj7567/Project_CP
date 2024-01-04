@@ -215,7 +215,7 @@ public class Game : MonoBehaviour
                             if (boardArr[i, j].checkHp == false)
                                 continue;
 
-                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsFishBlock() == true)
+                            if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsFishBlock() || boardArr[i, j].IsBallBlock())
                             {
                                 clear = false;
                                 break;
