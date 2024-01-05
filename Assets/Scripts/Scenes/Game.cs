@@ -96,6 +96,8 @@ public class Game : MonoBehaviour
     [SerializeField] Image banView;
 
     [Header("가이드")]
+    [SerializeField] bool guideEnd = false;
+    [SerializeField] RectTransform guideFinger;
     [SerializeField] RectTransform guideHole;
     [SerializeField] GameObject guideBackground;
     [SerializeField] Button guideBackgroundBtn;
@@ -120,6 +122,7 @@ public class Game : MonoBehaviour
     {
         bonusScoreText.gameObject.SetActive(false);
 
+        guideFinger.gameObject.SetActive(false);
         guideBackground.SetActive(false);
         guideHole.gameObject.SetActive(false);
 
@@ -630,6 +633,9 @@ public class Game : MonoBehaviour
     void StartTutorial()
     // 튜토리얼 시작
     {
+        guideEnd = false;
+        guideFinger.gameObject.SetActive(true);
+
         if (_selectStage != Defines.ESelectStage.Hard && _stageInfo.tutorialID > 0)
         {
             Time.timeScale = 0;
@@ -639,6 +645,8 @@ public class Game : MonoBehaviour
 
             guideHole.SetAsLastSibling();
             guideBackground.transform.SetAsLastSibling();
+
+            guideFinger.transform.SetAsLastSibling();
 
             var holeValue = GetTutorialStageImgSettingValue(boardArr, _stageBlockInfoList);
             guideHole.sizeDelta = holeValue.Item1;
@@ -738,7 +746,13 @@ public class Game : MonoBehaviour
         if (tutorialBlockList.Count == 1)
         {
             var tutorialBlock = blockArr[tutorialBlockList[0].row, tutorialBlockList[0].col];
-            return (tutorialBlock.rectTransform.sizeDelta, tutorialBlock.rectTransform.anchoredPosition);
+
+            sizeX = tutorialBlock.rectTransform.sizeDelta.x;
+            sizeY = tutorialBlock.rectTransform.sizeDelta.y;
+            posX = tutorialBlock.rectTransform.anchoredPosition.x;
+            posY = tutorialBlock.rectTransform.anchoredPosition.y;
+
+            guideFinger.anchoredPosition = new Vector2(posX, posY);
         }
         else if (tutorialBlockList.Count == 2)
         {
@@ -759,9 +773,32 @@ public class Game : MonoBehaviour
                 posX = tutorialBlock1.rectTransform.anchoredPosition.x;
                 posY = (tutorialBlock1.rectTransform.anchoredPosition.y + tutorialBlock2.rectTransform.anchoredPosition.y) / 2f;
             }
+
+            FingerMoveRepeat(tutorialBlock1.rectTransform.anchoredPosition, tutorialBlock2.rectTransform.anchoredPosition);
         }
 
         return (new Vector2(sizeX, sizeY), new Vector2(posX, posY));
+    }
+
+    async Task FingerMoveRepeat(Vector2 startPos, Vector2 endPos)
+    {
+        var moveTime = 2f;
+
+        while (!guideEnd)
+        {
+            guideFinger.anchoredPosition = startPos;
+
+            float elapsedTime = 0f;
+            while (elapsedTime < moveTime)
+            {
+                guideFinger.anchoredPosition = Vector2.Lerp(startPos, endPos, elapsedTime / moveTime);
+                elapsedTime += 0.02f;
+                await Task.Yield();
+            }
+
+            // 이동이 끝나면 잠시 대기하고 반복
+            await Task.Delay(1000); // 1초 대기
+        }
     }
 
     async void GameEnd(bool clear)
@@ -1063,14 +1100,20 @@ public class Game : MonoBehaviour
     // 블럭을 드래그하고 난 후 다음 드래그가 가능한 상태까지
     {
         // 블럭 생성기는 드래그 후 한 번만 동작해야 함.
+
+        Debug.Log("After Drag");
+
         bool checkCreateBlock = false;
 
         if (moveCount.Value == 0 && gameResult.Value != EGameState.CatPang)
             return;
 
         Time.timeScale = 1;
+
         guideBackground.SetActive(false);
         guideHole.gameObject.SetActive(false);
+        guideFinger.gameObject.SetActive(false);
+        guideEnd = true;
 
         isLock = true;
 
