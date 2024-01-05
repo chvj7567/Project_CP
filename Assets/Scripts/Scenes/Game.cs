@@ -945,6 +945,7 @@ public class Game : MonoBehaviour
                     {
                         changeBlock.changeBlockState = Defines.EBlockState.Potal;
                         changeBlock.changeHp = ballHp--;
+                        changeBlock.checkHp = true;
                     }
                     else
                     {
@@ -961,6 +962,7 @@ public class Game : MonoBehaviour
                     {
                         changeBlock.changeBlockState = Defines.EBlockState.Potal;
                         changeBlock.changeHp = ballHp--;
+                        changeBlock.checkHp = true;
                     }
                     else
                     {
@@ -1468,8 +1470,6 @@ public class Game : MonoBehaviour
                         block.SetHp(block.changeHp);
                         block.ResetScore();
                         block.SetOriginPos();
-                        block.changeBlockState = Defines.EBlockState.None;
-                        block.checkHp = false;
                     }
                     else if (reUpdate || block.IsMatch())
                     {
@@ -2798,6 +2798,7 @@ public class Game : MonoBehaviour
                                     change = true;
                                     upBlock.changeHp = 1;
                                     upBlock.changeBlockState = changeBlock;
+                                    upBlock.checkHp = false;
                                 }
                             }
                             break;
@@ -2812,6 +2813,7 @@ public class Game : MonoBehaviour
                                     change = true;
                                     downBlock.changeHp = 1;
                                     downBlock.changeBlockState = changeBlock;
+                                    downBlock.checkHp = false;
                                 }
                             }
                             break;
@@ -2826,6 +2828,7 @@ public class Game : MonoBehaviour
                                     change = true;
                                     leftBlock.changeHp = 1;
                                     leftBlock.changeBlockState = changeBlock;
+                                    leftBlock.checkHp = false;
                                 }
                             }
                             break;
@@ -2840,6 +2843,7 @@ public class Game : MonoBehaviour
                                     change = true;
                                     rightBlock.changeHp = 1;
                                     rightBlock.changeBlockState = changeBlock;
+                                    rightBlock.checkHp = false;
                                 }
                             }
                             break;
