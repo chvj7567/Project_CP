@@ -633,11 +633,11 @@ public class Game : MonoBehaviour
     void StartTutorial()
     // 튜토리얼 시작
     {
-        guideEnd = false;
-        guideFinger.gameObject.SetActive(true);
-
         if (_selectStage != Defines.ESelectStage.Hard && _stageInfo.tutorialID > 0)
         {
+            guideEnd = false;
+            guideFinger.gameObject.SetActive(true);
+
             Time.timeScale = 0;
 
             guideBackground.SetActive(true);
@@ -1102,9 +1102,6 @@ public class Game : MonoBehaviour
     // 블럭을 드래그하고 난 후 다음 드래그가 가능한 상태까지
     {
         // 블럭 생성기는 드래그 후 한 번만 동작해야 함.
-
-        Debug.Log("After Drag");
-
         bool checkCreateBlock = false;
 
         if (moveCount.Value == 0 && gameResult.Value != EGameState.CatPang)
@@ -1286,6 +1283,10 @@ public class Game : MonoBehaviour
                     guideHole.sizeDelta = settingValue.Item1;
                     guideHole.anchoredPosition = settingValue.Item2;
 
+                    guideFinger.gameObject.SetActive(true);
+                    guideFinger.anchoredPosition = settingValue.Item2;
+
+
                     guideDesc.SetStringID(tutorialInfo.descNextBlockStringID);
                 }
             }
@@ -1466,18 +1467,24 @@ public class Game : MonoBehaviour
                     if (block.changeBlockState != Defines.EBlockState.None)
                     {
                         createDelay = true;
+
                         CreateNewBlock(block, Defines.ELog.UpdateMap, 1, block.changeBlockState);
                         block.SetHp(block.changeHp);
                         block.ResetScore();
                         block.SetOriginPos();
+                        block.changeBlockState = Defines.EBlockState.None;
                     }
                     else if (reUpdate || block.IsMatch())
                     {
                         if (block.IsFixdBlock() || block.IsFishBlock())
+                        {
                             continue;
+                        }
 
                         if (reUpdate && (block.GetBlockState() == Defines.EBlockState.RainbowPang || block.IsBallBlock()))
+                        {
                             continue;
+                        }
 
                         firstRow = block.row;
                         firstCol = block.col;
@@ -2239,8 +2246,6 @@ public class Game : MonoBehaviour
 
         moveBlock.name = $"Block{moveBlock.row}/{moveBlock.col}";
         targetBlock.name = $"Block{targetBlock.row}/{targetBlock.col}";
-
-        Debug.Log($"{moveBlock.row}/{moveBlock.col} <=> {targetBlock.row}/{targetBlock.col}");
 
         boardArr[moveBlock.row, moveBlock.col] = moveBlock;
         boardArr[targetBlock.row, targetBlock.col] = targetBlock;
