@@ -1118,7 +1118,7 @@ public class Game : MonoBehaviour
 
         await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
 
-        if (block1 && block2 && block1.IsBlock() == true && block2.IsBlock() == true)
+        if (block1 && block2 && block1.IsBlock() && block2.IsBlock())
         {
             if (block1.tutorialBlock)
                 block1.tutorialBlock = false;
@@ -1129,7 +1129,7 @@ public class Game : MonoBehaviour
             moveIndex2 = block2.index;
 
             // 두 블럭 모두 스페셜 블럭일 경우
-            if (block1.IsSpecialBombBlock() == true && block2.IsSpecialBombBlock() == true)
+            if (block1.IsSpecialBombBlock() && block2.IsSpecialBombBlock())
             {
                 block1.match = true;
                 block2.match = true;
@@ -1155,7 +1155,7 @@ public class Game : MonoBehaviour
                 return;
             }
             // 한 블럭만 스페셜 블럭일 경우
-            else if (block1.IsSpecialBombBlock() == true)
+            else if (block1.IsSpecialBombBlock())
             {
                 await block1.Bomb();
 
@@ -1163,7 +1163,7 @@ public class Game : MonoBehaviour
                 return;
             }
             // 한 블럭만 스페셜 블럭일 경우
-            else if (block2.IsSpecialBombBlock() == true)
+            else if (block2.IsSpecialBombBlock())
             {
                 await block2.Bomb();
 
@@ -1171,8 +1171,9 @@ public class Game : MonoBehaviour
                 return;
             }
             // 두 블럭 모두 폭탄 블럭일 경우
-            else if (block1.IsBombBlock() == true && block2.IsBombBlock() == true)
+            else if (block1.IsBombBlock() == true && block2.IsBombBlock())
             {
+                moveCount.Value -= 1;
                 bonusScore.Value += 30;
                 block2.match = true;
 
@@ -1180,7 +1181,7 @@ public class Game : MonoBehaviour
                 block1.changeBlockState = random;
             }
             // 한 블럭만 폭탄 블럭일 경우
-            else if (block1.IsBombBlock() == true)
+            else if (block1.IsBombBlock())
             {
                 await block1.Bomb();
 
@@ -1188,7 +1189,7 @@ public class Game : MonoBehaviour
                 return;
             }
             // 한 블럭만 폭탄 블럭일 경우
-            else if (block2.IsBombBlock() == true)
+            else if (block2.IsBombBlock())
             {
                 await block2.Bomb();
 
@@ -1197,6 +1198,7 @@ public class Game : MonoBehaviour
             }
         }
 
+        // 매치가 안되서 다시 원위치
         bool back = false;
 
         isMatch = false;
@@ -1249,7 +1251,8 @@ public class Game : MonoBehaviour
 
         } while (isMatch || await CatInTheBox());
 
-        if ((block1 != null && block2 != null && back == false) || isBoom == true && gameResult.Value != EGameState.CatPang)
+        bool vaildDrag = block1 != null && block2 != null && back == false;
+        if (vaildDrag || isBoom && gameResult.Value != EGameState.CatPang)
         {
             moveCount.Value -= 1;
         }

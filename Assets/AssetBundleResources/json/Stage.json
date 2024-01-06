@@ -1346,7 +1346,57 @@
             "boardSize": 8,
             "time": -1.0,
             "targetScore": -1,
+            "moveCount": 20,
+            "tutorialID": -1
+        },
+        {
+            "group": 14,
+            "stage": 136,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 20,
+            "tutorialID": -1
+        },
+        {
+            "group": 14,
+            "stage": 137,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": 900,
             "moveCount": 100,
+            "tutorialID": -1
+        },
+        {
+            "group": 14,
+            "stage": 138,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": 30.0,
+            "targetScore": -1,
+            "moveCount": -1,
+            "tutorialID": -1
+        },
+        {
+            "group": 14,
+            "stage": 139,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 50,
+            "tutorialID": -1
+        },
+        {
+            "group": 14,
+            "stage": 140,
+            "blockTypeCount": 5,
+            "boardSize": 9,
+            "time": -1.0,
+            "targetScore": -1,
+            "moveCount": 1,
             "tutorialID": -1
         },
         {
