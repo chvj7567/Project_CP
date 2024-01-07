@@ -792,7 +792,7 @@ public class Game : MonoBehaviour
             while (elapsedTime < moveTime)
             {
                 guideFinger.anchoredPosition = Vector2.Lerp(startPos, endPos, elapsedTime / moveTime);
-                elapsedTime += 0.02f;
+                elapsedTime += 0.05f;
                 await Task.Yield();
             }
 
@@ -2071,7 +2071,6 @@ public class Game : MonoBehaviour
         _blockState = _block.CheckSelectCatShop(_blockState);
 
         _block.SetBlockState(_log, _key, _blockSpriteList[(int)_blockState], _blockState);
-        _block.checkHp = _block.CheckHpBlock();
         _block.match = false;
         _block.boom = false;
         _block.squareMatch = false;
@@ -2497,7 +2496,7 @@ public class Game : MonoBehaviour
 
         if (ani)
         {
-            await AfterDrag(null, null);
+            await AfterDrag(null, null, true);
         }
     }
 

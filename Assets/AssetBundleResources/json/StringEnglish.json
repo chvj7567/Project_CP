@@ -317,7 +317,7 @@
         },
         {
             "stringID": 79,
-            "value": "Blocks with a + sign generate blocks in a random direction, and if there is no space to create them, blocks are not created."
+            "value": "Blocks with a + sign generate blocks in a random direction, and if there is no space to create them, blocks are not created.\n\r(Created blocks do not affect clearing.)"
         },
         {
             "stringID": 80,

@@ -114,9 +114,9 @@ public class First : MonoBehaviour
 
                 CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
-                    waitText.gameObject.SetActive(false);
-
                     await SetGPGSLogin(success, localUser.userName);
+
+                    waitText.gameObject.SetActive(false);
                 });
             }
 #endif
@@ -186,9 +186,9 @@ public class First : MonoBehaviour
 
                     CHMGPGS.Instance.Login(async (success, localUser) =>
                     {
-                        waitText.gameObject.SetActive(false);
-
                         await SetGPGSLogin(success, localUser.userName);
+
+                        waitText.gameObject.SetActive(false);
                     });
                 }
                 else

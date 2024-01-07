@@ -27,6 +27,7 @@ public class UISetting : UIBase
     [SerializeField] GameObject guideInitObj;
     [SerializeField] Button guideInitBtn;
 
+    [SerializeField] GameObject colorObj;
     [SerializeField] Slider redSlider;
     [SerializeField] Slider greenSlider;
     [SerializeField] Slider blueSlider;
@@ -58,6 +59,7 @@ public class UISetting : UIBase
                 boomObj.SetActive(false);
                 languageObj.SetActive(true);
                 guideInitObj.SetActive(true);
+                colorObj.SetActive(true);
             }
         });
 
@@ -69,6 +71,7 @@ public class UISetting : UIBase
                 soundObj.SetActive(false);
                 languageObj.SetActive(false);
                 guideInitObj.SetActive(false);
+                colorObj.SetActive(false);
             }
         });
 

@@ -2595,6 +2595,7 @@ MonoBehaviour:
   englishBtn: {fileID: 8943783921413249443}
   guideInitObj: {fileID: 4531712591801406862}
   guideInitBtn: {fileID: 1084640378672220982}
+  colorObj: {fileID: 156372531143375673}
   redSlider: {fileID: 7871104266637126490}
   greenSlider: {fileID: 8454172169792757173}
   blueSlider: {fileID: 3115122240063684583}

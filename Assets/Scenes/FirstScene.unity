@@ -861,6 +861,7 @@ MonoBehaviour:
   stageCount: 10
   page: 0
   width: 0
+  curSelect: 0
 --- !u!114 &67400173
 MonoBehaviour:
   m_ObjectHideFlags: 0
