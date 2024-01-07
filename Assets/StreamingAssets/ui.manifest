@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 838737936
+CRC: 2093974106
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 452ccc89e5fac31e50317a0459cde448
+    Hash: 60b1f3d90f3e08265106cc235742dfde
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 20d6be9a5fb2d66f1bd1f6089a869e4c
+    Hash: 5ed478945651a4558351dec85ba1ab27
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -38,6 +38,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 6ade1da8314e3e24597f4fe006067214, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 01bc1677329821340af037273005a8d4, type: 3}
@@ -60,6 +62,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 096089e983ec46545a8a6af112ab0724, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 5243fac9e52413e4b9333b5716f5d20c, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
@@ -74,19 +78,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: d5456e65513a92e45bbfe92ea2993149, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: d4c41a1fd96324d468e00d7f32b0c217, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 128888257e077c24d8b86e6afdf87dc9, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 587ad3a96754f504484639ee2028ab94, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 6ade1da8314e3e24597f4fe006067214, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: d5456e65513a92e45bbfe92ea2993149, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 5243fac9e52413e4b9333b5716f5d20c, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 128888257e077c24d8b86e6afdf87dc9, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -119,6 +119,6 @@ Assets:
 - Assets/AssetBundleResources/ui/UICanvas.prefab
 - Assets/AssetBundleResources/ui/UINickname.prefab
 Dependencies:
-- C:/Users/User/Desktop/UnityProject/PaPang/Assets/Bundle/effect
-- C:/Users/User/Desktop/UnityProject/PaPang/Assets/Bundle/font
-- C:/Users/User/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
+- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/effect
+- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/font
+- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite

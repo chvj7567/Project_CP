@@ -3,7 +3,7 @@ CRC: 1564521914
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 73d8b68ae94b045d60d7e5b628264359
+    Hash: 08f96b576030d753d0f887887161b7f8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 84abb3ca0f036401516280b4e19ee5f9
@@ -27,4 +27,4 @@ Assets:
 - Assets/AssetBundleResources/effect/FireCracker.prefab
 - Assets/AssetBundleResources/effect/DarkBall.prefab
 Dependencies:
-- C:/Users/User/Desktop/UnityProject/PaPang/Assets/Bundle/material
+- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/material

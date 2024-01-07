@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 70031337
+CRC: 2262865817
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7e9b2203f67360a221601657b933ea57
+    Hash: 25a3670b92310ba16b46a1532af881f5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -14,6 +14,7 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/AssetBundleResources/json/StringEnglish.json
+- Assets/AssetBundleResources/json/ConstValue.json
 - Assets/AssetBundleResources/json/Guide.json
 - Assets/AssetBundleResources/json/Mission.json
 - Assets/AssetBundleResources/json/StringKorea.json
