@@ -398,9 +398,9 @@ public class CHMJson
         return stageBlockInfoList.FindAll(_ => _.stage == stage);
     }
 
-    public List<MissionInfo> GetMissionInfoListAll()
+    public List<MissionInfo> GetMissionInfoList(int tapIndex)
     {
-        return missionInfoList;
+        return missionInfoList.FindAll(_ => _.tapIndex == tapIndex);
     }
 
     public List<ShopInfo> GetShopInfoListAll()

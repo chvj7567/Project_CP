@@ -190,7 +190,7 @@ public abstract class CHPoolingScrollView<T, TInfo> : MonoBehaviour where T : Mo
         if (columnCount <= 0)
         {
             float width = viewPort.rect.width - (padding.left + padding.right);
-            _columnCount = Mathf.FloorToInt(width / (itemSize.x + itemGap.x));
+            _columnCount = Mathf.Max(1, Mathf.FloorToInt(width / (itemSize.x + itemGap.x)));
         }
         else
         {

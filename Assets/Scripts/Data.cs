@@ -11,8 +11,9 @@ namespace Data
         public string userID = "";
         public string nickname = "";
         public bool connectGPGS = false;
-        public int hardStage = 0;
+        public int rewardStage = 0;
         public int normalStage = 0;
+        public int hardStage = 0;
         public int bossStage = 0;
         public int selectCatShop = 0;
         public int guideIndex = 0;

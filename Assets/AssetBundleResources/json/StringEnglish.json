@@ -478,5 +478,21 @@
         {
             "stringID": 119,
             "value": "\rIt can be eliminated with a bomb before it hits the floor."
+        },
+        {
+            "stringID": 120,
+            "value": "Special"
+        },
+        {
+            "stringID": 121,
+            "value": "Normal Mission"
+        },
+        {
+            "stringID": 122,
+            "value": "Special Mission"
+        },
+        {
+            "stringID": 123,
+            "value": "Block"
         }
     ]

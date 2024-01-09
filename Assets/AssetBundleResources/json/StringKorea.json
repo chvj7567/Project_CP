@@ -478,5 +478,21 @@
         {
             "stringID": 119,
             "value": "바닥에 닿기 전 폭탄을 통해 제거할 수 있습니다."
+        },
+        {
+            "stringID": 120,
+            "value": "특별"
+        },
+        {
+            "stringID": 121,
+            "value": "일반 미션"
+        },
+        {
+            "stringID": 122,
+            "value": "특별 미션"
+        },
+        {
+            "stringID": 123,
+            "value": "블럭"
         }
     ]

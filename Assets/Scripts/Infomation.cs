@@ -57,6 +57,7 @@ public class Infomation
     public class MissionInfo
     {
         public int missionID = -1;
+        public int tapIndex = -1;
         public Defines.EBlockState collectionType = Defines.EBlockState.None;
         public int clearValue = -1;
         public int addValue = -1;
