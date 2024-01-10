@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2093974106
+CRC: 543022549
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 60b1f3d90f3e08265106cc235742dfde
+    Hash: 3ad8533799127c2411f1314d83b2bfe1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5ed478945651a4558351dec85ba1ab27
+    Hash: 6baa28c676f1e0571e0015848296e5b7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -119,6 +119,6 @@ Assets:
 - Assets/AssetBundleResources/ui/UICanvas.prefab
 - Assets/AssetBundleResources/ui/UINickname.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/effect
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/font
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
+- C:/Users/User/Desktop/UnityProject/PaPang/Assets/Bundle/effect
+- C:/Users/User/Desktop/UnityProject/PaPang/Assets/Bundle/font
+- C:/Users/User/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
