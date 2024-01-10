@@ -130,6 +130,7 @@ public class MissionScrollViewItem : MonoBehaviour
             missionValueText.SetStringID(27);
             missionValueText.SetText(_info.clearValue);
             SetMissionImage(_info.collectionType);
+            SetRewardImage(_info.reward);
 
             var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
             if (loginData.normalStage >= _info.clearValue &&

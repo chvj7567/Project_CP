@@ -792,7 +792,7 @@ public class Game : MonoBehaviour
             while (elapsedTime < moveTime)
             {
                 guideFinger.anchoredPosition = Vector2.Lerp(startPos, endPos, elapsedTime / moveTime);
-                elapsedTime += 0.05f;
+                elapsedTime += 0.025f;
                 await Task.Yield();
             }
 
