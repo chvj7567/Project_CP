@@ -209,7 +209,7 @@
         },
         {
             "stringID": 52,
-            "value": "You can set sound and language\r\nYou can see a description of the bomb."
+            "value": "\rYou can set sound, language, guide, and block background colors.\r\nYou can see a description of the bomb."
         },
         {
             "stringID": 53,
