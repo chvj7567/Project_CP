@@ -494,5 +494,17 @@
         {
             "stringID": 123,
             "value": "블럭"
+        },
+        {
+            "stringID": 124,
+            "value": "게임 데이터"
+        },
+        {
+            "stringID": 125,
+            "value": "삭제"
+        },
+        {
+            "stringID": 126,
+            "value": "게임 데이터가 모두 삭제되었습니다."
         }
     ]

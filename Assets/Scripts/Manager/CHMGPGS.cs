@@ -123,7 +123,6 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
     public void IncrementAchievement(string gpgsId, int steps, Action<bool> onUnlocked = null) =>
         PlayGamesPlatform.Instance.IncrementAchievement(gpgsId, steps, success => onUnlocked?.Invoke(success));
 
-
     public void ShowAllLeaderboardUI() =>
         Social.ShowLeaderboardUI();
 

@@ -156,6 +156,9 @@ public class First : MonoBehaviour
         rankingBtn.gameObject.SetActive(false);
         waitText.gameObject.SetActive(false);
 
+
+        userID.gameObject.SetActive(false);
+
         for (int i = 0; i < guideHoleList.Count; ++i)
         {
             guideHoleList[i].gameObject.SetActive(false);
@@ -247,6 +250,8 @@ public class First : MonoBehaviour
                 guideBackground.SetActive(false);
                 guideBackgroundBtn.gameObject.SetActive(false);
 
+                Time.timeScale = 1;
+
                 CHMData.Instance.SaveData(CHMMain.String.CatPang);
             }
         }
@@ -255,6 +260,7 @@ public class First : MonoBehaviour
 
         bundleDownload.Value = true;
 
+        userID.gameObject.SetActive(true);
         userID.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID);
 
         InitButton();
@@ -443,6 +449,8 @@ public class First : MonoBehaviour
 
             guideBackground.SetActive(false);
             guideBackgroundBtn.gameObject.SetActive(false);
+
+            Time.timeScale = 1;
 
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }

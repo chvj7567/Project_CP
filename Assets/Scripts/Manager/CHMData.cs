@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Purchasing.MiniJSON;
+using System;
 
 public interface ILoader<Key, Value>
 {
@@ -64,12 +66,12 @@ public class CHMData : CHSingleton<CHMData>
         }
     }
 
-    async Task<(bool, Loader)> LoadJsonToLocal<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
+    async Task<(bool, Loader)> LoadJsonToLocal<Loader, Key, Value>(string path, string name) where Loader : ILoader<Key, Value>
     {
-        string path = $"{Application.persistentDataPath}/{_path}.json";
+        string localPath = $"{Application.persistentDataPath}/{path}.json";
 
-        Debug.Log($"Local Path : {path}");
-        if (File.Exists(path) == false)
+        Debug.Log($"Local Path : {localPath}");
+        if (File.Exists(localPath) == false)
         {
             // 신규 유저
             firstData = true;
@@ -82,20 +84,20 @@ public class CHMData : CHSingleton<CHMData>
             PlayerPrefs.SetFloat(CHMMain.String.Alpha, 1f);
 
             Debug.Log("New User");
-            return (true, await LoadDefaultData<Loader>(_name));
+            return (true, await LoadDefaultData<Loader>(name));
         }
         else
         {
-            var data = File.ReadAllText(path);
+            var data = File.ReadAllText(localPath);
 
             // 데이터가 없을 경우 디폴트 데이터 저장
-            if (data.Contains($"{_name.ToLower()}List") == false || data.Contains($"\"{_name.ToLower()}List\":[]"))
+            if (data.Contains($"{name.ToLower()}List") == false || data.Contains($"\"{name.ToLower()}List\":[]"))
             {
-                return (false, await LoadDefaultData<Loader>(_name));
+                return (false, await LoadDefaultData<Loader>(name));
             }
             else
             {
-                return (false, JsonUtility.FromJson<Loader>(File.ReadAllText(path)));
+                return (false, JsonUtility.FromJson<Loader>(File.ReadAllText(localPath)));
             }
         }
     }
@@ -119,7 +121,7 @@ public class CHMData : CHSingleton<CHMData>
     {
         string json = "";
 
-        Data.ExtractData<Object> saveData = new Data.ExtractData<Object>();
+        Data.ExtractData<UnityEngine.Object> saveData = new Data.ExtractData<UnityEngine.Object>();
 
         Data.ExtractData<Data.Login> loginData = new Data.ExtractData<Data.Login>();
         saveData.loginList = loginData.MakeList(loginLocalDataDic);
@@ -143,7 +145,6 @@ public class CHMData : CHSingleton<CHMData>
 
         File.WriteAllText($"{Application.persistentDataPath}/{_path}.json", json);
 
-
 #if UNITY_ANDROID
         if (saveData.loginList.First().connectGPGS == true)
         {
@@ -156,58 +157,87 @@ public class CHMData : CHSingleton<CHMData>
     }
 
 #if UNITY_ANDROID
-    public async Task LoadCloudData(string _path)
+    public async Task LoadCloudData(string path)
     {
         Debug.Log("Cloud Data Load");
 
         if (loginCloudDataDic == null)
         {
             Debug.Log("Login Cloud Data Load");
-            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
+            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(path, Defines.EData.Login.ToString());
             loginLocalDataDic = loginCloudDataDic = data.MakeDict();
         }
 
         if (collectionCloudDataDic == null)
         {
             Debug.Log("Collection Cloud Data Load");
-            var data2 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
+            var data2 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(path, Defines.EData.Collection.ToString());
             collectionLocalDataDic = collectionCloudDataDic = data2.MakeDict();
         }
 
         if (missionCloudDataDic == null)
         {
             Debug.Log("Mission Cloud Data Load");
-            var data3 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
+            var data3 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(path, Defines.EData.Mission.ToString());
             missionLocalDataDic = missionCloudDataDic = data3.MakeDict();
         }
 
         if (shopCloudDataDic == null)
         {
             Debug.Log("Shop Cloud Data Load");
-            var data4 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
+            var data4 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(path, Defines.EData.Shop.ToString());
             shopLocalDataDic = shopCloudDataDic = data4.MakeDict();
         }
     }
 
-    public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string _path, string _name) where Loader : ILoader<Key, Value>
+    public async Task<Loader> LoadJsonToGPGSCloud<Loader, Key, Value>(string path, string name) where Loader : ILoader<Key, Value>
     {
         TaskCompletionSource<string> taskCompletionSource = new TaskCompletionSource<string>();
 
-        CHMGPGS.Instance.LoadCloud(_path, (success, data) =>
+        CHMGPGS.Instance.LoadCloud(path, (success, data) =>
         {
-            Debug.Log($"Load Cloud {_name} Data is {success} : {data}");
+            Debug.Log($"Load Cloud {name} Data is {success} : {data}");
             taskCompletionSource.SetResult(data);
         });
 
         var stringTask = await taskCompletionSource.Task;
 
         // 데이터가 없을 경우 디폴트 데이터 저장
-        if (stringTask.Contains($"{_name.ToLower()}List") == false || stringTask.Contains($"\"{_name.ToLower()}List\":[]"))
+        if (stringTask.Contains($"{name.ToLower()}List") == false || stringTask.Contains($"\"{name.ToLower()}List\":[]"))
         {
-            return await LoadDefaultData<Loader>(_name);
+            return await LoadDefaultData<Loader>(name);
         }
 
         return JsonUtility.FromJson<Loader>(stringTask);
+    }
+
+    public void DeleteData(string path, Action<bool> callback)
+    {
+        Debug.Log($"Delete : {Application.persistentDataPath}/{path}.json");
+        File.Delete($"{Application.persistentDataPath}/{path}.json");
+
+        loginLocalDataDic.Clear();
+        collectionLocalDataDic.Clear();
+        missionLocalDataDic.Clear();
+        shopLocalDataDic.Clear();
+
+        if (GetLoginData(path).connectGPGS)
+        {
+            CHMGPGS.Instance.DeleteCloud(path, success =>
+            {
+                Debug.Log($"Delete Cloud Data is {success} : ");
+
+                loginCloudDataDic.Clear();
+                collectionCloudDataDic.Clear();
+                missionCloudDataDic.Clear();
+                shopCloudDataDic.Clear();
+                callback(success);
+            });
+        }
+        else
+        {
+            callback(true);
+        }
     }
 #endif
     Data.Login CreateLoginData(string _key)
@@ -220,7 +250,7 @@ public class CHMData : CHSingleton<CHMData>
             connectGPGS = false,
             selectCatShop = 0,
             guideIndex = 0,
-            languageType = Defines.ELanguageType.English,
+            languageType = Application.systemLanguage == SystemLanguage.Korean ? Defines.ELanguageType.Korea : Defines.ELanguageType.English,
         };
 
         loginLocalDataDic.Add(_key, data);

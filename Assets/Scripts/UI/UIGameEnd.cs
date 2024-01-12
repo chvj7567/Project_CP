@@ -89,10 +89,14 @@ public class UIGameEnd : UIBase
 
         adBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).buyRemoveAD == false)
-                CHMAdmob.Instance.ShowRewardedAd();
-            else
+            if (CHMIAP.Instance.CanBuyFromID(CHMMain.String.Product_ID_RemoveAD) == false)
+            {
                 AcquireReward();
+            }
+            else
+            {
+                CHMAdmob.Instance.ShowRewardedAd();
+            }
         });
 
         CHMAdmob.Instance.AcquireReward += AcquireReward;

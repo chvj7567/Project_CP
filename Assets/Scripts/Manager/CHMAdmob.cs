@@ -18,6 +18,7 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
 
     public Action AcquireReward;
     public Action CloseAD;
+
     public void Init()
     {
         if (checkInit == true)

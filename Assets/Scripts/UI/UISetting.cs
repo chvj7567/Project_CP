@@ -27,6 +27,9 @@ public class UISetting : UIBase
     [SerializeField] GameObject guideInitObj;
     [SerializeField] Button guideInitBtn;
 
+    [SerializeField] GameObject deleteObj;
+    [SerializeField] Button deleteBtn;
+
     [SerializeField] GameObject colorObj;
     [SerializeField] Slider redSlider;
     [SerializeField] Slider greenSlider;
@@ -59,6 +62,7 @@ public class UISetting : UIBase
                 boomObj.SetActive(false);
                 languageObj.SetActive(true);
                 guideInitObj.SetActive(true);
+                deleteObj.SetActive(true);
                 colorObj.SetActive(true);
             }
         });
@@ -71,6 +75,7 @@ public class UISetting : UIBase
                 soundObj.SetActive(false);
                 languageObj.SetActive(false);
                 guideInitObj.SetActive(false);
+                deleteObj.SetActive(false);
                 colorObj.SetActive(false);
             }
         });
@@ -120,6 +125,21 @@ public class UISetting : UIBase
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
 
             SceneManager.LoadScene(1);
+        });
+
+        deleteBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            CHMData.Instance.DeleteData(CHMMain.String.CatPang, (ret) =>
+            {
+                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                {
+                    stringID = 126
+                });
+
+                CHMGPGS.Instance.Logout();
+
+                SceneManager.LoadScene(1);
+            });
         });
 
         redSlider.OnValueChangedAsObservable().Subscribe(_ =>

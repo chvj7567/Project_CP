@@ -494,5 +494,17 @@
         {
             "stringID": 123,
             "value": "Block"
+        },
+        {
+            "stringID": 124,
+            "value": "Game Data"
+        },
+        {
+            "stringID": 125,
+            "value": "Delete"
+        },
+        {
+            "stringID": 126,
+            "value": "All game data has been deleted."
         }
     ]

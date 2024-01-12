@@ -151,7 +151,7 @@ public class ShopScrollViewItem : MonoBehaviour
         }
         else
         {
-            if (false == CHMIAP.Instance.IsConsumableType(info.productName) && shopData.buy)
+            if (CHMIAP.Instance.CanBuyFromName(info.productName) == false)
             {
                 return false;
             }

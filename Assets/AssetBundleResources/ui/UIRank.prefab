@@ -1098,7 +1098,7 @@ MonoBehaviour:
   hardRankTapBtn: {fileID: 6354162579012648159}
   bossRankTapBtn: {fileID: 5372656819349381237}
   curRankDesc: {fileID: 5546953424864936681}
-  aiCount: 99
+  aiCount: 0
   curTap: 0
 --- !u!1 &3750408603315674647
 GameObject:

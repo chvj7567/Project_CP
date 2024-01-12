@@ -90,6 +90,8 @@ public class StageSelect : MonoBehaviour
 
     public bool SetPage(int page, Defines.ESelectStage select)
     {
+        Debug.Log($"SetPage : {select.ToString()} {page} ");
+
         if (select == Defines.ESelectStage.Boss)
         {
             page += CHMData.Instance.BossStageStartValue;
@@ -97,7 +99,10 @@ public class StageSelect : MonoBehaviour
 
         var stageList = CHMMain.Json.GetStageInfoList(page);
         if (stageList == null || stageList.Count == 0)
+        {
+            Debug.Log($"SetPage Failed : {page}");
             return false;
+        }
 
         var stageCount = stageList.Count;
 
@@ -127,19 +132,19 @@ public class StageSelect : MonoBehaviour
         return true;
     }
 
-    void SetClearObj(int _index)
+    void SetClearObj(int index)
     {
-        if (int.TryParse(btnList[_index].text.text, out int stage) == false)
+        if (int.TryParse(btnList[index].text.text, out int stage) == false)
             return;
 
         int clearStage = GetClearStage();
         if (clearStage >= stage)
         {
-            btnList[_index].clearObj.SetActive(true);
+            btnList[index].clearObj.SetActive(true);
         }
         else
         {
-            btnList[_index].clearObj.SetActive(false);
+            btnList[index].clearObj.SetActive(false);
         }
     }
 

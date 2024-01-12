@@ -189,4 +189,36 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
         return product.metadata.isoCurrencyCode;
     }
+
+    public bool CanBuyFromID(string productID)
+    {
+        if (IsConsumableType(productID) == false)
+        {
+            if (HadPurchased(productID))
+            {
+                Debug.Log("이미 구매한 상품");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public bool CanBuyFromName(string productName)
+    {
+        var product = productList.Find(_ => _.productName == productName);
+        if (product == null)
+            return false;
+
+        if (false == IsConsumableType(product.productID))
+        {
+            if (HadPurchased(product.productID))
+            {
+                Debug.Log("이미 구매한 상품");
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

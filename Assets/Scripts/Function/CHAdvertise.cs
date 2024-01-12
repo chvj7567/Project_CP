@@ -37,6 +37,9 @@ public class CHAdvertise : MonoBehaviour
             return false;
         }
 
+        if (CHMIAP.Instance.CanBuyFromID(CHMMain.String.Product_ID_RemoveAD))
+            return false;
+
         CHMAdmob.Instance.ShowInterstitialAd();
 
         return true;
