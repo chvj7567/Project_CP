@@ -40,8 +40,6 @@ public class UIShop : UIBase
 
         if (checkPurchase)
         {
-            loginData.buyRemoveAD = true;
-
             var shopData = CHMData.Instance.GetShopData("0");
             shopData.buy = true;
 
@@ -76,11 +74,7 @@ public class UIShop : UIBase
             scrollView.SetItemList(shopList);
         });
 
-        loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        if (loginData != null)
-        {
-            SetCurrentSkin(loginData.selectCatShop);
-        }
+        SetCurrentSkin(loginData.selectCatShop);
 
         tap1Btn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -134,12 +128,8 @@ public class UIShop : UIBase
         var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         if (loginData == null)
             return;
-
-        if (productName == CHMMain.String.Product_Name_RemoveAD)
-        {
-            loginData.buyRemoveAD = true;
-        }
-        else if (productName == CHMMain.String.Product_Name_AddTime)
+        
+        if (productName == CHMMain.String.Product_Name_AddTime)
         {
             loginData.addTimeItemCount += 10;
         }

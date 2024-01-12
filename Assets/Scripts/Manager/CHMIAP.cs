@@ -113,7 +113,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
     public void OnPurchaseFailed(UnityEngine.Purchasing.Product product, PurchaseFailureReason error)
     {
         var id = product.definition.id;
-        Debug.LogWarning($"구매 실패 - ID : {id}\n{error}");
+        Debug.Log($"구매 실패 - ID : {id}\n{error}");
 
         if (purchaseState != null)
             purchaseState.Invoke(new PurchaseState
@@ -143,7 +143,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
     public void RestorePurchase()
     {
-        if (false == IsInitialized)
+        if (IsInitialized == false)
             return;
 
         if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.OSXPlayer)
@@ -155,21 +155,25 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         }
     }
 
-    public bool HadPurchased(string productID)
+    public bool HadPurchased(string productName)
     {
-        if (false == IsInitialized)
+        if (IsInitialized == false)
             return false;
 
-        var product = GetProduct(productID);
+        Debug.Log($"Had Purchased 1 {productName}");
+
+        var product = GetProduct(productName);
         if (product == null)
             return false;
+
+        Debug.Log($"Had Purchased 2 {product.hasReceipt}");
 
         return product.hasReceipt;
     }
 
-    public UnityEngine.Purchasing.Product GetProduct(string productID)
+    public UnityEngine.Purchasing.Product GetProduct(string productName)
     {
-        return iStoreController.products.WithID(productID);
+        return iStoreController.products.WithID(productName);
     }
 
     public decimal GetPrice(string productID)
@@ -192,9 +196,13 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
     public bool CanBuyFromID(string productID)
     {
-        if (IsConsumableType(productID) == false)
+        var product = productList.Find(_ => _.productID == productID);
+        if (product == null)
+            return false;
+
+        if (IsConsumableType(product.productID) == false)
         {
-            if (HadPurchased(productID))
+            if (HadPurchased(product.productName))
             {
                 Debug.Log("이미 구매한 상품");
                 return false;
@@ -212,7 +220,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
         if (false == IsConsumableType(product.productID))
         {
-            if (HadPurchased(product.productID))
+            if (HadPurchased(product.productName))
             {
                 Debug.Log("이미 구매한 상품");
                 return false;

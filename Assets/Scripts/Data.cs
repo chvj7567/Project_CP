@@ -18,7 +18,6 @@ namespace Data
         public int selectCatShop = 0;
         public int guideIndex = 0;
         public Defines.ELanguageType languageType = Defines.ELanguageType.English;
-        public bool buyRemoveAD = false;
         public int addTimeItemCount = 0;
         public int addMoveItemCount = 0;
         public int useTimeItemCount = 0;
