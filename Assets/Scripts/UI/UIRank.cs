@@ -125,8 +125,58 @@ public class UIRank : UIBase
             await myFirstRankTask.Task;
 
             TaskCompletionSource<bool> rankTaskComplete = new TaskCompletionSource<bool>();
+            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 1, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
+            {
+                Debug.Log($"1  {gpgsID}/{data.Scores.Length}");
+            });
 
-            CHMGPGS.Instance.LoadAllLeaderboardArray(gpgsID, scores =>
+            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 2, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
+            {
+                Debug.Log($"2  {gpgsID}/{data.Scores.Length}");
+            });
+
+            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 100, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
+            {
+                Debug.Log($"3  {gpgsID}/{data.Scores.Length}");
+                if (success)
+                {
+                    if (data != null && data.Scores != null)
+                    {
+                        var scores = data.Scores;
+
+                        CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
+                        {
+                            int lastRank = 0;
+                            for (int i = 0; i < userProfiles.Length; ++i)
+                            {
+                                rankList.Add(new Infomation.RankInfo
+                                {
+                                    userID = userProfiles[i].userName,
+                                    profileTexture = userProfiles[i].image,
+                                    stageRank = scores[i].rank,
+                                    stage = scores[i].value
+                                });
+
+                                lastRank = scores[i].rank;
+                            }
+
+                            for (int i = 0; i < aiCount; ++i)
+                            {
+                                rankList.Add(new Infomation.RankInfo
+                                {
+                                    userID = $"AI {i + 1}",
+                                    stageRank = ++lastRank,
+                                    stage = 0
+                                });
+                            }
+
+                            rankTaskComplete.SetResult(true);
+                        });
+                    }
+                }
+            });
+
+            /*CHMGPGS.Instance.LoadAllLeaderboardArray(gpgsID, scores =>
             {
                 CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
                 {
@@ -156,7 +206,7 @@ public class UIRank : UIBase
 
                     rankTaskComplete.SetResult(true);
                 });
-            });
+            });*/
 
             await rankTaskComplete.Task;
         }

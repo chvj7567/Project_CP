@@ -44,6 +44,8 @@ public class UISetting : UIBase
 
     private void Start()
     {
+        CHMGPGS.Instance.ShowAllLeaderboardUI();
+
         backAction += () =>
         {
             PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, bgmSlider.value);

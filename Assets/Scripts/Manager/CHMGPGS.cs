@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SocialPlatforms;
+using static Defines;
 
 public class CHMGPGS : CHSingleton<CHMGPGS>
 {
@@ -152,9 +153,12 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
         {
             userIds.Add(score.userID);
         }
-        
+
+        Debug.Log($"LoadUsers {userIds.Count}");
+
         Social.LoadUsers(userIds.ToArray(), (users) =>
         {
+            Debug.Log($"LoadUsers {users.Length}");
             onUserProfiles.Invoke(users);
         });
     }
