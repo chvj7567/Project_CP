@@ -113,6 +113,7 @@ public class Game : MonoBehaviour
 
     CancellationTokenSource tokenSource;
 
+    float gameTime = 0;
     int helpTime = 0;
     bool tutorialNextBlock = false;
     bool bossSkill = false;
@@ -295,6 +296,8 @@ public class Game : MonoBehaviour
 
     private async void Update()
     {
+        gameTime += Time.deltaTime;
+
         if (isLock == false)
         {
             curTimer += Time.deltaTime;
@@ -317,22 +320,22 @@ public class Game : MonoBehaviour
 
         if (isLock == true)
         {
-            teachTime = Time.time;
-            dragTime = Time.time;
+            teachTime = gameTime;
+            dragTime = gameTime;
         }
         else
         {
 
 
-            // .5초 동안 드래그를 안하면 알려줌
-            if (autoPlay && dragTime + .5f < Time.time)
+            // .5초 딜레이를 가진 자동 플레이
+            if (autoPlay && dragTime + .5f < gameTime)
             {
                 var block = boardArr[canMatchRow, canMatchCol];
                 block.Drag(canMatchDrag);
             }
 
             // 3초 동안 드래그를 안하면 알려줌
-            if (teachTime + 3 < Time.time && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
+            if (teachTime + 3 < gameTime && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
             {
                 oneTimeAlarm = true;
 
@@ -607,6 +610,8 @@ public class Game : MonoBehaviour
             guideBackground.SetActive(false);
             guideBackgroundBtn.gameObject.SetActive(false);
 
+            Time.timeScale = 1;
+
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
 
@@ -625,6 +630,8 @@ public class Game : MonoBehaviour
 
             guideBackground.SetActive(false);
             guideBackgroundBtn.gameObject.SetActive(false);
+
+            Time.timeScale = 1;
 
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
         }
