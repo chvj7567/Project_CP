@@ -506,5 +506,21 @@
         {
             "stringID": 126,
             "value": "All game data has been deleted."
+        },
+        {
+            "stringID": 127,
+            "value": "No Ranking Data"
+        },
+        {
+            "stringID": 128,
+            "value": "\rAre you sure you want to delete your game data?\r\n(Ranking data is not deleted)"
+        },
+        {
+            "stringID": 129,
+            "value": "Yes"
+        },
+        {
+            "stringID": 130,
+            "value": "No"
         }
     ]

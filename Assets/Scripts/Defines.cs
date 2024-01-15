@@ -74,6 +74,7 @@ public class Defines
         UIStageSelect,
         UINickname,
         UIRank,
+        UIDataDelete,
 
         Max
     }

@@ -158,7 +158,6 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
 
         Social.LoadUsers(userIds.ToArray(), (users) =>
         {
-            Debug.Log($"LoadUsers {users.Length}");
             onUserProfiles.Invoke(users);
         });
     }

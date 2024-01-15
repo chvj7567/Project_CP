@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using static Defines;
 
 public class UIRankArg : CHUIArg
 {
@@ -23,6 +24,8 @@ public class UIRank : UIBase
     [SerializeField] Button bossRankTapBtn;
 
     [SerializeField] CHTMPro curRankDesc;
+
+    [SerializeField] GameObject noRankingDataObj;
 
     [SerializeField] int aiCount;
 
@@ -42,6 +45,14 @@ public class UIRank : UIBase
             curRankDesc.SetStringID(68);
             curTap = Defines.ESelectStage.Normal;
             var rankList = await GetRankList(Defines.ESelectStage.Normal);
+
+            noRankingDataObj.SetActive(false);
+
+            if (rankList.Count == 0)
+            {
+                noRankingDataObj.SetActive(true);
+            }
+
             scrollView.SetItemList(rankList);
         });
 
@@ -53,6 +64,14 @@ public class UIRank : UIBase
             curRankDesc.SetStringID(77);
             curTap = Defines.ESelectStage.Hard;
             var rankList = await GetRankList(Defines.ESelectStage.Hard);
+
+            noRankingDataObj.SetActive(false);
+
+            if (rankList.Count == 0)
+            {
+                noRankingDataObj.SetActive(true);
+            }
+
             scrollView.SetItemList(rankList);
         });
 
@@ -64,12 +83,30 @@ public class UIRank : UIBase
             curRankDesc.SetStringID(69);
             curTap = Defines.ESelectStage.Boss;
             var rankList = await GetRankList(Defines.ESelectStage.Boss);
+
+            noRankingDataObj.SetActive(false);
+
+            if (rankList.Count == 0)
+            {
+                noRankingDataObj.SetActive(true);
+            }
+
             scrollView.SetItemList(rankList);
         });
 
         curRankDesc.SetStringID(68);
         curTap = Defines.ESelectStage.Normal;
-        scrollView.SetItemList(await GetRankList(Defines.ESelectStage.Normal));
+
+        var rankList = await GetRankList(Defines.ESelectStage.Normal);
+
+        noRankingDataObj.SetActive(false);
+
+        if (rankList.Count == 0)
+        {
+            noRankingDataObj.SetActive(true);
+        }
+
+        scrollView.SetItemList(rankList);
     }
 
     async Task<List<Infomation.RankInfo>> GetRankList(Defines.ESelectStage selectStage)
@@ -93,91 +130,59 @@ public class UIRank : UIBase
 
         if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).connectGPGS)
         {
-            TaskCompletionSource<bool> myFirstRankTask = new TaskCompletionSource<bool>();
-
-            // 자기 정보 가져왔을 때 없으면(사이즈 0이면) 넣어주기
-            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 1, LeaderboardStart.PlayerCentered, LeaderboardTimeSpan.AllTime, (success, data) =>
-            {
-                if (success)
-                {
-                    if (data != null && data.Scores != null)
-                    {
-                        if (data.Scores.Length == 0)
-                        {
-                            CHMGPGS.Instance.ReportLeaderboard(gpgsID, 0, (success) =>
-                            {
-                                if (success)
-                                {
-                                    Debug.Log("Insert MyFirstRank Success");
-                                }
-
-                                myFirstRankTask.SetResult(true);
-                            });
-                        }
-                        else
-                        {
-                            myFirstRankTask.SetResult(true);
-                        }
-                    }
-                }
-            });
-
-            await myFirstRankTask.Task;
-
             TaskCompletionSource<bool> rankTaskComplete = new TaskCompletionSource<bool>();
-            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 1, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
-            {
-                Debug.Log($"1  {gpgsID}/{data.Scores.Length}");
-            });
 
-            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 2, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
+            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 10, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
             {
-                Debug.Log($"2  {gpgsID}/{data.Scores.Length}");
-            });
-
-            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 100, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
-            {
-                Debug.Log($"3  {gpgsID}/{data.Scores.Length}");
                 if (success)
                 {
                     if (data != null && data.Scores != null)
                     {
                         var scores = data.Scores;
 
-                        CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
+                        if (scores.Length == 0)
                         {
-                            int lastRank = 0;
-                            for (int i = 0; i < userProfiles.Length; ++i)
-                            {
-                                rankList.Add(new Infomation.RankInfo
-                                {
-                                    userID = userProfiles[i].userName,
-                                    profileTexture = userProfiles[i].image,
-                                    stageRank = scores[i].rank,
-                                    stage = scores[i].value
-                                });
-
-                                lastRank = scores[i].rank;
-                            }
-
-                            for (int i = 0; i < aiCount; ++i)
-                            {
-                                rankList.Add(new Infomation.RankInfo
-                                {
-                                    userID = $"AI {i + 1}",
-                                    stageRank = ++lastRank,
-                                    stage = 0
-                                });
-                            }
-
                             rankTaskComplete.SetResult(true);
-                        });
+                        }
+                        else
+                        {
+                            CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
+                            {
+                                int lastRank = 0;
+                                for (int i = 0; i < userProfiles.Length; ++i)
+                                {
+                                    rankList.Add(new Infomation.RankInfo
+                                    {
+                                        userID = userProfiles[i].userName,
+                                        profileTexture = userProfiles[i].image,
+                                        stageRank = scores[i].rank,
+                                        stage = scores[i].value
+                                    });
+
+                                    lastRank = scores[i].rank;
+                                }
+
+                                for (int i = 0; i < aiCount; ++i)
+                                {
+                                    rankList.Add(new Infomation.RankInfo
+                                    {
+                                        userID = $"AI {i + 1}",
+                                        stageRank = ++lastRank,
+                                        stage = 0
+                                    });
+                                }
+
+                                rankTaskComplete.SetResult(true);
+                            });
+                        }
                     }
                 }
             });
 
             /*CHMGPGS.Instance.LoadAllLeaderboardArray(gpgsID, scores =>
             {
+                Debug.Log($"4  {gpgsID}/{scores.Length}");
+
                 CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
                 {
                     int lastRank = 0;

@@ -44,8 +44,6 @@ public class UISetting : UIBase
 
     private void Start()
     {
-        CHMGPGS.Instance.ShowAllLeaderboardUI();
-
         backAction += () =>
         {
             PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, bgmSlider.value);
@@ -131,17 +129,7 @@ public class UISetting : UIBase
 
         deleteBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMData.Instance.DeleteData(CHMMain.String.CatPang, (ret) =>
-            {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
-                {
-                    stringID = 126
-                });
-
-                CHMGPGS.Instance.Logout();
-
-                SceneManager.LoadScene(1);
-            });
+            CHMMain.UI.ShowUI(Defines.EUI.UIDataDelete, new UIDataDeleteArg());
         });
 
         redSlider.OnValueChangedAsObservable().Subscribe(_ =>
