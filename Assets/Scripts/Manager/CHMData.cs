@@ -15,7 +15,7 @@ public interface ILoader<Key, Value>
 public class CHMData : CHSingleton<CHMData>
 {
     public readonly int BossStageStartValue = 100000;
-    public bool firstData = false;
+    public bool newUser = false;
 
     public Dictionary<string, Data.Login> loginLocalDataDic = null;
     public Dictionary<string, Data.Collection> collectionLocalDataDic = null;
@@ -74,7 +74,14 @@ public class CHMData : CHSingleton<CHMData>
         if (File.Exists(localPath) == false)
         {
             // 신규 유저
-            firstData = true;
+            newUser = true;
+
+            // 기본 스킨
+            GetShopData("1").buy = true;
+
+            PlayerPrefs.SetInt(CHMMain.String.HardStage, 0);
+            PlayerPrefs.SetInt(CHMMain.String.NormalStage, 0);
+            PlayerPrefs.SetInt(CHMMain.String.BossStage, 0 + CHMData.Instance.BossStageStartValue);
 
             PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, .2f);
             PlayerPrefs.SetFloat(CHMMain.String.EffectVolume, .2f);

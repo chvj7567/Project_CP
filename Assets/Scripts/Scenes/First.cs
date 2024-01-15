@@ -317,7 +317,7 @@ public class First : MonoBehaviour
             Debug.Log($"GPGS Login Success : {gpgsUserName}");
             await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
 
-            if (firstStartBtnClick)
+            if (firstStartBtnClick && CHMData.Instance.newUser == false)
                 await StageSelect(PlayerPrefs.GetInt(CHMMain.String.SelectStage));
         }
         else
@@ -406,18 +406,6 @@ public class First : MonoBehaviour
     async Task StageSelect(int select)
     {
         PlayerPrefs.SetInt(CHMMain.String.SelectStage, select);
-
-        if (CHMData.Instance.firstData)
-        {
-            CHMData.Instance.firstData = false;
-
-            // 기본 스킨
-            CHMData.Instance.GetShopData("1").buy = true;
-
-            PlayerPrefs.SetInt(CHMMain.String.HardStage, 0);
-            PlayerPrefs.SetInt(CHMMain.String.NormalStage, 0);
-            PlayerPrefs.SetInt(CHMMain.String.BossStage, 0 + CHMData.Instance.BossStageStartValue);
-        }
 
         pageMove.Init((Defines.ESelectStage)select);
         startBtn.gameObject.SetActive(false);
