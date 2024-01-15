@@ -260,9 +260,6 @@ public class First : MonoBehaviour
 
         bundleDownload.Value = true;
 
-        userID.gameObject.SetActive(true);
-        userID.SetText(CHMData.Instance.GetLoginData(CHMMain.String.CatPang).userID);
-
         InitButton();
     }
 
@@ -316,6 +313,9 @@ public class First : MonoBehaviour
         {
             Debug.Log($"GPGS Login Success : {gpgsUserName}");
             await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
+
+            userID.gameObject.SetActive(true);
+            userID.SetText(gpgsUserName);
 
             if (firstStartBtnClick && CHMData.Instance.newUser == false)
                 await StageSelect(PlayerPrefs.GetInt(CHMMain.String.SelectStage));
