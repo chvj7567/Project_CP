@@ -322,6 +322,7 @@ public class First : MonoBehaviour
         }
         else
         {
+            userID.gameObject.SetActive(false);
             Debug.Log($"GPGS Login Failed {success.ToString()}");
             await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
         }
