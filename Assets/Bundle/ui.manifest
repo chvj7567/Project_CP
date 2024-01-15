@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1205232608
+CRC: 500789215
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1f2e186a21ce47ba001cff9463f1a258
+    Hash: 5356d9da274cfcd978e6ddb1286e2ce4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6b65f88cbdb007f471d909c446fcb708
+    Hash: b0c83a10e53734d61d8773fcbb132952
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -87,6 +87,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 587ad3a96754f504484639ee2028ab94, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 528bb5d12869fce4aadaff41e253da39, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -106,6 +108,7 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/AssetBundleResources/ui/UIAlarm.prefab
+- Assets/AssetBundleResources/ui/UIDataDelete.prefab
 - Assets/AssetBundleResources/ui/UIStageSelect.prefab
 - Assets/AssetBundleResources/ui/UICamera.prefab
 - Assets/AssetBundleResources/ui/UIMission.prefab
