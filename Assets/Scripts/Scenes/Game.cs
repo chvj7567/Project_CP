@@ -441,12 +441,12 @@ public class Game : MonoBehaviour
                 break;
             case ESelectStage.Normal:
                 {
-                    // 난이도 조정
-                    if (_stageInfo.time > 0)
-                    {
-                        _stageInfo.time *= 2;
-                    }
-                    else if (_stageInfo.targetScore > 0)
+                    // 시간 제한 X
+                    // 목표 점수 1/2배
+                    // 이동 횟수 2배
+                    _stageInfo.time = -1;
+
+                    if (_stageInfo.targetScore > 0)
                     {
                         _stageInfo.targetScore /= 2;
                     }
