@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using static Defines;
 using static Infomation;
 using static Reporter;
+//Test
 
 public class Game : MonoBehaviour
 {
