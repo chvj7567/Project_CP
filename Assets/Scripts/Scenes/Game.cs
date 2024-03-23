@@ -10,44 +10,42 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Defines;
 using static Infomation;
-using static Reporter;
-//Test
 
 public class Game : MonoBehaviour
 {
     const int MAX = 9;
 
-    [Header("µÚ·Î °¡±â")]
+    [Header("ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] Button backBtn;
 
-    [Header("Å¸ÀÌ¸Ó")]
+    [Header("Å¸ï¿½Ì¸ï¿½")]
     [SerializeField] Image timerImg;
     [SerializeField] CHTMPro timerText;
     [SerializeField, ReadOnly] float curTimer;
 
-    [Header("ºí·° ÅÍÁø ÈÄ ÀÌ¹ÌÁö")]
+    [Header("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½")]
     [SerializeField] Image goldImg;
     [SerializeField] List<Image> catFootImgList = new List<Image>();
 
-    [Header("ºí·°")]
+    [Header("ï¿½ï¿½ï¿½")]
     [SerializeField] Transform parent;
     [SerializeField] CHInstantiateButton instBtn;
     [SerializeField] GameObject origin;
     [SerializeField] float margin = 0f;
 
-    [Header("¹è°æ")]
+    [Header("ï¿½ï¿½ï¿½")]
     [SerializeField] List<Image> backgroundList = new List<Image>();
     [SerializeField, ReadOnly] int backgroundIndex = 0;
 
-    [Header("ÆøÅº ÀÌÆåÆ®")]
+    [Header("ï¿½ï¿½Åº ï¿½ï¿½ï¿½ï¿½Æ®")]
     [SerializeField] ParticleSystem bombEffectPS;
     [SerializeField] List<ParticleSystem> pangEffectList = new List<ParticleSystem>();
 
-    [Header("°ÔÀÓ ¼Óµµ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½")]
     [SerializeField] public float delay;
     [SerializeField] int delayMillisecond;
 
-    [Header("°ÔÀÓ »óÅÂ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField, ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
     [SerializeField, ReadOnly] public bool isDrag = false;
     [SerializeField, ReadOnly] public bool isLock = false;
@@ -68,7 +66,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
-    [Header("À¯Àú µµ¿ÍÁÖ±â")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½")]
     [SerializeField] bool autoPlay = false;
     [SerializeField, ReadOnly] int updateMapCount = 5;
     [SerializeField, ReadOnly] float teachTime;
@@ -77,7 +75,7 @@ public class Game : MonoBehaviour
     [SerializeField, ReadOnly] int canMatchCol = -1;
     [SerializeField, ReadOnly] Defines.EDrag canMatchDrag = Defines.EDrag.None;
 
-    [Header("º¸½º ½ºÅ×ÀÌÁö")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] GameObject normalBossObj;
     [SerializeField] GameObject angryBossObj;
     [SerializeField] GameObject cryBossObj;
@@ -86,17 +84,17 @@ public class Game : MonoBehaviour
     [SerializeField] CHTMPro hpText;
     [SerializeField, ReadOnly] ReactiveProperty<int> hp = new ReactiveProperty<int>();
 
-    [Header("°¢ ½ºÅ×ÀÌÁö UI ¿ÀºêÁ§Æ®")]
+    [Header("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")]
     [SerializeField] GameObject onlyNormalStageObject;
     [SerializeField] GameObject onlyBossStageObject;
 
-    [Header("ÆøÅº ¼±ÅÃ ¹Ù")]
+    [Header("ï¿½ï¿½Åº ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½")]
     [SerializeField, ReadOnly] int arrowPangIndex = 1;
     [SerializeField] CHButton arrowPang1;
     [SerializeField] CHButton arrowPang2;
     [SerializeField] Image banView;
 
-    [Header("°¡ÀÌµå")]
+    [Header("ï¿½ï¿½ï¿½Ìµï¿½")]
     [SerializeField] bool guideEnd = false;
     [SerializeField] RectTransform guideFinger;
     [SerializeField] RectTransform guideHole;
@@ -209,7 +207,7 @@ public class Game : MonoBehaviour
                     bool useTargetScore = _stageInfo.targetScore > 0;
                     bool useMoveCount = _stageInfo.moveCount > 0;
 
-                    // Ã¼·ÂÀÌ ÀÖ´Â ºí·°ÀÌ ÀÖ°Å³ª ¾ø¾îÁ®¾ß µÇ´Â ºí·°ÀÌ ÀÖÀ¸¸é ¹ÌÅ¬¸®¾î
+                    // Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¬ï¿½ï¿½ï¿½ï¿½
                     for (int i = 0; i < boardSize; ++i)
                     {
                         for (int j = 0; j < boardSize; ++j)
@@ -231,10 +229,10 @@ public class Game : MonoBehaviour
                             break;
                     }
 
-                    // ½Ã°£Á¦ÇÑÀÌ ÀÖ°í ½Ã°£ÀÌ ´Ù µÈ °æ¿ì °ÔÀÓ Á¾·á È®ÀÎ
+                    // ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                     if (useTime == true && timerImg.fillAmount >= 1)
                     {
-                        // ¸ñÇ¥ Á¡¼ö¸¦ »ç¿ëÇÏ´Â °æ¿ì ¸ñÇ¥ Á¡¼ö ´Þ¼º È®ÀÎ
+                        // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ È®ï¿½ï¿½
                         if (useTargetScore == true && curScore.Value < _stageInfo.targetScore)
                         {
                             clear = false;
@@ -242,23 +240,23 @@ public class Game : MonoBehaviour
 
                         GameEnd(clear);
                     }
-                    // ½Ã°£À» »ç¿ëÇÏ°í ½Ã°£ÀÌ ´Ù µÇÁö ¾ÊÀº °æ¿ì °ÔÀÓ Á¾·á È®ÀÎ
+                    // ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                     else
                     {
-                        // ¸ñÇ¥ Á¡¼ö¸¦ »ç¿ëÇÏ´Â °æ¿ì ¸ñÇ¥ Á¡¼ö ´Þ¼º È®ÀÎ
+                        // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ È®ï¿½ï¿½
                         if (useTargetScore == true && curScore.Value < _stageInfo.targetScore)
                         {
                             clear = false;
                         }
 
-                        // ¿òÁ÷ÀÓ È½¼ö¸¦ »ç¿ëÇÏ´Â °æ¿ì È½¼ö¸¦ ´Ù ¼ÒÁøÇßÀ» ¶§ °ÔÀÓ Á¾·á È®ÀÎ
+                        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ È½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                         if (useMoveCount == true && moveCount.Value <= 0)
                         {
                             GameEnd(clear);
                         }
                         else
                         {
-                            // Å¬¸®¾î ÇÑ °æ¿ì¸¸ °ÔÀÓ Á¾·á
+                            // Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ì¸¸ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                             if (clear == true)
                             {
                                 GameEnd(clear);
@@ -328,14 +326,14 @@ public class Game : MonoBehaviour
         {
 
 
-            // .5ÃÊ µô·¹ÀÌ¸¦ °¡Áø ÀÚµ¿ ÇÃ·¹ÀÌ
+            // .5ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ ï¿½Ã·ï¿½ï¿½ï¿½
             if (autoPlay && dragTime + .5f < gameTime)
             {
                 var block = boardArr[canMatchRow, canMatchCol];
                 block.Drag(canMatchDrag);
             }
 
-            // 3ÃÊ µ¿¾È µå·¡±×¸¦ ¾ÈÇÏ¸é ¾Ë·ÁÁÜ
+            // 3ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½å·¡ï¿½×¸ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ë·ï¿½ï¿½ï¿½
             if (teachTime + 3 < gameTime && oneTimeAlarm == false && canMatchRow >= 0 && canMatchCol >= 0)
             {
                 oneTimeAlarm = true;
@@ -370,7 +368,7 @@ public class Game : MonoBehaviour
     }
 
     async Task LoadImage()
-    // ºí·° ÀÌ¹ÌÁö ·Îµå
+    // ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     {
         for (EBlockState i = 0; i < EBlockState.Max; ++i)
         {
@@ -388,7 +386,7 @@ public class Game : MonoBehaviour
     }
 
     void InitData()
-    // µ¥ÀÌÅÍ ÃÊ±âÈ­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
     {
         if (init)
             return;
@@ -430,7 +428,7 @@ public class Game : MonoBehaviour
         {
             case ESelectStage.Hard:
                 {
-                    // Æ©Åä¸®¾óÀº Easy(ÀÏ¹Ý)¿¡¼­ ÁøÇàÇÔÀ¸·Î »èÁ¦
+                    // Æ©ï¿½ä¸®ï¿½ï¿½ï¿½ï¿½ Easy(ï¿½Ï¹ï¿½)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     _stageInfo.tutorialID = -1;
                     for (int i = 0; i < _stageBlockInfoList.Count; ++i)
                     {
@@ -442,9 +440,9 @@ public class Game : MonoBehaviour
                 break;
             case ESelectStage.Normal:
                 {
-                    // ½Ã°£ Á¦ÇÑ X
-                    // ¸ñÇ¥ Á¡¼ö 1/2¹è
-                    // ÀÌµ¿ È½¼ö 2¹è
+                    // ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ X
+                    // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ 1/2ï¿½ï¿½
+                    // ï¿½Ìµï¿½ È½ï¿½ï¿½ 2ï¿½ï¿½
                     _stageInfo.time = -1;
 
                     if (_stageInfo.targetScore > 0)
@@ -496,7 +494,7 @@ public class Game : MonoBehaviour
             gameResult.Value = EGameState.NormalOrHardStagePlay;
         }
 
-        // º¸½º ½ºÅ×ÀÌÁöÀÏ °æ¿ì¸¸
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¸¸
         if (_selectStage == Defines.ESelectStage.Boss)
         {
             onlyBossStageObject.SetActive(true);
@@ -514,7 +512,7 @@ public class Game : MonoBehaviour
 
             hp.Value = _loginData.hp;
 
-            // 1ÃÊµÚ¿¡ 1ÃÊ¿¡ ÇÑ ¹ø¾¿ ½ÇÇà
+            // 1ï¿½ÊµÚ¿ï¿½ 1ï¿½Ê¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
@@ -593,7 +591,7 @@ public class Game : MonoBehaviour
     }
 
     async Task StartGuide()
-    // °¡ÀÌµå ½ÃÀÛ
+    // ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (_selectStage == Defines.ESelectStage.Normal && _loginData.guideIndex == (int)CHMMain.Json.GetConstValueInfo(Defines.EConstValue.NormalStageGuideMaxIndex))
         {
@@ -639,7 +637,7 @@ public class Game : MonoBehaviour
     }
 
     void StartTutorial()
-    // Æ©Åä¸®¾ó ½ÃÀÛ
+    // Æ©ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (_selectStage != Defines.ESelectStage.Hard && _stageInfo.tutorialID > 0)
         {
@@ -669,7 +667,7 @@ public class Game : MonoBehaviour
     }
 
     async Task<int> NormalStageGuideStart()
-    // ÀÏ¹Ý ½ºÅ×ÀÌÁö Game UI °¡ÀÌµå ½ÃÀÛ
+    // ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Game UI ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
 
@@ -704,7 +702,7 @@ public class Game : MonoBehaviour
     }
 
     async Task<int> BossStageGuideStart()
-    // º¸½º ½ºÅ×ÀÌÁö Game UI °¡ÀÌµå ½ÃÀÛ
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Game UI ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         TaskCompletionSource<int> tutorialCompleteTask = new TaskCompletionSource<int>();
 
@@ -739,7 +737,7 @@ public class Game : MonoBehaviour
     }
 
     (Vector2, Vector2) GetTutorialStageImgSettingValue(Block[,] blockArr, List<StageBlockInfo> stageBlockInfoList)
-    // Æ©Åä¸®¾ó¿¡¼­ ¹à°Ô º¸ÀÌ´Â ºÎºÐ Å©±â°ú À§Ä¡ ÁöÁ¤
+    // Æ©ï¿½ä¸®ï¿½ó¿¡¼ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½Îºï¿½ Å©ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
     {
         if (null == stageBlockInfoList || null == blockArr)
             return (Vector2.zero, Vector2.zero);
@@ -804,13 +802,13 @@ public class Game : MonoBehaviour
                 await Task.Yield();
             }
 
-            // ÀÌµ¿ÀÌ ³¡³ª¸é Àá½Ã ´ë±âÇÏ°í ¹Ýº¹
-            await Task.Delay(1000); // 1ÃÊ ´ë±â
+            // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ýºï¿½
+            await Task.Delay(1000); // 1ï¿½ï¿½ ï¿½ï¿½ï¿½
         }
     }
 
     async void GameEnd(bool clear)
-    // °ÔÀÓ Á¾·á ½Ã ½ÇÇà
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (isLock)
         {
@@ -864,7 +862,7 @@ public class Game : MonoBehaviour
             await Task.Delay(1000);
             await CatPang();
 
-            // °ÔÀÓ°á°ú ´Ù½Ã Ã¼Å©ÇÏµµ·Ï
+            // ï¿½ï¿½ï¿½Ó°ï¿½ï¿½ ï¿½Ù½ï¿½ Ã¼Å©ï¿½Ïµï¿½ï¿½ï¿½
             gameEnd = false;
             if (_selectStage == Defines.ESelectStage.Boss)
             {
@@ -892,7 +890,7 @@ public class Game : MonoBehaviour
     }
 
     async Task<bool> CatPang(bool check = false)
-    // ¸¶Áö¸·¿¡ ÅÍÁö´Â Ä¹ÆÎ!!!
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¹ï¿½ï¿½!!!
     {
         isLock = true;
 
@@ -920,7 +918,7 @@ public class Game : MonoBehaviour
     }
 
     void SetDissapearBlock()
-    // »ç¶óÁ®¾ßÇÒ ºí·°Àº ·£´ý »ý»ó ÆøÅºÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     {
         int row = boardSize - 1;
 
@@ -982,7 +980,7 @@ public class Game : MonoBehaviour
     }
 
     async Task ChangeBackgroundLoop()
-    // ¹è°æ º¯È¯ ¹Ýº¹
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½Ýºï¿½
     {
         for (int i = 0; i < backgroundList.Count; ++i)
         {
@@ -1018,7 +1016,7 @@ public class Game : MonoBehaviour
     }
 
     int ChangeBackground()
-    // ´ÙÀ½ ¹è°æ ÀÎµ¦½º ¹ÝÈ¯
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     {
         if (backgroundIndex >= backgroundList.Count)
             return 0;
@@ -1036,7 +1034,7 @@ public class Game : MonoBehaviour
     }
 
     void SaveClearData()
-    // ÇöÀç ½ºÅ×ÀÌÁö¸¦ Å¬¸®¾î »óÅÂ·Î ÀúÀå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         switch (_selectStage)
         {
@@ -1065,7 +1063,7 @@ public class Game : MonoBehaviour
     }
 
     Defines.EClearState GetClearState()
-    // ÇöÀç ½ºÅ×ÀÌÁöÀÇ Å¬¸®¾î »óÅÂ
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         switch (_selectStage)
         {
@@ -1093,7 +1091,7 @@ public class Game : MonoBehaviour
     }
 
     void SaveBombCollectionData(Block block)
-    // ÆøÅº ÄÝ·º¼Ç µ¥ÀÌÅÍ ÀúÀå
+    // ï¿½ï¿½Åº ï¿½Ý·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (block.IsBombBlock() == false && block.IsSpecialBombBlock() == false)
             return;
@@ -1107,9 +1105,9 @@ public class Game : MonoBehaviour
     }
 
     public async Task AfterDrag(Block block1, Block block2, bool isBoom = false)
-    // ºí·°À» µå·¡±×ÇÏ°í ³­ ÈÄ ´ÙÀ½ µå·¡±×°¡ °¡´ÉÇÑ »óÅÂ±îÁö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½å·¡ï¿½×°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½
     {
-        // ºí·° »ý¼º±â´Â µå·¡±× ÈÄ ÇÑ ¹ø¸¸ µ¿ÀÛÇØ¾ß ÇÔ.
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½ï¿½.
         bool checkCreateBlock = false;
 
         if (moveCount.Value == 0 && gameResult.Value != EGameState.CatPang)
@@ -1136,7 +1134,7 @@ public class Game : MonoBehaviour
             moveIndex1 = block1.index;
             moveIndex2 = block2.index;
 
-            // µÎ ºí·° ¸ðµÎ ½ºÆä¼È ºí·°ÀÏ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             if (block1.IsSpecialBombBlock() && block2.IsSpecialBombBlock())
             {
                 block1.match = true;
@@ -1146,7 +1144,7 @@ public class Game : MonoBehaviour
                 isLock = false;
                 return;
             }
-            // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·° Áß Æ¯º°ÇÑ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ Æ¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (block1.GetBlockState() == Defines.EBlockState.PinkBomb)
             {
                 await Boom3(block1, block2.GetBlockState());
@@ -1154,7 +1152,7 @@ public class Game : MonoBehaviour
                 isLock = false;
                 return;
             }
-            // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·° Áß Æ¯º°ÇÑ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ Æ¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (block2.GetBlockState() == Defines.EBlockState.PinkBomb)
             {
                 await Boom3(block2, block1.GetBlockState());
@@ -1162,7 +1160,7 @@ public class Game : MonoBehaviour
                 isLock = false;
                 return;
             }
-            // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·°ÀÏ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (block1.IsSpecialBombBlock())
             {
                 await block1.Bomb();
@@ -1170,7 +1168,7 @@ public class Game : MonoBehaviour
                 isLock = false;
                 return;
             }
-            // ÇÑ ºí·°¸¸ ½ºÆä¼È ºí·°ÀÏ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (block2.IsSpecialBombBlock())
             {
                 await block2.Bomb();
@@ -1178,7 +1176,7 @@ public class Game : MonoBehaviour
                 isLock = false;
                 return;
             }
-            // µÎ ºí·° ¸ðµÎ ÆøÅº ºí·°ÀÏ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Åº ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (block1.IsBombBlock() == true && block2.IsBombBlock())
             {
                 moveCount.Value -= 1;
@@ -1188,7 +1186,7 @@ public class Game : MonoBehaviour
                 var random = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.PinkBomb, (int)Defines.EBlockState.BlueBomb + 1);
                 block1.changeBlockState = random;
             }
-            // ÇÑ ºí·°¸¸ ÆøÅº ºí·°ÀÏ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Åº ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (block1.IsBombBlock())
             {
                 await block1.Bomb();
@@ -1196,7 +1194,7 @@ public class Game : MonoBehaviour
                 isLock = false;
                 return;
             }
-            // ÇÑ ºí·°¸¸ ÆøÅº ºí·°ÀÏ °æ¿ì
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Åº ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             else if (block2.IsBombBlock())
             {
                 await block2.Bomb();
@@ -1206,7 +1204,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        // ¸ÅÄ¡°¡ ¾ÈµÇ¼­ ´Ù½Ã ¿øÀ§Ä¡
+        // ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ÈµÇ¼ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡
         bool back = false;
 
         isMatch = false;
@@ -1307,7 +1305,7 @@ public class Game : MonoBehaviour
     }
 
     public bool CheckTutorial()
-    // Æ©Åä¸®¾ó ºí·°ÀÎÁö È®ÀÎ
+    // Æ©ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
         for (int w = 0; w < boardSize; w++)
         {
@@ -1324,7 +1322,7 @@ public class Game : MonoBehaviour
     }
 
     (Vector2, Vector2) TutorialBlockSetting(Block[,] blockArr, Defines.EBlockState blockState)
-    // Æ©Åä¸®¾ó ºí·°À¸·Î ¼¼ÆÃ
+    // Æ©ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         for (int w = 0; w < boardSize; w++)
         {
@@ -1342,7 +1340,7 @@ public class Game : MonoBehaviour
     }
 
     async Task CreateMap()
-    // ½ºÅ×ÀÌÁö ½ÃÀÛ ½Ã ¸Ê »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
@@ -1458,7 +1456,7 @@ public class Game : MonoBehaviour
     }
 
     async Task UpdateMap()
-    // ¸Ê ¾÷µ¥ÀÌÆ®
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     {
         try
         {
@@ -1546,7 +1544,7 @@ public class Game : MonoBehaviour
     }
 
     bool CanPlay()
-    // ÇÃ·¹ÀÌ°¡ °¡´ÉÇÑ ¸ÊÀÎÁö °Ë»ç
+    // ï¿½Ã·ï¿½ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
     {
         isMatch = false;
 
@@ -1649,7 +1647,7 @@ public class Game : MonoBehaviour
     }
 
     void CheckMap(bool test = false)
-    // 3Match ºí·° È®ÀÎ
+    // 3Match ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
         if (test == false)
         {
@@ -1707,7 +1705,7 @@ public class Game : MonoBehaviour
     }
 
     bool CheckSquareMatch(int row, int col, bool _test = false)
-    // ½ºÄù¾î Match ÁÂÃø »ó´ÜºÎÅÍ È®ÀÎ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Match ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Üºï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
         if (IsNormalBlock(row, col) == false || IsNormalBlock(row + 1, col) == false ||
             IsNormalBlock(row, col + 1) == false || IsNormalBlock(row + 1, col + 1) == false)
@@ -1730,7 +1728,7 @@ public class Game : MonoBehaviour
         if (normalBlockType != boardArr[row + 1, col + 1].GetBlockState())
             return false;
 
-        // ¿©±â¼­ºÎÅÍ´Â ½ºÄù¾î ¸ÅÄ¡ È®Á¤
+        // ï¿½ï¿½ï¿½â¼­ï¿½ï¿½ï¿½Í´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ È®ï¿½ï¿½
         isMatch = true;
 
         if (_test == false)
@@ -1770,7 +1768,7 @@ public class Game : MonoBehaviour
     }
 
     async Task RemoveMatchBlock()
-    // MatchµÈ ºí·° Á¦°Å
+    // Matchï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         bool removeDelay = false;
         for (int i = 0; i < boardSize; ++i)
@@ -1784,10 +1782,10 @@ public class Game : MonoBehaviour
                 /*if (block.GetBlockState() == Defines.EBlockState.PinkBomb || block.IsBottomTouchDisappearBlock() == true)
                     continue;*/
 
-                // ¾ø¾îÁ®¾ß ÇÒ ºí·°
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
                 if (block.IsMatch() == true && block.remove == false)
                 {
-                    // ÁÖº¯¿¡ hp°¡ ÀÖ´Â ºí·°Àº µ¥¹ÌÁö ÁÜ
+                    // ï¿½Öºï¿½ï¿½ï¿½ hpï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
                     CheckArround(block.row, block.col);
 
                     curScore.Value += 1;
@@ -1824,13 +1822,13 @@ public class Game : MonoBehaviour
                         }
                     }
 
-                    // ¾ÆÀÌÅÛÀÌ ¿¬´Þ¾Æ ÅÍÁö´Â °æ¿ì
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
                     if (block.IsBombBlock() == true && block.boom == false)
                     {
                         bonusScore.Value += 20;
                         await block.Bomb(false);
 
-                        // Match °Ë»ç¸¦ ´Ù½Ã ÇØ¾ßÇÔ
+                        // Match ï¿½Ë»ç¸¦ ï¿½Ù½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½
                         i = -1;
                         break;
                     }
@@ -1846,7 +1844,7 @@ public class Game : MonoBehaviour
     }
 
     async Task CreateBombBlock(bool boomBlock = true)
-    // ÆøÅº ºí·° »ý¼º
+    // ï¿½ï¿½Åº ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         bool createDelay = false;
 
@@ -1861,7 +1859,7 @@ public class Game : MonoBehaviour
                 int row = i;
                 int col = j;
 
-                // ½ºÄù¾î ¸ÅÄ¡ ºí·° »ý¼º
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (block.squareMatch == true)
                 {
                     createDelay = true;
@@ -1871,7 +1869,7 @@ public class Game : MonoBehaviour
                     block.SetOriginPos();
                 }
 
-                // ½ÊÀÚ°¡ ¸ÅÄ¡ ºí·° »ý¼º
+                // ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (block.hScore >= 3 && block.vScore >= 3)
                 {
                     createDelay = true;
@@ -1971,7 +1969,7 @@ public class Game : MonoBehaviour
                 if (block == null)
                     continue;
 
-                // °¡·Î 3°³ ÃÊ°ú ¸ÅÄ¡ ½Ã Æ¯¼ö ºí·° »ý¼º
+                // ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (block.hScore > 3)
                 {
                     createDelay = true;
@@ -2017,7 +2015,7 @@ public class Game : MonoBehaviour
                         }
                     }
                 }
-                // ¼¼·Î 3°³ ÃÊ°ú ¸ÅÄ¡ ½Ã Æ¯¼ö ºí·° »ý¼º
+                // ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 else if (block.vScore > 3)
                 {
                     createDelay = true;
@@ -2074,7 +2072,7 @@ public class Game : MonoBehaviour
     }
 
     void CreateNewBlock(Block _block, Defines.ELog _log, int _key, Defines.EBlockState _blockState, bool isDelay = true)
-    // »õ ºí·°À» ¸¸µç´Ù.
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½.
     {
         _blockState = _block.CheckSelectCatShop(_blockState);
 
@@ -2090,7 +2088,7 @@ public class Game : MonoBehaviour
     }
 
     void Check3Match(List<Block> blockList, Defines.EDirection direction, bool test = false)
-    // 3Match ºí·° È®ÀÎ
+    // 3Match ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
         Defines.EBlockState blockState = Defines.EBlockState.None;
         List<int> tempIndex = new List<int>();
@@ -2143,7 +2141,7 @@ public class Game : MonoBehaviour
     }
 
     async Task DownBlock()
-    // ºí·° ¾Æ·¡·Î ÀÌµ¿
+    // ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
     {
         List<Block> order = new List<Block>();
         for (int i = boardSize - 1; i >= 0; --i)
@@ -2172,7 +2170,7 @@ public class Game : MonoBehaviour
             int wallRow = -1;
             for (int i = boardSize - 1; i > row; --i)
             {
-                // º®À¸·Î »ç¿ëÇÏ´Â ºí·°ÀÎÁö È®ÀÎ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                 if (boardArr[i, col].IsWallBlock())
                 {
                     wallRow = i;
@@ -2228,7 +2226,7 @@ public class Game : MonoBehaviour
     }
 
     RectTransform CreateEffect(ParticleSystem effect, Vector2 movePos)
-    // ÀÌÆåÆ®¸¦ »ý¼ºÇÑ´Ù.
+    // ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
     {
         var copyObj = CHMMain.Resource.Instantiate(effect.gameObject, transform.parent);
         copyObj.SetActive(true);
@@ -2239,7 +2237,7 @@ public class Game : MonoBehaviour
     }
 
     public void ChangeBlock(Block moveBlock, Block targetBlock)
-    // ºí·°ÀÇ À§Ä¡ ¹× »óÅÂ¸¦ ¹Ù²Û´Ù.
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½Ù²Û´ï¿½.
     {
         var tempPos = moveBlock.originPos;
         moveBlock.originPos = targetBlock.originPos;
@@ -2262,7 +2260,7 @@ public class Game : MonoBehaviour
     }
 
     bool IsNormalBlock(int row, int col)
-    // À¯È¿ÇÑ ÀÏ¹Ý ºí·°ÀÎÁö È®ÀÎ
+    // ï¿½ï¿½È¿ï¿½ï¿½ ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null ||
             boardArr[row, col].IsFixdBlock() || boardArr[row, col].IsBombBlock() ||
@@ -2273,13 +2271,13 @@ public class Game : MonoBehaviour
     }
 
     bool IsValidIndex(int row, int col)
-    // ÀÎµ¦½º°¡ ÇØ´ç ½ºÅ×ÀÌÁö¿¡¼­ À¯È¿ÇÑÁö È®ÀÎ
+    // ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
         return row >= 0 && row < boardSize && col >= 0 && col < boardSize;
     }
 
     bool ChangeMatchState(int row, int col)
-    // ÇØ´ç ºí·°À» match »óÅÂ·Î ¸¸µç´Ù.
+    // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ match ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½.
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return false;
@@ -2304,7 +2302,7 @@ public class Game : MonoBehaviour
     }
 
     void CheckArround(int row, int col)
-    // ºí·°ÀÌ ¸ÅÄ¡µÇ¾ú´Ù¸é À§, ¾Æ·¡, ¾ç ¿· ºí·°¿¡ µ¥¹ÌÁö¸¦ ÁØ´Ù.
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ç¾ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½, ï¿½Æ·ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½.
     {
         if (IsValidIndex(row, col) == false || boardArr[row, col] == null)
             return;
@@ -2316,7 +2314,7 @@ public class Game : MonoBehaviour
     }
 
     void DamageBlock(int row, int col)
-    // hp°¡ ÀÖ´Â ºí·°ÀÌ¶ó¸é hp - 1À» ÇÑ´Ù.
+    // hpï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ hp - 1ï¿½ï¿½ ï¿½Ñ´ï¿½.
     {
         if (IsValidIndex(row, col) && boardArr[row, col] != null)
         {
@@ -2332,7 +2330,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task BoomAll(bool ani = true)
-    // ¸Ê ÀüÃ¼ ÆøÅº
+    // ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½Åº
     {
         bonusScore.Value += 5;
 
@@ -2351,7 +2349,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb1(Block block, bool ani = true)
-    // ÀÚ±â ÁÖº¯ 1Ä­ ÆøÅº
+    // ï¿½Ú±ï¿½ ï¿½Öºï¿½ 1Ä­ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2379,7 +2377,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb2(Block block, bool ani = true)
-    // ½ÊÀÚ°¡ ÆøÅº
+    // ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2408,7 +2406,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Boom3(Block _specialBlock, Defines.EBlockState _blockState, bool _ani = true)
-    // °°Àº ºí·° ÆøÅº
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         _specialBlock.match = true;
@@ -2453,7 +2451,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb4(Block block, bool ani = true)
-    // °¡·Î ÁÙ ÆøÅº
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2481,7 +2479,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb5(Block block, bool ani = true)
-    // ¼¼·Î ÁÙ ÆøÅº
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2509,7 +2507,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb6(Block block, bool ani = true)
-    // XÀÚ ÆøÅº
+    // Xï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2537,7 +2535,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb7(Block block, bool ani = true)
-    // ÁÂÇÏ¿ì»ó ´ë°¢¼± ÁÙ ÆøÅº
+    // ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2566,7 +2564,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb8(Block block, bool ani = true)
-    // ÁÂ»ó¿ìÇÏ ´ë°¢¼± ÁÙ ÆøÅº
+    // ï¿½Â»ï¿½ï¿½ï¿½ï¿½ ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2595,7 +2593,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb9(Block block, bool ani = true)
-    // ¸¶¸§¸ð ÆøÅº
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2628,7 +2626,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb10(Block block, bool ani = true)
-    // ÀÚ±â ÁÖº¯ 1Ä­ ¶ç¿î »ç°¢Çü ÆøÅº
+    // ï¿½Ú±ï¿½ ï¿½Öºï¿½ 1Ä­ ï¿½ï¿½ï¿½ ï¿½ç°¢ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2665,7 +2663,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb11(Block block, bool ani = true)
-    // ºüÁ÷ ¸ð¾ç ÆøÅº
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2701,7 +2699,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task Bomb12(Block block, bool ani = true)
-    // Z ¸ð¾ç ÆøÅº
+    // Z ï¿½ï¿½ï¿½ ï¿½ï¿½Åº
     {
         bonusScore.Value += 10;
         block.match = true;
@@ -2788,7 +2786,7 @@ public class Game : MonoBehaviour
                 if (block.GetBlockState() != creatorBlock)
                     continue;
 
-                // -ÀÏ °æ¿ì °è¼Ó »ý¼º
+                // -ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (block.GetHp() == 0)
                     continue;
 
@@ -2873,9 +2871,9 @@ public class Game : MonoBehaviour
     }
 
     void BossSkill(int type)
-    // ·£´ýÇÑ ºí·° º¯°æ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
-        // hp´Â 0ºÎÅÍ 10±îÁö
+        // hpï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ 10ï¿½ï¿½ï¿½ï¿½
         var blockHp = UnityEngine.Random.Range(0, 10);
         if (blockHp == 0)
             blockHp = -1;
@@ -2890,7 +2888,7 @@ public class Game : MonoBehaviour
 
         if (type == 1)
         {
-            // º® or Æ÷Å»
+            // ï¿½ï¿½ or ï¿½ï¿½Å»
             var block = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.Wall, (int)Defines.EBlockState.Potal + 1);
 
             boardArr[w, h].changeBlockState = block;
@@ -2898,7 +2896,7 @@ public class Game : MonoBehaviour
         }
         else if (type == 2)
         {
-            // º® »ý¼º±â or Æ÷Å» »ý¼º±â
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ or ï¿½ï¿½Å» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var block = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.WallCreator, (int)Defines.EBlockState.PotalCreator + 1);
 
             boardArr[w, h].changeBlockState = block;
@@ -2906,7 +2904,7 @@ public class Game : MonoBehaviour
         }
         else if (type == 3)
         {
-            // Ä¹ ¹Ú½º
+            // Ä¹ ï¿½Ú½ï¿½
             var block = (Defines.EBlockState)UnityEngine.Random.Range((int)Defines.EBlockState.CatBox1, (int)Defines.EBlockState.CatBox5 + 1);
 
             boardArr[w, h].changeBlockState = block;
@@ -2915,7 +2913,7 @@ public class Game : MonoBehaviour
     }
 
     Defines.EDrag CanDragBlock(Block block)
-    // µå·¡±×°¡ °¡´ÉÇÑ ºí·°ÀÎÁö È®ÀÎ
+    // ï¿½å·¡ï¿½×°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
         int w = block.row;
         int h = block.col;
@@ -2938,7 +2936,7 @@ public class Game : MonoBehaviour
     }
 
     public async Task RainbowPang(Block block, bool ani = true)
-    // ¹«Áö°³ ÆÎÀº °¢ Æ¯¼ö ÆøÅº 1°³ ¾¿À» ¸Ê¿¡ ·£´ýÀ¸·Î »Ñ·ÁÁÜ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Æ¯ï¿½ï¿½ ï¿½ï¿½Åº 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ·ï¿½ï¿½ï¿½
     {
         if (block.GetHp() > 0)
             return;
