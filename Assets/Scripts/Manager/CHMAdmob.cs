@@ -5,8 +5,12 @@ using System;
 public class CHMAdmob : CHSingleton<CHMAdmob>
 {
     string bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111";
-    string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
-    string rewardedAdUnitId = "ca-app-pub-3940256099942544/5224354917";
+    string interstitialAdUnitId = "ca-app-pub-7085378387310828/3775873067";
+    string rewardedAdUnitId = "ca-app-pub-7085378387310828/7433429939";
+
+    // test
+    //string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
+    //string rewardedAdUnitId = "ca-app-pub-3940256099942544/5224354917";
 
     BannerView bannerView;
     InterstitialAd interstitialAd;
