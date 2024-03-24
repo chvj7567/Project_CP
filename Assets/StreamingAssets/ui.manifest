@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4217899760
+CRC: 2576835845
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7f95100183f45d5f97c76bf2a4d309c7
+    Hash: 45d5653066d93bc08fc5e21145b71725
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b0c83a10e53734d61d8773fcbb132952
+    Hash: 391b495db92e021a27b5a01f801873ab
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,6 +25,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
 - Class: 114
@@ -84,8 +86,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 128888257e077c24d8b86e6afdf87dc9, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 587ad3a96754f504484639ee2028ab94, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 528bb5d12869fce4aadaff41e253da39, type: 3}
@@ -122,6 +122,6 @@ Assets:
 - Assets/AssetBundleResources/ui/UICanvas.prefab
 - Assets/AssetBundleResources/ui/UINickname.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/effect
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/font
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
+- C:/Users/admin/Desktop/UnityProject/Project_CP/Assets/Bundle/effect
+- C:/Users/admin/Desktop/UnityProject/Project_CP/Assets/Bundle/font
+- C:/Users/admin/Desktop/UnityProject/Project_CP/Assets/Bundle/sprite

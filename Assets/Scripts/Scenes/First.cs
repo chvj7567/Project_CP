@@ -261,6 +261,9 @@ public class First : MonoBehaviour
         bundleDownload.Value = true;
 
         InitButton();
+
+        // 기본 스킨
+        CHMData.Instance.GetShopData("1").buy = true;
     }
 
     async Task<int> TutorialStart()

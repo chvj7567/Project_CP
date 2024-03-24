@@ -166,7 +166,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         if (product == null)
             return false;
 
-        Debug.Log($"Had Purchased 2 {product.hasReceipt}");
+        Debug.Log($"Had Purchased 2 {product.hasReceipt}\n{product.receipt}");
 
         return product.hasReceipt;
     }

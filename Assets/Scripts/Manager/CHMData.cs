@@ -76,9 +76,6 @@ public class CHMData : CHSingleton<CHMData>
             // 신규 유저
             newUser = true;
 
-            // 기본 스킨
-            GetShopData("1").buy = true;
-
             PlayerPrefs.SetInt(CHMMain.String.HardStage, 0);
             PlayerPrefs.SetInt(CHMMain.String.NormalStage, 0);
             PlayerPrefs.SetInt(CHMMain.String.BossStage, 0 + CHMData.Instance.BossStageStartValue);

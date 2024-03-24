@@ -3,7 +3,7 @@ CRC: 1424082072
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 84043a32f4afe8ec4e3c95d53a87c192
+    Hash: ce4e3edf12dcc7a454746abd7356f51e
   TypeTreeHash:
     serializedVersion: 2
     Hash: c5a90161c859ca1678e61fa777406b9a
@@ -30,4 +30,4 @@ Assets:
 - Assets/AssetBundleResources/unit/AttackCat.prefab
 - Assets/AssetBundleResources/unit/Monster.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
+- C:/Users/admin/Desktop/UnityProject/Project_CP/Assets/Bundle/sprite
