@@ -56,13 +56,14 @@ public class CHMSound
 
     public void SetBGMVolume(float volume)
     {
-        bgmVolume = volume;
+        PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, volume);
+        
         audioSourceArr[(int)Defines.ESound.Bgm].volume = bgmVolume * Ratio;
     }
 
     public void SetEffectVolume(float volume)
     {
-        effectVolume = volume;
+        PlayerPrefs.SetFloat(CHMMain.String.EffectVolume, volume);
 
         for (int i = 0; i < audioSourceArr.Length; ++i)
         {
