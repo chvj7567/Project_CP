@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class UIAlarmArg : CHUIArg
 {
+    public bool useStringID = true;
+    public string text = "";
     public float closeTime = 2f;
     public int stringID;
     public int intValue;
@@ -26,8 +28,15 @@ public class UIAlarm : UIBase
 
     private async void Start()
     {
-        alarmText.SetStringID(arg.stringID);
-        alarmText.SetText(arg.intValue);
+        if (arg.useStringID)
+        {
+            alarmText.SetStringID(arg.stringID);
+            alarmText.SetText(arg.intValue);
+        }
+        else
+        {
+            alarmText.text.text = $"{arg.text}";
+        }
 
         delayTokenSource = new CancellationTokenSource();
 
