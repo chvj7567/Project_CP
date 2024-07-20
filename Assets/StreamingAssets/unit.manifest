@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1424082072
+CRC: 2826838333
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 84043a32f4afe8ec4e3c95d53a87c192
+    Hash: 0a54accfb777ee93f56ccbd4598ece89
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c5a90161c859ca1678e61fa777406b9a
+    Hash: 9989805d7dc07ce74f93d38b4d5378a0
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 0a54accfb777ee93f56ccbd4598ece89
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,9 +28,13 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
 - Assets/AssetBundleResources/unit/AttackCat.prefab
 - Assets/AssetBundleResources/unit/Monster.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/sprite
