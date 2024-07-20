@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4217899760
+CRC: 3579217316
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7f95100183f45d5f97c76bf2a4d309c7
+    Hash: 391c99082efff84d86080b48dc994a9d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b0c83a10e53734d61d8773fcbb132952
+    Hash: 349d00b7ea831ebcdb9bd1f896fbae5e
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 391c99082efff84d86080b48dc994a9d
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -22,11 +25,17 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  Script: {fileID: 11500000, guid: 5243fac9e52413e4b9333b5716f5d20c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1511ccae7919cfc46b603b9b337fdc94, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
 - Class: 114
@@ -44,11 +53,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 01bc1677329821340af037273005a8d4, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 0721a24973e7eb646bb75b1fa607cc90, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 1511ccae7919cfc46b603b9b337fdc94, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c504186a59242e245ba6fdc376241f13, type: 3}
 - Class: 114
@@ -61,8 +66,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 679331cd213529e4d83d2d3529f1c46a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 096089e983ec46545a8a6af112ab0724, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 5243fac9e52413e4b9333b5716f5d20c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
 - Class: 114
@@ -80,11 +83,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: d5456e65513a92e45bbfe92ea2993149, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: d4c41a1fd96324d468e00d7f32b0c217, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 128888257e077c24d8b86e6afdf87dc9, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 587ad3a96754f504484639ee2028ab94, type: 3}
 - Class: 114
@@ -105,7 +108,67 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UniRx
+  ClassName: UniRx.ReactiveProperty`1[System.Int32]
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphValueRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_InputField/OnChangeEvent
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_InputField/SelectionEvent
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_InputField/SubmitEvent
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_InputField/TextSelectionEvent
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_InputField/TouchScreenKeyboardEvent
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/AssetBundleResources/ui/UIAlarm.prefab
 - Assets/AssetBundleResources/ui/UIDataDelete.prefab
@@ -122,6 +185,6 @@ Assets:
 - Assets/AssetBundleResources/ui/UICanvas.prefab
 - Assets/AssetBundleResources/ui/UINickname.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/effect
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/font
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/sprite
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/font
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/material
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/sprite

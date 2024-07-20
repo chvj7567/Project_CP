@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1564521914
+CRC: 828091293
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 08f96b576030d753d0f887887161b7f8
+    Hash: 4b59488462a8ab20f2e969d68cbc5880
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 84abb3ca0f036401516280b4e19ee5f9
+    Hash: e99d55c070a592a90a17ad7530cd2df8
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 4b59488462a8ab20f2e969d68cbc5880
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,4 +30,4 @@ Assets:
 - Assets/AssetBundleResources/effect/FireCracker.prefab
 - Assets/AssetBundleResources/effect/DarkBall.prefab
 Dependencies:
-- C:/Users/chvj7567/Desktop/UnityProject/PaPang/Assets/Bundle/material
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/material
