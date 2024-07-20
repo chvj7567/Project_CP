@@ -824,7 +824,7 @@ MonoBehaviour:
   - {fileID: 1296868258}
   guideDesc: {fileID: 1500224134}
   userID: {fileID: 2000648615}
-  waitText: {fileID: 1312003832}
+  objWait: {fileID: 1312003829}
 --- !u!4 &67400170
 Transform:
   m_ObjectHideFlags: 0
