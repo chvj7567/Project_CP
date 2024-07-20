@@ -70,7 +70,6 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         bundleDownloadSuccess += () =>
         {
-            Debug.Log("bundleDownloadSuccess");
             foreach (var key in googleDownloadKeyList)
             {
                 StartCoroutine(LoadAssetBundle(key));
@@ -109,7 +108,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         if (assetBundle == null)
         {
-            Debug.Log($"Load Fail : {bundleKey}");
+            Debug.LogError($"Load Fail : {bundleKey}");
         }
         else
         {
@@ -142,17 +141,17 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             bundleRequest = AssetBundle.LoadFromFileAsync(Path.Combine(bundlePath + "/", $"{bundleName}.unity3d"));
         }
 
-        if (downloadText) downloadText.text = $"{bundleName} Loading...";
+        downloadText.text = $"{bundleName} Loading...";
 
         // 다운로드 표시
         float downloadProgress = 0;
 
-        while (!bundleRequest.isDone)
+        while (bundleRequest.isDone == false)
         {
             downloadProgress = bundleRequest.progress;
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
-            if (loadingText) loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
+            loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
+            loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
 
             yield return null;
         }
@@ -166,24 +165,20 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
             downloadProgress = bundleRequest.progress;
 
             AssetBundle assetBundle = bundleRequest.assetBundle;
-
             CHMAssetBundle.Instance.LoadAssetBundle(bundleName, assetBundle);
 
             ++loadingCount;
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
-            if (loadingText) loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
-
-            if (downloadText) downloadText.text = $"{bundleName} Load Success";
-            Debug.Log($"{bundleName} Load Success");
+            loadingBar.fillAmount = downloadProgress / totalLoadCount * loadingCount;
+            loadingText.text = downloadProgress / totalLoadCount * loadingCount * 100f + "%";
+            downloadText.text = $"{bundleName} Load Success ({loadingCount}/{totalLoadCount})";
 
             if (loadingCount == totalLoadCount)
             {
-                if (loadingBar) loadingBar.fillAmount = 1;
-                if (loadingText) loadingText.text = "100%";
-                Debug.Log($"Bundle load Success");
-                if (bundleLoadSuccess != null)
-                    bundleLoadSuccess.Invoke();
+                loadingBar.fillAmount = 1;
+                loadingText.text = "100%";
+                downloadText.text = $"Bundle Load Complete";
+                bundleLoadSuccess?.Invoke();
             }
         }
     }
@@ -196,7 +191,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.Log($"Error : {request.error}");
+            Debug.LogError($"Error : {request.error}");
         }
         else
         {
@@ -236,22 +231,24 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         request.SendWebRequest();
 
+        downloadText.text = $"{bundleName} Loading...";
+
         // 다운로드 표시
         float downloadProgress = 0;
-        while (!request.isDone)
+        while (request.isDone == false)
         {
             downloadProgress = request.downloadProgress;
             int downloadPercentage = Mathf.RoundToInt(downloadProgress * 100);
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalDownoadCount * loadingCount;
-            if (loadingText) loadingText.text = downloadProgress / totalDownoadCount * loadingCount * 100f + "%";
+            loadingBar.fillAmount = downloadProgress / totalDownoadCount * loadingCount;
+            loadingText.text = downloadProgress / totalDownoadCount * loadingCount * 100f + "%";
 
             yield return null;
         }
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.Log($"Error : {request.error}");
+            Debug.LogError($"Error : {request.error}");
         }
         else
         {
@@ -265,17 +262,15 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
             ++downloadingCount;
 
-            if (loadingBar) loadingBar.fillAmount = downloadProgress / totalDownoadCount * loadingCount;
-            if (loadingText) loadingText.text = downloadProgress / totalDownoadCount * loadingCount * 100f + "%";
-
-            downloadText.text = $"{bundleName} Download Success";
-            Debug.Log($"{bundleName} Download Success");
+            loadingBar.fillAmount = downloadProgress / totalDownoadCount * loadingCount;
+            loadingText.text = downloadProgress / totalDownoadCount * loadingCount * 100f + "%";
+            downloadText.text = $"{bundleName} Download Success ({loadingCount}/{totalLoadCount})";
 
             if (downloadingCount == totalDownoadCount)
             {
-                if (loadingBar) loadingBar.fillAmount = 1;
-                if (loadingText) loadingText.text = "100%";
-                Debug.Log($"Bundle download Success");
+                loadingBar.fillAmount = 1;
+                loadingText.text = "100%";
+                downloadText.text = $"Bundle Load Complete";
                 bundleDownloadSuccess.Invoke();
             }
         }

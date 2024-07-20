@@ -10,7 +10,7 @@ using DG.Tweening;
 
 public class ResourceDownload : MonoBehaviour
 {
-    [SerializeField] CHLoadingBarFromAssetBundle script;
+    [SerializeField] CHLoadingBarFromAssetBundle bundleLoader;
     [SerializeField] List<Image> backgroundList = new List<Image>();
 
     CancellationTokenSource tokenSource;
@@ -23,18 +23,18 @@ public class ResourceDownload : MonoBehaviour
 
         ChangeBackgroundLoop();
 
-        var initialize = script.Init();
+        bundleLoader.bundleLoadSuccess += async () =>
+        {
+            await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
+            SceneManager.LoadScene(1);
+        };
+
+        var initialize = bundleLoader.Init();
         if (initialize == false)
         {
             SceneManager.LoadScene(1);
             return;
         }
-        
-        script.bundleLoadSuccess += async () =>
-        {
-            await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
-            SceneManager.LoadScene(1);
-        };
     }
 
     async Task ChangeBackgroundLoop()

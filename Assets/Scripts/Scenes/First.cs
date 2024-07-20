@@ -327,6 +327,9 @@ public class First : MonoBehaviour
             await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
         }
 
+        // 기본 스킨
+        CHMData.Instance.GetShopData("1").buy = true;
+
         PlayerPrefs.SetInt(CHMMain.String.Login, success ? 1 : 0);
 
         connectGPGSBtn.gameObject.SetActive(success == false);
