@@ -1275,22 +1275,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36473553e127ba14d82e762a72bad19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 0
+  origin: {fileID: 7632772756727270733}
   itemSize: {x: 0, y: 0}
+  itemGap: {x: 10, y: 10}
   padding:
     m_Left: 0
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  itemGap: {x: 10, y: 10}
+  scrollDirection: 0
+  rowCount: 0
   columnCount: 0
   poolItemCount: 0
-  origin: {fileID: 7632772756727270733}
   align: 1
-  holdContentPositionWhenRefresh: 0
-  refreshWhenScrollViewResize: 0
-  fadeInDuration: 0
-  addFreeLine: 0
+  refresh: 0
 --- !u!1 &4345758091707197653
 GameObject:
   m_ObjectHideFlags: 0
@@ -3084,8 +3082,8 @@ MonoBehaviour:
   - {fileID: 7698099117884460068}
   rewardImgList:
   - {fileID: 576849758003243289}
-  - {fileID: 7990511346631435005}
   - {fileID: 326192012954729453}
+  - {fileID: 7990511346631435005}
   rewardBtn: {fileID: 6931397124514546794}
   clearObj: {fileID: 2360143685791344989}
 --- !u!1 &7698099117884460068

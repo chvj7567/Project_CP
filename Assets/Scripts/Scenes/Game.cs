@@ -469,7 +469,7 @@ public class Game : MonoBehaviour
         }
         else
         {
-            moveCount.Value = 9999;
+            moveCount.Value = 99;
 
             if (_loginData.useMoveItemCount > 0)
                 _loginData.addMoveItemCount += _loginData.useMoveItemCount;

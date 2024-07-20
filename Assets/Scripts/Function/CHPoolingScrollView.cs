@@ -6,96 +6,97 @@ using UnityEngine.UI;
 using UniRx;
 using UniRx.Triggers;
 using System.Linq;
-using DG.Tweening;
 
 public enum PoolingScrollViewDirection
 {
     Vertical,
-    Horizenal,
+    Horizontal,
 }
+
 public enum PoolingScrollViewAlign
 {
-    Left,
+    LeftOrTop,
     Center,
-    Right,
+    RightOrBottom,
 }
 
 public enum PoolingScrollViewScrollingDirection
 {
-    Up,
-    Down,
+    UpOrLeft,
+    DownOrRight,
 }
 
-public class PoolingScrollViewItem<T>
+public class PoolingScrollViewItem<TItem>
 {
     public int index;
-    public T item;
+    public TItem item;
 }
 
 [RequireComponent(typeof(ScrollRect))]
-// 오브젝트는 필요한 만큼 생성하고, 보이지 않는 건 생성을 미룬다.
-// 오브젝트를 재활용하고 파괴하지 않는다.
-public abstract class CHPoolingScrollView<T, TInfo> : MonoBehaviour where T : MonoBehaviour
+public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TItem : MonoBehaviour
 {
-    protected LinkedList<PoolingScrollViewItem<T>> poolItems = new LinkedList<PoolingScrollViewItem<T>>();
-    public List<T> Items
+    #region Argument
+    protected LinkedList<PoolingScrollViewItem<TItem>> _liPoolItem = new LinkedList<PoolingScrollViewItem<TItem>>();
+
+    public List<TItem> ItemList
     {
         get
         {
-            return poolItems.Select(x => x.item).ToList();
+            return _liPoolItem.Select(_ => _.item).ToList();
         }
     }
 
-    protected List<TInfo> infos = new List<TInfo>();
-    public List<TInfo> Infos
+    protected List<TData> _liData = new List<TData>();
+
+    public List<TData> DataList
     {
         get
         {
-            return infos.ToList();
+            return _liData.ToList();
         }
     }
 
+    [SerializeField, Header("복제할 아이템 오브젝트")]
+    GameObject origin;
+
+    [SerializeField, Header("아이템 크기(Zero이면 Origin 사이즈로 적용")]
+    Vector2 itemSize = Vector2.zero;
+
+    [SerializeField, Header("아이템 사이 간격")]
+    Vector2 itemGap = Vector2.zero;
+
+    [SerializeField, Header("패딩 설정")]
+    RectOffset padding = new RectOffset();
+
+    [SerializeField, Header("스크롤 방향 설정")]
+    PoolingScrollViewDirection scrollDirection = PoolingScrollViewDirection.Vertical;
+
+    [SerializeField, Header("행 갯수, 0이하이면 자동 계산")]
+    int rowCount = 0;
+
+    [SerializeField, Header("열 갯수, 0이하이면 자동 계산")]
+    int columnCount = 0;
+
+    [SerializeField, Header("오브젝트풀 개수 설정, 0 이하이면 자동 할당")]
+    int poolItemCount = 0;
+
+    [SerializeField, Header("아이템 정렬 기준")]
+    PoolingScrollViewAlign align = PoolingScrollViewAlign.Center;
+
+    [SerializeField, Header("스크롤뷰 사이즈 변경시 새로고침 여부")]
+    bool refresh = false;
+
     [Space]
-    [ReadOnly]
-    public PoolingScrollViewDirection direction = PoolingScrollViewDirection.Vertical;
-    [Header("아이템 크기(GridLayout의 셀크기처럼 생각), zero이면 origin 사이즈로 적용")]
-    public Vector2 itemSize = Vector2.zero;
-    [Header("패딩 설정")]
-    public RectOffset padding = new RectOffset();
-    [Header("아이템 사이 간격")]
-    public Vector2 itemGap = Vector2.zero;
-    [Header("한 행에 배치 개수, 0이하이면, 스마트하게 계산")]
-    public int columnCount = 0;
-    [Header("오브젝트풀 개수 설정하기, 0 이하이면, 스마트하게 풀 개수를 할당")]
-    public int poolItemCount = 0;
-    [Header("복제할 아이템 오브젝트")]
-    public GameObject origin;
-    [Header("아이템 정렬 기준")]
-    public PoolingScrollViewAlign align = PoolingScrollViewAlign.Center;
-    [Header("스크롤뷰아이템 추가 시, 컨텐츠 위치 유지하기")]
-    public bool holdContentPositionWhenRefresh = false;
-    [Header("스크롤뷰 사이즈 변경되면, 자동으로 새로고침")]
-    public bool refreshWhenScrollViewResize = false;
 
-    [Header("스크롤뷰 사이즈 변경되면, 페이드인 에니메이션 재생")]
-    public float fadeInDuration = 0;
+    protected Vector2 _prevScrollPosition = Vector2.zero;
+    protected GameObject _objContent;
+    protected RectTransform _rtContent;
+    protected RectTransform _rtViewPort;
+    protected CanvasGroup _canvasGroupContent;
+    protected ScrollRect _scrollRect;
 
-    [Header("1열 여유롭게 배치")]
-    public bool addFreeLine = false;
-
-    [Space]
-    protected Vector2 prevScrollPosition = Vector2.zero;
-
-    protected GameObject contentGameObject;
-    protected RectTransform contentRectTransform;
-    protected RectTransform viewPort;
-    protected CanvasGroup contentCanvasGroup;
-
-    protected ScrollRect scrollRect;
-
+    protected int _rowCount = 0;
     protected int _columnCount = 0;
-
-    protected bool originActive = false;
 
     public int LineCount
     {
@@ -103,30 +104,80 @@ public abstract class CHPoolingScrollView<T, TInfo> : MonoBehaviour where T : Mo
         {
             int line = 0;
 
-            if (infos.Count != 0)
+            if (_liData.Count == 0)
+                return line;
+
+            int count = 1;
+
+            switch (scrollDirection)
             {
-                line = infos.Count / _columnCount;
-                if (infos.Count % _columnCount != 0)
-                {
-                    line += 1;
-                }
+                case PoolingScrollViewDirection.Vertical:
+                    {
+                        count = _columnCount;
+                    }
+                    break;
+                case PoolingScrollViewDirection.Horizontal:
+                    {
+                        count = _rowCount;
+                    }
+                    break;
             }
+
+            line = _liData.Count / count;
+            if (_liData.Count % count != 0)
+            {
+                line += 1;
+            }
+
             return line;
         }
     }
 
-    public float LineLength
+    public float ItemsWidth
     {
         get
         {
-            float len = _columnCount * itemSize.x;
-            len += (_columnCount - 1) * itemGap.x;
-            return len;
+            return _columnCount * itemSize.x + (_columnCount - 1) * itemGap.x;
         }
     }
 
-    // 스크롤뷰 높이 계산하기
-    public float Height
+    public float ItemsHeight
+    {
+        get
+        {
+            return _rowCount * itemSize.y + (_rowCount - 1) * itemGap.y;
+        }
+    }
+
+    public float ContentWidth
+    {
+        get
+        {
+            return _rtContent.rect.width;
+        }
+    }
+
+    public float ContentHeight
+    {
+        get
+        {
+            return _rtContent.rect.height;
+        }
+    }
+
+    public float ScrollViewWidth
+    {
+        get
+        {
+            int line = LineCount;
+            float width = line * itemSize.x;
+            width += (line - 1) * itemGap.x;
+            width += padding.left + padding.right;
+            return width;
+        }
+    }
+
+    public float ScrollViewHeight
     {
         get
         {
@@ -137,227 +188,455 @@ public abstract class CHPoolingScrollView<T, TInfo> : MonoBehaviour where T : Mo
             return height;
         }
     }
+    #endregion
+
+    private void Awake()
+    {
+        if (_scrollRect == null)
+            _scrollRect = GetComponent<ScrollRect>();
+
+        if (_rtViewPort == null)
+            _rtViewPort = _scrollRect.viewport;
+
+        if (_objContent == null)
+            _objContent = _scrollRect.content.gameObject;
+
+        if (_rtContent == null)
+            _rtContent = _scrollRect.content.GetComponent<RectTransform>();
+
+        if (_canvasGroupContent = null)
+            _canvasGroupContent = _scrollRect.content.GetComponent<CanvasGroup>();
+    }
 
     public virtual void Start()
     {
-        if (direction == PoolingScrollViewDirection.Horizenal)
-        {
-            throw new NotSupportedException();
-        }
-
-        if (originActive == false)
-        {
-            origin.SetActive(false);
-        }
+        origin.SetActive(false);
 
         var scrollRect = GetComponent<ScrollRect>();
         scrollRect.OnValueChangedAsObservable().Subscribe(OnScroll);
-        // 스크롤뷰 사이즈 변화 감지되면, 다시 재정렬하기
         scrollRect.OnRectTransformDimensionsChangeAsObservable().Subscribe(_ =>
         {
-            if (refreshWhenScrollViewResize)
+            if (refresh)
             {
                 Refresh();
-            }
-
-            if (fadeInDuration > 0 && contentCanvasGroup)
-            {
-                contentCanvasGroup.DOKill();
-                contentCanvasGroup.alpha = 0;
-                contentCanvasGroup.DOFade(1, fadeInDuration).SetEase(Ease.InSine);
             }
         });
     }
 
-    public virtual void SetItemList(List<TInfo> list)
+    void SetItemSize()
     {
-        if (null == scrollRect) scrollRect = GetComponent<ScrollRect>();
-        if (null == viewPort) viewPort = scrollRect.viewport;
-        if (null == contentGameObject) contentGameObject = scrollRect.content.gameObject;
-        if (null == contentRectTransform) contentRectTransform = scrollRect.content.GetComponent<RectTransform>();
-        if (null == contentCanvasGroup) contentCanvasGroup = scrollRect.content.GetComponent<CanvasGroup>();
+        RectTransform rectTransform = origin.GetComponent<RectTransform>();
+        if (rectTransform == null)
+            throw new NullReferenceException();
 
-        infos.Clear();
-        infos.AddRange(list);
+        itemSize.x = rectTransform.rect.width * rectTransform.localScale.x;
+        itemSize.y = rectTransform.rect.height * rectTransform.localScale.y;
+    }
 
-        if (itemSize == Vector2.zero)
-        {
-            var rectTransform = origin.GetComponent<RectTransform>();
-            itemSize.x = rectTransform.rect.width * rectTransform.localScale.x;
-            itemSize.y = rectTransform.rect.height * rectTransform.localScale.y;
-        }
-
+    void SetColumnCount()
+    {
         if (columnCount <= 0)
         {
-            float width = viewPort.rect.width - (padding.left + padding.right);
+            float width = _rtViewPort.rect.width - (padding.left + padding.right);
             _columnCount = Mathf.Max(1, Mathf.FloorToInt(width / (itemSize.x + itemGap.x)));
         }
         else
         {
             _columnCount = columnCount;
         }
+    }
 
+    void SetRowCount()
+    {
+        if (rowCount <= 0)
+        {
+            float width = _rtViewPort.rect.height - (padding.top + padding.bottom);
+            _rowCount = Mathf.Max(1, Mathf.FloorToInt(width / (itemSize.y + itemGap.y)));
+        }
+        else
+        {
+            _rowCount = rowCount;
+        }
+    }
+
+    void SetPoolItemCount()
+    {
         if (poolItemCount <= 0)
         {
-            int line = Mathf.RoundToInt(viewPort.rect.size.y / itemSize.y);
-            line += 2;
-
-            if (addFreeLine)
+            switch (scrollDirection)
             {
-                line += 2;
+                case PoolingScrollViewDirection.Vertical:
+                    {
+                        int line = Mathf.RoundToInt(_rtViewPort.rect.size.y / itemSize.y);
+                        line += 2;
+                        poolItemCount = line * _columnCount;
+                    }
+                    break;
+                case PoolingScrollViewDirection.Horizontal:
+                    {
+                        int line = Mathf.RoundToInt(_rtViewPort.rect.size.x / itemSize.x);
+                        line += 2;
+                        poolItemCount = line * _rowCount;
+                    }
+                    break;
             }
+        }
+    }
 
-            poolItemCount = line * _columnCount;
+    public virtual void SetContentTransform()
+    {
+        switch (scrollDirection)
+        {
+            case PoolingScrollViewDirection.Vertical:
+                {
+                    // 스트레치 앵커로 설정
+                    _rtContent.anchorMax = new Vector2(.5f, 1f);
+                    _rtContent.anchorMin = new Vector2(.5f, 1f);
+                    _rtContent.pivot = new Vector2(.5f, 1f);
+
+                    // 사이즈 재설정
+                    _rtContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _rtViewPort.rect.width);
+                    _rtContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ScrollViewHeight);
+
+                    // 컨텐츠 최상단으로 이동
+                    _rtContent.anchoredPosition = Vector2.zero;
+                }
+                break;
+            case PoolingScrollViewDirection.Horizontal:
+                {
+                    // 스트레치 앵커로 설정
+                    _rtContent.anchorMax = new Vector2(0f, .5f);
+                    _rtContent.anchorMin = new Vector2(0f, .5f);
+                    _rtContent.pivot = new Vector2(0f, .5f);
+
+                    // 사이즈 재설정
+                    _rtContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ScrollViewWidth);
+                    _rtContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _rtViewPort.rect.height);
+
+                    // 컨텐츠 최상단으로 이동
+                    _rtContent.anchoredPosition = Vector2.zero;
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 스크롤 될 데이터 세팅
+    /// </summary>
+    /// <param name="dataList"></param>
+    public virtual void SetItemList(List<TData> dataList)
+    {
+        _liData.Clear();
+        _liData.AddRange(dataList);
+
+        // 아이템 크기 설정
+        SetItemSize();
+
+        // 행 갯수 설정
+        SetRowCount();
+
+        // 열 갯수 설정
+        SetColumnCount();
+
+        // 아이템 풀링 갯수 설정
+        SetPoolItemCount();
+
+        // Content 오브젝트 설정
+        SetContentTransform();
+
+        // 풀링 오브젝트 생성
+        CreatePoolingObject();
+
+        // 아이템 초기화
+        InitItem();
+    }
+
+    public Vector2 GetItemPosition(int index)
+    {
+        Vector2 pos = Vector2.zero;
+
+        switch (scrollDirection)
+        {
+            case PoolingScrollViewDirection.Horizontal:
+                pos = GetItemHorizontalPosition(index);
+                break;
+            case PoolingScrollViewDirection.Vertical:
+                pos = GetItemVerticalPosition(index);
+                break;
         }
 
-        InitContentTransform();
-        CreatePoolingObject();
-        InitContent();
+        return pos;
+    }
+
+    public virtual Vector2 GetItemHorizontalPosition(int index)
+    {
+        // 행 인덱스
+        int rowIndex = index % _rowCount;
+
+        float y = rowIndex * itemSize.y;
+        y += rowIndex * itemGap.y;
+
+        float diff = ContentHeight - ItemsHeight;
+
+        Debug.Log($"GetItemHorizontalPosition {index} H {ContentHeight} - {_rowCount} * {itemSize.y} + {(_rowCount - 1)} * {itemGap.y}");
+        Debug.Log($"GetItemHorizontalPosition {index} W {ContentWidth} - {ItemsWidth}");
+        switch (align)
+        {
+            case PoolingScrollViewAlign.LeftOrTop:
+                {
+                    y += 0;
+                    y += padding.top;
+                }
+                break;
+            case PoolingScrollViewAlign.Center:
+                {
+                    y += (diff) * 0.5f;
+                    y += padding.top;
+                }
+                break;
+            case PoolingScrollViewAlign.RightOrBottom:
+                {
+                    y += diff;
+                    y -= padding.bottom;
+                }
+                break;
+        }
+
+        y *= -1;
+
+        // 열 인덱스
+        int colIndex = index / _rowCount;
+
+        float x = colIndex * itemSize.x;
+        x += colIndex * itemGap.x;
+        x += padding.left;
+
+        return new Vector2(x, y);
+    }
+
+    public virtual Vector2 GetItemVerticalPosition(int index)
+    {
+        // 열 인덱스
+        int colIndex = index % _columnCount;
+
+        float x = colIndex * itemSize.x;
+        x += colIndex * itemGap.x;
+
+        float diff = ContentWidth - ItemsWidth;
+
+        switch (align)
+        {
+            case PoolingScrollViewAlign.LeftOrTop:
+                {
+                    x += 0;
+                    x += padding.left;
+                }
+                break;
+            case PoolingScrollViewAlign.Center:
+                {
+                    x += (diff) * 0.5f;
+                    x += padding.left;
+                }
+                break;
+            case PoolingScrollViewAlign.RightOrBottom:
+                {
+                    x += diff;
+                    x -= padding.right;
+                }
+                break;
+        }
+
+        // 행 인덱스
+        int rowIndex = index / _columnCount;
+
+        float y = rowIndex * itemSize.y;
+        y += rowIndex * itemGap.y;
+        y += padding.top;
+        y *= -1;
+
+        return new Vector2(x, y);
+    }
+
+    public Rect GetViewConentRect()
+    {
+        Rect rect = new Rect();
+
+        switch (scrollDirection)
+        {
+            case PoolingScrollViewDirection.Vertical:
+                {
+                    float scrollRectY = _rtViewPort.rect.size.y;
+                    rect.Set(_rtContent.anchoredPosition.x, -1 * (_rtContent.anchoredPosition.y + scrollRectY), ContentWidth, scrollRectY + itemSize.y);
+                }
+                break;
+            case PoolingScrollViewDirection.Horizontal:
+                {
+                    float scrollRectX = _rtViewPort.rect.size.x;
+                    float scrollRectY = _rtViewPort.rect.size.y;
+                    rect.Set(-1 * _rtContent.anchoredPosition.x, -1 * (_rtContent.anchoredPosition.y + scrollRectY), scrollRectX + itemSize.x, ContentHeight);
+                }
+                break;
+        }
+        
+        return rect;
     }
 
     private void OnScroll(Vector2 scrollPosition)
     {
-        if (poolItems.Count <= 0)
-        {
+        if (_liPoolItem.Count <= 0)
             return;
-        }
 
-        Vector2 delta = scrollPosition - prevScrollPosition;
-        prevScrollPosition = scrollPosition;
-        if (delta.y != 0)
+        Vector2 delta = scrollPosition - _prevScrollPosition;
+        _prevScrollPosition = scrollPosition;
+
+        switch (scrollDirection)
         {
-            UpdateContent(delta.y > 0 ? PoolingScrollViewScrollingDirection.Up : PoolingScrollViewScrollingDirection.Down);
+            case PoolingScrollViewDirection.Vertical:
+                {
+                    // 이전 위치와 달라졌다면
+                    if (delta.y != 0)
+                    {
+                        UpdateContent(delta.y > 0 ? PoolingScrollViewScrollingDirection.UpOrLeft : PoolingScrollViewScrollingDirection.DownOrRight);
+                    }
+                }
+                break;
+            case PoolingScrollViewDirection.Horizontal:
+                {
+                    // 이전 위치와 달라졌다면
+                    if (delta.x != 0)
+                    {
+                        UpdateContent(delta.x < 0 ? PoolingScrollViewScrollingDirection.UpOrLeft : PoolingScrollViewScrollingDirection.DownOrRight);
+                    }
+                }
+                break;
         }
     }
 
-    private void UpdateContent(PoolingScrollViewScrollingDirection dir)
+    void UpdateContent(PoolingScrollViewScrollingDirection direction)
     {
-        if (poolItems.Count <= 0)
-        {
+        if (_liPoolItem.Count <= 0)
             return;
-        }
 
-        float scrollRectY = viewPort.rect.size.y;
-        Rect contentRect = new Rect(0, -1 * (contentRectTransform.anchoredPosition.y + scrollRectY), contentRectTransform.rect.width, scrollRectY + itemSize.y);
+        Rect contentRect = GetViewConentRect();
+
         // 영역검사할 컨텐츠 사각형의 위아래로 마진추가
         Rect itemRect = new Rect();
-        if (dir == PoolingScrollViewScrollingDirection.Up)
+
+        switch (direction)
         {
-            int firstIndex = poolItems.First.Value.index;
-            for (int i = firstIndex - 1; i >= 0; --i)
-            {
-                Vector2 itemPosition = GetItemPosition(i);
-                itemRect.Set(itemPosition.x, itemPosition.y, itemSize.x, itemSize.y);
-
-                if (contentRect.Overlaps(itemRect))
+            case PoolingScrollViewScrollingDirection.UpOrLeft:
                 {
-                    LinkedListNode<PoolingScrollViewItem<T>> node = poolItems.Last;
-                    poolItems.Remove(node);
+                    int firstIndex = _liPoolItem.First.Value.index;
+                    for (int i = firstIndex - 1; i >= 0; --i)
+                    {
+                        Vector2 itemPosition = GetItemPosition(i);
+                        itemRect.Set(itemPosition.x, itemPosition.y, itemSize.x, itemSize.y);
 
-                    InitItem(node.Value.item, i);
+                        if (contentRect.Overlaps(itemRect))
+                        {
+                            var node = _liPoolItem.Last;
+                            _liPoolItem.Remove(node);
 
-                    node.Value.index = i;
-                    poolItems.AddFirst(node);
+                            InitItem(node.Value.item, i);
+
+                            node.Value.index = i;
+                            _liPoolItem.AddFirst(node);
+                        }
+                    }
                 }
-            }
-        }
-        else if (dir == PoolingScrollViewScrollingDirection.Down)
-        {
-            int lastIndex = poolItems.Last.Value.index;
-            for (int i = lastIndex + 1; i < infos.Count; ++i)
-            {
-                Vector2 itemPosition = GetItemPosition(i);
-                itemRect.Set(itemPosition.x, itemPosition.y, itemSize.x, itemSize.y);
-
-                if (contentRect.Overlaps(itemRect))
+                break;
+            case PoolingScrollViewScrollingDirection.DownOrRight:
                 {
-                    var node = poolItems.First;
-                    poolItems.Remove(node);
+                    int lastIndex = _liPoolItem.Last.Value.index;
+                    for (int i = lastIndex + 1; i < _liData.Count; ++i)
+                    {
+                        Vector2 itemPosition = GetItemPosition(i);
+                        itemRect.Set(itemPosition.x, itemPosition.y, itemSize.x, itemSize.y);
 
-                    InitItem(node.Value.item, i);
+                        if (contentRect.Overlaps(itemRect))
+                        {
+                            var node = _liPoolItem.First;
+                            _liPoolItem.Remove(node);
 
-                    node.Value.index = i;
-                    poolItems.AddLast(node);
+                            InitItem(node.Value.item, i);
+
+                            node.Value.index = i;
+                            _liPoolItem.AddLast(node);
+                        }
+                    }
                 }
-            }
+                break;
         }
     }
 
-    private void InitContent()
+    void InitItem()
     {
-        poolItems.Clear();
-        int childCount = contentGameObject.transform.childCount;
-        GameObject[] children = new GameObject[childCount];
+        _liPoolItem.Clear();
 
-        for (int i = 0; i < childCount; i++)
+        // 생성된 풀링 오브젝트 가져옴
+        int childCount = _objContent.transform.childCount;
+        GameObject[] arrChildObj = new GameObject[childCount];
+        for (int i = 0; i < childCount; ++i)
         {
-            children[i] = contentGameObject.transform.GetChild(i).gameObject;
+            arrChildObj[i] = _objContent.transform.GetChild(i).gameObject;
         }
 
-        float scrollRectY = viewPort.rect.size.y;
-        Rect contentRect = new Rect(0, -1 * (contentRectTransform.anchoredPosition.y + scrollRectY), contentRectTransform.rect.width, scrollRectY + itemSize.y);
+        Rect contentRect = GetViewConentRect();
         Rect itemRect = new Rect();
-        int firstIndex = Enumerable.Range(0, infos.Count).FirstOrDefault(i =>
+        int firstIndex = Enumerable.Range(0, _liData.Count).FirstOrDefault(_ =>
         {
-            Vector2 itemPosition = GetItemPosition(i);
+            Vector2 itemPosition = GetItemPosition(_);
             itemRect.Set(itemPosition.x, itemPosition.y, itemSize.x, itemSize.y);
+
+            // Content와 겹치는 여부 반환
             return contentRect.Overlaps(itemRect);
         });
 
-        for (int i = 0; i < childCount; i++)
+        for (int i = 0; i < childCount; ++i)
         {
-            children[i].SetActive(true);
+            arrChildObj[i].SetActive(true);
         }
 
-        for (int i = 0; i < children.Length; ++i)
+        for (int i = 0; i < arrChildObj.Length; ++i)
         {
             int index = i + firstIndex;
-            T item = children[i].GetComponent<T>();
+            TItem item = arrChildObj[i].GetComponent<TItem>();
+
             InitItem(item, index);
-            PoolingScrollViewItem<T> poolItem = new PoolingScrollViewItem<T>() { index = index, item = item };
-            poolItems.AddLast(poolItem);
+            PoolingScrollViewItem<TItem> poolItem = new PoolingScrollViewItem<TItem>() { index = index, item = item };
+            _liPoolItem.AddLast(poolItem);
         }
     }
 
-    private void InitItem(T item, int index)
+    void InitItem(TItem item, int index)
     {
-        TInfo info = infos.ElementAtOrDefault(index);
-        item.gameObject.SetActive(info != null);
-        if (info != null)
+        TData info = _liData.ElementAtOrDefault(index);
+
+        bool isNotNull = info != null;
+        item.gameObject.SetActive(isNotNull);
+
+        if (isNotNull)
         {
             InitItem(item, info, index);
         }
+
         InitItemTransform(item.gameObject, index);
         item.gameObject.name = $"{origin.name} {index}";
     }
 
-    public abstract void InitItem(T obj, TInfo info, int index);
-    public virtual void InitPoolingObject(T obj)
-    {
-    }
+    /// <summary>
+    /// 아이템 초기화 스크롤하여 인덱스가 바뀔때마다 호출
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="info"></param>
+    /// <param name="index"></param>
+    public abstract void InitItem(TItem obj, TData info, int index);
 
-    public virtual void InitContentTransform()
-    {
-        // 스트레치 앵커로 설정
-        contentRectTransform.anchorMax = new Vector2(0.5f, 1);
-        contentRectTransform.anchorMin = new Vector2(0.5f, 1);
-        contentRectTransform.pivot = new Vector2(0.5f, 1);
-
-        // 사이즈 재설정
-        contentRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, viewPort.rect.width);
-        contentRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Height);
-        if (holdContentPositionWhenRefresh) // 컨텐트가 스크롤뷰보다 아래에 있을 때, 스크롤뷰 하단으로 좌표 옮겨주기
-        {
-            float maxY = Height - viewPort.rect.height;
-            float y = Mathf.Min(maxY, contentRectTransform.anchoredPosition.y);
-            contentRectTransform.anchoredPosition = new Vector2(0, y);
-        }
-        else
-        {
-            // 컨텐트 최상단으로 이동
-            contentRectTransform.anchoredPosition = Vector2.zero;
-        }
-    }
+    /// <summary>
+    /// 풀링 오브젝트 생성 시 호출(최초 1회)
+    /// </summary>
+    /// <param name="obj"></param>
+    public virtual void InitPoolingObject(TItem obj) { }
 
     public virtual void InitItemTransform(GameObject item, int index)
     {
@@ -367,97 +646,41 @@ public abstract class CHPoolingScrollView<T, TInfo> : MonoBehaviour where T : Mo
         rectTransform.anchorMin = new Vector2(0, 1);
         rectTransform.pivot = new Vector2(0, 1);
 
-        //rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, itemSize.x);
-        //rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, itemSize.y);
-
         rectTransform.anchoredPosition = GetItemPosition(index);
         rectTransform.SetSiblingIndex(index);
     }
 
-    public virtual Vector2 GetItemPosition(int index)
-    {
-        float width = contentRectTransform.rect.width;
-        int colIndex = index % _columnCount;
-        float x = colIndex * itemSize.x;
-        x += colIndex * itemGap.x;
-        float diff = width - LineLength;
-        if (diff > 0)
-        {
-            switch (align)
-            {
-                case PoolingScrollViewAlign.Left:
-                    x += 0;
-                    break;
-                case PoolingScrollViewAlign.Center:
-                    x += (width - LineLength) * 0.5f;
-                    break;
-                case PoolingScrollViewAlign.Right:
-                    x += width - LineLength;
-                    break;
-            }
-        }
-        if (diff > (padding.left + padding.right))
-        {
-            switch (align)
-            {
-                case PoolingScrollViewAlign.Left:
-                    x += padding.left;
-                    break;
-                case PoolingScrollViewAlign.Center:
-                    x += padding.left - padding.right;
-                    break;
-                case PoolingScrollViewAlign.Right:
-                    x += -1 * padding.right;
-                    break;
-            }
-        }
-
-        int rowIndex = index / _columnCount;
-        float y = rowIndex * itemSize.y;
-        y += rowIndex * itemGap.y;
-        y += padding.top;
-        y *= -1;
-
-        return new Vector2(x, y);
-    }
-
     private void CreatePoolingObject()
     {
-        int diff = poolItemCount - contentGameObject.transform.childCount;
-        diff = Mathf.Min(diff, infos.Count); // 필요한 만큼만 풀을 만들자
+        int diff = poolItemCount - _objContent.transform.childCount;
+        diff = Mathf.Min(diff, _liData.Count); // 필요한 만큼만 풀을 만들자
         if (diff > 0)
         {
             for (int i = 0; i < diff; ++i)
             {
-                var obj = Instantiate(origin, contentGameObject.transform);
-                InitPoolingObject(obj.GetComponent<T>());
+                GameObject obj = Instantiate(origin, _objContent.transform);
+                InitPoolingObject(obj.GetComponent<TItem>());
             }
         }
     }
 
-    public void RefreshWithColumnCount(int column = 0)
-    {
-        columnCount = column;
-        Refresh();
-    }
-
     public void Refresh()
     {
-        SetItemList(infos.ToList());
+        SetItemList(_liData.ToList());
     }
 
     public void Clear()
     {
-        infos.Clear();
-        poolItems.Clear();
-        if (contentGameObject)
+        _liData.Clear();
+        _liPoolItem.Clear();
+        if (_objContent)
         {
-            int childCount = contentGameObject.transform.childCount;
+            int childCount = _objContent.transform.childCount;
             GameObject[] children = new GameObject[childCount];
 
             for (int i = 0; i < childCount; i++)
             {
-                children[i] = contentGameObject.transform.GetChild(i).gameObject;
+                children[i] = _objContent.transform.GetChild(i).gameObject;
             }
 
             foreach (var child in children)

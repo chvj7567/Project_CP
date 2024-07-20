@@ -13,6 +13,8 @@ public class ShopScrollViewItem : MonoBehaviour
     [SerializeField] CHTMPro costText;
     [SerializeField] Button skinSelectBtn;
     [SerializeField] CHTMPro descText;
+    [SerializeField] GameObject objGold;
+    [SerializeField] GameObject objWon;
 
     Infomation.ShopInfo info;
 
@@ -110,6 +112,9 @@ public class ShopScrollViewItem : MonoBehaviour
         if (info.gold >= 0)
         {
             costText.SetText(info.gold, "Gold");
+
+            objGold.SetActive(true);
+            objWon.SetActive(false);
         }
         else
         {
@@ -117,6 +122,9 @@ public class ShopScrollViewItem : MonoBehaviour
             var priceUnit = CHMIAP.Instance.GetPriceUnit(info.productName);
 
             costText.SetText(price, priceUnit);
+
+            objGold.SetActive(false);
+            objWon.SetActive(true);
         }
 
         SetImage(info.shopID);

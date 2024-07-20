@@ -44,14 +44,9 @@ public class UISetting : UIBase
 
     private void Start()
     {
-        backAction += () =>
+        actBack += () =>
         {
-            PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, bgmSlider.value);
-            PlayerPrefs.SetFloat(CHMMain.String.EffectVolume, effectSlider.value);
-            PlayerPrefs.SetFloat(CHMMain.String.Red, redSlider.value);
-            PlayerPrefs.SetFloat(CHMMain.String.Green, greenSlider.value);
-            PlayerPrefs.SetFloat(CHMMain.String.Blue, blueSlider.value);
-            PlayerPrefs.SetFloat(CHMMain.String.Alpha, alphaSlider.value);
+            SaveSetting();
         };
 
         etcBtn.OnClickAsObservable().Subscribe(_ =>
@@ -157,5 +152,13 @@ public class UISetting : UIBase
         blueSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Blue);
         alphaSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Alpha);
         blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
+    }
+
+    void SaveSetting()
+    {
+        PlayerPrefs.SetFloat(CHMMain.String.Red, redSlider.value);
+        PlayerPrefs.SetFloat(CHMMain.String.Green, greenSlider.value);
+        PlayerPrefs.SetFloat(CHMMain.String.Blue, blueSlider.value);
+        PlayerPrefs.SetFloat(CHMMain.String.Alpha, alphaSlider.value);
     }
 }

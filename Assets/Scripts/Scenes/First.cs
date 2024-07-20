@@ -33,7 +33,7 @@ public class First : MonoBehaviour
     [SerializeField] List<RectTransform> guideHoleList = new List<RectTransform>();
     [SerializeField] CHTMPro guideDesc;
     [SerializeField] CHTMPro userID;
-    [SerializeField] CHTMPro waitText;
+    [SerializeField] GameObject objWait;
 
     CancellationTokenSource tokenSource;
 
@@ -110,13 +110,13 @@ public class First : MonoBehaviour
 #if UNITY_ANDROID
             if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).connectGPGS == false)
             {
-                waitText.gameObject.SetActive(true);
+                objWait.SetActive(true);
 
                 CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
                     await SetGPGSLogin(success, localUser.userName);
 
-                    waitText.gameObject.SetActive(false);
+                    objWait.SetActive(false);
                 });
             }
 #endif
@@ -154,7 +154,7 @@ public class First : MonoBehaviour
         shopBtn.gameObject.SetActive(false);
         bombBtn.gameObject.SetActive(false);
         rankingBtn.gameObject.SetActive(false);
-        waitText.gameObject.SetActive(false);
+        objWait.SetActive(false);
 
 
         userID.gameObject.SetActive(false);
@@ -185,13 +185,13 @@ public class First : MonoBehaviour
             {
                 if (GetPhoneLoginState())
                 {
-                    waitText.gameObject.SetActive(true);
+                    objWait.SetActive(true);
 
                     CHMGPGS.Instance.Login(async (success, localUser) =>
                     {
                         await SetGPGSLogin(success, localUser.userName);
 
-                        waitText.gameObject.SetActive(false);
+                        objWait.SetActive(false);
                     });
                 }
                 else
@@ -261,6 +261,9 @@ public class First : MonoBehaviour
         bundleDownload.Value = true;
 
         InitButton();
+
+        // 기본 스킨
+        CHMData.Instance.GetShopData("1").buy = true;
     }
 
     async Task<int> TutorialStart()

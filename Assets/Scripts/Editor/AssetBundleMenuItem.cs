@@ -41,7 +41,7 @@ public class AssetBundleMenuItem
     [MenuItem("CHTools/AssetBundleBuild Android")]
     public static void AssetBundleBuildAndroid()
     {
-        string directory = "Assets/Bundle";
+        string directory = "Assets/StreamingAssets";
 
         if (Directory.Exists(directory) == false)
         {
