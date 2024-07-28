@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 3956793349
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: json
+      Dependencies: {}
+    Info_1:
+      Name: sprite
+      Dependencies: {}
+    Info_2:
+      Name: material
+      Dependencies:
+        Dependency_0: texture
+    Info_3:
+      Name: texture
+      Dependencies: {}
+    Info_4:
+      Name: ui
+      Dependencies:
+        Dependency_0: sprite
+        Dependency_1: material
+        Dependency_2: font
+    Info_5:
+      Name: unit
+      Dependencies:
+        Dependency_0: sprite
+    Info_6:
+      Name: sound
+      Dependencies: {}
+    Info_7:
+      Name: font
+      Dependencies: {}
+    Info_8:
+      Name: data
+      Dependencies: {}
+    Info_9:
+      Name: effect
+      Dependencies:
+        Dependency_0: material

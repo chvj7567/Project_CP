@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3579217316
+CRC: 347536910
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 391c99082efff84d86080b48dc994a9d
+    Hash: 85149710cf0d295c3d3a8acedd474177
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 349d00b7ea831ebcdb9bd1f896fbae5e
+    Hash: 3334b17fbc76099edd2721cccdb68781
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 391c99082efff84d86080b48dc994a9d
+    Hash: 85149710cf0d295c3d3a8acedd474177
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,8 +24,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
-- Class: 114
-  Script: {fileID: 11500000, guid: 5243fac9e52413e4b9333b5716f5d20c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
@@ -66,6 +64,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 679331cd213529e4d83d2d3529f1c46a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 096089e983ec46545a8a6af112ab0724, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5243fac9e52413e4b9333b5716f5d20c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
 - Class: 114
@@ -185,6 +185,6 @@ Assets:
 - Assets/AssetBundleResources/ui/UICanvas.prefab
 - Assets/AssetBundleResources/ui/UINickname.prefab
 Dependencies:
-- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/font
-- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/material
-- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/sprite
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/StreamingAssets/font
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/StreamingAssets/material
+- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/StreamingAssets/sprite
