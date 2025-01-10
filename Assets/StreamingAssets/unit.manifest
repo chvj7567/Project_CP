@@ -1,15 +1,16 @@
 ManifestFileVersion: 0
-CRC: 2826838333
+UnityVersion: 6000.0.23f1
+CRC: 51927228
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0a54accfb777ee93f56ccbd4598ece89
+    Hash: 2d6a290619ae96959a38dc76271ff503
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9989805d7dc07ce74f93d38b4d5378a0
+    Hash: a26707978e34cb8e22092020b70701e9
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 0a54accfb777ee93f56ccbd4598ece89
+    Hash: ef6e5ef8f94704531566e5548f1d02df
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -37,4 +38,4 @@ Assets:
 - Assets/AssetBundleResources/unit/AttackCat.prefab
 - Assets/AssetBundleResources/unit/Monster.prefab
 Dependencies:
-- C:/Users/admin/Desktop/UnityProject/CPTest/Project_CP/Assets/Bundle/sprite
+- E:/UnityProject/Project_CP/Assets/StreamingAssets/sprite
