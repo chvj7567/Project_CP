@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.23f1
-CRC: 2966607902
+CRC: 3486811104
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 440177bc4b5c90c802cc99b88ba5729b
+    Hash: eeea8ddbfb17097aff73ef3d672d0176
   TypeTreeHash:
     serializedVersion: 2
     Hash: 9f349c36d7a6532f767333f9299b3e74
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 54b994ee6fb51d4a410ddda3a5727211
+    Hash: a3094926e287c84c92f58290eddd5727
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -55,6 +55,7 @@ Assets:
 - Assets/AssetBundleResources/sprite/CatSkin2.png
 - Assets/AssetBundleResources/sprite/CatBox3.png
 - Assets/AssetBundleResources/sprite/Locker4.png
+- Assets/AssetBundleResources/sprite/GUI.png
 - Assets/AssetBundleResources/sprite/Cat5.png
 - Assets/AssetBundleResources/sprite/Unlock.png
 - Assets/AssetBundleResources/sprite/Tutorial_PinkBomb.png
