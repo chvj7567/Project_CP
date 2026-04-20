@@ -1,4 +1,6 @@
+#if UNITY_ANDROID
 using GooglePlayGames.BasicApi;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -128,6 +130,7 @@ public class UIRank : UIBase
 
         List<Infomation.RankInfo> rankList = new List<Infomation.RankInfo>();
 
+#if UNITY_ANDROID
         if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).connectGPGS)
         {
             TaskCompletionSource<bool> rankTaskComplete = new TaskCompletionSource<bool>();
@@ -215,6 +218,7 @@ public class UIRank : UIBase
 
             await rankTaskComplete.Task;
         }
+#endif
 
         return rankList;
     }

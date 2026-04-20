@@ -1,4 +1,6 @@
 
+#if UNITY_ANDROID
+
 using GooglePlayGames.BasicApi.Events;
 using GooglePlayGames.BasicApi.SavedGame;
 using GooglePlayGames.BasicApi;
@@ -183,3 +185,5 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
         });
     }
 }
+
+#endif

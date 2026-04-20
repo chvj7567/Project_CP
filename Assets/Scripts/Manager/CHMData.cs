@@ -73,7 +73,7 @@ public class CHMData : CHSingleton<CHMData>
         Debug.Log($"Local Path : {localPath}");
         if (File.Exists(localPath) == false)
         {
-            // ½Å±Ô À¯Àú
+            // ï¿½Å±ï¿½ ï¿½ï¿½ï¿½ï¿½
             newUser = true;
 
             PlayerPrefs.SetInt(CHMMain.String.HardStage, 0);
@@ -94,7 +94,7 @@ public class CHMData : CHSingleton<CHMData>
         {
             var data = File.ReadAllText(localPath);
 
-            // µ¥ÀÌÅÍ°¡ ¾øÀ» °æ¿ì µðÆúÆ® µ¥ÀÌÅÍ ÀúÀå
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (data.Contains($"{name.ToLower()}List") == false || data.Contains($"\"{name.ToLower()}List\":[]"))
             {
                 return (false, await LoadDefaultData<Loader>(name));
@@ -206,7 +206,7 @@ public class CHMData : CHSingleton<CHMData>
 
         var stringTask = await taskCompletionSource.Task;
 
-        // µ¥ÀÌÅÍ°¡ ¾øÀ» °æ¿ì µðÆúÆ® µ¥ÀÌÅÍ ÀúÀå
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (stringTask.Contains($"{name.ToLower()}List") == false || stringTask.Contains($"\"{name.ToLower()}List\":[]"))
         {
             return await LoadDefaultData<Loader>(name);
@@ -214,6 +214,8 @@ public class CHMData : CHSingleton<CHMData>
 
         return JsonUtility.FromJson<Loader>(stringTask);
     }
+
+#endif
 
     public void DeleteData(string path, Action<bool> callback)
     {
@@ -227,6 +229,7 @@ public class CHMData : CHSingleton<CHMData>
 
         if (GetLoginData(path).connectGPGS)
         {
+#if UNITY_ANDROID
             CHMGPGS.Instance.DeleteCloud(path, success =>
             {
                 Debug.Log($"Delete Cloud Data is {success} : ");
@@ -237,13 +240,15 @@ public class CHMData : CHSingleton<CHMData>
                 shopCloudDataDic.Clear();
                 callback(success);
             });
+#else
+            callback(true);
+#endif
         }
         else
         {
             callback(true);
         }
     }
-#endif
     Data.Login CreateLoginData(string _key)
     {
         Debug.Log($"Create Login {_key}");

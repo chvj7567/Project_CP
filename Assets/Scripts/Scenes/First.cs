@@ -138,7 +138,7 @@ public class First : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
-        // DB ¹Ì»ç¿ëÀ¸·Î ÀÎÇØ ´Ð³×ÀÓÀº ¹Ì»ç¿ë(·©Å·¿¡ ´Ù¸¥ À¯Àú ´Ð³×ÀÓ ¸ø °¡Á®¿È)
+        // DB ï¿½Ì»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½(ï¿½ï¿½Å·ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         /*if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname == "")
         {
             CHMMain.UI.ShowUI(Defines.EUI.UINickname, new CHUIArg());
@@ -186,13 +186,14 @@ public class First : MonoBehaviour
                 if (GetPhoneLoginState())
                 {
                     objWait.SetActive(true);
-
+#if UNITY_ANDROID
                     CHMGPGS.Instance.Login(async (success, localUser) =>
                     {
                         await SetGPGSLogin(success, localUser.userName);
 
                         objWait.SetActive(false);
                     });
+#endif
                 }
                 else
                 {
@@ -262,7 +263,7 @@ public class First : MonoBehaviour
 
         InitButton();
 
-        // ±âº» ½ºÅ²
+        // ï¿½âº» ï¿½ï¿½Å²
         CHMData.Instance.GetShopData("1").buy = true;
     }
 
@@ -315,7 +316,9 @@ public class First : MonoBehaviour
         if (success)
         {
             Debug.Log($"GPGS Login Success : {gpgsUserName}");
+#if UNITY_ANDROID
             await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
+#endif
 
             userID.gameObject.SetActive(true);
             userID.SetText(gpgsUserName);
@@ -330,7 +333,7 @@ public class First : MonoBehaviour
             await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
         }
 
-        // ±âº» ½ºÅ²
+        // ï¿½âº» ï¿½ï¿½Å²
         CHMData.Instance.GetShopData("1").buy = true;
 
         PlayerPrefs.SetInt(CHMMain.String.Login, success ? 1 : 0);

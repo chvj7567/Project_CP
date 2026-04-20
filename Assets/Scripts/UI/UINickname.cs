@@ -1,5 +1,7 @@
 using DG.Tweening;
+#if UNITY_ANDROID
 using GooglePlayGames.BasicApi;
+#endif
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -37,6 +39,7 @@ public class UINickname : UIBase
             {
                 if (loginData.connectGPGS)
                 {
+#if UNITY_ANDROID
                     CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, 0, (success) =>
                     {
                         if (success)
@@ -56,6 +59,7 @@ public class UINickname : UIBase
                             });
                         }
                     });
+#endif
                 }
                 else
                 {

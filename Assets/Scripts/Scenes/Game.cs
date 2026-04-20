@@ -1042,21 +1042,27 @@ public class Game : MonoBehaviour
                 if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage < PlayerPrefs.GetInt(CHMMain.String.HardStage))
                 {
                     CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
+#if UNITY_ANDROID
                     CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_hard_stage_rank, PlayerPrefs.GetInt(CHMMain.String.HardStage));
+#endif
                 }
                 break;
             case ESelectStage.Boss:
                 if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage < PlayerPrefs.GetInt(CHMMain.String.BossStage))
                 {
                     CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+#if UNITY_ANDROID
                     CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_boss_stage_rank, PlayerPrefs.GetInt(CHMMain.String.BossStage));
+#endif
                 }
                 break;
             case ESelectStage.Normal:
                 if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage < PlayerPrefs.GetInt(CHMMain.String.NormalStage))
                 {
                     CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
+#if UNITY_ANDROID
                     CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, PlayerPrefs.GetInt(CHMMain.String.NormalStage));
+#endif
                 }
                 break;
         }

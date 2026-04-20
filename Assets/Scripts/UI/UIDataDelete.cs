@@ -31,7 +31,9 @@ public class UIDataDelete : UIBase
                     stringID = 126
                 });
 
+#if UNITY_ANDROID
                 CHMGPGS.Instance.Logout();
+#endif
 
                 SceneManager.LoadScene(1);
             });
