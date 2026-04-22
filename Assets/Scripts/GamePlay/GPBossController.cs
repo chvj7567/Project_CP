@@ -42,7 +42,7 @@ public class GPBossController
         _angryBossObj = angryBossObj;
         _cryBossObj = cryBossObj;
 
-        hp.Subscribe(_ => { if (_ >= 0) _hpText.SetText(hp); });
+        hp.Subscribe(_ => { if (_ >= 0) _hpText.SetText(hp); }).AddTo(owner);
         hp.Value = loginData.hp;
 
         Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
@@ -70,7 +70,7 @@ public class GPBossController
                 else if (mod >= 6) { coolTime = 10 - mod + 10; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => { BossSkill(1); BossSkill(2); }).AddTo(owner); }
                 else { coolTime = 10 - mod + 10; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => BossSkill(1)).AddTo(owner); }
             }
-        });
+        }).AddTo(owner);
     }
 
     public void OnClear()
