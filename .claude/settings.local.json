@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep *)",
+      "Bash(reg query *)",
+      "Read(//c/Users/GVNC/AppData/Local/Android/**)",
+      "Read(//c/Users/GVNC/AppData/Roaming/Unity/config/**)",
+      "Read(//c/Users/GVNC/AppData/Roaming/UnityHub/**)",
+      "Bash(python3 -c \"import chardet; print\\('chardet ok'\\)\")",
+      "Bash(python -c \"import chardet; print\\('chardet ok'\\)\")",
+      "PowerShell(python --version)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(python3 -c \"print\\('ok'\\)\")",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git rm *)"
+    ]
+  }
+}
