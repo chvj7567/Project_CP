@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -72,7 +72,7 @@ public class CHToolString : EditorWindow
         EditorGUILayout.LabelField("English");
         english = EditorGUILayout.TextArea(english);
 
-        if (GUILayout.Button("ºÒ·¯¿À±â(Stage °ª ±âÁØ)", GUILayout.Width(595), GUILayout.Height(30)))
+        if (GUILayout.Button("ë¶ˆëŸ¬ì˜¤ê¸°(Stage ê°’ ê¸°ì¤€)", GUILayout.Width(595), GUILayout.Height(30)))
         {
             var stringInfo = stringKoreaList.Find(_ => _.stringID == stringID);
             if (stringInfo != null)
@@ -95,7 +95,7 @@ public class CHToolString : EditorWindow
             }
         }
 
-        if (GUILayout.Button("ÀúÀåÇÏ±â", GUILayout.Width(595), GUILayout.Height(30)))
+        if (GUILayout.Button("ì €ì¥í•˜ê¸°", GUILayout.Width(595), GUILayout.Height(30)))
         {
             var stringInfo = stringKoreaList.Find(_ => _.stringID == stringID);
             if (stringInfo != null)
@@ -133,7 +133,7 @@ public class CHToolString : EditorWindow
             var splitData = jsonData.Split('[', ']');
 
             jsonData = "[" + splitData[1] + "]";
-            // JSON ÆÄÀÏ·Î ÀúÀå (Assets Æú´õ ³»¿¡ ÀúÀåµÊ)
+            // JSON íŒŒì¼ë¡œ ì €ì¥ (Assets í´ë” ë‚´ì— ì €ì¥ë¨)
             string filePath = Path.Combine(Application.dataPath + "/AssetBundleResources/json", "StringKorea.json");
             File.WriteAllText(filePath, jsonData);
 
@@ -144,7 +144,7 @@ public class CHToolString : EditorWindow
 
             jsonData = "[" + splitData[1] + "]";
 
-            // JSON ÆÄÀÏ·Î ÀúÀå (Assets Æú´õ ³»¿¡ ÀúÀåµÊ)
+            // JSON íŒŒì¼ë¡œ ì €ì¥ (Assets í´ë” ë‚´ì— ì €ì¥ë¨)
             filePath = Path.Combine(Application.dataPath + "/AssetBundleResources/json", "StringEnglish.json");
             File.WriteAllText(filePath, jsonData);
         }

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -128,10 +128,10 @@ public class CHToolCreateMap : EditorWindow
             EditorGUILayout.LabelField("MoveCount");
             moveCount = EditorGUILayout.IntField(moveCount);
 
-            EditorGUILayout.LabelField("HP ÁöÁ¤");
+            EditorGUILayout.LabelField("HP ì§€ì •");
             hp = EditorGUILayout.IntField(hp);
 
-            EditorGUILayout.LabelField("Æ©Åä¸®¾ó ID");
+            EditorGUILayout.LabelField("íŠœí† ë¦¬ì–¼ ID");
             tutorialID = EditorGUILayout.IntField(tutorialID);
         }
         EditorGUILayout.EndHorizontal();
@@ -140,7 +140,7 @@ public class CHToolCreateMap : EditorWindow
         {
             EditorGUIUtility.labelWidth = 30;
 
-            EditorGUILayout.LabelField("»ı¼ºÇÒ ºí·°");
+            EditorGUILayout.LabelField("ìƒì„±í•  ë¸”ëŸ­");
 
             if (GUILayout.Button(texture, GUILayout.Width(100), GUILayout.Height(100)))
             {
@@ -226,12 +226,12 @@ public class CHToolCreateMap : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
 
-        if (GUILayout.Button("ÆÇ ¸®¼Â", GUILayout.Width(595), GUILayout.Height(30)))
+        if (GUILayout.Button("íŒ ë¦¬ì…‹", GUILayout.Width(595), GUILayout.Height(30)))
         {
             ResetBoard();
         }
 
-        if (GUILayout.Button("ºÒ·¯¿À±â(Stage °ª ±âÁØ)", GUILayout.Width(595), GUILayout.Height(30)))
+        if (GUILayout.Button("ë¶ˆëŸ¬ì˜¤ê¸°(Stage ê°’ ê¸°ì¤€)", GUILayout.Width(595), GUILayout.Height(30)))
         {
             ResetBoard();
 
@@ -287,7 +287,7 @@ public class CHToolCreateMap : EditorWindow
             }
         }
 
-        if (GUILayout.Button("ÀúÀåÇÏ±â", GUILayout.Width(595), GUILayout.Height(30)))
+        if (GUILayout.Button("ì €ì¥í•˜ê¸°", GUILayout.Width(595), GUILayout.Height(30)))
         {
             int tempGroup = 0;
             int tempStage = 0;
@@ -366,7 +366,7 @@ public class CHToolCreateMap : EditorWindow
             var splitData = jsonData.Split('[', ']');
 
             jsonData = "[" + splitData[1] + "]";
-            // JSON ÆÄÀÏ·Î ÀúÀå (Assets Æú´õ ³»¿¡ ÀúÀåµÊ)
+            // JSON íŒŒì¼ë¡œ ì €ì¥ (Assets í´ë” ë‚´ì— ì €ì¥ë¨)
             string filePath = Path.Combine(Application.dataPath + "/AssetBundleResources/json", "Stage.json");
             File.WriteAllText(filePath, jsonData);
 
@@ -376,7 +376,7 @@ public class CHToolCreateMap : EditorWindow
 
             jsonData = "[" + splitData[1] + "]";
 
-            // JSON ÆÄÀÏ·Î ÀúÀå (Assets Æú´õ ³»¿¡ ÀúÀåµÊ)
+            // JSON íŒŒì¼ë¡œ ì €ì¥ (Assets í´ë” ë‚´ì— ì €ì¥ë¨)
             filePath = Path.Combine(Application.dataPath + "/AssetBundleResources/json", "StageBlock.json");
             File.WriteAllText(filePath, jsonData);
         }

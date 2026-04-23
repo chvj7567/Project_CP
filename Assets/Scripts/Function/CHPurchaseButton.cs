@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
@@ -34,7 +34,7 @@ public class CHPurchaseButton : MonoBehaviour
         {
             if (CHMIAP.Instance.HadPurchased(targetProductID))
             {
-                Debug.Log("ÀÌ¹Ì ±¸¸ÅÇÑ »óÇ°");
+                Debug.Log("ì´ë¯¸ êµ¬ë§¤í•œ ìƒí’ˆ");
                 return;
             }
         }

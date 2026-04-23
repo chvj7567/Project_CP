@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -93,10 +93,10 @@ public class AssetBundleMenuItem
     {
         string jsonData = JsonUtility.ToJson(stageData, true);
 
-        // JSON ÆÄÀÏ·Î ÀúÀå (Assets Æú´õ ³»¿¡ ÀúÀåµÊ)
+        // JSON íŒŒì¼ë¡œ ì €ì¥ (Assets í´ë” ë‚´ì— ì €ì¥ë¨)
         string filePath = Path.Combine(Application.dataPath + "/AssetBundleResources/json", "stages.json");
         File.WriteAllText(filePath, jsonData);
 
-        Debug.Log("JSON µ¥ÀÌÅÍ »ı¼ºÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
+        Debug.Log("JSON ë°ì´í„° ìƒì„±ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
     }*/
 }

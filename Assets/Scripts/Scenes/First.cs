@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -138,7 +138,7 @@ public class First : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
-        // DB �̻������ ���� �г����� �̻��(��ŷ�� �ٸ� ���� �г��� �� ������)
+        // DB 과부하를 막기 위해 닉네임 설정창 주석 처리 (랭킹 등 다른 곳에서 닉네임 입력 유도)
         /*if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).nickname == "")
         {
             CHMMain.UI.ShowUI(Defines.EUI.UINickname, new CHUIArg());
@@ -263,7 +263,7 @@ public class First : MonoBehaviour
 
         InitButton();
 
-        // �⺻ ��Ų
+        // 기본 스킨
         CHMData.Instance.GetShopData("1").buy = true;
     }
 
@@ -333,7 +333,7 @@ public class First : MonoBehaviour
             await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
         }
 
-        // �⺻ ��Ų
+        // 기본 스킨
         CHMData.Instance.GetShopData("1").buy = true;
 
         PlayerPrefs.SetInt(CHMMain.String.Login, success ? 1 : 0);

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(TMP_Text))]
@@ -39,7 +39,7 @@ public class CHTMPro : MonoBehaviour
 
             if (int.TryParse(text.text, out var intValue))
             {
-                // ¼ýÀÚÀÏ °æ¿ì ¿µ¾î ÆùÆ®·Î
+                // ìˆ«ìžì¼ ê²½ìš° ì˜ì–´ í°íŠ¸ë¡œ
                 CHMMain.Resource.LoadFont(Defines.ELanguageType.English, (font) =>
                 {
                     text.font = font;

@@ -73,7 +73,7 @@ public class CHMData : CHSingleton<CHMData>
         Debug.Log($"Local Path : {localPath}");
         if (File.Exists(localPath) == false)
         {
-            // �ű� ����
+            // 신규 접속 유저인지 확인
             newUser = true;
 
             PlayerPrefs.SetInt(CHMMain.String.HardStage, 0);
@@ -94,7 +94,7 @@ public class CHMData : CHSingleton<CHMData>
         {
             var data = File.ReadAllText(localPath);
 
-            // �����Ͱ� ���� ��� ����Ʈ ������ ����
+            // 데이터가 없거나 로드한 리스트 정보가 비어 있는 경우
             if (data.Contains($"{name.ToLower()}List") == false || data.Contains($"\"{name.ToLower()}List\":[]"))
             {
                 return (false, await LoadDefaultData<Loader>(name));
@@ -206,7 +206,7 @@ public class CHMData : CHSingleton<CHMData>
 
         var stringTask = await taskCompletionSource.Task;
 
-        // �����Ͱ� ���� ��� ����Ʈ ������ ����
+        // 데이터가 없거나 로드한 리스트 정보가 비어 있는 경우
         if (stringTask.Contains($"{name.ToLower()}List") == false || stringTask.Contains($"\"{name.ToLower()}List\":[]"))
         {
             return await LoadDefaultData<Loader>(name);

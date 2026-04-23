@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
@@ -39,24 +39,24 @@ public class Block : MonoBehaviour
     [ReadOnly]
     public int vScore;
 
-    // ��ġ�Ǿ����� Ȯ��
+    // 매치 상태 (매치되었는지 확인)
     public bool match = false;
-    // ��ź ������ ��� �������� Ȯ��
+    // 폭탄 생성 혹은 연출용 매치 상태인지 확인
     public bool boom = false;
-    // �簢�� ��ġ�Ǿ����� Ȯ��(��ź ���� �����Ǵ� ������ true)
+    // 사각형으로 매치되었는지 확인 (폭탄 생성 조건일 때 true)
     public bool squareMatch = false;
-    // ������ �������� Ȯ��
+    // 블럭 삭제 대상 여부 확인
     public bool remove = false;
-    // Ʃ�丮�� ���� ����
+    // 튜토리얼 대상 블럭인지 여부
     public bool tutorialBlock = false;
-    // hp�� ���� Ŭ��� ���� ������
+    // 체력(HP)을 체크해야 하는 블럭인지 여부
     public bool checkHp = true;
 
-    // ��HP
+    // 현재 HP
     [SerializeField, ReadOnly] int hp = 0;
     public int changeHp = -1;
 
-    // ���� �� �Ͽ� �� ���� �������� ����
+    // 중복 데미지 처리 방지 플래그
     [SerializeField, ReadOnly] bool checkDamage = false;
 
     private void Start()
@@ -88,7 +88,7 @@ public class Block : MonoBehaviour
 
         btn.OnDragAsObservable().Subscribe(_ =>
         {
-            // �־�� BeginDrag, EndDrag �۵���
+            // 자체 드래그 이벤트 대신 BeginDrag, EndDrag 핸들러를 사용함
         });
 
         btn.OnEndDragAsObservable().Subscribe(async _ =>
@@ -490,7 +490,7 @@ public class Block : MonoBehaviour
                 await game.Bomb6(this, ani);
                 break;
             case Defines.EBlockState.PinkBomb:
-                // �巡�� �ؾ� ��
+                // 추후 특수 기능 구현 혹은 처리 생략
                 break;
             case Defines.EBlockState.YellowBomb:
                 await game.Bomb9(this, ani);
@@ -715,7 +715,7 @@ public class Block : MonoBehaviour
 
     bool CheckInBoxBlock(Defines.EBlockState upBlockState)
     {
-        // �ڱ� �ڽ��� �ڽ� ������ �ƴϸ� Ȯ�� X
+        // 자기 자신의 히트박스가 아니면 무시함
         if (IsBoxBlock() == false)
             return false;
 

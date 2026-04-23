@@ -1,4 +1,4 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,13 +18,13 @@ public class PageMove : MonoBehaviour
     [SerializeField] Button rightBtn;
     [SerializeField] float moveSpeed;
 
-    [Header("ÇÑ ÆäÀÌÁö´ç ½ºÅ×ÀÌÁö ¼ö")]
+    [Header("í•œ í˜ì´ì§€ë‹¹ ìŠ¤í…Œì´ì§€ ìˆ˜")]
     [SerializeField] int stageCount;
     [SerializeField, ReadOnly] int page;
     [SerializeField, ReadOnly] float width;
 
     bool moving = false;
-    // stageSelectÀÇ index;
+    // stageSelectì˜ index;
     int index;
 
     public Defines.ESelectStage curSelect;

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +39,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         totalDownoadCount = totalLoadCount = googleDownloadKeyList.Count;
 
-        // ¿¡¼Â ¹øµé ÀúÀå °æ·Î ¼³Á¤
+        // ì—ì…‹ ë²ˆë“¤ ì €ì¥ ê²½ë¡œ ì„¤ì •
         string savePath = Path.Combine(Application.persistentDataPath, bundleKey);
         if (Directory.Exists(savePath) == false)
         {
@@ -96,7 +96,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         Debug.Log($"BundlePath : {bundlePath}");
 
-        // ¿¡¼Â ¹øµé ·Îµå
+        // ì—ì…‹ ë²ˆë“¤ ë¡œë“œ
         AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
 
         while (!bundleRequest.isDone)
@@ -143,7 +143,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         downloadText.text = $"{bundleName} Loading...";
 
-        // ´Ù¿î·Îµå Ç¥½Ã
+        // ë‹¤ìš´ë¡œë“œ í‘œì‹œ
         float downloadProgress = 0;
 
         while (bundleRequest.isDone == false)
@@ -195,10 +195,10 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         }
         else
         {
-            // ¿¡¼Â ¹øµé ÀúÀå °æ·Î ¼³Á¤
+            // ì—ì…‹ ë²ˆë“¤ ì €ì¥ ê²½ë¡œ ì„¤ì •
             string savePath = Path.Combine(Application.persistentDataPath, bundleKey);
 
-            // ÆÄÀÏ ÀúÀå
+            // íŒŒì¼ ì €ì¥
             File.WriteAllBytes(savePath, request.downloadHandler.data);
 
             AssetBundle assetBundle = DownloadHandlerAssetBundle.GetContent(request);
@@ -233,7 +233,7 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
 
         downloadText.text = $"{bundleName} Loading...";
 
-        // ´Ù¿î·Îµå Ç¥½Ã
+        // ë‹¤ìš´ë¡œë“œ í‘œì‹œ
         float downloadProgress = 0;
         while (request.isDone == false)
         {
@@ -252,10 +252,10 @@ public class CHLoadingBarFromAssetBundle : MonoBehaviour
         }
         else
         {
-            // ¿¡¼Â ¹øµé ÀúÀå °æ·Î ¼³Á¤
+            // ì—ì…‹ ë²ˆë“¤ ì €ì¥ ê²½ë¡œ ì„¤ì •
             string savePath = Path.Combine(Application.persistentDataPath, bundleKey);
 
-            // ÆÄÀÏ ÀúÀå
+            // íŒŒì¼ ì €ì¥
             File.WriteAllBytes(savePath + "/" + $"{bundleName}.unity3d", request.downloadHandler.data);
 
             Debug.Log($"Saving asset bundle to: {savePath}");
