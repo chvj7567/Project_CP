@@ -12,107 +12,214 @@ using static Infomation;
 
 public class GPGameScene : MonoBehaviour
 {
-    const int MAX = 9;
+    private const int MAX = 9;
 
     [Header("뒤로 가기")]
-    [SerializeField] Button backBtn;
+    [SerializeField] private Button backBtn;
 
     [Header("타이머")]
-    [SerializeField] Image timerImg;
-    [SerializeField] CHTMPro timerText;
-    [SerializeField, ReadOnly] float curTimer;
+    [SerializeField] private Image timerImg;
+    [SerializeField] private CHTMPro timerText;
+    [SerializeField, ReadOnly] private float curTimer;
 
     [Header("점수 골드 및 이미지")]
-    [SerializeField] Image goldImg;
-    [SerializeField] List<Image> catFootImgList = new List<Image>();
+    [SerializeField] private Image goldImg;
+    [SerializeField] private List<Image> catFootImgList = new List<Image>();
 
     [Header("보드")]
-    [SerializeField] Transform parent;
-    [SerializeField] CHInstantiateButton instBtn;
-    [SerializeField] GameObject origin;
-    [SerializeField] float margin = 0f;
+    [SerializeField] private Transform parent;
+    [SerializeField] private CHInstantiateButton instBtn;
+    [SerializeField] private GameObject origin;
+    [SerializeField] private float margin = 0f;
 
     [Header("폭탄 이펙트")]
-    [SerializeField] ParticleSystem bombEffectPS;
-    [SerializeField] List<ParticleSystem> pangEffectList = new List<ParticleSystem>();
+    [SerializeField] private ParticleSystem bombEffectPS;
+    [SerializeField] private List<ParticleSystem> pangEffectList = new List<ParticleSystem>();
 
     [Header("게임 속도")]
     [SerializeField] public float delay;
-    [SerializeField] int delayMillisecond;
+    [SerializeField] private int delayMillisecond;
 
     [Header("게임 상태")]
-    [SerializeField, ReadOnly] Block[,] boardArr = new Block[MAX, MAX];
+    [SerializeField, ReadOnly] private Block[,] boardArr = new Block[MAX, MAX];
     [SerializeField, ReadOnly] public bool isDrag = false;
     [SerializeField, ReadOnly] public bool isLock = false;
-    [SerializeField, ReadOnly] bool isMatch = false;
-    [SerializeField, ReadOnly] bool oneTimeAlarm = false;
-    [SerializeField, ReadOnly] int moveIndex1 = 0;
-    [SerializeField, ReadOnly] int moveIndex2 = 0;
-    [SerializeField, ReadOnly] int boardSize = 1;
+    [SerializeField, ReadOnly] private bool isMatch = false;
+    [SerializeField, ReadOnly] private bool oneTimeAlarm = false;
+    [SerializeField, ReadOnly] private int moveIndex1 = 0;
+    [SerializeField, ReadOnly] private int moveIndex2 = 0;
+    [SerializeField, ReadOnly] private int boardSize = 1;
     [SerializeField, ReadOnly] public ReactiveProperty<EGameState> gameResult = new ReactiveProperty<EGameState>();
     [SerializeField, ReadOnly] public bool gameEnd = false;
 
-    [SerializeField] CHTMPro targetScoreText;
-    [SerializeField] CHTMPro moveCountText;
-    [SerializeField] CHTMPro curScoreText;
-    [SerializeField] CHTMPro bonusScoreText;
-    [SerializeField, ReadOnly] ReactiveProperty<int> curScore = new ReactiveProperty<int>();
-    [SerializeField, ReadOnly] ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
-    [SerializeField, ReadOnly] ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
+    [SerializeField] private CHTMPro targetScoreText;
+    [SerializeField] private CHTMPro moveCountText;
+    [SerializeField] private CHTMPro curScoreText;
+    [SerializeField] private CHTMPro bonusScoreText;
+    [SerializeField, ReadOnly] private ReactiveProperty<int> curScore = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] private ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
+    [SerializeField, ReadOnly] private ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
 
     [Header("자동 플레이")]
-    [SerializeField] bool autoPlay = false;
-    [SerializeField, ReadOnly] int updateMapCount = 5;
-    [SerializeField, ReadOnly] float teachTime;
-    [SerializeField, ReadOnly] float dragTime;
+    [SerializeField] private bool autoPlay = false;
+    [SerializeField, ReadOnly] private int updateMapCount = 5;
+    [SerializeField, ReadOnly] private float teachTime;
+    [SerializeField, ReadOnly] private float dragTime;
 
     [Header("보스 스테이지")]
-    [SerializeField] GameObject normalBossObj;
-    [SerializeField] GameObject angryBossObj;
-    [SerializeField] GameObject cryBossObj;
-    [SerializeField] Image bossHpImage;
-    [SerializeField] CHTMPro bossHpText;
-    [SerializeField] CHTMPro hpText;
+    [SerializeField] private GameObject normalBossObj;
+    [SerializeField] private GameObject angryBossObj;
+    [SerializeField] private GameObject cryBossObj;
+    [SerializeField] private Image bossHpImage;
+    [SerializeField] private CHTMPro bossHpText;
+    [SerializeField] private CHTMPro hpText;
 
     [Header("스테이지별 UI 오브젝트")]
-    [SerializeField] GameObject onlyNormalStageObject;
-    [SerializeField] GameObject onlyBossStageObject;
+    [SerializeField] private GameObject onlyNormalStageObject;
+    [SerializeField] private GameObject onlyBossStageObject;
 
     [Header("폭탄 선택 UI")]
-    [SerializeField, ReadOnly] int arrowPangIndex = 1;
-    [SerializeField] CHButton arrowPang1;
-    [SerializeField] CHButton arrowPang2;
-    [SerializeField] Image banView;
+    [SerializeField, ReadOnly] private int arrowPangIndex = 1;
+    [SerializeField] private CHButton arrowPang1;
+    [SerializeField] private CHButton arrowPang2;
+    [SerializeField] private Image banView;
 
     [Header("가이드")]
-    [SerializeField] bool guideEnd = false;
-    [SerializeField] RectTransform guideFinger;
-    [SerializeField] RectTransform guideHole;
-    [SerializeField] GameObject guideBackground;
-    [SerializeField] Button guideBackgroundBtn;
-    [SerializeField] List<RectTransform> normalStageGuideHoleList = new List<RectTransform>();
-    [SerializeField] List<RectTransform> bossStageGuideHoleList = new List<RectTransform>();
-    [SerializeField] CHTMPro guideDesc;
+    [SerializeField] private bool guideEnd = false;
+    [SerializeField] private RectTransform guideFinger;
+    [SerializeField] private RectTransform guideHole;
+    [SerializeField] private GameObject guideBackground;
+    [SerializeField] private Button guideBackgroundBtn;
+    [SerializeField] private List<RectTransform> normalStageGuideHoleList = new List<RectTransform>();
+    [SerializeField] private List<RectTransform> bossStageGuideHoleList = new List<RectTransform>();
+    [SerializeField] private CHTMPro guideDesc;
 
-    List<Sprite> _blockSpriteList = new List<Sprite>();
-    StageInfo _stageInfo;
-    List<StageBlockInfo> _stageBlockInfoList = new List<StageBlockInfo>();
-    ESelectStage _selectStage = ESelectStage.Hard;
-    Data.Login _loginData;
+    private List<Sprite> _blockSpriteList = new List<Sprite>();
+    private StageInfo _stageInfo;
+    private List<StageBlockInfo> _stageBlockInfoList = new List<StageBlockInfo>();
+    private ESelectStage _selectStage = ESelectStage.Hard;
+    private Data.Login _loginData;
 
-    CancellationTokenSource tokenSource;
-    float gameTime = 0;
-    int helpTime = 0;
-    bool tutorialNextBlock = false;
-    bool init = false;
+    private CancellationTokenSource _tokenSource;
+    private float _gameTime = 0;
+    private int _helpTime = 0;
+    private bool _tutorialNextBlock = false;
+    private bool _init = false;
 
-    GPBoard _board;
-    GPMatchChecker _matcher;
-    GPBombResolver _bombResolver;
-    GPTutorial _tutorial;
-    GPBossController _boss;
+    private GPBoard _board;
+    private GPMatchChecker _matcher;
+    private GPBombResolver _bombResolver;
+    private GPTutorial _tutorial;
+    private GPBossController _boss;
 
-    async void Start()
+    private async void Start()
+    {
+        InitUI();
+        BindUI();
+
+        await LoadImage();
+        InitData();
+        await CreateMap();
+        await _tutorial.StartGuide(_selectStage, _loginData);
+        _tutorial.StartTutorial(_stageInfo, _stageBlockInfoList, _selectStage);
+    }
+
+    private async void Update()
+    {
+        if (_init == false)
+            return;
+
+        if (gameResult.Value == EGameState.GameClearWait) { GameEnd(true); return; }
+        if (gameResult.Value == EGameState.GameOverWait) { GameEnd(false); return; }
+
+        if (gameResult.Value == EGameState.NormalOrHardStagePlay)
+        {
+            bool clear = true;
+            bool useTime = _stageInfo.time > 0;
+            bool useTargetScore = _stageInfo.targetScore > 0;
+            bool useMoveCount = _stageInfo.moveCount > 0;
+
+            for (int i = 0; i < boardSize; ++i)
+            {
+                for (int j = 0; j < boardSize; ++j)
+                {
+                    if (boardArr[i, j].GetBlockState() == EBlockState.RainbowPang) continue;
+                    if (!boardArr[i, j].checkHp) continue;
+                    if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsFishBlock() || boardArr[i, j].IsBallBlock())
+                    { clear = false; break; }
+                }
+                if (!clear) break;
+            }
+
+            if (useTime && timerImg.fillAmount >= 1)
+            {
+                if (useTargetScore && curScore.Value < _stageInfo.targetScore) clear = false;
+                GameEnd(clear);
+            }
+            else
+            {
+                if (useTargetScore && curScore.Value < _stageInfo.targetScore) clear = false;
+                if (useMoveCount && moveCount.Value <= 0) GameEnd(clear);
+                else if (clear) GameEnd(clear);
+            }
+        }
+        else if (gameResult.Value == EGameState.BossStagePlay)
+        {
+            if (_boss != null && _boss.hp.Value <= 0) { GameEnd(bossHpImage.fillAmount <= 0); return; }
+            if (bossHpImage.fillAmount <= 0) { GameEnd(true); return; }
+        }
+
+        _gameTime += Time.deltaTime;
+
+        if (!isLock)
+        {
+            curTimer += Time.deltaTime;
+            timerImg.fillAmount = curTimer / _stageInfo.time;
+
+            if (curTimer >= _helpTime)
+            {
+                if (_stageInfo.time >= _helpTime)
+                {
+                    timerText.gameObject.SetActive(true);
+                    timerText.SetText(_stageInfo.time - _helpTime);
+                    ++_helpTime;
+                }
+                else timerText.gameObject.SetActive(false);
+            }
+        }
+
+        if (isLock) { teachTime = _gameTime; dragTime = _gameTime; }
+        else
+        {
+            if (autoPlay && dragTime + .5f < _gameTime)
+                boardArr[_matcher.canMatchRow, _matcher.canMatchCol].Drag(_matcher.canMatchDrag);
+
+            if (teachTime + 3 < _gameTime && !oneTimeAlarm && _matcher.canMatchRow >= 0 && _matcher.canMatchCol >= 0)
+            {
+                oneTimeAlarm = true;
+                try
+                {
+                    var block = boardArr[_matcher.canMatchRow, _matcher.canMatchCol];
+                    block.transform.DOScale(1.5f, 0.25f).OnComplete(() => block.transform.DOScale(1f, 0.25f));
+                    await Task.Delay(3000, _tokenSource.Token);
+                }
+                catch (TaskCanceledException) { }
+                oneTimeAlarm = false;
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        _tokenSource?.Cancel();
+    }
+
+    private void OnApplicationQuit()
+    {
+        CHMData.Instance.SaveData(CHMMain.String.CatPang);
+    }
+
+    private void InitUI()
     {
         bonusScoreText.gameObject.SetActive(false);
         guideFinger.gameObject.SetActive(false);
@@ -120,16 +227,26 @@ public class GPGameScene : MonoBehaviour
         guideHole.gameObject.SetActive(false);
         onlyNormalStageObject.SetActive(true);
         onlyBossStageObject.SetActive(false);
-
-        foreach (var h in normalStageGuideHoleList) h.gameObject.SetActive(false);
-        foreach (var h in bossStageGuideHoleList) h.gameObject.SetActive(false);
         guideBackgroundBtn.gameObject.SetActive(false);
 
+        foreach (var h in normalStageGuideHoleList)
+        {
+            h.gameObject.SetActive(false);
+        }
+
+        foreach (var h in bossStageGuideHoleList)
+        {
+            h.gameObject.SetActive(false);
+        }
+    }
+
+    private void BindUI()
+    {
         if (backBtn)
         {
             backBtn.OnClickAsObservable().Subscribe(_ =>
             {
-                tokenSource?.Cancel();
+                _tokenSource?.Cancel();
                 Time.timeScale = 1;
                 CHInstantiateButton.ResetBlockDict();
                 CHMMain.UI.CloseUI(EUI.UIAlarm);
@@ -156,104 +273,9 @@ public class GPGameScene : MonoBehaviour
 
         curScore.Subscribe(_ => curScoreText.SetText(_));
         moveCount.Subscribe(_ => moveCountText.SetText(_));
-
-        this.UpdateAsObservable().Subscribe(_ =>
-        {
-            if (gameResult.Value == EGameState.GameClearWait) { GameEnd(true); return; }
-            if (gameResult.Value == EGameState.GameOverWait) { GameEnd(false); return; }
-
-            if (gameResult.Value == EGameState.NormalOrHardStagePlay)
-            {
-                bool clear = true;
-                bool useTime = _stageInfo.time > 0;
-                bool useTargetScore = _stageInfo.targetScore > 0;
-                bool useMoveCount = _stageInfo.moveCount > 0;
-
-                for (int i = 0; i < boardSize; ++i)
-                {
-                    for (int j = 0; j < boardSize; ++j)
-                    {
-                        if (boardArr[i, j].GetBlockState() == EBlockState.RainbowPang) continue;
-                        if (!boardArr[i, j].checkHp) continue;
-                        if (boardArr[i, j].GetHp() > 0 || boardArr[i, j].IsFishBlock() || boardArr[i, j].IsBallBlock())
-                        { clear = false; break; }
-                    }
-                    if (!clear) break;
-                }
-
-                if (useTime && timerImg.fillAmount >= 1)
-                {
-                    if (useTargetScore && curScore.Value < _stageInfo.targetScore) clear = false;
-                    GameEnd(clear);
-                }
-                else
-                {
-                    if (useTargetScore && curScore.Value < _stageInfo.targetScore) clear = false;
-                    if (useMoveCount && moveCount.Value <= 0) GameEnd(clear);
-                    else if (clear) GameEnd(clear);
-                }
-            }
-            else if (gameResult.Value == EGameState.BossStagePlay)
-            {
-                if (_boss.hp.Value <= 0) { GameEnd(bossHpImage.fillAmount <= 0); return; }
-                if (bossHpImage.fillAmount <= 0) { GameEnd(true); return; }
-            }
-        });
-
-        await LoadImage();
-        InitData();
-        await CreateMap();
-        await _tutorial.StartGuide(_selectStage, _loginData);
-        _tutorial.StartTutorial(_stageInfo, _stageBlockInfoList, _selectStage);
     }
 
-    private async void Update()
-    {
-        gameTime += Time.deltaTime;
-
-        if (!isLock)
-        {
-            curTimer += Time.deltaTime;
-            timerImg.fillAmount = curTimer / _stageInfo.time;
-
-            if (curTimer >= helpTime)
-            {
-                if (_stageInfo.time >= helpTime)
-                {
-                    timerText.gameObject.SetActive(true);
-                    timerText.SetText(_stageInfo.time - helpTime);
-                    ++helpTime;
-                }
-                else timerText.gameObject.SetActive(false);
-            }
-        }
-
-        if (isLock) { teachTime = gameTime; dragTime = gameTime; }
-        else
-        {
-            if (autoPlay && dragTime + .5f < gameTime)
-                boardArr[_matcher.canMatchRow, _matcher.canMatchCol].Drag(_matcher.canMatchDrag);
-
-            if (teachTime + 3 < gameTime && !oneTimeAlarm && _matcher.canMatchRow >= 0 && _matcher.canMatchCol >= 0)
-            {
-                oneTimeAlarm = true;
-                try
-                {
-                    var block = boardArr[_matcher.canMatchRow, _matcher.canMatchCol];
-                    block.transform.DOScale(1.5f, 0.25f).OnComplete(() => block.transform.DOScale(1f, 0.25f));
-                    await Task.Delay(3000, tokenSource.Token);
-                }
-                catch (TaskCanceledException) { }
-                oneTimeAlarm = false;
-            }
-        }
-    }
-
-    void OnDestroy() => tokenSource?.Cancel();
-
-    private void OnApplicationQuit() => CHMData.Instance.SaveData(CHMMain.String.CatPang);
-
-    async Task LoadImage()
+    private async Task LoadImage()
     {
         for (EBlockState i = 0; i < EBlockState.Max; ++i)
         {
@@ -267,12 +289,12 @@ public class GPGameScene : MonoBehaviour
         }
     }
 
-    void InitData()
+    private void InitData()
     {
-        if (init) return;
-        init = true;
+        if (_init) return;
+        _init = true;
 
-        tokenSource = new CancellationTokenSource();
+        _tokenSource = new CancellationTokenSource();
         _loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
         _selectStage = (ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
 
@@ -318,7 +340,7 @@ public class GPGameScene : MonoBehaviour
 
         // GP 클래스 초기화
         _board = new GPBoard();
-        _board.Init(boardArr, boardSize, _blockSpriteList, delay, delayMillisecond, tokenSource.Token);
+        _board.Init(boardArr, boardSize, _blockSpriteList, delay, delayMillisecond, _tokenSource.Token);
 
         _matcher = new GPMatchChecker();
         _matcher.Init(_board, _stageInfo.blockTypeCount);
@@ -331,7 +353,7 @@ public class GPGameScene : MonoBehaviour
             CreateEffect,
             sound => CHMMain.Sound.Play(sound),
             pangEffectList, bombEffectPS,
-            tokenSource.Token);
+            _tokenSource.Token);
         _bombResolver.SetArrowPangIndex(arrowPangIndex);
 
         _tutorial = new GPTutorial();
@@ -352,7 +374,7 @@ public class GPGameScene : MonoBehaviour
         }
     }
 
-    async Task CreateMap()
+    private async Task CreateMap()
     {
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
@@ -436,10 +458,10 @@ public class GPGameScene : MonoBehaviour
         } while (_matcher.isMatch || !canMatch);
 
         Debug.Log("Create Map End");
-        await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+        await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
     }
 
-    async Task UpdateMap()
+    private async Task UpdateMap()
     {
         try
         {
@@ -474,7 +496,7 @@ public class GPGameScene : MonoBehaviour
 
                 reUpdate = !_matcher.CanPlay();
                 if (reUpdate) CHMMain.UI.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 56 });
-                if (createDelay) await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+                if (createDelay) await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
 
                 if (count++ > updateMapCount)
                 {
@@ -489,7 +511,7 @@ public class GPGameScene : MonoBehaviour
         catch (TaskCanceledException) { Debug.Log("Cancel Update Map"); }
     }
 
-    async Task RemoveMatchBlock()
+    private async Task RemoveMatchBlock()
     {
         bool removeDelay = false;
         for (int i = 0; i < boardSize; ++i)
@@ -536,11 +558,11 @@ public class GPGameScene : MonoBehaviour
         if (removeDelay)
         {
             CHMMain.Sound.Play(ESound.Ppauk);
-            await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+            await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
         }
     }
 
-    void SetDissapearBlock()
+    private void SetDissapearBlock()
     {
         int row = boardSize - 1;
         for (int i = 0; i < boardSize; ++i)
@@ -596,11 +618,11 @@ public class GPGameScene : MonoBehaviour
                 }
             }
         }
-        if (inDelay) { await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token); return true; }
+        if (inDelay) { await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token); return true; }
         return false;
     }
 
-    RectTransform CreateEffect(ParticleSystem effect, Vector2 movePos)
+    private RectTransform CreateEffect(ParticleSystem effect, Vector2 movePos)
     {
         var copyObj = CHMMain.Resource.Instantiate(effect.gameObject, transform.parent);
         copyObj.SetActive(true);
@@ -619,7 +641,7 @@ public class GPGameScene : MonoBehaviour
         _tutorial.HideGuide();
         isLock = true;
 
-        await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+        await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
 
         if (block1 && block2 && block1.IsBlock() && block2.IsBlock())
         {
@@ -660,7 +682,7 @@ public class GPGameScene : MonoBehaviour
             _board.ChangeBlock(block1, block2);
             block1.rectTransform.DOAnchorPos(block1.originPos, delay);
             block2.rectTransform.DOAnchorPos(block2.originPos, delay);
-            await Task.Delay((int)(delay * delayMillisecond), tokenSource.Token);
+            await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
             back = true;
         }
 
@@ -712,9 +734,9 @@ public class GPGameScene : MonoBehaviour
 
         do
         {
-            if (!tutorialNextBlock)
+            if (!_tutorialNextBlock)
             {
-                tutorialNextBlock = true;
+                _tutorialNextBlock = true;
                 if (_selectStage != ESelectStage.Hard && _stageInfo.tutorialID > 0)
                 {
                     var tutInfo = CHMMain.Json.GetTutorialInfo(_stageInfo.tutorialID);
@@ -734,7 +756,7 @@ public class GPGameScene : MonoBehaviour
         isLock = false;
     }
 
-    async void GameEnd(bool clear)
+    private async void GameEnd(bool clear)
     {
         if (isLock) { gameResult.Value = clear ? EGameState.GameClearWait : EGameState.GameOverWait; return; }
         if (gameEnd) return;
@@ -765,7 +787,7 @@ public class GPGameScene : MonoBehaviour
         if (clear) SaveClearData();
     }
 
-    void SaveClearData()
+    private void SaveClearData()
     {
         switch (_selectStage)
         {
@@ -799,7 +821,7 @@ public class GPGameScene : MonoBehaviour
         }
     }
 
-    EClearState GetClearState()
+    private EClearState GetClearState()
     {
         switch (_selectStage)
         {
