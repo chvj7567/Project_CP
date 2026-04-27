@@ -522,5 +522,9 @@
         {
             "stringID": 130,
             "value": "No"
+        },
+        {
+            "stringID": 131,
+            "value": "Next"
         }
     ]

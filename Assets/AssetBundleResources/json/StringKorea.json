@@ -522,5 +522,9 @@
         {
             "stringID": 130,
             "value": "아니오"
+        },
+        {
+            "stringID": 131,
+            "value": "다음"
         }
     ]

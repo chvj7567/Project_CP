@@ -4,6 +4,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static Defines;
 
 public class UIGameEndArg : CHUIArg
 {
@@ -14,15 +15,16 @@ public class UIGameEndArg : CHUIArg
 
 public class UIGameEnd : UIBase
 {
-    UIGameEndArg arg;
+    private UIGameEndArg arg;
 
-    [SerializeField] TMP_Text resultText;
-    [SerializeField] CHTMPro goldText;
-    [SerializeField] CHTMPro goldx2Text;
-    [SerializeField] Button menuBtn;
-    [SerializeField] Button adBtn;
+    [SerializeField] private TMP_Text resultText;
+    [SerializeField] private CHTMPro goldText;
+    [SerializeField] private CHTMPro goldx2Text;
+    [SerializeField] private Button nextBtn;
+    [SerializeField] private Button adBtn;
+    [SerializeField] private Button backBtn;
 
-    bool received = false;
+    private bool received = false;
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -53,7 +55,32 @@ public class UIGameEnd : UIBase
             }
         }
 
-        menuBtn.OnClickAsObservable().Subscribe(_ =>
+        CHMAdmob.Instance.AcquireReward += AcquireReward;
+
+        BindUI();
+    }
+
+    private void BindUI()
+    {
+        nextBtn.OnClickAsObservable().Subscribe(_ =>
+        {
+            int currentStage = 0;
+            Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+            switch (selectStage)
+            {
+                case ESelectStage.Hard: currentStage = PlayerPrefs.GetInt(CHMMain.String.HardStage); break;
+                case ESelectStage.Boss: currentStage = PlayerPrefs.GetInt(CHMMain.String.BossStage); break;
+                case ESelectStage.Normal: currentStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage); break;
+            }
+
+            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+            {
+                stage = currentStage + 1
+            });
+
+        }).AddTo(this);
+
+        backBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (received == true)
             {
@@ -85,7 +112,7 @@ public class UIGameEnd : UIBase
 
             CHMData.Instance.SaveData(CHMMain.String.CatPang);
             SceneManager.LoadScene(1);
-        });
+        }).AddTo(this);
 
         adBtn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -97,12 +124,10 @@ public class UIGameEnd : UIBase
             {
                 CHMAdmob.Instance.ShowRewardedAd();
             }
-        });
-
-        CHMAdmob.Instance.AcquireReward += AcquireReward;
+        }).AddTo(this);
     }
 
-    void AcquireReward()
+    private void AcquireReward()
     {
         if (received == true)
         {
@@ -117,7 +142,6 @@ public class UIGameEnd : UIBase
         var before = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
         var after = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += arg.gold * 3;
 
-        //adBtn.gameObject.SetActive(false);
         received = true;
 
         Debug.Log($"Gold {before} => {after}");
