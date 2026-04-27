@@ -786,12 +786,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 67400168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4be25731e2dd8e940b7e60fa7ba0421c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 35adbfdea9bd43248bdc0a8422560b4e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
   canvas: {fileID: 2057816452}
-  backgroundList:
-  - {fileID: 1831549940}
   stageSelect1: {fileID: 14750362}
   stageSelect2: {fileID: 1838538309}
   pageMove: {fileID: 67400172}
@@ -803,7 +801,6 @@ MonoBehaviour:
   bombBtn: {fileID: 1060617467}
   menuBtn: {fileID: 948190399}
   rankingBtn: {fileID: 1775368009}
-  backgroundIndex: 0
   adScript: {fileID: 67400173}
   dataDownload:
     value: 0
