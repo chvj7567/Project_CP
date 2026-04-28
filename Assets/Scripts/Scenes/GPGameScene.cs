@@ -94,7 +94,7 @@ public class GPGameScene : MonoBehaviour
     [SerializeField] private List<RectTransform> bossStageGuideHoleList = new List<RectTransform>();
     [SerializeField] private CHTMPro guideDesc;
 
-    private List<Sprite> _blockSpriteList = new List<Sprite>();
+    private Dictionary<EBlockState, Sprite> _blockSpriteList = new Dictionary<EBlockState, Sprite>();
     private StageInfo _stageInfo;
     private List<StageBlockInfo> _stageBlockInfoList = new List<StageBlockInfo>();
     private ESelectStage _selectStage = ESelectStage.Hard;
@@ -279,10 +279,11 @@ public class GPGameScene : MonoBehaviour
     {
         for (EBlockState i = 0; i < EBlockState.Max; ++i)
         {
+            if ((int)i >= 7 && (int)i <= 9) continue;
             var t = new TaskCompletionSource<Sprite>();
             CHMMain.Resource.LoadSprite(i, sprite =>
             {
-                if (sprite != null) _blockSpriteList.Add(sprite);
+                if (sprite != null) _blockSpriteList[i] = sprite;
                 t.SetResult(sprite);
             });
             await t.Task;
@@ -391,14 +392,14 @@ public class GPGameScene : MonoBehaviour
             {
                 var random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                 random = block.CheckSelectCatShop(random);
-                block.SetBlockState(ELog.CreateMap, 1, _blockSpriteList[(int)random], random);
+                block.SetBlockState(ELog.CreateMap, 1, _blockSpriteList[random], random);
                 block.checkHp = block.CheckHpBlock();
                 block.SetHp(-1);
             }
             else
             {
                 var blockState = block.CheckSelectCatShop(info.blockState);
-                block.SetBlockState(ELog.CreateMap, 2, _blockSpriteList[(int)blockState], blockState);
+                block.SetBlockState(ELog.CreateMap, 2, _blockSpriteList[blockState], blockState);
                 block.checkHp = block.CheckHpBlock();
                 block.tutorialBlock = info.tutorialBlock;
                 block.SetHp(block.IsNormalBlock() ? -1 : info.hp);
@@ -421,13 +422,13 @@ public class GPGameScene : MonoBehaviour
                     {
                         var random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                         random = block.CheckSelectCatShop(random);
-                        block.SetBlockState(ELog.CreateMap, 3, _blockSpriteList[(int)random], random);
+                        block.SetBlockState(ELog.CreateMap, 3, _blockSpriteList[random], random);
                         block.SetHp(-1);
                     }
                     else
                     {
                         var blockState = block.CheckSelectCatShop(info.blockState);
-                        block.SetBlockState(ELog.CreateMap, 4, _blockSpriteList[(int)blockState], blockState);
+                        block.SetBlockState(ELog.CreateMap, 4, _blockSpriteList[blockState], blockState);
                         block.tutorialBlock = info.tutorialBlock;
                         block.SetHp(block.IsNormalBlock() ? -1 : info.hp);
                     }
@@ -444,7 +445,7 @@ public class GPGameScene : MonoBehaviour
                     {
                         var random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                         random = block.CheckSelectCatShop(random);
-                        block.SetBlockState(ELog.CreateMap, 5, _blockSpriteList[(int)random], random);
+                        block.SetBlockState(ELog.CreateMap, 5, _blockSpriteList[random], random);
                         block.SetHp(-1); block.ResetScore(); block.match = false; block.squareMatch = false;
                     }
                 }

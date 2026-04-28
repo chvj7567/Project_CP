@@ -10,12 +10,12 @@ public class GPBoard
     public Block[,] boardArr { get; private set; }
     public int boardSize { get; private set; }
 
-    List<Sprite> _blockSpriteList;
+    Dictionary<EBlockState, Sprite> _blockSpriteList;
     public float delay;
     public int delayMillisecond;
     CancellationToken _token;
 
-    public void Init(Block[,] arr, int size, List<Sprite> sprites, float delay, int delayMs, CancellationToken token)
+    public void Init(Block[,] arr, int size, Dictionary<EBlockState, Sprite> sprites, float delay, int delayMs, CancellationToken token)
     {
         boardArr = arr;
         boardSize = size;
@@ -68,7 +68,7 @@ public class GPBoard
     public void CreateNewBlock(Block block, ELog log, int key, EBlockState blockState, bool isDelay = true)
     {
         blockState = block.CheckSelectCatShop(blockState);
-        block.SetBlockState(log, key, _blockSpriteList[(int)blockState], blockState);
+        block.SetBlockState(log, key, _blockSpriteList[blockState], blockState);
         block.match = false;
         block.boom = false;
         block.squareMatch = false;

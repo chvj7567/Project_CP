@@ -526,9 +526,6 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.Cat5:
             case Defines.EBlockState.Cat6:
             case Defines.EBlockState.Cat7:
-            case Defines.EBlockState.Cat8:
-            case Defines.EBlockState.Cat9:
-            case Defines.EBlockState.Cat10:
             case Defines.EBlockState.CatHat1:
             case Defines.EBlockState.CatHat2:
             case Defines.EBlockState.CatHat3:
@@ -757,7 +754,6 @@ public class Block : MonoBehaviour
                     switch (upBlockState)
                     {
                         case Defines.EBlockState.Cat3:
-                        case Defines.EBlockState.Cat8:
                         case Defines.EBlockState.CatHat3:
                         case Defines.EBlockState.CatSkin3:
                         case Defines.EBlockState.Locker3:
@@ -772,7 +768,6 @@ public class Block : MonoBehaviour
                     switch (upBlockState)
                     {
                         case Defines.EBlockState.Cat4:
-                        case Defines.EBlockState.Cat9:
                         case Defines.EBlockState.CatHat4:
                         case Defines.EBlockState.CatSkin4:
                         case Defines.EBlockState.Locker4:
@@ -787,7 +782,6 @@ public class Block : MonoBehaviour
                     switch (upBlockState)
                     {
                         case Defines.EBlockState.Cat5:
-                        case Defines.EBlockState.Cat10:
                         case Defines.EBlockState.CatHat5:
                         case Defines.EBlockState.CatSkin5:
                         case Defines.EBlockState.Locker5:
