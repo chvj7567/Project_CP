@@ -15,12 +15,6 @@ public class UIBase : MonoBehaviour
 
     private void Awake()
     {
-        GameObject _canvas = GameObject.FindGameObjectWithTag("UICanvas");
-        if (_canvas)
-        {
-            transform.SetParent(_canvas.transform, false);
-        }
-
         if (backgroundBtn)
         {
             backgroundBtn.OnClickAsObservable().Subscribe(_ =>
