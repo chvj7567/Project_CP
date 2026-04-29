@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(xargs grep *)",
       "Bash(reg query *)",
@@ -14,7 +15,12 @@
       "Bash(git checkout *)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Skill(update-config)",
+      "Bash(\"D:/Project_CP/Assets/StreamingAssets/realvirtual-MCP/python/python.exe\" --version)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "UnityMCP"
+  ]
 }
