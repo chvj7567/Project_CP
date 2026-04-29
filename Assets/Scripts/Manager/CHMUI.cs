@@ -114,7 +114,7 @@ public class CHMUI
         {
             if (uiObj)
             {
-                uiObj.transform.SetParent(uiCanvas.transform);
+                uiObj.transform.SetParent(uiCanvas.transform, false);
                 if (false == activeUID.Contains(_uiWaitData.uid))
                 {
                     uiObj.SetActive(false);
