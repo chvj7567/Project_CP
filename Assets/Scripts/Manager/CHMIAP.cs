@@ -173,6 +173,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
     public UnityEngine.Purchasing.Product GetProduct(string productName)
     {
+        if (!IsInitialized) return null;
         return iStoreController.products.WithID(productName);
     }
 
@@ -200,7 +201,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         if (product == null)
             return false;
 
-        if (IsConsumableType(product.productID) == false)
+        if (IsConsumableType(product.productName) == false)
         {
             if (HadPurchased(product.productName))
             {
@@ -218,7 +219,7 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
         if (product == null)
             return false;
 
-        if (false == IsConsumableType(product.productID))
+        if (false == IsConsumableType(product.productName))
         {
             if (HadPurchased(product.productName))
             {

@@ -31,6 +31,11 @@ public class UIGameEnd : UIBase
         arg = _uiArg as UIGameEndArg;
     }
 
+    private void OnDestroy()
+    {
+        CHMAdmob.Instance.AcquireReward -= AcquireReward;
+    }
+
     private void Start()
     {
         if (arg.result == Defines.EGameState.GameOver)

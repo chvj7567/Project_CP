@@ -35,7 +35,7 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
 
         MobileAds.Initialize(initStatus => { });
 
-        adRequest = new AdRequest.Builder().Build();
+        adRequest = new AdRequest();
 
         LoadInterstitialAd();
         LoadRewardedAd();
@@ -151,19 +151,19 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
     {
         ad.OnAdImpressionRecorded += () =>
         {
-            Debug.Log("Interstitial ad recorded an impression.");
+            Debug.Log("Rewarded ad recorded an impression.");
         };
         ad.OnAdClicked += () =>
         {
-            Debug.Log("Interstitial ad was clicked.");
+            Debug.Log("Rewarded ad was clicked.");
         };
         ad.OnAdFullScreenContentOpened += () =>
         {
-            Debug.Log("Interstitial ad full screen content opened.");
+            Debug.Log("Rewarded ad full screen content opened.");
         };
         ad.OnAdFullScreenContentClosed += () =>
         {
-            Debug.Log("Interstitial ad full screen content closed.");
+            Debug.Log("Rewarded ad full screen content closed.");
 
             if (CloseAD != null)
             {
@@ -174,7 +174,7 @@ public class CHMAdmob : CHSingleton<CHMAdmob>
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
-            Debug.LogError("Interstitial ad failed to open full screen content " +
+            Debug.LogError("Rewarded ad failed to open full screen content " +
                            "with error : " + error);
         };
     }

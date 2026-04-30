@@ -15,14 +15,13 @@ using static Defines;
 
 public class CHMGPGS : CHSingleton<CHMGPGS>
 {
-    [SerializeField]
-    TMP_Text googleLog;
-
-    [SerializeField]
-    TMP_Text saveLog;
+    bool initialized = false;
 
     void Init()
     {
+        if (initialized) return;
+        initialized = true;
+
         PlayGamesPlatform.InitializeInstance(new PlayGamesClientConfiguration.Builder()
             .RequestIdToken()
             .RequestEmail()
@@ -53,6 +52,7 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
 
     public void SaveCloud(string fileName, string saveData, Action<bool> onCloudSaved = null)
     {
+        if (!Social.localUser.authenticated) { onCloudSaved?.Invoke(false); return; }
         PlayGamesPlatform.Instance.SavedGame.OpenWithAutomaticConflictResolution(fileName, DataSource.ReadCacheOrNetwork,
             ConflictResolutionStrategy.UseLastKnownGood, (status, game) =>
             {
@@ -74,6 +74,7 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
 
     public void LoadCloud(string fileName, Action<bool, string> onCloudLoaded = null)
     {
+        if (!Social.localUser.authenticated) { onCloudLoaded?.Invoke(false, null); return; }
         PlayGamesPlatform.Instance.SavedGame.OpenWithAutomaticConflictResolution(fileName, DataSource.ReadCacheOrNetwork,
             ConflictResolutionStrategy.UseLastKnownGood, (status, game) =>
             {
@@ -101,6 +102,7 @@ public class CHMGPGS : CHSingleton<CHMGPGS>
 
     public void DeleteCloud(string fileName, Action<bool> onCloudDeleted = null)
     {
+        if (!Social.localUser.authenticated) { onCloudDeleted?.Invoke(false); return; }
         PlayGamesPlatform.Instance.SavedGame.OpenWithAutomaticConflictResolution(fileName,
             DataSource.ReadCacheOrNetwork, ConflictResolutionStrategy.UseLongestPlaytime, (status, game) =>
             {
