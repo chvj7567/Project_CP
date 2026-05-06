@@ -22,7 +22,7 @@ public class UIGameEnd : UIBase
     [SerializeField] private CHTMPro goldx2Text;
     [SerializeField] private Button nextBtn;
     [SerializeField] private Button adBtn;
-    [SerializeField] private Button backBtn;
+    [SerializeField] private Button claimBtn;
 
     private bool received = false;
 
@@ -85,7 +85,7 @@ public class UIGameEnd : UIBase
 
         }).AddTo(this);
 
-        backBtn.OnClickAsObservable().Subscribe(_ =>
+        claimBtn.OnClickAsObservable().Subscribe(_ =>
         {
             if (received == true)
             {

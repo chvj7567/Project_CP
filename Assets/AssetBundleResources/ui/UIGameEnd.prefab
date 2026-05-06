@@ -487,13 +487,13 @@ MonoBehaviour:
   eUIType: 0
   uid: 0
   backgroundBtn: {fileID: 0}
-  backBtn: {fileID: 7673177068412121011}
+  backBtn: {fileID: 0}
   resultText: {fileID: 6541136462200984563}
   goldText: {fileID: 8205181815026363472}
   goldx2Text: {fileID: 7269658502877152957}
   nextBtn: {fileID: 8895993190645753078}
   adBtn: {fileID: 3132494329897276627}
-  backBtn: {fileID: 7673177068412121011}
+  claimBtn: {fileID: 7673177068412121011}
 --- !u!1 &3755172140362299380
 GameObject:
   m_ObjectHideFlags: 0
