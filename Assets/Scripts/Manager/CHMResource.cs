@@ -29,11 +29,11 @@ public class CHMResource
     {
         if (languageType == Defines.ELanguageType.Korea)
         {
-            LoadAsset<TMP_FontAsset>($"font", "NotoSansKR_SemiBold", _callback);
+            LoadAsset<TMP_FontAsset>($"font", "Gaegu-Bold SDF", _callback);
         }
         else if (languageType == Defines.ELanguageType.English)
         {
-            LoadAsset<TMP_FontAsset>($"font", "Habo", _callback);
+            LoadAsset<TMP_FontAsset>($"font", "Gaegu-Bold SDF", _callback);
         }
     }
 

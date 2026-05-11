@@ -40,13 +40,13 @@ public class UIGameEnd : UIBase
     {
         if (arg.result == Defines.EGameState.GameOver)
         {
-            resultText.DOText("Game Over", 1f);
+            resultText.DOText("Failed...", 1f);
             goldText.SetText(0);
             goldx2Text.SetText(0);
         }
         else if (arg.result == Defines.EGameState.GameClear)
         {
-            resultText.DOText("Game Clear", 1f);
+            resultText.DOText("CLEAR!", 1f);
 
             if (arg.clearState == Defines.EClearState.Clear)
             {

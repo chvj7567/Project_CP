@@ -1,0 +1,1333 @@
+{
+  "schema_version": "1.0.2",
+  "cached_at": "2026-05-07T13:17:41",
+  "tools": [
+    {
+      "name": "assetstore_validate",
+      "description": "Start Asset Store Publishing Tools validation on Unity packages. Returns immediately - poll assetstore_validate_status for results.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "paths": {
+            "type": "string",
+            "description": "Comma-separated validation paths (default: both starter and professional packages)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Validation type: 'generic' or 'unitypackage' (default: unitypackage)"
+          }
+        }
+      }
+    },
+    {
+      "name": "assetstore_validate_status",
+      "description": "Get Asset Store validation status. Returns results when validation is complete.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "component_get",
+      "description": "Get component properties",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject hierarchy path (e.g. 'Robot/Rotobpath/PickPos'). Use full path to disambiguate objects with the same name."
+          },
+          "componentType": {
+            "type": "string",
+            "description": "Component type (e.g. 'Drive')"
+          }
+        },
+        "required": [
+          "name",
+          "componentType"
+        ]
+      }
+    },
+    {
+      "name": "component_set",
+      "description": "Set component properties. Supports setting Unity Object references (Component, GameObject, Material) by passing the hierarchy path as a string value, e.g. {\"MyDrive\": \"Robot/Axis1\"}",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject hierarchy path (e.g. 'Robot/Rotobpath/PickPos'). Use full path to disambiguate objects with the same name."
+          },
+          "componentType": {
+            "type": "string",
+            "description": "Component type (e.g. 'Drive')"
+          },
+          "properties": {
+            "type": "string",
+            "description": "JSON with property values"
+          }
+        },
+        "required": [
+          "name",
+          "componentType",
+          "properties"
+        ]
+      }
+    },
+    {
+      "name": "component_get_all",
+      "description": "Get all components on GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject hierarchy path (e.g. 'Robot/Rotobpath/PickPos'). Use full path to disambiguate objects with the same name."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "component_set_all",
+      "description": "Set properties on multiple components",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject hierarchy path (e.g. 'Robot/Rotobpath/PickPos'). Use full path to disambiguate objects with the same name."
+          },
+          "properties": {
+            "type": "string",
+            "description": "JSON keyed by component type"
+          }
+        },
+        "required": [
+          "name",
+          "properties"
+        ]
+      }
+    },
+    {
+      "name": "component_add",
+      "description": "Add component to GameObject by type name",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject hierarchy path (e.g. 'Robot/Rotobpath/PickPos'). Use full path to disambiguate objects with the same name."
+          },
+          "componentType": {
+            "type": "string",
+            "description": "Component type name (e.g. 'AudioSource', 'Light', 'Drive')"
+          }
+        },
+        "required": [
+          "name",
+          "componentType"
+        ]
+      }
+    },
+    {
+      "name": "component_invoke",
+      "description": "Invoke a public method on a component (e.g. click an inspector button)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject hierarchy path (e.g. 'ctrlXInterface')"
+          },
+          "componentType": {
+            "type": "string",
+            "description": "Component type (e.g. 'CtrlXInterface')"
+          },
+          "methodName": {
+            "type": "string",
+            "description": "Method name to invoke (e.g. 'RefreshStatus')"
+          }
+        },
+        "required": [
+          "name",
+          "componentType",
+          "methodName"
+        ]
+      }
+    },
+    {
+      "name": "component_remove",
+      "description": "Remove component from GameObject by type name",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject hierarchy path (e.g. 'Robot/Rotobpath/PickPos'). Use full path to disambiguate objects with the same name."
+          },
+          "componentType": {
+            "type": "string",
+            "description": "Component type name (e.g. 'AudioSource', 'Light')"
+          }
+        },
+        "required": [
+          "name",
+          "componentType"
+        ]
+      }
+    },
+    {
+      "name": "game_object_create",
+      "description": "Create a new empty GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name for the new GameObject"
+          },
+          "parent": {
+            "type": "string",
+            "description": "Parent name or path (optional)"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "game_object_create_primitive",
+      "description": "Create a primitive GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Primitive type: Cube, Sphere, Plane, Cylinder, Capsule"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for the primitive (optional)"
+          },
+          "parent": {
+            "type": "string",
+            "description": "Parent name or path (optional)"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
+      "name": "game_object_destroy",
+      "description": "Destroy a GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "game_object_duplicate",
+      "description": "Duplicate a GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "newName": {
+            "type": "string",
+            "description": "Name for the duplicate (optional)"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "game_object_rename",
+      "description": "Rename a GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "newName": {
+            "type": "string",
+            "description": "New name"
+          }
+        },
+        "required": [
+          "name",
+          "newName"
+        ]
+      }
+    },
+    {
+      "name": "game_object_set_active",
+      "description": "Set GameObject active/inactive",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Active state"
+          }
+        },
+        "required": [
+          "name",
+          "active"
+        ]
+      }
+    },
+    {
+      "name": "game_object_get_info",
+      "description": "Get GameObject info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "game_object_set_layer",
+      "description": "Set GameObject layer by name",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "layer": {
+            "type": "string",
+            "description": "Layer name (e.g. 'Default', 'UI', 'Ignore Raycast')"
+          }
+        },
+        "required": [
+          "name",
+          "layer"
+        ]
+      }
+    },
+    {
+      "name": "game_object_set_tag",
+      "description": "Set GameObject tag",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "tag": {
+            "type": "string",
+            "description": "Tag name (e.g. 'Player', 'MainCamera', 'Untagged')"
+          }
+        },
+        "required": [
+          "name",
+          "tag"
+        ]
+      }
+    },
+    {
+      "name": "material_set_color",
+      "description": "Set material color",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "r": {
+            "type": "number",
+            "description": "Red (0-1)"
+          },
+          "g": {
+            "type": "number",
+            "description": "Green (0-1)"
+          },
+          "b": {
+            "type": "number",
+            "description": "Blue (0-1)"
+          },
+          "a": {
+            "type": "number",
+            "description": "Alpha (0-1, default 1)"
+          },
+          "property": {
+            "type": "string",
+            "description": "Color property name (default '_Color')"
+          }
+        },
+        "required": [
+          "name",
+          "r",
+          "g",
+          "b"
+        ]
+      }
+    },
+    {
+      "name": "material_get_color",
+      "description": "Get material color",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "property": {
+            "type": "string",
+            "description": "Color property name (default '_Color')"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "renderer_set_enabled",
+      "description": "Set renderer enabled/disabled",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enabled state"
+          }
+        },
+        "required": [
+          "name",
+          "enabled"
+        ]
+      }
+    },
+    {
+      "name": "physics_add_rigidbody",
+      "description": "Add Rigidbody to GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "mass": {
+            "type": "number",
+            "description": "Mass (default 1)"
+          },
+          "useGravity": {
+            "type": "boolean",
+            "description": "Use gravity (default true)"
+          },
+          "isKinematic": {
+            "type": "boolean",
+            "description": "Is kinematic (default false)"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "physics_add_collider",
+      "description": "Add Collider to GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "type": {
+            "type": "string",
+            "description": "Collider type: Box, Sphere, Capsule, Mesh"
+          },
+          "isTrigger": {
+            "type": "boolean",
+            "description": "Is trigger (default false)"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ]
+      }
+    },
+    {
+      "name": "physics_remove_rigidbody",
+      "description": "Remove Rigidbody from GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "physics_remove_colliders",
+      "description": "Remove all Colliders from GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "prefab_instantiate",
+      "description": "Instantiate a prefab",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "assetPath": {
+            "type": "string",
+            "description": "Prefab asset path (edit: 'Assets/...prefab', play: Resources-relative path)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for instance (optional)"
+          },
+          "parent": {
+            "type": "string",
+            "description": "Parent name or path (optional)"
+          }
+        },
+        "required": [
+          "assetPath"
+        ]
+      }
+    },
+    {
+      "name": "prefab_find",
+      "description": "Find prefabs by name",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "searchTerm": {
+            "type": "string",
+            "description": "Search term for prefab name"
+          }
+        },
+        "required": [
+          "searchTerm"
+        ]
+      }
+    },
+    {
+      "name": "scene_hierarchy",
+      "description": "Get scene hierarchy",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "depth": {
+            "type": "integer",
+            "description": "Max depth to traverse (default 3)"
+          },
+          "root": {
+            "type": "string",
+            "description": "Root GameObject name/path to start from (optional, empty=full scene)"
+          }
+        }
+      }
+    },
+    {
+      "name": "scene_find",
+      "description": "Find GameObjects by name",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "searchTerm": {
+            "type": "string",
+            "description": "Search term"
+          }
+        },
+        "required": [
+          "searchTerm"
+        ]
+      }
+    },
+    {
+      "name": "scene_get_transform",
+      "description": "Get GameObject transform",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "scene_get_components",
+      "description": "Get GameObject components",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "scene_get_info",
+      "description": "Get active scene info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "scene_new",
+      "description": "Create new empty scene",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Save path (e.g. Assets/Scenes/MyScene.unity)"
+          }
+        }
+      }
+    },
+    {
+      "name": "scene_list",
+      "description": "List all scene files in project",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "folder": {
+            "type": "string",
+            "description": "Optional folder filter (e.g. Assets/Scenes)"
+          }
+        }
+      }
+    },
+    {
+      "name": "sim_play",
+      "description": "Start simulation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "sim_pause",
+      "description": "Pause simulation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "sim_stop",
+      "description": "Stop simulation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "sim_resume",
+      "description": "Resume simulation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "sim_set_speed",
+      "description": "Set simulation speed",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "speed": {
+            "type": "number",
+            "description": "Speed multiplier (1.0 = normal)"
+          }
+        },
+        "required": [
+          "speed"
+        ]
+      }
+    },
+    {
+      "name": "sim_status",
+      "description": "Get simulation status",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "sim_reset",
+      "description": "Reset simulation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "transform_set_position",
+      "description": "Set GameObject position",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "x": {
+            "type": "number",
+            "description": "X position"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y position"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z position"
+          },
+          "space": {
+            "type": "string",
+            "description": "Coordinate space: local or world (default: local)"
+          }
+        },
+        "required": [
+          "name",
+          "x",
+          "y",
+          "z"
+        ]
+      }
+    },
+    {
+      "name": "transform_set_rotation",
+      "description": "Set GameObject rotation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "x": {
+            "type": "number",
+            "description": "X rotation (degrees)"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y rotation (degrees)"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z rotation (degrees)"
+          },
+          "space": {
+            "type": "string",
+            "description": "Coordinate space: local or world (default: local)"
+          }
+        },
+        "required": [
+          "name",
+          "x",
+          "y",
+          "z"
+        ]
+      }
+    },
+    {
+      "name": "transform_set_scale",
+      "description": "Set GameObject scale",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "x": {
+            "type": "number",
+            "description": "X scale"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y scale"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z scale"
+          }
+        },
+        "required": [
+          "name",
+          "x",
+          "y",
+          "z"
+        ]
+      }
+    },
+    {
+      "name": "transform_set_parent",
+      "description": "Set GameObject parent",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "parent": {
+            "type": "string",
+            "description": "Parent name or path (empty = root)"
+          }
+        },
+        "required": [
+          "name",
+          "parent"
+        ]
+      }
+    },
+    {
+      "name": "transform_translate",
+      "description": "Translate a GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "x": {
+            "type": "number",
+            "description": "X offset"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y offset"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z offset"
+          },
+          "space": {
+            "type": "string",
+            "description": "Coordinate space: local or world (default: local)"
+          }
+        },
+        "required": [
+          "name",
+          "x",
+          "y",
+          "z"
+        ]
+      }
+    },
+    {
+      "name": "transform_set_sibling_index",
+      "description": "Set GameObject sibling index (hierarchy order among siblings)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "index": {
+            "type": "integer",
+            "description": "Sibling index (0 = first child). Use -1 for last."
+          }
+        },
+        "required": [
+          "name",
+          "index"
+        ]
+      }
+    },
+    {
+      "name": "transform_measure_distance",
+      "description": "Measure distance between two GameObjects. Returns distance in meters and millimeters, plus the direction vector.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "objectA": {
+            "type": "string",
+            "description": "First GameObject name or path"
+          },
+          "objectB": {
+            "type": "string",
+            "description": "Second GameObject name or path"
+          }
+        },
+        "required": [
+          "objectA",
+          "objectB"
+        ]
+      }
+    },
+    {
+      "name": "transform_look_at",
+      "description": "Make GameObject look at target",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "targetName": {
+            "type": "string",
+            "description": "Target GameObject name or path"
+          }
+        },
+        "required": [
+          "name",
+          "targetName"
+        ]
+      }
+    },
+    {
+      "name": "transform_get_bounds",
+      "description": "Get GameObject bounding box from renderers. Returns world-space AABB center, size, min, max in meters and millimeters.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          },
+          "includeChildren": {
+            "type": "boolean",
+            "description": "Include child renderers (default: true)"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "transform_measure_surface_distance",
+      "description": "Measure surface-to-surface distance between two GameObjects using bounding boxes. Returns gap or overlap per axis.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "objectA": {
+            "type": "string",
+            "description": "First GameObject name or path"
+          },
+          "objectB": {
+            "type": "string",
+            "description": "Second GameObject name or path"
+          }
+        },
+        "required": [
+          "objectA",
+          "objectB"
+        ]
+      }
+    },
+    {
+      "name": "editor_save_scene",
+      "description": "Save current scene",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Optional: asset path to save as (e.g. 'Assets/Scenes/MyScene.unity'). If empty, saves to current path."
+          }
+        }
+      }
+    },
+    {
+      "name": "editor_undo",
+      "description": "Undo last operation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "editor_select",
+      "description": "Select GameObject in hierarchy",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "editor_open_scene",
+      "description": "Open scene by path",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Scene asset path (e.g. Assets/Scenes/MyScene.unity)"
+          },
+          "save": {
+            "type": "boolean",
+            "description": "Save current scene before opening"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "name": "editor_focus",
+      "description": "Focus camera on GameObject",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "GameObject name or path"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "editor_execute_menu",
+      "description": "Execute Unity Editor menu item by path",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "menuPath": {
+            "type": "string",
+            "description": "Menu item path (e.g. 'Window/General/Console')"
+          }
+        },
+        "required": [
+          "menuPath"
+        ]
+      }
+    },
+    {
+      "name": "editor_invoke_method",
+      "description": "Invoke a static method by class and method name",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "className": {
+            "type": "string",
+            "description": "Fully qualified class name (e.g. 'realvirtual.ProjectBuilder')"
+          },
+          "methodName": {
+            "type": "string",
+            "description": "Static method name (e.g. 'RunTests')"
+          }
+        },
+        "required": [
+          "className",
+          "methodName"
+        ]
+      }
+    },
+    {
+      "name": "editor_get_camera",
+      "description": "Get scene camera view",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "editor_set_camera",
+      "description": "Set scene camera view",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pivotX": {
+            "type": "number",
+            "description": "Pivot X position"
+          },
+          "pivotY": {
+            "type": "number",
+            "description": "Pivot Y position"
+          },
+          "pivotZ": {
+            "type": "number",
+            "description": "Pivot Z position"
+          },
+          "rotationX": {
+            "type": "number",
+            "description": "Rotation X (pitch in degrees)"
+          },
+          "rotationY": {
+            "type": "number",
+            "description": "Rotation Y (yaw in degrees)"
+          },
+          "rotationZ": {
+            "type": "number",
+            "description": "Rotation Z (roll in degrees)"
+          },
+          "size": {
+            "type": "number",
+            "description": "Camera zoom size"
+          },
+          "orthographic": {
+            "type": "boolean",
+            "description": "Orthographic view"
+          }
+        }
+      }
+    },
+    {
+      "name": "editor_read_log",
+      "description": "Read console log",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Max entries to return"
+          },
+          "filter": {
+            "type": "string",
+            "description": "Filter: all, error, warning, log"
+          }
+        }
+      }
+    },
+    {
+      "name": "editor_write_log",
+      "description": "Write to console log",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message to write"
+          },
+          "type": {
+            "type": "string",
+            "description": "Log type: log, warning, error"
+          }
+        }
+      }
+    },
+    {
+      "name": "editor_clear_log",
+      "description": "Clear console log",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "editor_recompile",
+      "description": "Recompile scripts",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "editor_refresh_assets",
+      "description": "Refresh assets",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "editor_get_status",
+      "description": "Get editor status",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "prefab_open",
+      "description": "Open prefab for editing",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Prefab asset path (e.g. Packages/io.realvirtual.starter/Tests/MyPrefab.prefab)"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "name": "prefab_stage",
+      "description": "Get current prefab stage info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "prefab_save",
+      "description": "Save current prefab",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "prefab_close",
+      "description": "Close prefab editor",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "save": {
+            "type": "boolean",
+            "description": "Save before closing"
+          }
+        }
+      }
+    },
+    {
+      "name": "screenshot_editor",
+      "description": "Capture Unity Editor window screenshot",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "save_path": {
+            "type": "string",
+            "description": "Optional file path to save the screenshot"
+          },
+          "panel": {
+            "type": "string",
+            "description": "Panel to capture: all, inspector, scene, game, console, hierarchy, project (default: all)"
+          }
+        }
+      }
+    },
+    {
+      "name": "screenshot_game",
+      "description": "Capture game view screenshot from camera",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "description": "Width in pixels"
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height in pixels"
+          },
+          "camera_name": {
+            "type": "string",
+            "description": "Camera name (empty = Main Camera)"
+          },
+          "format": {
+            "type": "string",
+            "description": "Image format: png or jpg"
+          },
+          "quality": {
+            "type": "integer",
+            "description": "JPG quality 1-100"
+          }
+        }
+      }
+    },
+    {
+      "name": "screenshot_scene",
+      "description": "Capture scene view screenshot",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "description": "Width in pixels"
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height in pixels"
+          },
+          "format": {
+            "type": "string",
+            "description": "Image format: png or jpg"
+          },
+          "quality": {
+            "type": "integer",
+            "description": "JPG quality 1-100"
+          }
+        }
+      }
+    }
+  ]
+}
