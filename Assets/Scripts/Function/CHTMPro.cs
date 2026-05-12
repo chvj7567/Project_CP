@@ -18,11 +18,11 @@ public class CHTMPro : MonoBehaviour
         {
             if (stringID != -1)
             {
-                text.text = CHMMain.String.GetString(stringID);
+                text.text = CHMString.Instance.GetString(stringID);
 
-                var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
 
-                CHMMain.Resource.LoadFont(loginData.languageType, (font) =>
+                CHMResource.Instance.LoadFont(loginData.languageType, (font) =>
                 {
                     text.font = font;
                 });
@@ -35,12 +35,12 @@ public class CHTMPro : MonoBehaviour
         this.argArr = _arrArg;
         if (text)
         {
-            text.text = string.Format(CHMMain.String.GetString(stringID), _arrArg);
+            text.text = string.Format(CHMString.Instance.GetString(stringID), _arrArg);
 
             if (int.TryParse(text.text, out var intValue))
             {
                 // 숫자일 경우 영어 폰트로
-                CHMMain.Resource.LoadFont(Defines.ELanguageType.English, (font) =>
+                CHMResource.Instance.LoadFont(Defines.ELanguageType.English, (font) =>
                 {
                     text.font = font;
                 });
@@ -62,7 +62,7 @@ public class CHTMPro : MonoBehaviour
         stringID = _stringID;
         if (text)
         {
-            text.text = CHMMain.String.GetString(stringID);
+            text.text = CHMString.Instance.GetString(stringID);
         }
     }
 

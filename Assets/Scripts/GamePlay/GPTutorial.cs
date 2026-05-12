@@ -42,7 +42,7 @@ public class GPTutorial
     public async Task StartGuide(ESelectStage selectStage, Data.Login loginData)
     {
         if (selectStage == ESelectStage.Normal &&
-            loginData.guideIndex == (int)CHMMain.Json.GetConstValueInfo(EConstValue.NormalStageGuideMaxIndex))
+            loginData.guideIndex == (int)CHMJson.Instance.GetConstValueInfo(EConstValue.NormalStageGuideMaxIndex))
         {
             Time.timeScale = 0;
             _guideBackground.SetActive(true);
@@ -55,11 +55,11 @@ public class GPTutorial
             _guideBackground.SetActive(false);
             _guideBackgroundBtn.gameObject.SetActive(false);
             Time.timeScale = 1;
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
         }
 
         if (selectStage == ESelectStage.Boss &&
-            loginData.guideIndex == (int)CHMMain.Json.GetConstValueInfo(EConstValue.BossStageGuideMaxIndex))
+            loginData.guideIndex == (int)CHMJson.Instance.GetConstValueInfo(EConstValue.BossStageGuideMaxIndex))
         {
             Time.timeScale = 0;
             _guideBackground.SetActive(true);
@@ -72,7 +72,7 @@ public class GPTutorial
             _guideBackground.SetActive(false);
             _guideBackgroundBtn.gameObject.SetActive(false);
             Time.timeScale = 1;
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
         }
     }
 
@@ -93,7 +93,7 @@ public class GPTutorial
         _guideHole.sizeDelta = holeValue.Item1;
         _guideHole.anchoredPosition = holeValue.Item2;
 
-        var tutorialInfo = CHMMain.Json.GetTutorialInfo(stageInfo.tutorialID);
+        var tutorialInfo = CHMJson.Instance.GetTutorialInfo(stageInfo.tutorialID);
         if (tutorialInfo != null)
             _guideDesc.SetStringID(tutorialInfo.descStringID);
     }
@@ -133,7 +133,7 @@ public class GPTutorial
         _guideBackground.SetActive(true);
         for (int i = 0; i < _normalGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMMain.Json.GetGuideInfo(i + 1 + (int)CHMMain.Json.GetConstValueInfo(EConstValue.NormalStageGuideMaxIndex));
+            var guideInfo = CHMJson.Instance.GetGuideInfo(i + 1 + (int)CHMJson.Instance.GetConstValueInfo(EConstValue.NormalStageGuideMaxIndex));
             if (guideInfo == null) break;
             _normalGuideHoleList[i].gameObject.SetActive(true);
             _guideDesc.SetStringID(guideInfo.descStringID);
@@ -152,7 +152,7 @@ public class GPTutorial
         _guideBackground.SetActive(true);
         for (int i = 0; i < _bossGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMMain.Json.GetGuideInfo(i + 1 + (int)CHMMain.Json.GetConstValueInfo(EConstValue.BossStageGuideMaxIndex));
+            var guideInfo = CHMJson.Instance.GetGuideInfo(i + 1 + (int)CHMJson.Instance.GetConstValueInfo(EConstValue.BossStageGuideMaxIndex));
             if (guideInfo == null) break;
             _bossGuideHoleList[i].gameObject.SetActive(true);
             _guideDesc.SetStringID(guideInfo.descStringID);

@@ -47,7 +47,7 @@ public class ShopScrollViewItem : MonoBehaviour
 
             if (CanBuy() == false)
             {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
                     stringID = 60
                 });
@@ -57,7 +57,7 @@ public class ShopScrollViewItem : MonoBehaviour
 
             if (collectionData.value < info.gold)
             {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
                     stringID = 61
                 });
@@ -72,16 +72,16 @@ public class ShopScrollViewItem : MonoBehaviour
 
                 if (info.skinIndex > 0)
                 {
-                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                    var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                     loginData.selectCatShop = info.skinIndex;
                 }
 
                 BuyGoods(info.shopID);
 
-                CHMData.Instance.SaveData(CHMMain.String.CatPang);
-                CHMMain.UI.CloseUI(Defines.EUI.UIShop);
+                CHMData.Instance.SaveData(CHMString.Instance.CatPang);
+                CHMUI.Instance.CloseUI(Defines.EUI.UIShop);
                 
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
                     stringID = 62
                 });
@@ -102,7 +102,7 @@ public class ShopScrollViewItem : MonoBehaviour
     {
         this.info = info;
 
-        collectionData = CHMData.Instance.GetCollectionData(CHMMain.String.Gold);
+        collectionData = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold);
         shopData = CHMData.Instance.GetShopData(info.shopID.ToString());
 
         descText.SetStringID(info.descStringID);
@@ -174,13 +174,13 @@ public class ShopScrollViewItem : MonoBehaviour
         {
             case 7:
                 {
-                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                    var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                     loginData.hp += 10;
                 }
                 break;
             case 8:
                 {
-                    var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                    var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                     loginData.attack += 1;
                 }
                 break;

@@ -48,10 +48,10 @@ public class UISetting : UIBase
 
         koreanBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             loginData.languageType = Defines.ELanguageType.Korea;
 
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
             Debug.Log(loginData.languageType);
 
@@ -60,42 +60,42 @@ public class UISetting : UIBase
 
         englishBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             loginData.languageType = Defines.ELanguageType.English;
 
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
             Debug.Log(loginData.languageType);
 
             SceneManager.LoadScene(1);
         });
 
-        bgmSlider.value = CHMMain.Sound.bgmVolume;
-        effectSlider.value = CHMMain.Sound.effectVolume;
+        bgmSlider.value = CHMSound.Instance.bgmVolume;
+        effectSlider.value = CHMSound.Instance.effectVolume;
 
         bgmSlider.OnValueChangedAsObservable().Subscribe(_ =>
         {
-            CHMMain.Sound.SetBGMVolume(_);
+            CHMSound.Instance.SetBGMVolume(_);
         });
 
         effectSlider.OnValueChangedAsObservable().Subscribe(_ =>
         {
-            CHMMain.Sound.SetEffectVolume(_);
+            CHMSound.Instance.SetEffectVolume(_);
         });
 
         guideInitBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             loginData.guideIndex = 0;
 
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
             SceneManager.LoadScene(1);
         });
 
         deleteBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMMain.UI.ShowUI(Defines.EUI.UIDataDelete, new UIDataDeleteArg());
+            CHMUI.Instance.ShowUI(Defines.EUI.UIDataDelete, new UIDataDeleteArg());
         });
 
         redSlider.OnValueChangedAsObservable().Subscribe(_ =>
@@ -118,18 +118,18 @@ public class UISetting : UIBase
             blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
         });
 
-        redSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Red);
-        greenSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Green);
-        blueSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Blue);
-        alphaSlider.value = PlayerPrefs.GetFloat(CHMMain.String.Alpha);
+        redSlider.value = PlayerPrefs.GetFloat(CHMString.Instance.Red);
+        greenSlider.value = PlayerPrefs.GetFloat(CHMString.Instance.Green);
+        blueSlider.value = PlayerPrefs.GetFloat(CHMString.Instance.Blue);
+        alphaSlider.value = PlayerPrefs.GetFloat(CHMString.Instance.Alpha);
         blockBackground.color = new Color(redSlider.value, greenSlider.value, blueSlider.value, alphaSlider.value);
     }
 
     void SaveSetting()
     {
-        PlayerPrefs.SetFloat(CHMMain.String.Red, redSlider.value);
-        PlayerPrefs.SetFloat(CHMMain.String.Green, greenSlider.value);
-        PlayerPrefs.SetFloat(CHMMain.String.Blue, blueSlider.value);
-        PlayerPrefs.SetFloat(CHMMain.String.Alpha, alphaSlider.value);
+        PlayerPrefs.SetFloat(CHMString.Instance.Red, redSlider.value);
+        PlayerPrefs.SetFloat(CHMString.Instance.Green, greenSlider.value);
+        PlayerPrefs.SetFloat(CHMString.Instance.Blue, blueSlider.value);
+        PlayerPrefs.SetFloat(CHMString.Instance.Alpha, alphaSlider.value);
     }
 }

@@ -22,7 +22,7 @@ public class CHToggle : MonoBehaviour
             }
             else
             {
-                CHMMain.Sound.Play(Defines.ESound.Cat);
+                CHMSound.Instance.Play(Defines.ESound.Cat);
             }
         });
     }

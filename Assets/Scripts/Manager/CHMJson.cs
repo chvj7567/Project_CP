@@ -106,7 +106,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
         Action<TextAsset> callback;
         stringKoreaInfoDic.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.StringKorea, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.StringKorea, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>("{\"stringKoreaInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.stringKoreaInfoArr)
@@ -128,7 +128,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
         Action<TextAsset> callback;
         stringEnglishInfoDic.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.StringEnglish, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.StringEnglish, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>("{\"stringEnglishInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.stringEnglishInfoArr)
@@ -151,7 +151,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         stageInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
             foreach (var data in jsonData.stageInfoArr)
@@ -174,7 +174,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         stageBlockInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.StageBlock, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.StageBlock, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageBlockInfoArr\":" + textAsset.text + "}"));
             foreach (var data in jsonData.stageBlockInfoArr)
@@ -197,7 +197,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         missionInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Mission, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.Mission, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"missionInfoArr\":" + textAsset.text + "}"));
             foreach (var data in jsonData.missionInfoArr)
@@ -220,7 +220,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         shopInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Shop, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.Shop, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"shopInfoArr\":" + textAsset.text + "}"));
             foreach (var data in jsonData.shopInfoArr)
@@ -243,7 +243,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         guideInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Guide, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.Guide, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"guideInfoArr\":" + textAsset.text + "}"));
             foreach (var data in jsonData.guideInfoArr)
@@ -266,7 +266,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         tutorialInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.Tutorial, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.Tutorial, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"tutorialInfoArr\":" + textAsset.text + "}"));
             foreach (var data in jsonData.tutorialInfoArr)
@@ -289,7 +289,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         constValueInfoList.Clear();
 
-        CHMMain.Resource.LoadJson(Defines.EJsonType.ConstValue, callback = (TextAsset textAsset) =>
+        CHMResource.Instance.LoadJson(Defines.EJsonType.ConstValue, callback = (TextAsset textAsset) =>
         {
             var jsonData = JsonUtility.FromJson<JsonData>(("{\"constValueInfoArr\":" + textAsset.text + "}"));
             foreach (var data in jsonData.constValueInfoArr)

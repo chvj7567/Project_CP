@@ -24,9 +24,9 @@ public class UIDataDelete : UIBase
     {
         yesBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMData.Instance.DeleteData(CHMMain.String.CatPang, (ret) =>
+            CHMData.Instance.DeleteData(CHMString.Instance.CatPang, (ret) =>
             {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
                     stringID = 126
                 });
@@ -41,7 +41,7 @@ public class UIDataDelete : UIBase
 
         noBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMMain.UI.CloseUI(gameObject);
+            CHMUI.Instance.CloseUI(gameObject);
         });
     }
 }

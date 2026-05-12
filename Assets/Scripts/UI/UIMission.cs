@@ -32,18 +32,18 @@ public class UIMission : UIBase
         {
             curTapIndex = 1;
             curTapText.SetStringID(121);
-            scrollView.SetItemList(CHMMain.Json.GetMissionInfoList(curTapIndex));
+            scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
         });
 
         specialTapBtn.OnClickAsObservable().Subscribe(_ =>
         {
             curTapIndex = 2;
             curTapText.SetStringID(122);
-            scrollView.SetItemList(CHMMain.Json.GetMissionInfoList(curTapIndex));
+            scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
         });
 
         curTapIndex = 1;
         curTapText.SetStringID(121);
-        scrollView.SetItemList(CHMMain.Json.GetMissionInfoList(curTapIndex));
+        scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
     }
 }

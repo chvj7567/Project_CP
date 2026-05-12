@@ -51,7 +51,7 @@ public class UIAlarm : UIBase
 
         if (gameObject != null)
         {
-            CHMMain.UI.CloseUI(gameObject);
+            CHMUI.Instance.CloseUI(gameObject);
         }
     }
 

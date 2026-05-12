@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CHMSound
+public class CHMSound : ChvjUnityInfra.CHSingletonStatic<CHMSound>
 {
     public float bgmVolume { get { return ChvjUnityInfra.CHMSound.Instance.BgmVolume; } }
     public float effectVolume { get { return ChvjUnityInfra.CHMSound.Instance.EffectVolume; } }

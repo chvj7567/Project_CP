@@ -70,15 +70,15 @@ public class UIGameEnd : UIBase
         nextBtn.OnClickAsObservable().Subscribe(_ =>
         {
             int currentStage = 0;
-            Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+            Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
             switch (selectStage)
             {
-                case ESelectStage.Hard: currentStage = PlayerPrefs.GetInt(CHMMain.String.HardStage); break;
-                case ESelectStage.Boss: currentStage = PlayerPrefs.GetInt(CHMMain.String.BossStage); break;
-                case ESelectStage.Normal: currentStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage); break;
+                case ESelectStage.Hard: currentStage = PlayerPrefs.GetInt(CHMString.Instance.HardStage); break;
+                case ESelectStage.Boss: currentStage = PlayerPrefs.GetInt(CHMString.Instance.BossStage); break;
+                case ESelectStage.Normal: currentStage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage); break;
             }
 
-            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+            CHMUI.Instance.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
             {
                 stage = currentStage + 1
             });
@@ -91,37 +91,37 @@ public class UIGameEnd : UIBase
             {
                 Time.timeScale = 1;
                 CHInstantiateButton.ResetBlockDict();
-                CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
-                CHMMain.Pool.Clear();
+                CHMUI.Instance.CloseUI(Defines.EUI.UIAlarm);
+                CHMPool.Instance.Clear();
 
                 SceneManager.LoadScene(1);
                 return;
             }
 
-            var before = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
-            var after = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += arg.gold;
+            var before = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
+            var after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold;
 
             received = true;
 
             Debug.Log($"Gold {before} => {after}");
 
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+            CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
                 stringID = 63
             });
 
             Time.timeScale = 1;
             CHInstantiateButton.ResetBlockDict();
-            CHMMain.UI.CloseUI(Defines.EUI.UIAlarm);
-            CHMMain.Pool.Clear();
+            CHMUI.Instance.CloseUI(Defines.EUI.UIAlarm);
+            CHMPool.Instance.Clear();
 
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
             SceneManager.LoadScene(1);
         }).AddTo(this);
 
         adBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (CHMIAP.Instance.CanBuyFromID(CHMMain.String.Product_ID_RemoveAD) == false)
+            if (CHMIAP.Instance.CanBuyFromID(CHMString.Instance.Product_ID_RemoveAD) == false)
             {
                 AcquireReward();
             }
@@ -136,7 +136,7 @@ public class UIGameEnd : UIBase
     {
         if (received == true)
         {
-            CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+            CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
             {
                 stringID = 64
             });
@@ -144,14 +144,14 @@ public class UIGameEnd : UIBase
             return;
         }
 
-        var before = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
-        var after = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += arg.gold * 3;
+        var before = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
+        var after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold * 3;
 
         received = true;
 
         Debug.Log($"Gold {before} => {after}");
 
-        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+        CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
         {
             stringID = 63
         });

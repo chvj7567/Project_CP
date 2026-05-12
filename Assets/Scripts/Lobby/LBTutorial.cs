@@ -26,7 +26,7 @@ public class LBTutorial
         _guideBackground.SetActive(true);
         for (int i = 0; i < _guideHoleList.Count; ++i)
         {
-            var info = CHMMain.Json.GetGuideInfo(i + 1);
+            var info = CHMJson.Instance.GetGuideInfo(i + 1);
             if (info == null) break;
             _guideHoleList[i].gameObject.SetActive(true);
             _guideDesc.SetStringID(info.descStringID);

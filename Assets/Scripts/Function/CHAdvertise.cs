@@ -9,25 +9,25 @@ public class CHAdvertise : MonoBehaviour
     public bool GetAdvertise()
     {
         var lastPlayStage = 0;
-        var selectStage = PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+        var selectStage = PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
         if (selectStage == (int)Defines.ESelectStage.Boss)
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
+            lastPlayStage = PlayerPrefs.GetInt(CHMString.Instance.BossStage) - CHMData.Instance.BossStageStartValue;
         }
         else if (selectStage == (int)Defines.ESelectStage.Hard)
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
+            lastPlayStage = PlayerPrefs.GetInt(CHMString.Instance.HardStage);
         }
         else if (selectStage == (int)Defines.ESelectStage.Normal)
         {
-            lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
+            lastPlayStage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage);
         }
 
         var checkAdStage = lastPlayStage % 10;
         if (adStageList.Contains(checkAdStage) == false)
             return false;
 
-        if (CHMIAP.Instance.CanBuyFromID(CHMMain.String.Product_ID_RemoveAD) == false)
+        if (CHMIAP.Instance.CanBuyFromID(CHMString.Instance.Product_ID_RemoveAD) == false)
             return false;
 
         CHMAdmob.Instance.ShowInterstitialAd();

@@ -46,22 +46,22 @@ public class CHMIAP : CHSingleton<CHMIAP>, IStoreListener
 
         productList.Add(new IAPInfo
         {
-            productName = CHMMain.String.Product_Name_RemoveAD,
-            productID = CHMMain.String.Product_ID_RemoveAD,
+            productName = CHMString.Instance.Product_Name_RemoveAD,
+            productID = CHMString.Instance.Product_ID_RemoveAD,
             productType = ProductType.NonConsumable
         });
 
         productList.Add(new IAPInfo
         {
-            productName = CHMMain.String.Product_Name_AddTime,
-            productID = CHMMain.String.Product_ID_AddTime,
+            productName = CHMString.Instance.Product_Name_AddTime,
+            productID = CHMString.Instance.Product_ID_AddTime,
             productType = ProductType.Consumable
         });
 
         productList.Add(new IAPInfo
         {
-            productName = CHMMain.String.Product_Name_AddMove,
-            productID = CHMMain.String.Product_ID_AddMove,
+            productName = CHMString.Instance.Product_Name_AddMove,
+            productID = CHMString.Instance.Product_ID_AddMove,
             productType = ProductType.Consumable
         });
 

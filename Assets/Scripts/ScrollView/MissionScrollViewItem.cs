@@ -26,8 +26,8 @@ public class MissionScrollViewItem : MonoBehaviour
             {
                 case Defines.EReward.Gold:
                     {
-                        CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value += reward;
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += reward;
+                        CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                         {
                             stringID = 57,
                             intValue = reward
@@ -36,12 +36,12 @@ public class MissionScrollViewItem : MonoBehaviour
                     break;
                 case Defines.EReward.AddTime:
                     {
-                        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                         if (loginData == null)
                             return;
 
                         loginData.addTimeItemCount += reward;
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                         {
                             stringID = 58,
                             intValue = reward
@@ -50,12 +50,12 @@ public class MissionScrollViewItem : MonoBehaviour
                     break;
                 case Defines.EReward.AddMove:
                     {
-                        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                         if (loginData == null)
                             return;
 
                         loginData.addMoveItemCount += reward;
-                        CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                        CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                         {
                             stringID = 59,
                             intValue = reward
@@ -73,13 +73,13 @@ public class MissionScrollViewItem : MonoBehaviour
             }
             else if (_info.tapIndex == 2)
             {
-                var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+                var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                 if (loginData.normalStage >= _info.clearValue &&
                     loginData.rewardStage < _info.clearValue)
                 {
                     clearObj.SetActive(true);
                     loginData.rewardStage = _info.clearValue;
-                    CHMData.Instance.SaveData(CHMMain.String.CatPang);
+                    CHMData.Instance.SaveData(CHMString.Instance.CatPang);
                 }
 
                 rewardBtn.interactable = false;
@@ -132,7 +132,7 @@ public class MissionScrollViewItem : MonoBehaviour
             SetMissionImage(_info.collectionType);
             SetRewardImage(_info.reward);
 
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             if (loginData.normalStage >= _info.clearValue &&
                 loginData.rewardStage < _info.clearValue)
             {

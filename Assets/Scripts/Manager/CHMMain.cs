@@ -7,19 +7,12 @@ public class CHMMain : MonoBehaviour
     static Task _initTask;
 
     #region Core
-    CHMPool m_pool = new CHMPool();
-    CHMResource m_resource = new CHMResource();
-    CHMUI m_ui = new CHMUI();
-    CHMJson m_json = new CHMJson();
-    CHMString m_string = new CHMString();
-    CHMSound m_sound = new CHMSound();
-
-    public static CHMPool Pool { get { EnsureKickoff(); return m_instance.m_pool; } }
-    public static CHMResource Resource { get { EnsureKickoff(); return m_instance.m_resource; } }
-    public static CHMUI UI { get { EnsureKickoff(); return m_instance.m_ui; } }
-    public static CHMJson Json { get { EnsureKickoff(); return m_instance.m_json; } }
-    public static CHMString String { get { EnsureKickoff(); return m_instance.m_string; } }
-    public static CHMSound Sound { get { EnsureKickoff(); return m_instance.m_sound; } }
+    public static CHMPool Pool { get { EnsureKickoff(); return CHMPool.Instance; } }
+    public static CHMResource Resource { get { EnsureKickoff(); return CHMResource.Instance; } }
+    public static CHMUI UI { get { EnsureKickoff(); return CHMUI.Instance; } }
+    public static CHMJson Json { get { EnsureKickoff(); return CHMJson.Instance; } }
+    public static CHMString String { get { EnsureKickoff(); return CHMString.Instance; } }
+    public static CHMSound Sound { get { EnsureKickoff(); return CHMSound.Instance; } }
     #endregion
 
     /// <summary>
@@ -38,10 +31,10 @@ public class CHMMain : MonoBehaviour
 
         m_instance = go.GetOrAddComponent<CHMMain>();
 
-        await m_instance.m_resource.EnsureInit();
-        await m_instance.m_json.Init();
-        m_instance.m_pool.Init();
-        m_instance.m_sound.Init();
+        await CHMResource.Instance.EnsureInit();
+        await CHMJson.Instance.Init();
+        CHMPool.Instance.Init();
+        CHMSound.Instance.Init();
         ChvjUnityInfra.CHMUI.Instance.Init();
     }
 
@@ -52,13 +45,10 @@ public class CHMMain : MonoBehaviour
     static void EnsureKickoff()
     {
         if (m_instance != null) return;
-        // 인스턴스만 먼저 만들어 accessor가 null 반환 안 하도록.
         GameObject go = GameObject.Find("@CHMMain");
         if (go == null) go = new GameObject { name = "@CHMMain" };
         Object.DontDestroyOnLoad(go);
         m_instance = go.GetOrAddComponent<CHMMain>();
-
-        // 본격 init은 Task pattern으로 비동기 진행 (이미 진행 중이면 캐싱)
         _ = EnsureInitialized();
     }
 
@@ -66,8 +56,8 @@ public class CHMMain : MonoBehaviour
     {
         if (m_instance != null)
         {
-            m_instance.m_json.Clear();
-            m_instance.m_pool.Clear();
+            CHMJson.Instance.Clear();
+            CHMPool.Instance.Clear();
             Destroy(this);
         }
     }

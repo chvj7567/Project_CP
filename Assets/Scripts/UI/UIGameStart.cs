@@ -46,7 +46,7 @@ public class UIGameStart : UIBase
     {
         InitBtn();
 
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        if (PlayerPrefs.GetInt(CHMString.Instance.SelectStage) == (int)Defines.ESelectStage.Boss)
         {
             stageText.SetText(arg.stage - CHMData.Instance.BossStageStartValue);
         }
@@ -55,7 +55,7 @@ public class UIGameStart : UIBase
             stageText.SetText(arg.stage);
         }
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData == null)
             return;
 
@@ -80,7 +80,7 @@ public class UIGameStart : UIBase
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             if (loginData == null)
                 return;
 
@@ -96,7 +96,7 @@ public class UIGameStart : UIBase
                 loginData.useTimeItemCount = useAddTimeItemCount;
             }
 
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
             SceneManager.LoadScene(2);
         });
@@ -137,7 +137,7 @@ public class UIGameStart : UIBase
             useAddTimeItemCountText.SetText(++useAddTimeItemCount);
         });
 
-        if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+        if (PlayerPrefs.GetInt(CHMString.Instance.SelectStage) == (int)Defines.ESelectStage.Boss)
         {
             myMoveItemCountText.gameObject.SetActive(false);
             myTimeItemCountText.gameObject.SetActive(false);

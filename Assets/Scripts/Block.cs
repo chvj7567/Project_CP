@@ -304,7 +304,7 @@ public class Block : MonoBehaviour
         match = false;
         img.sprite = _sprite;
         img.color = new Color(1, 1, 1, 1);
-        background.color = new Color(PlayerPrefs.GetFloat(CHMMain.String.Red), PlayerPrefs.GetFloat(CHMMain.String.Green), PlayerPrefs.GetFloat(CHMMain.String.Blue), PlayerPrefs.GetFloat(CHMMain.String.Alpha));
+        background.color = new Color(PlayerPrefs.GetFloat(CHMString.Instance.Red), PlayerPrefs.GetFloat(CHMString.Instance.Green), PlayerPrefs.GetFloat(CHMString.Instance.Blue), PlayerPrefs.GetFloat(CHMString.Instance.Alpha));
 
         switch (blockState)
         {
@@ -356,7 +356,7 @@ public class Block : MonoBehaviour
 
     public EBlockState CheckSelectCatShop(EBlockState _blockState)
     {
-        var data = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var data = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (data == null)
             return _blockState;
 

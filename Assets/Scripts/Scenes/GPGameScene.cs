@@ -216,7 +216,7 @@ public class GPGameScene : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        CHMData.Instance.SaveData(CHMString.Instance.CatPang);
     }
 
     private void InitUI()
@@ -249,8 +249,8 @@ public class GPGameScene : MonoBehaviour
                 _tokenSource?.Cancel();
                 Time.timeScale = 1;
                 CHInstantiateButton.ResetBlockDict();
-                CHMMain.UI.CloseUI(EUI.UIAlarm);
-                CHMMain.Pool.Clear();
+                CHMUI.Instance.CloseUI(EUI.UIAlarm);
+                CHMPool.Instance.Clear();
                 SceneManager.LoadScene(1);
             });
         }
@@ -281,7 +281,7 @@ public class GPGameScene : MonoBehaviour
         {
             if ((int)i >= 7 && (int)i <= 9) continue;
             var t = new TaskCompletionSource<Sprite>();
-            CHMMain.Resource.LoadSprite(i, sprite =>
+            CHMResource.Instance.LoadSprite(i, sprite =>
             {
                 if (sprite != null) _blockSpriteList[i] = sprite;
                 t.SetResult(sprite);
@@ -296,19 +296,19 @@ public class GPGameScene : MonoBehaviour
         _init = true;
 
         _tokenSource = new CancellationTokenSource();
-        _loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
-        _selectStage = (ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+        _loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        _selectStage = (ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
 
         int stage = 0;
         switch (_selectStage)
         {
-            case ESelectStage.Hard:   stage = PlayerPrefs.GetInt(CHMMain.String.HardStage); break;
-            case ESelectStage.Boss:   stage = PlayerPrefs.GetInt(CHMMain.String.BossStage); break;
-            case ESelectStage.Normal: stage = PlayerPrefs.GetInt(CHMMain.String.NormalStage); break;
+            case ESelectStage.Hard:   stage = PlayerPrefs.GetInt(CHMString.Instance.HardStage); break;
+            case ESelectStage.Boss:   stage = PlayerPrefs.GetInt(CHMString.Instance.BossStage); break;
+            case ESelectStage.Normal: stage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage); break;
         }
 
-        _stageInfo = CHMMain.Json.GetStageInfo(stage);
-        _stageBlockInfoList = CHMMain.Json.GetStageBlockInfoList(stage);
+        _stageInfo = CHMJson.Instance.GetStageInfo(stage);
+        _stageBlockInfoList = CHMJson.Instance.GetStageBlockInfoList(stage);
         boardSize = _stageInfo.boardSize;
 
         switch (_selectStage)
@@ -352,7 +352,7 @@ public class GPGameScene : MonoBehaviour
             () => AfterDrag(null, null, true),
             score => bonusScore.Value += score,
             CreateEffect,
-            sound => CHMMain.Sound.Play(sound),
+            sound => CHMSound.Instance.Play(sound),
             pangEffectList, bombEffectPS,
             _tokenSource.Token);
         _bombResolver.SetArrowPangIndex(arrowPangIndex);
@@ -496,12 +496,12 @@ public class GPGameScene : MonoBehaviour
                 }
 
                 reUpdate = !_matcher.CanPlay();
-                if (reUpdate) CHMMain.UI.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 56 });
+                if (reUpdate) CHMUI.Instance.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 56 });
                 if (createDelay) await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
 
                 if (count++ > updateMapCount)
                 {
-                    CHMMain.UI.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 80 });
+                    CHMUI.Instance.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 80 });
                     _board.CreateNewBlock(boardArr[firstRow, firstCol], ELog.UpdateMap, 3, EBlockState.YellowBomb);
                     break;
                 }
@@ -533,7 +533,7 @@ public class GPGameScene : MonoBehaviour
                         ? catFootImgList[UnityEngine.Random.Range(0, catFootImgList.Count)]
                         : goldImg;
 
-                    var gold = CHMMain.Resource.Instantiate(img.gameObject, transform.parent);
+                    var gold = CHMResource.Instance.Instantiate(img.gameObject, transform.parent);
                     if (gold != null)
                     {
                         var rect = gold.GetComponent<RectTransform>();
@@ -542,7 +542,7 @@ public class GPGameScene : MonoBehaviour
                             rect.anchoredPosition = block.rectTransform.anchoredPosition;
                             rect.DOAnchorPosY(rect.anchoredPosition.y + UnityEngine.Random.Range(30f, 50f), .5f).OnComplete(() =>
                                 rect.DOAnchorPos(img.rectTransform.anchoredPosition, UnityEngine.Random.Range(.2f, 1f)).OnComplete(() =>
-                                    CHMMain.Resource.Destroy(gold)));
+                                    CHMResource.Instance.Destroy(gold)));
                         }
                     }
 
@@ -558,7 +558,7 @@ public class GPGameScene : MonoBehaviour
 
         if (removeDelay)
         {
-            CHMMain.Sound.Play(ESound.Ppauk);
+            CHMSound.Instance.Play(ESound.Ppauk);
             await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
         }
     }
@@ -625,7 +625,7 @@ public class GPGameScene : MonoBehaviour
 
     private RectTransform CreateEffect(ParticleSystem effect, Vector2 movePos)
     {
-        var copyObj = CHMMain.Resource.Instantiate(effect.gameObject, transform.parent);
+        var copyObj = CHMResource.Instance.Instantiate(effect.gameObject, transform.parent);
         copyObj.SetActive(true);
         var rt = copyObj.GetComponent<RectTransform>();
         rt.anchoredPosition = movePos;
@@ -740,7 +740,7 @@ public class GPGameScene : MonoBehaviour
                 _tutorialNextBlock = true;
                 if (_selectStage != ESelectStage.Hard && _stageInfo.tutorialID > 0)
                 {
-                    var tutInfo = CHMMain.Json.GetTutorialInfo(_stageInfo.tutorialID);
+                    var tutInfo = CHMJson.Instance.GetTutorialInfo(_stageInfo.tutorialID);
                     if (tutInfo == null || tutInfo.connectNextBlock == EBlockState.None) break;
                     guideBackground.SetActive(true);
                     guideHole.gameObject.SetActive(true);
@@ -770,7 +770,7 @@ public class GPGameScene : MonoBehaviour
         if (await _bombResolver.CatPang(true))
         {
             gameResult.Value = EGameState.CatPang;
-            CHMMain.UI.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 55, closeTime = 1 });
+            CHMUI.Instance.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 55, closeTime = 1 });
             await Task.Delay(1000);
             await _bombResolver.CatPang();
             gameEnd = false;
@@ -778,7 +778,7 @@ public class GPGameScene : MonoBehaviour
             return;
         }
 
-        CHMMain.UI.ShowUI(EUI.UIGameEnd, new UIGameEndArg
+        CHMUI.Instance.ShowUI(EUI.UIGameEnd, new UIGameEndArg
         {
             clearState = GetClearState(),
             result = gameResult.Value,
@@ -793,29 +793,29 @@ public class GPGameScene : MonoBehaviour
         switch (_selectStage)
         {
             case ESelectStage.Hard:
-                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage < PlayerPrefs.GetInt(CHMMain.String.HardStage))
+                if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).hardStage < PlayerPrefs.GetInt(CHMString.Instance.HardStage))
                 {
-                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
+                    CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).hardStage = PlayerPrefs.GetInt(CHMString.Instance.HardStage);
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_hard_stage_rank, PlayerPrefs.GetInt(CHMMain.String.HardStage));
+                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_hard_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.HardStage));
 #endif
                 }
                 break;
             case ESelectStage.Boss:
-                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage < PlayerPrefs.GetInt(CHMMain.String.BossStage))
+                if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).bossStage < PlayerPrefs.GetInt(CHMString.Instance.BossStage))
                 {
-                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage = PlayerPrefs.GetInt(CHMMain.String.BossStage);
+                    CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).bossStage = PlayerPrefs.GetInt(CHMString.Instance.BossStage);
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_boss_stage_rank, PlayerPrefs.GetInt(CHMMain.String.BossStage));
+                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_boss_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.BossStage));
 #endif
                 }
                 break;
             case ESelectStage.Normal:
-                if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage < PlayerPrefs.GetInt(CHMMain.String.NormalStage))
+                if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).normalStage < PlayerPrefs.GetInt(CHMString.Instance.NormalStage))
                 {
-                    CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
+                    CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).normalStage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage);
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, PlayerPrefs.GetInt(CHMMain.String.NormalStage));
+                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.NormalStage));
 #endif
                 }
                 break;
@@ -826,9 +826,9 @@ public class GPGameScene : MonoBehaviour
     {
         switch (_selectStage)
         {
-            case ESelectStage.Hard:   if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage >= PlayerPrefs.GetInt(CHMMain.String.HardStage)) return EClearState.Clear; break;
-            case ESelectStage.Boss:   if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage >= PlayerPrefs.GetInt(CHMMain.String.BossStage)) return EClearState.Clear; break;
-            case ESelectStage.Normal: if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage >= PlayerPrefs.GetInt(CHMMain.String.NormalStage)) return EClearState.Clear; break;
+            case ESelectStage.Hard:   if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).hardStage >= PlayerPrefs.GetInt(CHMString.Instance.HardStage)) return EClearState.Clear; break;
+            case ESelectStage.Boss:   if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).bossStage >= PlayerPrefs.GetInt(CHMString.Instance.BossStage)) return EClearState.Clear; break;
+            case ESelectStage.Normal: if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).normalStage >= PlayerPrefs.GetInt(CHMString.Instance.NormalStage)) return EClearState.Clear; break;
         }
         return EClearState.Doing;
     }

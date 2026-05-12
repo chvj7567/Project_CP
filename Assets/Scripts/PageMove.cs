@@ -93,11 +93,11 @@ public class PageMove : MonoBehaviour
         int maxGroup = 0;
         if (curSelect == Defines.ESelectStage.Boss)
         {
-            maxGroup = CHMMain.Json.GetMaxStageGroup() - CHMData.Instance.BossStageStartValue;
+            maxGroup = CHMJson.Instance.GetMaxStageGroup() - CHMData.Instance.BossStageStartValue;
         }
         else
         {
-            maxGroup = CHMMain.Json.GetMaxStageGroup(CHMData.Instance.BossStageStartValue);
+            maxGroup = CHMJson.Instance.GetMaxStageGroup(CHMData.Instance.BossStageStartValue);
         }
 
         if (page == 1)

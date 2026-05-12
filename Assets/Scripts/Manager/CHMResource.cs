@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-public class CHMResource
+public class CHMResource : ChvjUnityInfra.CHSingletonStatic<CHMResource>
 {
     // 같은 Task를 캐싱해 동시 호출자가 모두 같은 Addressables Init을 await하도록 함
     private Task<bool> _initTask;
@@ -56,7 +56,7 @@ public class CHMResource
         CHPoolable poolable = _object.GetComponent<CHPoolable>();
         if (poolable != null)
         {
-            return CHMMain.Pool.Pop(_object, _parent).gameObject;
+            return CHMPool.Instance.Pop(_object, _parent).gameObject;
         }
         return GameObject.Instantiate(_object, _parent);
     }
@@ -68,7 +68,7 @@ public class CHMResource
         if (poolable != null)
         {
             await Task.Delay((int)(_time * 1000f));
-            CHMMain.Pool.Push(poolable);
+            CHMPool.Instance.Push(poolable);
         }
         else
         {

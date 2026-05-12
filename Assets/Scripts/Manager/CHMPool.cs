@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CHMPool
+public class CHMPool : ChvjUnityInfra.CHSingletonStatic<CHMPool>
 {
     public void Init()
     {

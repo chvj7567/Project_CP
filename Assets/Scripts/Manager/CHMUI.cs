@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CHMUI
+public class CHMUI : ChvjUnityInfra.CHSingletonStatic<CHMUI>
 {
     public void ShowUI(Defines.EUI _uiType, CHUIArg _uiArg)
     {

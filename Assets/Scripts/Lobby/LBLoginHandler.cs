@@ -22,16 +22,16 @@ public class LBLoginHandler
 
     public bool GetGPGSLogin()
     {
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         Debug.Log($"GetLoginState : {loginData.connectGPGS}");
         return loginData.connectGPGS;
     }
 
-    public bool GetPhoneLoginState() => PlayerPrefs.GetInt(CHMMain.String.Login) == 1;
+    public bool GetPhoneLoginState() => PlayerPrefs.GetInt(CHMString.Instance.Login) == 1;
 
     public async Task<bool> SetGPGSLogin(bool success, string gpgsUserName)
     {
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         loginData.connectGPGS = success;
         Debug.Log($"SetLoginState : {loginData.connectGPGS}");
 
@@ -39,7 +39,7 @@ public class LBLoginHandler
         {
             Debug.Log($"GPGS Login Success : {gpgsUserName}");
 #if UNITY_ANDROID
-            await CHMData.Instance.LoadCloudData(CHMMain.String.CatPang);
+            await CHMData.Instance.LoadCloudData(CHMString.Instance.CatPang);
 #endif
             _userID.gameObject.SetActive(true);
             _userID.SetText(gpgsUserName);
@@ -48,15 +48,15 @@ public class LBLoginHandler
         {
             _userID.gameObject.SetActive(false);
             Debug.Log($"GPGS Login Failed");
-            await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
+            await CHMData.Instance.LoadLocalData(CHMString.Instance.CatPang);
         }
 
         CHMData.Instance.GetShopData("1").buy = true;
-        PlayerPrefs.SetInt(CHMMain.String.Login, success ? 1 : 0);
+        PlayerPrefs.SetInt(CHMString.Instance.Login, success ? 1 : 0);
         _connectGPGSBtn.gameObject.SetActive(!success);
         _logoutBtn.gameObject.SetActive(success);
 
-        CHMData.Instance.SaveData(CHMMain.String.CatPang);
+        CHMData.Instance.SaveData(CHMString.Instance.CatPang);
         if (_onLoginComplete != null) await _onLoginComplete.Invoke(success);
         return true;
     }

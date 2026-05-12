@@ -48,10 +48,10 @@ public class LBLobbyScene : MonoBehaviour
             firstStartBtnClick = true;
             var arg = new UIStageSelectArg();
             arg.stageSelect += async (select) => await StageSelect(select);
-            CHMMain.UI.ShowUI(Defines.EUI.UIStageSelect, arg);
+            CHMUI.Instance.ShowUI(Defines.EUI.UIStageSelect, arg);
         });
 
-        missionBtn.OnClickAsObservable().Subscribe(_ => CHMMain.UI.ShowUI(Defines.EUI.UIMission, new CHUIArg()));
+        missionBtn.OnClickAsObservable().Subscribe(_ => CHMUI.Instance.ShowUI(Defines.EUI.UIMission, new CHUIArg()));
 
         logoutBtn.OnClickAsObservable().Subscribe(async _ =>
         {
@@ -62,21 +62,21 @@ public class LBLobbyScene : MonoBehaviour
 #endif
         });
 
-        shopBtn.OnClickAsObservable().Subscribe(_ => CHMMain.UI.ShowUI(Defines.EUI.UIShop, new CHUIArg()));
-        bombBtn.OnClickAsObservable().Subscribe(_ => CHMMain.UI.ShowUI(Defines.EUI.UISetting, new CHUIArg()));
+        shopBtn.OnClickAsObservable().Subscribe(_ => CHMUI.Instance.ShowUI(Defines.EUI.UIShop, new CHUIArg()));
+        bombBtn.OnClickAsObservable().Subscribe(_ => CHMUI.Instance.ShowUI(Defines.EUI.UISetting, new CHUIArg()));
 
         rankingBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (!CHMData.Instance.GetLoginData(CHMMain.String.CatPang).connectGPGS)
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { stringID = 107 });
+            if (!CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).connectGPGS)
+                CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { stringID = 107 });
             else
-                CHMMain.UI.ShowUI(Defines.EUI.UIRank, new CHUIArg());
+                CHMUI.Instance.ShowUI(Defines.EUI.UIRank, new CHUIArg());
         });
 
         connectGPGSBtn.OnPointerClickAsObservable().Subscribe(_ =>
         {
 #if UNITY_ANDROID
-            if (!CHMData.Instance.GetLoginData(CHMMain.String.CatPang).connectGPGS)
+            if (!CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).connectGPGS)
             {
                 objWait.SetActive(true);
                 CHMGPGS.Instance.Login(async (success, localUser) =>
@@ -92,7 +92,7 @@ public class LBLobbyScene : MonoBehaviour
         {
             var arg = new UIStageSelectArg();
             arg.stageSelect += async (select) => await StageSelect(select);
-            CHMMain.UI.ShowUI(Defines.EUI.UIStageSelect, arg);
+            CHMUI.Instance.ShowUI(Defines.EUI.UIStageSelect, arg);
         });
     }
 
@@ -105,7 +105,7 @@ public class LBLobbyScene : MonoBehaviour
         {
             dataDownload.Value = true;
             if (success && firstStartBtnClick && CHMData.Instance.newUser == false)
-                await StageSelect(PlayerPrefs.GetInt(CHMMain.String.SelectStage));
+                await StageSelect(PlayerPrefs.GetInt(CHMString.Instance.SelectStage));
         });
 
         _tutorial = new LBTutorial();
@@ -130,15 +130,6 @@ public class LBLobbyScene : MonoBehaviour
         CHMIAP.Instance.Init();
         CHMAdmob.Instance.Init();
 
-        dataDownload.Subscribe(async dl =>
-        {
-            if (CHMAssetBundle.Instance.firstDownload && dl && bundleDownload.Value)
-            {
-                CHMAssetBundle.Instance.firstDownload = false;
-                startBtn.gameObject.SetActive(true);
-            }
-        });
-
         bundleDownload.Subscribe(async bl =>
         {
             if (bl && !dataDownload.Value)
@@ -156,23 +147,13 @@ public class LBLobbyScene : MonoBehaviour
                 }
                 else await _loginHandler.SetGPGSLogin(false, "");
             }
-            else if (CHMAssetBundle.Instance.firstDownload && bl && dataDownload.Value)
-            {
-                CHMAssetBundle.Instance.firstDownload = false;
-                startBtn.gameObject.SetActive(true);
-            }
         });
 
-        if (CHMAssetBundle.Instance.firstDownload)
-        {
-            pageMove.ActiveMoveBtn(false);
-        }
-        else
         {
             bundleDownload.Value = true;
             dataDownload.Value = true;
 
-            pageMove.Init((Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage));
+            pageMove.Init((Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage));
             stageSelect1.SetActive(true);
             stageSelect2.SetActive(true);
             missionBtn.gameObject.SetActive(true);
@@ -187,7 +168,7 @@ public class LBLobbyScene : MonoBehaviour
 
             adScript.GetAdvertise();
 
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             if (loginData.guideIndex == 0)
             {
                 Time.timeScale = 0;
@@ -201,7 +182,7 @@ public class LBLobbyScene : MonoBehaviour
                 guideBackground.SetActive(false);
                 guideBackgroundBtn.gameObject.SetActive(false);
                 Time.timeScale = 1;
-                CHMData.Instance.SaveData(CHMMain.String.CatPang);
+                CHMData.Instance.SaveData(CHMString.Instance.CatPang);
             }
         }
 
@@ -210,11 +191,11 @@ public class LBLobbyScene : MonoBehaviour
         CHMData.Instance.GetShopData("1").buy = true;
     }
 
-    private void OnApplicationQuit() => CHMData.Instance.SaveData(CHMMain.String.CatPang);
+    private void OnApplicationQuit() => CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
     async Task StageSelect(int select)
     {
-        PlayerPrefs.SetInt(CHMMain.String.SelectStage, select);
+        PlayerPrefs.SetInt(CHMString.Instance.SelectStage, select);
         pageMove.Init((Defines.ESelectStage)select);
         startBtn.gameObject.SetActive(false);
         missionBtn.gameObject.SetActive(true);
@@ -225,9 +206,9 @@ public class LBLobbyScene : MonoBehaviour
         menuBtn.gameObject.SetActive(true);
         rankingBtn.gameObject.SetActive(true);
 
-        CHMMain.Sound.Play(Defines.ESound.Bgm);
+        CHMSound.Instance.Play(Defines.ESound.Bgm);
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData.guideIndex == 0)
         {
             Time.timeScale = 0;
@@ -241,7 +222,7 @@ public class LBLobbyScene : MonoBehaviour
             guideBackground.SetActive(false);
             guideBackgroundBtn.gameObject.SetActive(false);
             Time.timeScale = 1;
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
         }
     }
 }

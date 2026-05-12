@@ -19,7 +19,7 @@ public class ResourceDownload : MonoBehaviour
         _ = ChangeBackgroundLoop();
 
         await CHMMain.EnsureInitialized();
-        await CHMData.Instance.LoadLocalData(CHMMain.String.CatPang);
+        await CHMData.Instance.LoadLocalData(CHMString.Instance.CatPang);
         SceneManager.LoadScene(1);
     }
 

@@ -39,7 +39,7 @@ public class CHButton : MonoBehaviour
 
         button.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMMain.Sound.Play(Defines.ESound.Cat);
+            CHMSound.Instance.Play(Defines.ESound.Cat);
         });
     }
 }

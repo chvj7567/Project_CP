@@ -30,8 +30,8 @@ public class UIShop : UIBase
 
     private void Start()
     {
-        var checkPurchase = CHMIAP.Instance.HadPurchased(CHMMain.String.Product_Name_RemoveAD);
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var checkPurchase = CHMIAP.Instance.HadPurchased(CHMString.Instance.Product_Name_RemoveAD);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData == null)
             return;
 
@@ -43,13 +43,13 @@ public class UIShop : UIBase
             var shopData = CHMData.Instance.GetShopData("0");
             shopData.buy = true;
 
-            CHMData.Instance.SaveData(CHMMain.String.CatPang);
+            CHMData.Instance.SaveData(CHMString.Instance.CatPang);
         }
 
-        var gold = CHMData.Instance.GetCollectionData(CHMMain.String.Gold).value;
+        var gold = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
         goldText.SetText(gold);
 
-        var shopScriptList = CHMMain.Json.GetShopInfoListAll();
+        var shopScriptList = CHMJson.Instance.GetShopInfoListAll();
         if (shopScriptList == null)
         {
             Debug.Log("Shop Script is Null");
@@ -62,7 +62,7 @@ public class UIShop : UIBase
 
             if (tapIndex == 2 && CHMIAP.Instance.IsInitialized == false)
             {
-                CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
                     stringID = 109
                 });
@@ -104,7 +104,7 @@ public class UIShop : UIBase
                 {
                     PurchaseSuccess(purchaseState.productName);
 
-                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {
                         stringID = 62
                     });
@@ -112,7 +112,7 @@ public class UIShop : UIBase
                 break;
             case Defines.EPurchase.Failure:
                 {
-                    CHMMain.UI.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
+                    CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {
                         stringID = 65
                     });
@@ -125,21 +125,21 @@ public class UIShop : UIBase
     {
         Debug.Log($"PurchaseSuccess {productName}");
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData == null)
             return;
         
-        if (productName == CHMMain.String.Product_Name_AddTime)
+        if (productName == CHMString.Instance.Product_Name_AddTime)
         {
             loginData.addTimeItemCount += 10;
         }
-        else if (productName == CHMMain.String.Product_Name_AddMove)
+        else if (productName == CHMString.Instance.Product_Name_AddMove)
         {
             loginData.addMoveItemCount += 10;
         }
 
-        CHMData.Instance.SaveData(CHMMain.String.CatPang);
-        CHMMain.UI.CloseUI(Defines.EUI.UIShop);
+        CHMData.Instance.SaveData(CHMString.Instance.CatPang);
+        CHMUI.Instance.CloseUI(Defines.EUI.UIShop);
     }
 
     public void SetCurrentSkin(int skinIndex)
@@ -159,7 +159,7 @@ public class UIShop : UIBase
             }
         }
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData != null)
         {
             loginData.selectCatShop = skinIndex;

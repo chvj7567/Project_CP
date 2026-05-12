@@ -12,7 +12,7 @@ public interface ILoader<Key, Value>
     List<Value> MakeList(Dictionary<Key, Value> dict);
 }
 
-public class CHMData : CHSingleton<CHMData>
+public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
 {
     public readonly int BossStageStartValue = 100000;
     public bool newUser = false;
@@ -76,16 +76,16 @@ public class CHMData : CHSingleton<CHMData>
             // 신규 접속 유저인지 확인
             newUser = true;
 
-            PlayerPrefs.SetInt(CHMMain.String.HardStage, 0);
-            PlayerPrefs.SetInt(CHMMain.String.NormalStage, 0);
-            PlayerPrefs.SetInt(CHMMain.String.BossStage, 0 + CHMData.Instance.BossStageStartValue);
+            PlayerPrefs.SetInt(CHMString.Instance.HardStage, 0);
+            PlayerPrefs.SetInt(CHMString.Instance.NormalStage, 0);
+            PlayerPrefs.SetInt(CHMString.Instance.BossStage, 0 + CHMData.Instance.BossStageStartValue);
 
-            PlayerPrefs.SetFloat(CHMMain.String.BGMVolume, .2f);
-            PlayerPrefs.SetFloat(CHMMain.String.EffectVolume, .2f);
-            PlayerPrefs.SetFloat(CHMMain.String.Red, 1f);
-            PlayerPrefs.SetFloat(CHMMain.String.Green, 1f);
-            PlayerPrefs.SetFloat(CHMMain.String.Blue, 1f);
-            PlayerPrefs.SetFloat(CHMMain.String.Alpha, 1f);
+            PlayerPrefs.SetFloat(CHMString.Instance.BGMVolume, .2f);
+            PlayerPrefs.SetFloat(CHMString.Instance.EffectVolume, .2f);
+            PlayerPrefs.SetFloat(CHMString.Instance.Red, 1f);
+            PlayerPrefs.SetFloat(CHMString.Instance.Green, 1f);
+            PlayerPrefs.SetFloat(CHMString.Instance.Blue, 1f);
+            PlayerPrefs.SetFloat(CHMString.Instance.Alpha, 1f);
 
             Debug.Log("New User");
             return (true, await LoadDefaultData<Loader>(name));
@@ -113,7 +113,7 @@ public class CHMData : CHSingleton<CHMData>
         // data/와 json/ 폴더의 basename 충돌(Mission, Shop) 해소: data 쪽에 Default suffix
         string resourceName = (_name == "Mission" || _name == "Shop") ? _name + "Default" : _name;
 
-        CHMMain.Resource.LoadData(resourceName, (data) =>
+        CHMResource.Instance.LoadData(resourceName, (data) =>
         {
             Debug.Log($"Load Default {_name} Data is {data}");
             taskCompletionSource.SetResult(data);

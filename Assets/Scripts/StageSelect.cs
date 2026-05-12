@@ -43,36 +43,36 @@ public class StageSelect : MonoBehaviour
             int index = i;
             var btnDispose = btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
-                var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+                var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
                 switch (selectStage)
                 {
                     case ESelectStage.Hard:
                         {
-                            PlayerPrefs.SetInt(CHMMain.String.HardStage, int.Parse(btnList[index].text.text));
+                            PlayerPrefs.SetInt(CHMString.Instance.HardStage, int.Parse(btnList[index].text.text));
 
-                            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                            CHMUI.Instance.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
                             {
-                                stage = PlayerPrefs.GetInt(CHMMain.String.HardStage)
+                                stage = PlayerPrefs.GetInt(CHMString.Instance.HardStage)
                             });
                         }
                         break;
                     case ESelectStage.Boss:
                         {
-                            PlayerPrefs.SetInt(CHMMain.String.BossStage, int.Parse(btnList[index].text.text) + CHMData.Instance.BossStageStartValue);
+                            PlayerPrefs.SetInt(CHMString.Instance.BossStage, int.Parse(btnList[index].text.text) + CHMData.Instance.BossStageStartValue);
 
-                            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                            CHMUI.Instance.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
                             {
-                                stage = PlayerPrefs.GetInt(CHMMain.String.BossStage)
+                                stage = PlayerPrefs.GetInt(CHMString.Instance.BossStage)
                             });
                         }
                         break;
                     case ESelectStage.Normal:
                         {
-                            PlayerPrefs.SetInt(CHMMain.String.NormalStage, int.Parse(btnList[index].text.text));
+                            PlayerPrefs.SetInt(CHMString.Instance.NormalStage, int.Parse(btnList[index].text.text));
 
-                            CHMMain.UI.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
+                            CHMUI.Instance.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg
                             {
-                                stage = PlayerPrefs.GetInt(CHMMain.String.NormalStage)
+                                stage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage)
                             });
                         }
                         break;
@@ -97,7 +97,7 @@ public class StageSelect : MonoBehaviour
             page += CHMData.Instance.BossStageStartValue;
         }
 
-        var stageList = CHMMain.Json.GetStageInfoList(page);
+        var stageList = CHMJson.Instance.GetStageInfoList(page);
         if (stageList == null || stageList.Count == 0)
         {
             Debug.Log($"SetPage Failed : {page}");
@@ -116,7 +116,7 @@ public class StageSelect : MonoBehaviour
 
             btnList[i].gameObject.SetActive(true);
 
-            if (PlayerPrefs.GetInt(CHMMain.String.SelectStage) == (int)Defines.ESelectStage.Boss)
+            if (PlayerPrefs.GetInt(CHMString.Instance.SelectStage) == (int)Defines.ESelectStage.Boss)
             {
                 btnList[i].text.text = (stageList[i].stage - CHMData.Instance.BossStageStartValue).ToString();
             }
@@ -163,7 +163,7 @@ public class StageSelect : MonoBehaviour
             return;
         }
 
-        var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         var beforeStage = stage - 1;
 
         var lastPlayStage = GetLastPlayStage();
@@ -210,18 +210,18 @@ public class StageSelect : MonoBehaviour
     public int GetLastPlayStage()
     {
         var lastPlayStage = 0;
-        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
 
         switch (selectStage)
         {
             case Defines.ESelectStage.Hard:
-                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.HardStage);
+                lastPlayStage = PlayerPrefs.GetInt(CHMString.Instance.HardStage);
                 break;
             case Defines.ESelectStage.Boss:
-                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.BossStage) - CHMData.Instance.BossStageStartValue;
+                lastPlayStage = PlayerPrefs.GetInt(CHMString.Instance.BossStage) - CHMData.Instance.BossStageStartValue;
                 break;
             case Defines.ESelectStage.Normal:
-                lastPlayStage = PlayerPrefs.GetInt(CHMMain.String.NormalStage);
+                lastPlayStage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage);
                 break;
         }
 
@@ -231,18 +231,18 @@ public class StageSelect : MonoBehaviour
     public int GetClearStage()
     {
         int clearStage = 0;
-        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMMain.String.SelectStage);
+        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
 
         switch (selectStage)
         {
             case Defines.ESelectStage.Hard:
-                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).hardStage;
+                clearStage = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).hardStage;
                 break;
             case Defines.ESelectStage.Boss:
-                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).bossStage - CHMData.Instance.BossStageStartValue;
+                clearStage = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).bossStage - CHMData.Instance.BossStageStartValue;
                 break;
             case Defines.ESelectStage.Normal:
-                clearStage = CHMData.Instance.GetLoginData(CHMMain.String.CatPang).normalStage;
+                clearStage = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).normalStage;
                 break;
         }
 

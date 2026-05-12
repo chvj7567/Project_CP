@@ -62,7 +62,7 @@ public class GPBossController
                 _normalBossObj.SetActive(false);
                 _angryBossObj.SetActive(true);
 
-                CHMMain.UI.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 78 });
+                CHMUI.Instance.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 78 });
 
                 int coolTime;
                 int mod = _stageInfo.stage % 10;

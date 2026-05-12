@@ -131,7 +131,7 @@ public class UIRank : UIBase
         List<Infomation.RankInfo> rankList = new List<Infomation.RankInfo>();
 
 #if UNITY_ANDROID
-        if (CHMData.Instance.GetLoginData(CHMMain.String.CatPang).connectGPGS)
+        if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).connectGPGS)
         {
             TaskCompletionSource<bool> rankTaskComplete = new TaskCompletionSource<bool>();
 

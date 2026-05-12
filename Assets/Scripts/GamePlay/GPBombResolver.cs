@@ -133,7 +133,7 @@ public class GPBombResolver
         SaveBombCollectionData(specialBlock);
         if (ani) _onBoomTrigger();
         await Task.Delay(1000, _token);
-        foreach (var go in blueHoleList) CHMMain.Resource.Destroy(go);
+        foreach (var go in blueHoleList) CHMResource.Instance.Destroy(go);
     }
 
     public async Task Bomb4(Block block, bool ani = true)

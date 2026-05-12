@@ -34,7 +34,7 @@ public class UINickname : UIBase
 
         enterBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMMain.String.CatPang);
+            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             if (loginData.userID == "")
             {
                 if (loginData.connectGPGS)
@@ -52,9 +52,9 @@ public class UINickname : UIBase
                                     nameText.SetText(name.text);
                                     loginData.userID = data.Id;
                                     loginData.nickname = name.text;
-                                    CHMData.Instance.SaveData(CHMMain.String.CatPang);
+                                    CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
-                                    CHMMain.UI.CloseUI(gameObject);
+                                    CHMUI.Instance.CloseUI(gameObject);
                                 }
                             });
                         }
@@ -66,14 +66,14 @@ public class UINickname : UIBase
                     Debug.Log($"Save ID / Name : {name.text}");
                     nameText.SetText(name.text);
                     loginData.nickname = name.text;
-                    CHMData.Instance.SaveData(CHMMain.String.CatPang);
+                    CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
-                    CHMMain.UI.CloseUI(gameObject);
+                    CHMUI.Instance.CloseUI(gameObject);
                 }
             }
             else
             {
-                CHMMain.UI.CloseUI(gameObject);
+                CHMUI.Instance.CloseUI(gameObject);
             }
         });
     }
