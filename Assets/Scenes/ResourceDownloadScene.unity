@@ -314,7 +314,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 853197012}
-  - component: {fileID: 853197011}
   - component: {fileID: 853197013}
   m_Layer: 0
   m_Name: ResourceDownloadScene
@@ -323,40 +322,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &853197011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 853197010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 558f24f99a9b3fd4aa308aab95c0d019, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loadingBar: {fileID: 1729841307}
-  loadingText: {fileID: 1993908461}
-  downloadText: {fileID: 1151519856}
-  useStreamingAssets: 1
-  googleDriveDownload: 0
-  bundleKey: Bundle
-  googleDownloadKeyList: []
-  googleDownloadValueList:
-  - data
-  - effect
-  - json
-  - material
-  - sound
-  - sprite
-  - texture
-  - ui
-  - unit
-  - font
-  totalLoadCount: 0
-  loadingCount: 0
-  totalDownoadCount: 0
-  downloadingCount: 0
 --- !u!4 &853197012
 Transform:
   m_ObjectHideFlags: 0
@@ -384,7 +349,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61ec7d927b26c3844ab6ec30bdc35557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bundleLoader: {fileID: 853197011}
   backgroundList:
   - {fileID: 1646192822}
 --- !u!1 &888528392
