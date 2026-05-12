@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CHMString
+public class CHMString : ChvjUnityInfra.CHSingletonStatic<CHMString>
 {
     public string CatPang = "CatPang";
     public string Login = "Login";
