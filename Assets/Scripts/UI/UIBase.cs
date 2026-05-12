@@ -21,7 +21,7 @@ public class UIBase : MonoBehaviour
             {
                 actBack?.Invoke();
                 CHMMain.UI.CloseUI(gameObject);
-            });
+            }).AddTo(this);
         }
 
         if (backBtn)
@@ -30,7 +30,7 @@ public class UIBase : MonoBehaviour
             {
                 actBack?.Invoke();
                 CHMMain.UI.CloseUI(gameObject);
-            });
+            }).AddTo(this);
         }
     }
 

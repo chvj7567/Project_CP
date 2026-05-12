@@ -12,10 +12,7 @@ public class UISetting : UIBase
 {
     UISettingArg arg;
 
-    [SerializeField] Button etcBtn;
     [SerializeField] GameObject soundObj;
-    [SerializeField] Button boomBtn;
-    [SerializeField] GameObject boomObj;
 
     [SerializeField] Slider bgmSlider;
     [SerializeField] Slider effectSlider;
@@ -48,32 +45,6 @@ public class UISetting : UIBase
         {
             SaveSetting();
         };
-
-        etcBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            if (false == soundObj.activeSelf)
-            {
-                soundObj.SetActive(true);
-                boomObj.SetActive(false);
-                languageObj.SetActive(true);
-                guideInitObj.SetActive(true);
-                deleteObj.SetActive(true);
-                colorObj.SetActive(true);
-            }
-        });
-
-        boomBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            if (false == boomObj.activeSelf)
-            {
-                boomObj.SetActive(true);
-                soundObj.SetActive(false);
-                languageObj.SetActive(false);
-                guideInitObj.SetActive(false);
-                deleteObj.SetActive(false);
-                colorObj.SetActive(false);
-            }
-        });
 
         koreanBtn.OnClickAsObservable().Subscribe(_ =>
         {
