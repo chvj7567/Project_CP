@@ -1,0 +1,194 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace ChvjUnityInfra
+{
+    /// <summary>
+    /// 사운드 매니저. 게임의 enum 타입을 Init<TAudio>(bgmKeys...)로 주입해 AudioSource를 자동 구성.
+    /// - enum 항목 이름이 "None" 또는 "Max"면 건너뜀 (보편적 sentinel 컨벤션)
+    /// - Init의 bgmKeys로 명시한 키는 loop=true (BGM 채널, 단일 재생)
+    /// - 나머지는 PlayOneShot (효과음, 동시 재생)
+    /// - 볼륨은 PlayerPrefs로 영구 저장
+    /// 외부 라이브러리 의존 없음 (CHMResource 통해 AudioClip 로드).
+    /// </summary>
+    public class CHMSound : CHSingleton<CHMSound>
+    {
+        private const string BGMVolumeKey = "CHMSound.BGMVolume";
+        private const string EffectVolumeKey = "CHMSound.EffectVolume";
+
+        private AudioSource[] _audioSourceArr;
+        private Dictionary<int, AudioClip> _audioClipDict = new Dictionary<int, AudioClip>();
+        private HashSet<int> _bgmIndices = new HashSet<int>();
+        private bool _initialize = false;
+
+        public float BgmVolume
+        {
+            get => PlayerPrefs.GetFloat(BGMVolumeKey, 1f);
+            private set => PlayerPrefs.SetFloat(BGMVolumeKey, value);
+        }
+
+        public float EffectVolume
+        {
+            get => PlayerPrefs.GetFloat(EffectVolumeKey, 1f);
+            private set => PlayerPrefs.SetFloat(EffectVolumeKey, value);
+        }
+
+        public float Ratio { get; private set; } = 0.5f;
+
+        /// <summary>
+        /// 게임 enum 타입의 사운드 채널 자동 구성. bgmKeys로 BGM(loop) 채널 명시.
+        /// 예: Init<EAudio>() — 모두 효과음
+        ///     Init<EAudio>(EAudio.MainBGM) — MainBGM만 loop
+        ///     Init<EAudio>(EAudio.Stage1BGM, EAudio.Stage2BGM) — 다중 BGM
+        /// </summary>
+        public void Init<TAudio>(params TAudio[] bgmKeys) where TAudio : struct, Enum
+        {
+            if (_initialize)
+                return;
+
+            _initialize = true;
+
+            string[] names = Enum.GetNames(typeof(TAudio));
+            Array values = Enum.GetValues(typeof(TAudio));
+
+            int maxValue = 0;
+            for (int i = 0; i < values.Length; i++)
+            {
+                int v = Convert.ToInt32(values.GetValue(i));
+                if (v > maxValue) maxValue = v;
+            }
+
+            _audioSourceArr = new AudioSource[maxValue + 1];
+
+            // BGM 키 인덱스 미리 수집
+            if (bgmKeys != null)
+            {
+                foreach (var key in bgmKeys)
+                {
+                    _bgmIndices.Add(Convert.ToInt32(key));
+                }
+            }
+
+            GameObject root = GameObject.Find("@CHMSound");
+            if (root == null)
+            {
+                root = new GameObject("@CHMSound");
+            }
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                int v = Convert.ToInt32(values.GetValue(i));
+                string n = names[i];
+
+                // "None"/"Max" sentinel 항목은 AudioSource 안 만듦 (보편적 enum 컨벤션)
+                if (string.Equals(n, "None", StringComparison.OrdinalIgnoreCase))
+                    continue;
+                if (string.Equals(n, "Max", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                GameObject go = new GameObject(n);
+                go.transform.parent = root.transform;
+                var source = go.AddComponent<AudioSource>();
+                _audioSourceArr[v] = source;
+
+                // bgmKeys로 명시된 항목만 loop
+                if (_bgmIndices.Contains(v))
+                {
+                    source.loop = true;
+                }
+            }
+
+            DontDestroyOnLoad(root);
+        }
+
+        public void SetBGMVolume(float volume)
+        {
+            BgmVolume = volume;
+            foreach (int idx in _bgmIndices)
+            {
+                if (idx >= 0 && idx < _audioSourceArr.Length && _audioSourceArr[idx] != null)
+                {
+                    _audioSourceArr[idx].volume = BgmVolume * Ratio;
+                }
+            }
+        }
+
+        public void SetEffectVolume(float volume)
+        {
+            EffectVolume = volume;
+            for (int i = 0; i < _audioSourceArr.Length; i++)
+            {
+                if (_bgmIndices.Contains(i)) continue;
+                if (_audioSourceArr[i] == null) continue;
+                _audioSourceArr[i].volume = EffectVolume * Ratio;
+            }
+        }
+
+        public async void Play(Enum audioType, float pitch = 1.0f)
+        {
+            try
+            {
+                if (_audioSourceArr == null)
+                {
+                    Debug.LogWarning("[CHMSound] Init<TAudio>()가 호출되지 않았습니다.");
+                    return;
+                }
+
+                int v = Convert.ToInt32(audioType);
+                if (v < 0 || v >= _audioSourceArr.Length || _audioSourceArr[v] == null)
+                {
+                    Debug.LogWarning($"[CHMSound] AudioSource not found for: {audioType}");
+                    return;
+                }
+
+                AudioClip clip = await GetOrAddAudioClip(audioType, v);
+                if (clip == null) return;
+
+                AudioSource source = _audioSourceArr[v];
+                source.pitch = pitch;
+
+                if (_bgmIndices.Contains(v))
+                {
+                    source.volume = BgmVolume * Ratio;
+                    if (source.isPlaying) return;
+                    source.clip = clip;
+                    source.Play();
+                }
+                else
+                {
+                    source.volume = EffectVolume * Ratio;
+                    source.PlayOneShot(clip);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[CHMSound] Play({audioType}) 예외: {ex}");
+            }
+        }
+
+        private async Task<AudioClip> GetOrAddAudioClip(Enum audioType, int v)
+        {
+            if (_audioClipDict.TryGetValue(v, out var clip))
+            {
+                return clip;
+            }
+
+            var tcs = new TaskCompletionSource<AudioClip>();
+            CHMResource.Instance.Load<AudioClip>(audioType, (loaded) =>
+            {
+                tcs.SetResult(loaded);
+            });
+
+            clip = await tcs.Task;
+            if (clip == null)
+            {
+                return null;
+            }
+
+            _audioClipDict[v] = clip;
+            return clip;
+        }
+    }
+}

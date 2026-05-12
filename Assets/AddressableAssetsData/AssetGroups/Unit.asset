@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Unit
+  m_EditorClassIdentifier: 
+  m_GroupName: Unit
+  m_GUID: 8529170c946759e4dbdaa3e29198e85c
+  m_SerializeEntries:
+  - m_GUID: c0f2993aad9858242be3b5e4d0443dd9
+    m_Address: AttackCat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3cba27eeba0a714586a2ef5bac1bb94
+    m_Address: Monster
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 449b69bde62989b449ee5e535148ca6d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 96fd632e129720d47904e2d5920c091c, type: 2}
+    - {fileID: 11400000, guid: 4c3d0a399f364a7448621c19a431b485, type: 2}

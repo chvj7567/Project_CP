@@ -1,0 +1,833 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Sprite
+  m_EditorClassIdentifier: 
+  m_GroupName: Sprite
+  m_GUID: 70e5079927d576e43a9a6bad8562fc0a
+  m_SerializeEntries:
+  - m_GUID: 00242f45bcb423046a0ba6496a11d40f
+    m_Address: Tutorial_OrangeBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02006caa9b89ecf4abc98ba0a6a7860e
+    m_Address: CatHat5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0688ee2e27434071bc58cb64583a989f
+    m_Address: Chip_Coin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0845919f96b43de4c8f0a186b94186a4
+    m_Address: Arrow5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 091df0b94f7a46a5a9c4a5e424a770db
+    m_Address: IconBtn_Ranking
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 093c4956d4e367440a6e9ece10ae6418
+    m_Address: Unlock
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a70888853347ed47b32f14ec1490a33
+    m_Address: Cat6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a8908c0a1eb4d74fa5e9cd83420744c
+    m_Address: CatBox4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0aa001da09c018d408a4b6f77c291fc3
+    m_Address: LockerBox1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d5c8d18922daaa4fb6fe78b49c2e65c
+    m_Address: Circle_Cream
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 115db57d5376cd84b8cc22aea86c9962
+    m_Address: Locker2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 131d82874f9d9c34c958aa14a0bdf6f8
+    m_Address: Tutorial_Arrow5_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13658d11219f4f7fbc50752ac8dfa48a
+    m_Address: CatButton_Filled_M
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16f67d528c6af8e4eb049575bd307d55
+    m_Address: Locker5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19d3d13266440d74fbd08083c279f4a2
+    m_Address: Circle_Mint
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1bc2d0cfda5cc71409bc0dc4acf2948e
+    m_Address: LockerBox4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1bca458fe3d05d04aa84c3e60a57d1d3
+    m_Address: Cat4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e2aab748854ad048bbfd6ca0d9766c7
+    m_Address: HpBar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e78a270ce48eaf4b9389a39fcfda58e
+    m_Address: Heart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e8d1d1df4501f74c9b1030cb26e1ff4
+    m_Address: Tutorial_YellowBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1eaee135ce037439d925cee5e41ce026
+    m_Address: GUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ec23baa176c7d64fa235148d0bee441
+    m_Address: Clock
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f7f91e3cfa8efa46a6729998b8f506e
+    m_Address: CatHat3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 233d7cab24e993646af408cac9873fbf
+    m_Address: CatHat2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2605245b9574aed4895a4f4ce30d416e
+    m_Address: Logo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27fa25e1cf7a71841a79f3afd930ce1a
+    m_Address: Tutorial_Arrow3_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28e079928edb4fc8a9d28e083d061495
+    m_Address: PortalCreator
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29e5879e56018a449ac8a30c804e081a
+    m_Address: CatSkin1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a002f88afd40b043801d73b5962e23b
+    m_Address: Tutorial_GreenBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a91e5952af9b11469e92a96dd385e1f
+    m_Address: CatPang
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c1033ccb90125d46b2cd11b7d7eabe5
+    m_Address: YellowBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c2d9b95e7f9b424097dd7627dae8074
+    m_Address: Tutorial_Arrow6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f8da243e64d9fb43a9aff119fa00959
+    m_Address: Arrow2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 316be7608c4ac1f4e93dc6be3ef7a49c
+    m_Address: Potal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 365e7f623982dbc4dbbcfc7de09e292d
+    m_Address: OrangeBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36db3e13014d8c14084fbc741169599a
+    m_Address: Cat1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39558610717ce254b8a61c8cc7a1046a
+    m_Address: Volume
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3bd54d264f4c41d9ac5fb3e79b3b0b8f
+    m_Address: IconBtn_Google
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f848b540c12abe4ba02089ebb94dbd3
+    m_Address: Tutorial_Arrow1_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 426b7ef956bcb26408b49efcc2881f06
+    m_Address: CatBox2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 432fe2a5968a4bb19ec3fa7b1b8f989f
+    m_Address: CatSleepy4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43f9ceb7d0e3d114c85aaf2fe38c8e6d
+    m_Address: Tutorial_Arrow4_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 447c6d065de29284c9124f05e17aa32f
+    m_Address: Arrow6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45be49d245c54c1e9ca947b776a9dceb
+    m_Address: Chip_Star
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4677186d389b44f409a984c3324fab40
+    m_Address: CatHat1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 499a8a693ceb7d343b4cec0af7cce1ef
+    m_Address: PinkBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ba02e209d7144c384004ba36144a829
+    m_Address: IconBtn_Stage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c19f7244a8d2034c8931ec887353299
+    m_Address: ball
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ca405f3de51420eb72f1c7a3789ddad
+    m_Address: Chip_Heart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d90546567c30dd4bb0877f8064b6640
+    m_Address: CatSkin5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fb8c90d8f104d24a9e68a93665f39a8
+    m_Address: CatBox5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fe7dff4df1260c4fb364978b923e6af
+    m_Address: Cat2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5072206f182607c4f85a704a4b3fab73
+    m_Address: Tutorial_CatPang
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5611d1f2a2414b7488f9c378c68a9ae5
+    m_Address: Fish
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57a83bdff515bc044b48fe7ea81ef412
+    m_Address: PotalCreator
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b802a20b550510478266fb68a26e2ec
+    m_Address: CatBox3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c33032480f24cb4afa796e838648138
+    m_Address: CatSmile1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6137c7ec86e94688a2bf15384c950982
+    m_Address: PillBtn_Danger
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 624367c05c95f6b4eaf8aeea7272780a
+    m_Address: Diamond
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62c41e8413672234783090e1e97173cf
+    m_Address: Tutorial_YellowBomb_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62fb9f8dadc0f294b9db828c0f396833
+    m_Address: Tutorial_GreenBomb_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 638acc8561d54825949d9a0cd51f3cba
+    m_Address: CatSleepy3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67e25408cd604044b0f21bacb745525e
+    m_Address: CatSmile3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 699789558267d254892026d79f7aaea5
+    m_Address: Tutorial_BlueBomb_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b3ebef266b23874e9e46af1562a09fd
+    m_Address: CatSkin3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6eebee54bda7ddc48acbaf4057640269
+    m_Address: BlueBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70125d9f717210e4195c97f3d1a83bf7
+    m_Address: LockerBox3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 727f5e712aad48cb8933b9199eb85c9d
+    m_Address: CatSleepy5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76413b2eb3214440854e1700427d8bb7
+    m_Address: PillBtn_Primary
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76cb29108ad9c3b4dba663f62c02e107
+    m_Address: Mouse_Move
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7926373406bde1140943646d2b2d7835
+    m_Address: Locker3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7af266a173362cf4da5d2d235db5c888
+    m_Address: Wall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c45c0fa35184f0b831376fb5aebe476
+    m_Address: Logo_Small
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7caf8a2ce810568458eb645825bef01c
+    m_Address: Background_Splash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80ba1c14ca4f8424f9f10ad8651cc25c
+    m_Address: Mouse_Angry
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 824c4db6ca9f49f4daca73693ccf28e8
+    m_Address: Tutorial_Arrow4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 836cf5f6fb5e40cc8cdaf630a0f72d75
+    m_Address: CatPang_Icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a59e2fddd704e49a45c74300cd26c97
+    m_Address: CatButton_Outline_M
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ad9a23b7a86ddd45a1980d7edd177eb
+    m_Address: Tutorial_Arrow1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b17e6d1557354845a169d03e1ea7717
+    m_Address: Tutorial_Arrow5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b7d820fdbb6d344788c9cfdb0986bbf
+    m_Address: Tutorial_Arrow2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bc74035dd1c43dd8743df4ad6ea6371
+    m_Address: IconBtn_Shop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c3f0bbea8fa10e48adc46da1d74564c
+    m_Address: GreenBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e932e595021bba4dbfbe172fb2204ee
+    m_Address: Tutorial_Arrow6_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f4bf57638a7446d9fd643474e9a5764
+    m_Address: Card_Cream_Lg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ffdddc39b134fdca3693f0c448abf9e
+    m_Address: CatSleepy6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9108fa5830b6ad947af2a6bd2ddc4332
+    m_Address: RainbowPang
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9232140da4880f040bf80c178433390e
+    m_Address: Cat7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 939dbf23656912049a768715f025f500
+    m_Address: Arrow3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9516a9446aa14ea1936ce9411f8f5a4a
+    m_Address: Card_White_Lg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9576771b5da88ef478047d42163ce569
+    m_Address: CatPangMain
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99facdf64318ed54880c92d38a27810f
+    m_Address: Locker1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cad5e58153f76e4b8a3b09c5316868e
+    m_Address: CatHat4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ce1218a793fa6f48b2bf2f6b91538e0
+    m_Address: Arrow4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a32ce1697563b9247ad9e601771775fe
+    m_Address: Background_Map
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4fede0291454304b87a85d7ad7cf973
+    m_Address: WallCreator
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9961856792291c44819381dca7c9b80
+    m_Address: Tutorial_CatPang_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9a0e38d76474e45a8aa08b43d4320fc
+    m_Address: CatSmile2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab2a9b3c2bb1b944297fe9c9e2fa9bcf
+    m_Address: Lock
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab5039021f0308b47a3b5ff39e37f6f8
+    m_Address: GoldIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab8927d9c7aa450bbebddb441936ee1c
+    m_Address: CatSmile6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4341c4f0d3a6cd4887491c3d5567b22
+    m_Address: CatBox1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b79f39ea7e9240178951057e941bd576
+    m_Address: IconBtn_Settings
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9c632c0dd271a04b80130cd54a69f99
+    m_Address: Cat5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bac13ad7e0c9438f95595a4e3735597a
+    m_Address: CatSleepy2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc480686a8c6e1e4b902669cf0038b34
+    m_Address: Tutorial_PinkBomb_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bcafe5b92092bfd4ab9bf39305e50eeb
+    m_Address: LockerBox5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9a62815abe94bd4eb7a15b3f7be35c2
+    m_Address: Button
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: caf4c2777eaefc345bcb9f90e8a4f41d
+    m_Address: Mouse_Cry
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccd690f8402447f0b361502646ebfcbc
+    m_Address: Portal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd17dac118424ca9846456f0c7e86af7
+    m_Address: IconBtn_Mission
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0b5d4804c8e6f04e80f715092bba686
+    m_Address: SpecialBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0b82f803758a0e42bfee8ccc7bcca24
+    m_Address: Tutorial_BlueBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3c65cef1db6f324ab1f1a6e7f6cfe82
+    m_Address: Tutorial_Arrow3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3dd5dcbed746d94e93da5674abd2323
+    m_Address: Tutorial_OrangeBomb_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4371dc0b54e3e445b372c59e0990c7f
+    m_Address: Cat3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d57dfbc33af29bf489dc80a4e993bfaa
+    m_Address: Tutorial_PinkBomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7a8838b38630414995efd540c1c6482
+    m_Address: CatSkin4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd11245283694d99a6dfc09bca237753
+    m_Address: Logo_Large
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ddf7f7c049bb7724a8583baa0882d29d
+    m_Address: BGM
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0a94ee7707648709f536b815747f353
+    m_Address: CatSmile4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0d448e8e53b4df89c0d6624451bdff0
+    m_Address: PillBtn_Secondary
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e104727e73ab5f44394950db750c1b4c
+    m_Address: Circle_Pink
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2880502b98bcab42bdb4de93eb64459
+    m_Address: Tutorial_Arrow2_Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2a794af7ab84dc38cd9fe032de0ee68
+    m_Address: CatSleepy7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3facca70d6a2604f8595e6f74127186
+    m_Address: RemoveAD
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e469342521c0ac446aeaddbe6ec3cbca
+    m_Address: CatSkin2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5c6a12651034a02972e0d9b1ba2534f
+    m_Address: CatSmile7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9a11662eba585c40a7d8d835a07cc1e
+    m_Address: Background_InGame
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f028f78c6abc4ae4fb5fc88edb537cc4
+    m_Address: LockerBox2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0dc1919bd95ec3469187220189e49ee
+    m_Address: Locker4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3c815d95da3a483385620d7bd8fc545
+    m_Address: Cursor_B
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f863207433f5426ea59f87950e9266ca
+    m_Address: CatSmile5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f9fa33c284ba9764ba5da2fdb3aefd58
+    m_Address: Arrow1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa528cf800494b92a63d59ba050a3471
+    m_Address: CatSleepy1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 449b69bde62989b449ee5e535148ca6d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 42938af65d462c440945781b8ae1aab2, type: 2}
+    - {fileID: 11400000, guid: 09275914c3938784fb1f1666d8ae5d90, type: 2}

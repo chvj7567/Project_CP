@@ -1705,8 +1705,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eUIType: 0
   uid: 0
-  backgroundBtn: {fileID: 0}
-  backBtn: {fileID: 3317563673456001623}
+  _backgroundButton: {fileID: 0}
+  _backButton: {fileID: 3317563673456001623}
   goldText: {fileID: 337654343071677415}
   hpText: {fileID: 7089543588810072455}
   attackText: {fileID: 6126653661195213048}

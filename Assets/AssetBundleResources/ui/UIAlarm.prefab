@@ -136,8 +136,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eUIType: 0
   uid: 0
-  backgroundBtn: {fileID: 0}
-  backBtn: {fileID: 0}
+  _backgroundButton: {fileID: 0}
+  _backButton: {fileID: 0}
   alarmText: {fileID: 7094169960955085836}
 --- !u!1 &5937871105284235683
 GameObject:

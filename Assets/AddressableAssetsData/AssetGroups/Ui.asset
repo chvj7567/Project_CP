@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Ui
+  m_EditorClassIdentifier: 
+  m_GroupName: Ui
+  m_GUID: 9de417f6508327d4b87a598b932df256
+  m_SerializeEntries:
+  - m_GUID: 158483576852dc540afe68d57c15ffbd
+    m_Address: UIAlarm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cfe2caaf1ff17f4ebcae68deb55e60a
+    m_Address: UIShop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64c7548fcf9095a4f9423a7325d20340
+    m_Address: UISetting
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79c1be358b427734ea93faa0c700de9b
+    m_Address: btnBack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8036b27c98c9819408cd2732a84cd738
+    m_Address: UICamera
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a6ddf0efd75b874094e8688d314502c
+    m_Address: UIMission
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9031b880050e50a4399f26b674d45d9f
+    m_Address: UIRank
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aeb545c58e048eb429dace3fb78a2191
+    m_Address: UIStageSelect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c98ecf2e73197f14b80f4bf95f5df422
+    m_Address: UIGameEnd
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8c12f0159139fb4483260a09db58c9d
+    m_Address: UIGameStart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1d68057cd993cf46a855825353abb0e
+    m_Address: EventSystem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e84f3b912bf1fd74d9d74374ae5ed244
+    m_Address: UIDataDelete
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee972e03dcdd07742a13b97b3d838035
+    m_Address: UINickname
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef0a57bd38e986e47bb900ff28e87e99
+    m_Address: UICanvas
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7479b53761e56149a8b48a58d56b0d9
+    m_Address: GoldImg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8917da9b00eceb40bfd8065fa38668a
+    m_Address: btnStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 449b69bde62989b449ee5e535148ca6d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 5c6188279e5143146ae198c0ecee98c4, type: 2}
+    - {fileID: 11400000, guid: 2135c6ae8c810f94fa41f5c977309e25, type: 2}

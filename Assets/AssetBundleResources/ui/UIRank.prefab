@@ -1102,8 +1102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eUIType: 0
   uid: 0
-  backgroundBtn: {fileID: 8465052519705049649}
-  backBtn: {fileID: 0}
+  _backgroundButton: {fileID: 8465052519705049649}
+  _backButton: {fileID: 0}
   scrollView: {fileID: 1176553642229112893}
   normalRankTapBtn: {fileID: 6803007419373639934}
   hardRankTapBtn: {fileID: 6354162579012648159}

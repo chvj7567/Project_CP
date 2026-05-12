@@ -677,8 +677,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eUIType: 0
   uid: 0
-  backgroundBtn: {fileID: 0}
-  backBtn: {fileID: 0}
+  _backgroundButton: {fileID: 0}
+  _backButton: {fileID: 0}
   nameText: {fileID: 729998075900772878}
   name: {fileID: 8592882936674544091}
   enterBtn: {fileID: 8094936852892934152}

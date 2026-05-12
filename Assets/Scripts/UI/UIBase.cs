@@ -1,40 +1,35 @@
 using System;
-using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class UIBase : MonoBehaviour
+public class CHUIArg : ChvjUnityInfra.UIArg
 {
-    [ReadOnly] public Defines.EUI eUIType;
-    [ReadOnly] public int uid = 0;
+    public static readonly CHUIArg empty = new CHUIArg();
+}
 
-    [SerializeField] Button backgroundBtn;
-    [SerializeField] Button backBtn;
+public abstract class UIBase : ChvjUnityInfra.UIBase
+{
+    public Defines.EUI eUIType
+    {
+        get => UIType is Defines.EUI e ? e : Defines.EUI.None;
+    }
 
+    // background/back 버튼뿐 아니라 ESC, 프로그램에서 호출한 Close()까지 모든 경로에서 fire한다.
+    // 기존 코드는 background/back 클릭 시에만 발생했으므로 widening. 부작용 우려되는 callback은 등록 X.
     protected Action actBack;
 
-    private void Awake()
+    public sealed override void InitUI(ChvjUnityInfra.UIArg arg)
     {
-        if (backgroundBtn)
-        {
-            backgroundBtn.OnClickAsObservable().Subscribe(_ =>
-            {
-                actBack?.Invoke();
-                CHMMain.UI.CloseUI(gameObject);
-            }).AddTo(this);
-        }
-
-        if (backBtn)
-        {
-            backBtn.OnClickAsObservable().Subscribe(_ =>
-            {
-                actBack?.Invoke();
-                CHMMain.UI.CloseUI(gameObject);
-            }).AddTo(this);
-        }
+        InitUI(arg as CHUIArg ?? CHUIArg.empty);
     }
 
     public virtual void InitUI(CHUIArg _uiArg) { }
 
     public virtual void CloseUI() { }
+
+    public override void Close(bool reuse = true)
+    {
+        actBack?.Invoke();
+        CloseUI();
+        base.Close(reuse);
+    }
 }

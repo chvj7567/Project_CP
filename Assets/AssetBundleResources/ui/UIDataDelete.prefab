@@ -766,8 +766,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eUIType: 0
   uid: 0
-  backgroundBtn: {fileID: 0}
-  backBtn: {fileID: 0}
+  _backgroundButton: {fileID: 0}
+  _backButton: {fileID: 0}
   yesBtn: {fileID: 8094936852892934152}
   noBtn: {fileID: 8768673362505665290}
 --- !u!1 &6782277157990652814

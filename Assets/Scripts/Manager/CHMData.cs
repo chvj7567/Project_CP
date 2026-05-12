@@ -110,7 +110,10 @@ public class CHMData : CHSingleton<CHMData>
     {
         TaskCompletionSource<TextAsset> taskCompletionSource = new TaskCompletionSource<TextAsset>();
 
-        CHMMain.Resource.LoadData(_name, (data) =>
+        // data/와 json/ 폴더의 basename 충돌(Mission, Shop) 해소: data 쪽에 Default suffix
+        string resourceName = (_name == "Mission" || _name == "Shop") ? _name + "Default" : _name;
+
+        CHMMain.Resource.LoadData(resourceName, (data) =>
         {
             Debug.Log($"Load Default {_name} Data is {data}");
             taskCompletionSource.SetResult(data);

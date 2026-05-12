@@ -1652,8 +1652,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eUIType: 0
   uid: 0
-  backgroundBtn: {fileID: 0}
-  backBtn: {fileID: 1640796297559091852}
+  _backgroundButton: {fileID: 0}
+  _backButton: {fileID: 1640796297559091852}
   soundObj: {fileID: 3914140452056511756}
   bgmSlider: {fileID: 5007135408958808817}
   effectSlider: {fileID: 7217380798162944620}

@@ -1031,8 +1031,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eUIType: 0
   uid: 0
-  backgroundBtn: {fileID: 6062566096962990849}
-  backBtn: {fileID: 0}
+  _backgroundButton: {fileID: 6062566096962990849}
+  _backButton: {fileID: 0}
   banObj: {fileID: 1123293708160501341}
   stageText: {fileID: 2501219431480353155}
   myMoveItemCountText: {fileID: 3912017978771705819}
