@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AdConfig
   m_EditorClassIdentifier: 
   UseTestAds: 1
-  BannerAdUnitId: 
-  InterstitialAdUnitId: 
-  RewardedAdUnitId: 
+  BannerAdUnitId: ca-app-pub-3940256099942544/6300978111
+  InterstitialAdUnitId: ca-app-pub-7085378387310828/3775873067
+  RewardedAdUnitId: ca-app-pub-7085378387310828/7433429939
   TestBannerAdUnitId: ca-app-pub-3940256099942544/9214589741
   TestInterstitialAdUnitId: ca-app-pub-3940256099942544/1033173712
   TestRewardedAdUnitId: ca-app-pub-3940256099942544/5224354917
