@@ -77,8 +77,8 @@ namespace ChvjUnityInfra
         }
 
         /// <summary>
-        /// 라벨에 속한 모든 Addressables 에셋을 순차적으로 preload하고 진행률을 보고.
-        /// onProgress(ratio 0~1, currentKey)로 현재 로드 중인 에셋 키도 전달.
+        /// 라벨에 속한 모든 Addressables 에셋을 병렬로 preload하고 진행률을 보고.
+        /// onProgress(ratio 0~1, currentKey)로 아직 로드 중인 키 하나를 표시용으로 전달.
         /// 로드한 핸들은 _loadedHandles에 캐싱되어 이후 Load&lt;T&gt; 호출이 즉시 반환됨.
         /// </summary>
         public async Task<bool> PreloadByLabelAsync(string label = LabelName, Action<float, string> onProgress = null)
@@ -94,7 +94,25 @@ namespace ChvjUnityInfra
             }
 
             var locations = locHandle.Result;
-            int total = locations.Count;
+            if (locations.Count == 0)
+            {
+                Addressables.Release(locHandle);
+                onProgress?.Invoke(1f, string.Empty);
+                return true;
+            }
+
+            // 1) 캐시 미적중 키만 추려 병렬 launch
+            var pending = new List<(string key, AsyncOperationHandle<UnityEngine.Object> handle)>(locations.Count);
+            foreach (var loc in locations)
+            {
+                string key = loc.ToString().Split('/').Last().Split('.').First();
+                if (_loadedHandles.ContainsKey(key))
+                    continue;
+                var h = Addressables.LoadAssetAsync<UnityEngine.Object>(loc);
+                pending.Add((key, h));
+            }
+
+            int total = pending.Count;
             if (total == 0)
             {
                 Addressables.Release(locHandle);
@@ -102,30 +120,39 @@ namespace ChvjUnityInfra
                 return true;
             }
 
-            bool allOk = true;
-            for (int i = 0; i < total; i++)
+            // 2) 한 프레임마다 완료 카운트 + 미완료 키 하나 보고
+            while (true)
             {
-                var loc = locations[i];
-                string key = loc.ToString().Split('/').Last().Split('.').First();
-                onProgress?.Invoke((float)i / total, key);
-
-                if (_loadedHandles.ContainsKey(key) == false)
+                int done = 0;
+                string currentKey = null;
+                for (int i = 0; i < pending.Count; i++)
                 {
-                    var assetHandle = Addressables.LoadAssetAsync<UnityEngine.Object>(loc);
-                    await assetHandle.Task;
-                    if (assetHandle.Status == AsyncOperationStatus.Succeeded)
-                    {
-                        _loadedHandles[key] = assetHandle;
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"[CHMResource] Preload failed: {key}");
-                        Addressables.Release(assetHandle);
-                        allOk = false;
-                    }
+                    var p = pending[i];
+                    if (p.handle.IsDone) done++;
+                    else if (currentKey == null) currentKey = p.key;
                 }
+                onProgress?.Invoke((float)done / total, currentKey ?? string.Empty);
+                if (done == total) break;
+                await Task.Yield();
+            }
 
-                onProgress?.Invoke((float)(i + 1) / total, key);
+            // 3) 캐시 적재 + 실패 핸들 release
+            bool allOk = true;
+            foreach (var (key, handle) in pending)
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    if (_loadedHandles.ContainsKey(key) == false)
+                        _loadedHandles[key] = handle;
+                    else
+                        Addressables.Release(handle);
+                }
+                else
+                {
+                    Debug.LogWarning($"[CHMResource] Preload failed: {key}");
+                    Addressables.Release(handle);
+                    allOk = false;
+                }
             }
 
             Addressables.Release(locHandle);
