@@ -25,6 +25,7 @@ public class GPGameScene : MonoBehaviour
 
     [Header("점수 골드 및 이미지")]
     [SerializeField] private Image goldImg;
+    [SerializeField] private RectTransform goldImgTarget;
     [SerializeField] private List<Image> catFootImgList = new List<Image>();
 
     [Header("보드")]
@@ -252,6 +253,7 @@ public class GPGameScene : MonoBehaviour
                 CHInstantiateButton.ResetBlockDict();
                 CHMUI.Instance.CloseUI(EUI.UIAlarm);
                 CHMPool.Instance.Clear();
+                LBLobbyScene.fromGame = true;
                 SceneManager.LoadScene(1);
             });
         }
@@ -546,10 +548,11 @@ public class GPGameScene : MonoBehaviour
                         var rect = gold.GetComponent<RectTransform>();
                         if (rect != null)
                         {
-                            rect.anchoredPosition = block.rectTransform.anchoredPosition;
-                            rect.DOAnchorPosY(rect.anchoredPosition.y + UnityEngine.Random.Range(30f, 50f), .5f).OnComplete(() =>
-                                rect.DOAnchorPos(img.rectTransform.anchoredPosition, UnityEngine.Random.Range(.2f, 1f)).OnComplete(() =>
-                                    CHMResource.Instance.Destroy(gold)));
+                            // 도착지는 씬에 배치된 goldImgTarget을 사용 (goldImg는 프리팹 템플릿이라 .position이 의미 없음).
+                            rect.position = block.rectTransform.position;
+                            var destPos = goldImgTarget != null ? goldImgTarget.position : img.rectTransform.position;
+                            rect.DOMove(destPos, UnityEngine.Random.Range(.4f, .8f)).OnComplete(() =>
+                                CHMResource.Instance.Destroy(gold));
                         }
                     }
 

@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class LBLobbyScene : MonoBehaviour
 {
+    // GPGameScene 등에서 lobby로 돌아올 때 true로 세팅 → Start에서 startBtn 단계 건너뛰고 스테이지 메뉴 직행
+    public static bool fromGame = false;
+
     [SerializeField] Canvas canvas;
     [SerializeField] GameObject stageSelect1;
     [SerializeField] GameObject stageSelect2;
@@ -150,46 +153,28 @@ public class LBLobbyScene : MonoBehaviour
             }
         });
 
-        {
-            bundleDownload.Value = true;
-            dataDownload.Value = true;
-
-            pageMove.Init((Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage));
-            stageSelect1.SetActive(true);
-            stageSelect2.SetActive(true);
-            missionBtn.gameObject.SetActive(true);
-            shopBtn.gameObject.SetActive(true);
-            bombBtn.gameObject.SetActive(true);
-            menuBtn.gameObject.SetActive(true);
-            rankingBtn.gameObject.SetActive(true);
-
-            var login = _loginHandler.GetGPGSLogin();
-            connectGPGSBtn.gameObject.SetActive(!login);
-            logoutBtn.gameObject.SetActive(login);
-
-            adScript.GetAdvertise();
-
-            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
-            if (loginData.guideIndex == 0)
-            {
-                Time.timeScale = 0;
-                guideBackground.SetActive(true);
-                guideBackground.transform.SetAsLastSibling();
-                guideBackgroundBtn.gameObject.SetActive(true);
-                guideBackgroundBtn.transform.SetAsLastSibling();
-
-                loginData.guideIndex = await _tutorial.TutorialStart();
-
-                guideBackground.SetActive(false);
-                guideBackgroundBtn.gameObject.SetActive(false);
-                Time.timeScale = 1;
-                CHMData.Instance.SaveData(CHMString.Instance.CatPang);
-            }
-        }
-
         bundleDownload.Value = true;
+        dataDownload.Value = true;
+
+        var login = _loginHandler.GetGPGSLogin();
+        connectGPGSBtn.gameObject.SetActive(!login);
+        logoutBtn.gameObject.SetActive(login);
+
+        adScript.GetAdvertise();
+
         InitButton();
         CHMData.Instance.GetShopData("1").buy = true;
+
+        if (fromGame)
+        {
+            fromGame = false;
+            await StageSelect(PlayerPrefs.GetInt(CHMString.Instance.SelectStage));
+        }
+        else
+        {
+            startBtn.gameObject.SetActive(true);
+            pageMove.ActiveMoveBtn(false);
+        }
     }
 
     private void OnApplicationQuit() => CHMData.Instance.SaveData(CHMString.Instance.CatPang);

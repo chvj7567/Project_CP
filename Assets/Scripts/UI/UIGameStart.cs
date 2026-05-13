@@ -46,49 +46,69 @@ public class UIGameStart : UIBase
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIGameStartArg;
-    }
 
-    private void Start()
-    {
         InitBtn();
 
-        if (PlayerPrefs.GetInt(CHMString.Instance.SelectStage) == (int)Defines.ESelectStage.Boss)
-        {
-            stageText.SetText(arg.stage - CHMData.Instance.BossStageStartValue);
-        }
-        else
-        {
-            stageText.SetText(arg.stage);
-        }
+        // 인스턴스 재사용 대비 상태 리셋
+        useAddMoveItemCount = 0;
+        useAddTimeItemCount = 0;
+
+        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
+        bool isBoss = selectStage == Defines.ESelectStage.Boss;
+
+        if (isBoss) stageText.SetText(arg.stage - CHMData.Instance.BossStageStartValue);
+        else stageText.SetText(arg.stage);
 
         var stageInfo = CHMJson.Instance.GetStageInfo(arg.stage);
         if (stageInfo != null)
         {
             if (stageInfo.targetScore < 0) targetScoreText.SetStringID(135);
-            else targetScoreText.SetText(stageInfo.targetScore);
+            else { targetScoreText.SetStringID(1); targetScoreText.SetText(stageInfo.targetScore); }
 
-            if (stageInfo.time < 0) timeText.SetStringID(135);
-            else timeText.SetText(stageInfo.time);
+            if (selectStage == Defines.ESelectStage.Normal || stageInfo.time < 0) timeText.SetStringID(135);
+            else { timeText.SetStringID(1); timeText.SetText(stageInfo.time); }
 
             if (stageInfo.moveCount < 0) moveCountText.SetStringID(135);
-            else moveCountText.SetText(stageInfo.moveCount);
+            else { moveCountText.SetStringID(1); moveCountText.SetText(stageInfo.moveCount); }
         }
 
         var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
-        if (loginData == null)
-            return;
+        if (loginData != null)
+        {
+            maxMoveItemCount = myAddMoveItemCount = loginData.addMoveItemCount;
+            maxTimeItemCount = myAddTimeItemCount = loginData.addTimeItemCount;
 
-        maxMoveItemCount = myAddMoveItemCount = loginData.addMoveItemCount;
-        maxTimeItemCount = myAddTimeItemCount = loginData.addTimeItemCount;
+            myMoveItemCountText.SetText(myAddMoveItemCount);
+            myTimeItemCountText.SetText(myAddTimeItemCount);
 
-        myMoveItemCountText.SetText(myAddMoveItemCount);
-        myTimeItemCountText.SetText(myAddTimeItemCount);
+            useAddMoveItemCountText.SetText(useAddMoveItemCount);
+            useAddTimeItemCountText.SetText(useAddTimeItemCount);
 
-        useAddMoveItemCountText.SetText(useAddMoveItemCount);
-        useAddTimeItemCountText.SetText(useAddTimeItemCount);
+            // SetStringID로 베이스 텍스트 리셋 후 SetPlusString. 리셋 없이 재진입하면 " + N"이 누적됨.
+            addMoveItemValueText.SetStringID(16);
+            addMoveItemValueText.SetPlusString(CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.AddMoveItemValue).ToString());
+            addTimeItemValueText.SetStringID(17);
+            addTimeItemValueText.SetPlusString(CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.AddTimeItemValue).ToString());
+        }
 
-        addMoveItemValueText.SetPlusString(CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.AddMoveItemValue).ToString());
-        addTimeItemValueText.SetPlusString(CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.AddTimeItemValue).ToString());
+        SetItemsActive(!isBoss);
+    }
+
+    void SetItemsActive(bool active)
+    {
+        objItems.SetActive(active);
+
+        myMoveItemCountText.gameObject.SetActive(active);
+        myTimeItemCountText.gameObject.SetActive(active);
+        useAddMoveItemCountText.gameObject.SetActive(active);
+        useAddTimeItemCountText.gameObject.SetActive(active);
+        addMoveItemValueText.gameObject.SetActive(active);
+        addTimeItemValueText.gameObject.SetActive(active);
+
+        myAddMoveItemBtn.gameObject.SetActive(active);
+        myAddTimeItemBtn.gameObject.SetActive(active);
+        addMoveItemBtn.gameObject.SetActive(active);
+        addTimeItemBtn.gameObject.SetActive(active);
     }
 
     void InitBtn()
@@ -97,8 +117,6 @@ public class UIGameStart : UIBase
             return;
 
         IsInitBtn = true;
-
-        objItems.SetActive(true);
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -158,22 +176,5 @@ public class UIGameStart : UIBase
             myTimeItemCountText.SetText(--myAddTimeItemCount);
             useAddTimeItemCountText.SetText(++useAddTimeItemCount);
         });
-
-        if (PlayerPrefs.GetInt(CHMString.Instance.SelectStage) == (int)Defines.ESelectStage.Boss)
-        {
-            myMoveItemCountText.gameObject.SetActive(false);
-            myTimeItemCountText.gameObject.SetActive(false);
-            useAddMoveItemCountText.gameObject.SetActive(false);
-            useAddTimeItemCountText.gameObject.SetActive(false);
-            addMoveItemValueText.gameObject.SetActive(false);
-            addTimeItemValueText.gameObject.SetActive(false);
-
-            myAddMoveItemBtn.gameObject.SetActive(false);
-            myAddTimeItemBtn.gameObject.SetActive(false);
-            addMoveItemBtn.gameObject.SetActive(false);
-            addTimeItemBtn.gameObject.SetActive(false);
-
-            objItems.SetActive(false);
-        }
     }
 }

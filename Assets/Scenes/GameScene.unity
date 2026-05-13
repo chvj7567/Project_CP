@@ -561,6 +561,7 @@ MonoBehaviour:
   timerText: {fileID: 390776629}
   curTimer: 0
   goldImg: {fileID: 7980698764611561927, guid: f7479b53761e56149a8b48a58d56b0d9, type: 3}
+  goldImgTarget: {fileID: 1903877010}
   catFootImgList:
   - {fileID: 1850241140}
   - {fileID: 579937337}
