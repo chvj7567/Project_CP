@@ -1,15 +1,16 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 
 public class CHGaugeBar : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
-    [SerializeField] CHTMPro textDamage;
+    [SerializeField] CHText textDamage;
     [SerializeField] Image imgBackGaugeBar;
     [SerializeField] Image imgGaugeBar;
 
@@ -47,7 +48,8 @@ public class CHGaugeBar : MonoBehaviour
     {
         if (textDamage)
         {
-            var copyTextDamage = CHMResource.Instance.Instantiate(textDamage.gameObject, transform).GetComponent<CHTMPro>();
+            var copyTextDamage = CHMResource.Instance.Instantiate(textDamage.gameObject, transform).GetComponent<CHText>();
+            var copyTmp = copyTextDamage.GetComponent<TMP_Text>();
             copyTextDamage.gameObject.SetActive(true);
             copyTextDamage.transform.localPosition = Vector3.zero;
             copyTextDamage.SetText(_damage);
@@ -65,14 +67,14 @@ public class CHGaugeBar : MonoBehaviour
                 copyTextDamage.SetColor(Color.gray);
             }
 
-            copyTextDamage.text.DOFade(0, _time);
+            copyTmp.DOFade(0, _time);
 
             var rtTextDamage = copyTextDamage.GetComponent<RectTransform>();
             if (rtTextDamage)
             {
                 rtTextDamage.DOAnchorPosY(originPosYText + 10f, _time).OnComplete(() =>
                 {
-                    copyTextDamage.text.alpha = 1f;
+                    copyTmp.alpha = 1f;
                     rtTextDamage.anchoredPosition = new Vector2(rtTextDamage.anchoredPosition.x, originPosYText);
                     CHMResource.Instance.Destroy(copyTextDamage.gameObject);
                 });

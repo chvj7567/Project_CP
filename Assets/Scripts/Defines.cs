@@ -322,6 +322,8 @@ public class Defines
         NormalStageGuideMaxIndex = 1,
         BossStageGuideMaxIndex = 2,
         HardStage_NormalStageLock = 3,
-        BossStage_HardStageLock = 4
+        BossStage_HardStageLock = 4,
+        AddMoveItemValue = 5,
+        AddTimeItemValue = 6
     }
 }

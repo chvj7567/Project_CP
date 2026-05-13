@@ -1,17 +1,18 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 
 public class LBLoginHandler
 {
-    CHTMPro _userID;
+    CHText _userID;
     Button _connectGPGSBtn;
     Button _logoutBtn;
     GameObject _objWait;
     Func<bool, Task> _onLoginComplete;
 
-    public void Init(CHTMPro userID, Button connectGPGSBtn, Button logoutBtn, GameObject objWait, Func<bool, Task> onLoginComplete)
+    public void Init(CHText userID, Button connectGPGSBtn, Button logoutBtn, GameObject objWait, Func<bool, Task> onLoginComplete)
     {
         _userID = userID;
         _connectGPGSBtn = connectGPGSBtn;

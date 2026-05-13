@@ -1,4 +1,4 @@
-#if UNITY_ANDROID
+﻿#if UNITY_ANDROID
 using GooglePlayGames.BasicApi;
 #endif
 using System.Collections;
@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using static Defines;
 
@@ -25,7 +26,7 @@ public class UIRank : UIBase
     [SerializeField] Button hardRankTapBtn;
     [SerializeField] Button bossRankTapBtn;
 
-    [SerializeField] CHTMPro curRankDesc;
+    [SerializeField] CHText curRankDesc;
 
     [SerializeField] GameObject noRankingDataObj;
 

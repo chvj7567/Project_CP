@@ -485,11 +485,11 @@
         },
         {
             "stringID": 121,
-            "value": "Normal Mission"
+            "value": "Normal"
         },
         {
             "stringID": 122,
-            "value": "Special Mission"
+            "value": "Special"
         },
         {
             "stringID": 123,
@@ -526,5 +526,29 @@
         {
             "stringID": 131,
             "value": "Next"
+        },
+        {
+            "stringID": 132,
+            "value": "Target Gold"
+        },
+        {
+            "stringID": 133,
+            "value": "Time Limit"
+        },
+        {
+            "stringID": 134,
+            "value": "Move Limit"
+        },
+        {
+            "stringID": 135,
+            "value": "No Limit"
+        },
+        {
+            "stringID": 136,
+            "value": "Sound"
+        },
+        {
+            "stringID": 137,
+            "value": "Data"
         }
     ]

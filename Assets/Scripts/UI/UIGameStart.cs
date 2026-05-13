@@ -1,7 +1,8 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using TMPro;
 using UniRx;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -14,13 +15,18 @@ public class UIGameStart : UIBase
 {
     UIGameStartArg arg;
 
-    [SerializeField] GameObject banObj;
+    [SerializeField] GameObject objItems;
 
-    [SerializeField] CHTMPro stageText;
-    [SerializeField] CHTMPro myMoveItemCountText;
-    [SerializeField] CHTMPro myTimeItemCountText;
-    [SerializeField] CHTMPro useAddMoveItemCountText;
-    [SerializeField] CHTMPro useAddTimeItemCountText;
+    [SerializeField] CHText stageText;
+    [SerializeField] CHText targetScoreText;
+    [SerializeField] CHText timeText;
+    [SerializeField] CHText moveCountText;
+    [SerializeField] CHText myMoveItemCountText;
+    [SerializeField] CHText myTimeItemCountText;
+    [SerializeField] CHText useAddMoveItemCountText;
+    [SerializeField] CHText useAddTimeItemCountText;
+    [SerializeField] CHText addMoveItemValueText;
+    [SerializeField] CHText addTimeItemValueText;
 
     [SerializeField] Button myAddMoveItemBtn;
     [SerializeField] Button myAddTimeItemBtn;
@@ -55,6 +61,19 @@ public class UIGameStart : UIBase
             stageText.SetText(arg.stage);
         }
 
+        var stageInfo = CHMJson.Instance.GetStageInfo(arg.stage);
+        if (stageInfo != null)
+        {
+            if (stageInfo.targetScore < 0) targetScoreText.SetStringID(135);
+            else targetScoreText.SetText(stageInfo.targetScore);
+
+            if (stageInfo.time < 0) timeText.SetStringID(135);
+            else timeText.SetText(stageInfo.time);
+
+            if (stageInfo.moveCount < 0) moveCountText.SetStringID(135);
+            else moveCountText.SetText(stageInfo.moveCount);
+        }
+
         var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData == null)
             return;
@@ -67,6 +86,9 @@ public class UIGameStart : UIBase
 
         useAddMoveItemCountText.SetText(useAddMoveItemCount);
         useAddTimeItemCountText.SetText(useAddTimeItemCount);
+
+        addMoveItemValueText.SetPlusString(CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.AddMoveItemValue).ToString());
+        addTimeItemValueText.SetPlusString(CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.AddTimeItemValue).ToString());
     }
 
     void InitBtn()
@@ -76,7 +98,7 @@ public class UIGameStart : UIBase
 
         IsInitBtn = true;
 
-        banObj.SetActive(false);
+        objItems.SetActive(true);
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
@@ -143,13 +165,15 @@ public class UIGameStart : UIBase
             myTimeItemCountText.gameObject.SetActive(false);
             useAddMoveItemCountText.gameObject.SetActive(false);
             useAddTimeItemCountText.gameObject.SetActive(false);
+            addMoveItemValueText.gameObject.SetActive(false);
+            addTimeItemValueText.gameObject.SetActive(false);
 
             myAddMoveItemBtn.gameObject.SetActive(false);
             myAddTimeItemBtn.gameObject.SetActive(false);
             addMoveItemBtn.gameObject.SetActive(false);
             addTimeItemBtn.gameObject.SetActive(false);
 
-            banObj.SetActive(true);
+            objItems.SetActive(false);
         }
     }
 }

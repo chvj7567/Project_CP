@@ -1,8 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 
 public class LBTutorial
@@ -10,10 +11,10 @@ public class LBTutorial
     GameObject _guideBackground;
     Button _guideBackgroundBtn;
     List<RectTransform> _guideHoleList;
-    CHTMPro _guideDesc;
+    CHText _guideDesc;
 
     public void Init(GameObject guideBackground, Button guideBackgroundBtn,
-        List<RectTransform> guideHoleList, CHTMPro guideDesc)
+        List<RectTransform> guideHoleList, CHText guideDesc)
     {
         _guideBackground = guideBackground;
         _guideBackgroundBtn = guideBackgroundBtn;

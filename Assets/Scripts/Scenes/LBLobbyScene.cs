@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 
 public class LBLobbyScene : MonoBehaviour
@@ -26,8 +27,8 @@ public class LBLobbyScene : MonoBehaviour
     [SerializeField] GameObject guideBackground;
     [SerializeField] Button guideBackgroundBtn;
     [SerializeField] List<RectTransform> guideHoleList = new List<RectTransform>();
-    [SerializeField] CHTMPro guideDesc;
-    [SerializeField] CHTMPro userID;
+    [SerializeField] CHText guideDesc;
+    [SerializeField] CHText userID;
     [SerializeField] GameObject objWait;
 
     CancellationTokenSource tokenSource;

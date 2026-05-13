@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using UniRx;
 using DG.Tweening;
@@ -12,8 +13,8 @@ public class CHPurchaseButton : MonoBehaviour
     [NonSerialized] public Button button;
 
     [SerializeField] string targetProductID;
-    [SerializeField] CHTMPro priceText;
-    [SerializeField] CHTMPro priceUnitText;
+    [SerializeField] CHText priceText;
+    [SerializeField] CHText priceUnitText;
 
     private void Awake()
     {

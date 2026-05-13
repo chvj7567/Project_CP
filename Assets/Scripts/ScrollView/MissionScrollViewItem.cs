@@ -1,13 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using UniRx;
 
 public class MissionScrollViewItem : MonoBehaviour
 {
-    [SerializeField] CHTMPro missionText;
-    [SerializeField] CHTMPro missionValueText;
+    [SerializeField] CHText missionText;
+    [SerializeField] CHText missionValueText;
     [SerializeField] List<GameObject> missionImgList = new List<GameObject>();
     [SerializeField] List<GameObject> rewardImgList = new List<GameObject>();
     [SerializeField] Button rewardBtn;

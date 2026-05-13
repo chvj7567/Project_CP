@@ -1,10 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using ChvjUnityInfra;
 public class CHDebugLog : MonoBehaviour
 {
-    public CHTMPro logText;
+    public CHText logText;
     [ReadOnly]
     int logCount = 0;
     Dictionary<string, GUIStyle> dicLogInfo = new Dictionary<string, GUIStyle>();

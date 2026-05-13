@@ -27,6 +27,11 @@ namespace ChvjUnityInfra
         private object[] _arrArg;
         private bool _initialize;
 
+        private void Awake()
+        {
+            Init();
+        }
+
         private void Init()
         {
             if (_initialize)

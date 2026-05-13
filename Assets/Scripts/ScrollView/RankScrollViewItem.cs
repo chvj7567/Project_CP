@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using UniRx;
 
@@ -8,9 +9,9 @@ public class RankScrollViewItem : MonoBehaviour
 {
     [SerializeField] UIRank uiRank;
     [SerializeField] List<Image> imageList = new List<Image>();
-    [SerializeField] CHTMPro userID;
-    [SerializeField] CHTMPro stage;
-    [SerializeField] CHTMPro stageRank;
+    [SerializeField] CHText userID;
+    [SerializeField] CHText stage;
+    [SerializeField] CHText stageRank;
 
     Infomation.RankInfo info;
 

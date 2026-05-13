@@ -1,10 +1,11 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Defines;
@@ -19,7 +20,7 @@ public class GPGameScene : MonoBehaviour
 
     [Header("타이머")]
     [SerializeField] private Image timerImg;
-    [SerializeField] private CHTMPro timerText;
+    [SerializeField] private CHText timerText;
     [SerializeField, ReadOnly] private float curTimer;
 
     [Header("점수 골드 및 이미지")]
@@ -52,10 +53,10 @@ public class GPGameScene : MonoBehaviour
     [SerializeField, ReadOnly] public ReactiveProperty<EGameState> gameResult = new ReactiveProperty<EGameState>();
     [SerializeField, ReadOnly] public bool gameEnd = false;
 
-    [SerializeField] private CHTMPro targetScoreText;
-    [SerializeField] private CHTMPro moveCountText;
-    [SerializeField] private CHTMPro curScoreText;
-    [SerializeField] private CHTMPro bonusScoreText;
+    [SerializeField] private CHText targetScoreText;
+    [SerializeField] private CHText moveCountText;
+    [SerializeField] private CHText curScoreText;
+    [SerializeField] private CHText bonusScoreText;
     [SerializeField, ReadOnly] private ReactiveProperty<int> curScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] private ReactiveProperty<int> bonusScore = new ReactiveProperty<int>();
     [SerializeField, ReadOnly] private ReactiveProperty<int> moveCount = new ReactiveProperty<int>();
@@ -71,8 +72,8 @@ public class GPGameScene : MonoBehaviour
     [SerializeField] private GameObject angryBossObj;
     [SerializeField] private GameObject cryBossObj;
     [SerializeField] private Image bossHpImage;
-    [SerializeField] private CHTMPro bossHpText;
-    [SerializeField] private CHTMPro hpText;
+    [SerializeField] private CHText bossHpText;
+    [SerializeField] private CHText hpText;
 
     [Header("스테이지별 UI 오브젝트")]
     [SerializeField] private GameObject onlyNormalStageObject;
@@ -92,7 +93,7 @@ public class GPGameScene : MonoBehaviour
     [SerializeField] private Button guideBackgroundBtn;
     [SerializeField] private List<RectTransform> normalStageGuideHoleList = new List<RectTransform>();
     [SerializeField] private List<RectTransform> bossStageGuideHoleList = new List<RectTransform>();
-    [SerializeField] private CHTMPro guideDesc;
+    [SerializeField] private CHText guideDesc;
 
     private Dictionary<EBlockState, Sprite> _blockSpriteList = new Dictionary<EBlockState, Sprite>();
     private StageInfo _stageInfo;
@@ -330,14 +331,17 @@ public class GPGameScene : MonoBehaviour
         targetScoreText.SetText(_stageInfo.targetScore);
         if (_stageInfo.targetScore < 0) targetScoreText.gameObject.SetActive(false);
 
-        if (_stageInfo.moveCount > 0) moveCount.Value = _stageInfo.moveCount + _loginData.useMoveItemCount;
+        var addMoveItemValue = (int)CHMJson.Instance.GetConstValueInfo(EConstValue.AddMoveItemValue);
+        var addTimeItemValue = (int)CHMJson.Instance.GetConstValueInfo(EConstValue.AddTimeItemValue);
+
+        if (_stageInfo.moveCount > 0) moveCount.Value = _stageInfo.moveCount + _loginData.useMoveItemCount * addMoveItemValue;
         else
         {
             moveCount.Value = 99;
             if (_loginData.useMoveItemCount > 0) _loginData.addMoveItemCount += _loginData.useMoveItemCount;
         }
 
-        if (_stageInfo.time > 0) _stageInfo.time += _loginData.useTimeItemCount * 10;
+        if (_stageInfo.time > 0) _stageInfo.time += _loginData.useTimeItemCount * addTimeItemValue;
         else if (_loginData.useTimeItemCount > 0) _loginData.addTimeItemCount += _loginData.useTimeItemCount;
 
         gameResult.Value = _selectStage == ESelectStage.Boss ? EGameState.BossStagePlay : EGameState.NormalOrHardStagePlay;

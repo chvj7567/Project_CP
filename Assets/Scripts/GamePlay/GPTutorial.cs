@@ -1,8 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using static Defines;
 using static Infomation;
@@ -16,7 +17,7 @@ public class GPTutorial
     Button _guideBackgroundBtn;
     List<RectTransform> _normalGuideHoleList;
     List<RectTransform> _bossGuideHoleList;
-    CHTMPro _guideDesc;
+    CHText _guideDesc;
     bool _guideEnd;
 
     public void Init(
@@ -27,7 +28,7 @@ public class GPTutorial
         Button guideBackgroundBtn,
         List<RectTransform> normalGuideHoleList,
         List<RectTransform> bossGuideHoleList,
-        CHTMPro guideDesc)
+        CHText guideDesc)
     {
         _board = board;
         _guideFinger = guideFinger;

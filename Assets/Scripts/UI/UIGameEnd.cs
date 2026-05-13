@@ -1,7 +1,8 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using TMPro;
 using UniRx;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Defines;
@@ -18,8 +19,8 @@ public class UIGameEnd : UIBase
     private UIGameEndArg arg;
 
     [SerializeField] private TMP_Text resultText;
-    [SerializeField] private CHTMPro goldText;
-    [SerializeField] private CHTMPro goldx2Text;
+    [SerializeField] private CHText goldText;
+    [SerializeField] private CHText goldx2Text;
     [SerializeField] private Button nextBtn;
     [SerializeField] private Button adBtn;
     [SerializeField] private Button claimBtn;

@@ -798,13 +798,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 390776627}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!114 &390776630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1288,13 +1285,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 448771710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!1 &487260937
 GameObject:
   m_ObjectHideFlags: 0
@@ -1655,13 +1649,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 517917046}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1952,13 +1943,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 584283303}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 76
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 76
 --- !u!114 &584283306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2898,13 +2886,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 869330594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!114 &869330597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5187,13 +5172,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1693725880}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!114 &1693725885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5560,13 +5542,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1814382578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!114 &1814382581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6074,13 +6053,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1976018823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!114 &1976018826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6403,13 +6379,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2051093201}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: -1
-  stringID: 1
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 1
 --- !u!1001 &2062342851
 PrefabInstance:
   m_ObjectHideFlags: 0

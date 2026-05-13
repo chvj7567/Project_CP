@@ -485,11 +485,11 @@
         },
         {
             "stringID": 121,
-            "value": "일반 미션"
+            "value": "일반"
         },
         {
             "stringID": 122,
-            "value": "특별 미션"
+            "value": "특별"
         },
         {
             "stringID": 123,
@@ -526,5 +526,29 @@
         {
             "stringID": 131,
             "value": "다음"
+        },
+        {
+            "stringID": 132,
+            "value": "목표 골드"
+        },
+        {
+            "stringID": 133,
+            "value": "제한 시간"
+        },
+        {
+            "stringID": 134,
+            "value": "제한 횟수"
+        },
+        {
+            "stringID": 135,
+            "value": "제한 없음"
+        },
+        {
+            "stringID": 136,
+            "value": "사운드"
+        },
+        {
+            "stringID": 137,
+            "value": "데이터"
         }
     ]

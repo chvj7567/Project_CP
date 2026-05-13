@@ -2,5 +2,7 @@
   {"variable":1, "value":6},
   {"variable":2, "value":12},
   {"variable":3, "value":150},
-  {"variable":4, "value":50}
+  {"variable":4, "value":50},
+  {"variable":5, "value":1},
+  {"variable":6, "value":10}
 ]

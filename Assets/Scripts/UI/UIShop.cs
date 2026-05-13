@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using ChvjUnityInfra;
 using UniRx;
 using static ChvjUnityInfra.CHMIAP;
 using UnityEngine.UI;
@@ -13,9 +14,9 @@ public class UIShop : UIBase
 {
     UIShopArg arg;
 
-    [SerializeField] CHTMPro goldText;
-    [SerializeField] CHTMPro hpText;
-    [SerializeField] CHTMPro attackText;
+    [SerializeField] CHText goldText;
+    [SerializeField] CHText hpText;
+    [SerializeField] CHText attackText;
     [SerializeField] Button tap1Btn;
     [SerializeField] Button tap2Btn;
     [SerializeField] ShopScrollView scrollView;

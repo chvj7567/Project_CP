@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 #if UNITY_ANDROID
 using GooglePlayGames.BasicApi;
 #endif
@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UniRx;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using static Defines;
 
@@ -19,7 +20,7 @@ public class UINickname : UIBase
 {
     UINicknameArg arg;
 
-    [SerializeField] CHTMPro nameText;
+    [SerializeField] CHText nameText;
     [SerializeField] TMP_InputField name;
     [SerializeField] Button enterBtn;
 

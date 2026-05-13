@@ -268,12 +268,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 253148537431801697}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 128
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 128
 --- !u!1 &2086419049576060683
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,12 +419,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2086419049576060683}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 130
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 130
 --- !u!1 &2853039619259162231
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,12 +691,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3309963050699972987}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 129
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 129
 --- !u!1 &3370538097019770196
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,8 +758,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 528bb5d12869fce4aadaff41e253da39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eUIType: 0
-  uid: 0
   _backgroundButton: {fileID: 0}
   _backButton: {fileID: 0}
   yesBtn: {fileID: 8094936852892934152}
@@ -1113,9 +1105,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7811166777100180574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 128
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 128

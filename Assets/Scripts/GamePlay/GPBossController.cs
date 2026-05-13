@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using static Defines;
 using static Infomation;
@@ -13,8 +14,8 @@ public class GPBossController
     GPBoard _board;
     StageInfo _stageInfo;
     Image _bossHpImage;
-    CHTMPro _bossHpText;
-    CHTMPro _hpText;
+    CHText _bossHpText;
+    CHText _hpText;
     GameObject _normalBossObj;
     GameObject _angryBossObj;
     GameObject _cryBossObj;
@@ -25,8 +26,8 @@ public class GPBossController
         StageInfo stageInfo,
         Data.Login loginData,
         Image bossHpImage,
-        CHTMPro bossHpText,
-        CHTMPro hpText,
+        CHText bossHpText,
+        CHText hpText,
         GameObject normalBossObj,
         GameObject angryBossObj,
         GameObject cryBossObj,

@@ -1,9 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using ChvjUnityInfra;
 public class UIAlarmArg : CHUIArg
 {
     public bool useStringID = true;
@@ -17,7 +17,7 @@ public class UIAlarm : UIBase
 {
     UIAlarmArg arg;
 
-    [SerializeField] CHTMPro alarmText;
+    [SerializeField] CHText alarmText;
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -35,7 +35,8 @@ public class UIAlarm : UIBase
         }
         else
         {
-            alarmText.text.text = $"{arg.text}";
+            alarmText.SetStringID(-1);
+            alarmText.SetText(arg.text);
         }
 
         delayTokenSource = new CancellationTokenSource();

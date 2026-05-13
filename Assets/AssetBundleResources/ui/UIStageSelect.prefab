@@ -147,12 +147,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 144935635722156380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 100
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 100
 --- !u!1 &1426972713384423811
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,12 +454,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1655455558484877905}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 98
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 98
 --- !u!1 &1770194703668338167
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,12 +605,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1770194703668338167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 99
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 99
 --- !u!1 &2366027863507931091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1066,12 +1060,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2719652910447882062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 77
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 77
 --- !u!1 &3370538097019770196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,8 +1123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19544c184f1663e4a98e71ea423b6d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eUIType: 0
-  uid: 0
   _backgroundButton: {fileID: 6062566096962990849}
   _backButton: {fileID: 0}
   normalStageBtn: {fileID: 3865523943842409816}
@@ -1596,12 +1586,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5822830944814266888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 68
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 68
 --- !u!1 &6782277157990652814
 GameObject:
   m_ObjectHideFlags: 0
@@ -2253,12 +2241,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8893268552353155134}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
+  m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stringID: 69
-  rtText: {fileID: 0}
-  text: {fileID: 0}
+  _stringID: 69
 --- !u!1 &8940298605149297297
 GameObject:
   m_ObjectHideFlags: 0

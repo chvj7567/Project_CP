@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using static Defines;
 using static Infomation;
@@ -17,7 +18,7 @@ public class Block : MonoBehaviour
     [SerializeField]
     RectTransform backRect;
     [SerializeField]
-    CHTMPro hpText;
+    CHText hpText;
 
     public Image background;
     public Image img;

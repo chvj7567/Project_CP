@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ChvjUnityInfra;
 using UnityEngine.UI;
 using UniRx;
 
@@ -9,10 +10,10 @@ public class ShopScrollViewItem : MonoBehaviour
     [SerializeField] UIShop shopScript;
     [SerializeField] List<GameObject> shopImgList = new List<GameObject>();
     [SerializeField] Button buyBtn;
-    [SerializeField] CHTMPro productName;
-    [SerializeField] CHTMPro costText;
+    [SerializeField] CHText productName;
+    [SerializeField] CHText costText;
     [SerializeField] Button skinSelectBtn;
-    [SerializeField] CHTMPro descText;
+    [SerializeField] CHText descText;
     [SerializeField] GameObject objGold;
     [SerializeField] GameObject objWon;
 
