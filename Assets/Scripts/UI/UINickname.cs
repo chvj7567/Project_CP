@@ -40,11 +40,11 @@ public class UINickname : UIBase
                 if (loginData.connectGPGS)
                 {
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, 0, (success) =>
+                    ChvjUnityInfra.CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, 0, (success) =>
                     {
                         if (success)
                         {
-                            CHMGPGS.Instance.LoadCustomLeaderboardArray(GPGSIds.leaderboard_normal_stage_rank, 1, LeaderboardStart.PlayerCentered, LeaderboardTimeSpan.AllTime, (success, data) =>
+                            ChvjUnityInfra.CHMGPGS.Instance.LoadCustomLeaderboardArray(GPGSIds.leaderboard_normal_stage_rank, 1, LeaderboardStart.PlayerCentered, LeaderboardTimeSpan.AllTime, (success, data) =>
                             {
                                 if (success)
                                 {

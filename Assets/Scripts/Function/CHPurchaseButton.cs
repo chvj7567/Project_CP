@@ -30,21 +30,21 @@ public class CHPurchaseButton : MonoBehaviour
 
     public void HandleClick()
     {
-        if (false == CHMIAP.Instance.IsConsumableType(targetProductID))
+        if (false == ChvjUnityInfra.CHMIAP.Instance.IsConsumableType(targetProductID))
         {
-            if (CHMIAP.Instance.HadPurchased(targetProductID))
+            if (ChvjUnityInfra.CHMIAP.Instance.HadPurchased(targetProductID))
             {
                 Debug.Log("이미 구매한 상품");
                 return;
             }
         }
 
-        var price = CHMIAP.Instance.GetPrice(targetProductID);
-        var priceUnit = CHMIAP.Instance.GetPriceUnit(targetProductID);
+        var price = ChvjUnityInfra.CHMIAP.Instance.GetPrice(targetProductID);
+        var priceUnit = ChvjUnityInfra.CHMIAP.Instance.GetPriceUnit(targetProductID);
 
         SetPrice(price, priceUnit);
 
-        CHMIAP.Instance.Purchase(targetProductID);
+        ChvjUnityInfra.CHMIAP.Instance.Purchase(targetProductID);
     }
 
     public void SetPrice(decimal price, string priceUnit)

@@ -135,7 +135,7 @@ public class UIRank : UIBase
         {
             TaskCompletionSource<bool> rankTaskComplete = new TaskCompletionSource<bool>();
 
-            CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 10, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
+            ChvjUnityInfra.CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 10, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
             {
                 if (success)
                 {
@@ -149,7 +149,7 @@ public class UIRank : UIBase
                         }
                         else
                         {
-                            CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
+                            ChvjUnityInfra.CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
                             {
                                 int lastRank = 0;
                                 for (int i = 0; i < userProfiles.Length; ++i)
@@ -182,11 +182,11 @@ public class UIRank : UIBase
                 }
             });
 
-            /*CHMGPGS.Instance.LoadAllLeaderboardArray(gpgsID, scores =>
+            /*ChvjUnityInfra.CHMGPGS.Instance.LoadAllLeaderboardArray(gpgsID, scores =>
             {
                 Debug.Log($"4  {gpgsID}/{scores.Length}");
 
-                CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
+                ChvjUnityInfra.CHMGPGS.Instance.LoadUsers(scores, (userProfiles) =>
                 {
                     int lastRank = 0;
                     for (int i = 0; i < userProfiles.Length; ++i)

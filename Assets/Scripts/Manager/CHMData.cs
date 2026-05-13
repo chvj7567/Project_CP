@@ -155,7 +155,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
 #if UNITY_ANDROID
         if (saveData.loginList.First().connectGPGS == true)
         {
-            CHMGPGS.Instance.SaveCloud(_path, json, success =>
+            ChvjUnityInfra.CHMGPGS.Instance.SaveCloud(_path, json, success =>
             {
                 Debug.Log($"Save Cloud Data is {success} : {json}");
             });
@@ -201,7 +201,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
     {
         TaskCompletionSource<string> taskCompletionSource = new TaskCompletionSource<string>();
 
-        CHMGPGS.Instance.LoadCloud(path, (success, data) =>
+        ChvjUnityInfra.CHMGPGS.Instance.LoadCloud(path, (success, data) =>
         {
             Debug.Log($"Load Cloud {name} Data is {success} : {data}");
             taskCompletionSource.SetResult(data);
@@ -233,7 +233,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         if (GetLoginData(path).connectGPGS)
         {
 #if UNITY_ANDROID
-            CHMGPGS.Instance.DeleteCloud(path, success =>
+            ChvjUnityInfra.CHMGPGS.Instance.DeleteCloud(path, success =>
             {
                 Debug.Log($"Delete Cloud Data is {success} : ");
 

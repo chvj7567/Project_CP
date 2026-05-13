@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using static CHMIAP;
+using static ChvjUnityInfra.CHMIAP;
 using UnityEngine.UI;
 
 public class UIShopArg : CHUIArg
@@ -30,7 +30,7 @@ public class UIShop : UIBase
 
     private void Start()
     {
-        var checkPurchase = CHMIAP.Instance.HadPurchased(CHMString.Instance.Product_Name_RemoveAD);
+        var checkPurchase = ChvjUnityInfra.CHMIAP.Instance.HadPurchased(CHMString.Instance.Product_Name_RemoveAD);
         var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData == null)
             return;
@@ -60,14 +60,14 @@ public class UIShop : UIBase
         {
             var shopList = shopScriptList.FindAll(_ => _.tapIndex == tapIndex);
 
-            if (tapIndex == 2 && CHMIAP.Instance.IsInitialized == false)
+            if (tapIndex == 2 && ChvjUnityInfra.CHMIAP.Instance.IsInitialized == false)
             {
                 CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
                     stringID = 109
                 });
 
-                CHMIAP.Instance.Init();
+                ChvjUnityInfra.CHMIAP.Instance.Init();
                 return;
             }
 
@@ -86,21 +86,21 @@ public class UIShop : UIBase
             curTapIndex.Value = 2;
         });
 
-        CHMIAP.Instance.purchaseState += PurchaseState;
+        ChvjUnityInfra.CHMIAP.Instance.purchaseState += PurchaseState;
 
         curTapIndex.Value = 1;
     }
 
     private void OnDestroy()
     {
-        CHMIAP.Instance.purchaseState -= PurchaseState;
+        ChvjUnityInfra.CHMIAP.Instance.purchaseState -= PurchaseState;
     }
 
     void PurchaseState(PurchaseState purchaseState)
     {
         switch (purchaseState.state)
         {
-            case Defines.EPurchase.Success:
+            case ChvjUnityInfra.EPurchase.Success:
                 {
                     PurchaseSuccess(purchaseState.productName);
 
@@ -110,7 +110,7 @@ public class UIShop : UIBase
                     });
                 }
                 break;
-            case Defines.EPurchase.Failure:
+            case ChvjUnityInfra.EPurchase.Failure:
                 {
                     CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                     {

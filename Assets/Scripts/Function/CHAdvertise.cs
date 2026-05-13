@@ -27,10 +27,10 @@ public class CHAdvertise : MonoBehaviour
         if (adStageList.Contains(checkAdStage) == false)
             return false;
 
-        if (CHMIAP.Instance.CanBuyFromID(CHMString.Instance.Product_ID_RemoveAD) == false)
+        if (ChvjUnityInfra.CHMIAP.Instance.CanBuyFromID(CHMString.Instance.Product_ID_RemoveAD) == false)
             return false;
 
-        CHMAdmob.Instance.ShowInterstitialAd();
+        ChvjUnityInfra.CHMAdmob.Instance.ShowInterstitialAd();
 
         return true;
     }

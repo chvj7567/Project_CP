@@ -17,44 +17,44 @@ public class Test : MonoBehaviour
             log = "";
 
         if (GUILayout.Button("Login"))
-            CHMGPGS.Instance.Login((success, localUser) =>
+            ChvjUnityInfra.CHMGPGS.Instance.Login((success, localUser) =>
             log = $"{success}, {localUser.userName}, {localUser.id}, {localUser.state}, {localUser.underage}");
 
         if (GUILayout.Button("Logout"))
-            CHMGPGS.Instance.Logout();
+            ChvjUnityInfra.CHMGPGS.Instance.Logout();
 
         if (GUILayout.Button("SaveCloud"))
-            CHMGPGS.Instance.SaveCloud("mysave", "want data", success => log = $"{success}");
+            ChvjUnityInfra.CHMGPGS.Instance.SaveCloud("mysave", "want data", success => log = $"{success}");
 
         if (GUILayout.Button("LoadCloud"))
-            CHMGPGS.Instance.LoadCloud("mysave", (success, data) => log = $"{success}, {data}");
+            ChvjUnityInfra.CHMGPGS.Instance.LoadCloud("mysave", (success, data) => log = $"{success}, {data}");
 
         if (GUILayout.Button("DeleteCloud"))
-            CHMGPGS.Instance.DeleteCloud("mysave", success => log = $"{success}");
+            ChvjUnityInfra.CHMGPGS.Instance.DeleteCloud("mysave", success => log = $"{success}");
 
         /*if (GUILayout.Button("ShowAchievementUI"))
-            CHMGPGS.Instance.ShowAchievementUI();
+            ChvjUnityInfra.CHMGPGS.Instance.ShowAchievementUI();
 
         if (GUILayout.Button("UnlockAchievement_one"))
-            CHMGPGS.Instance.UnlockAchievement(GPGSIds.achievement_one, success => log = $"{success}");
+            ChvjUnityInfra.CHMGPGS.Instance.UnlockAchievement(GPGSIds.achievement_one, success => log = $"{success}");
 
         if (GUILayout.Button("UnlockAchievement_two"))
-            CHMGPGS.Instance.UnlockAchievement(GPGSIds.achievement_two, success => log = $"{success}");
+            ChvjUnityInfra.CHMGPGS.Instance.UnlockAchievement(GPGSIds.achievement_two, success => log = $"{success}");
 
         if (GUILayout.Button("IncrementAchievement_three"))
-            CHMGPGS.Instance.IncrementAchievement(GPGSIds.achievement_three, 1, success => log = $"{success}");
+            ChvjUnityInfra.CHMGPGS.Instance.IncrementAchievement(GPGSIds.achievement_three, 1, success => log = $"{success}");
 
         if (GUILayout.Button("ShowAllLeaderboardUI"))
-            CHMGPGS.Instance.ShowAllLeaderboardUI();
+            ChvjUnityInfra.CHMGPGS.Instance.ShowAllLeaderboardUI();
 
         if (GUILayout.Button("ShowTargetLeaderboardUI_num"))
-            CHMGPGS.Instance.ShowTargetLeaderboardUI(GPGSIds.leaderboard_num);
+            ChvjUnityInfra.CHMGPGS.Instance.ShowTargetLeaderboardUI(GPGSIds.leaderboard_num);
 
         if (GUILayout.Button("ReportLeaderboard_num"))
-            CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_num, 1000, success => log = $"{success}");
+            ChvjUnityInfra.CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_num, 1000, success => log = $"{success}");
 
         if (GUILayout.Button("LoadAllLeaderboardArray_num"))
-            CHMGPGS.Instance.LoadAllLeaderboardArray(GPGSIds.leaderboard_num, scores =>
+            ChvjUnityInfra.CHMGPGS.Instance.LoadAllLeaderboardArray(GPGSIds.leaderboard_num, scores =>
             {
                 log = "";
                 for (int i = 0; i < scores.Length; i++)
@@ -62,7 +62,7 @@ public class Test : MonoBehaviour
             });
 
         if (GUILayout.Button("LoadCustomLeaderboardArray_num"))
-            CHMGPGS.Instance.LoadCustomLeaderboardArray(GPGSIds.leaderboard_num, 10,
+            ChvjUnityInfra.CHMGPGS.Instance.LoadCustomLeaderboardArray(GPGSIds.leaderboard_num, 10,
                 GooglePlayGames.BasicApi.LeaderboardStart.PlayerCentered, GooglePlayGames.BasicApi.LeaderboardTimeSpan.Daily, (success, scoreData) =>
                 {
                     log = $"{success}\n";
@@ -72,16 +72,16 @@ public class Test : MonoBehaviour
                 });
 
         if (GUILayout.Button("IncrementEvent_event"))
-            CHMGPGS.Instance.IncrementEvent(GPGSIds.event_event, 1);
+            ChvjUnityInfra.CHMGPGS.Instance.IncrementEvent(GPGSIds.event_event, 1);
 
         if (GUILayout.Button("LoadEvent_event"))
-            CHMGPGS.Instance.LoadEvent(GPGSIds.event_event, (success, iEvent) =>
+            ChvjUnityInfra.CHMGPGS.Instance.LoadEvent(GPGSIds.event_event, (success, iEvent) =>
             {
                 log = $"{success}, {iEvent.Name}, {iEvent.CurrentCount}";
             });
 
         if (GUILayout.Button("LoadAllEvent"))
-            CHMGPGS.Instance.LoadAllEvent((success, iEvents) =>
+            ChvjUnityInfra.CHMGPGS.Instance.LoadAllEvent((success, iEvents) =>
             {
                 log = $"{success}\n";
                 foreach (var iEvent in iEvents)

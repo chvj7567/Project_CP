@@ -32,7 +32,7 @@ public class UIDataDelete : UIBase
                 });
 
 #if UNITY_ANDROID
-                CHMGPGS.Instance.Logout();
+                ChvjUnityInfra.CHMGPGS.Instance.Logout();
 #endif
 
                 SceneManager.LoadScene(1);

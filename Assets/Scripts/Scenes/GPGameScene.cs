@@ -800,7 +800,7 @@ public class GPGameScene : MonoBehaviour
                 {
                     CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).hardStage = PlayerPrefs.GetInt(CHMString.Instance.HardStage);
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_hard_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.HardStage));
+                    ChvjUnityInfra.CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_hard_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.HardStage));
 #endif
                 }
                 break;
@@ -809,7 +809,7 @@ public class GPGameScene : MonoBehaviour
                 {
                     CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).bossStage = PlayerPrefs.GetInt(CHMString.Instance.BossStage);
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_boss_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.BossStage));
+                    ChvjUnityInfra.CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_boss_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.BossStage));
 #endif
                 }
                 break;
@@ -818,7 +818,7 @@ public class GPGameScene : MonoBehaviour
                 {
                     CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).normalStage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage);
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.NormalStage));
+                    ChvjUnityInfra.CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.NormalStage));
 #endif
                 }
                 break;

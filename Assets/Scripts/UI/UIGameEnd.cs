@@ -33,7 +33,7 @@ public class UIGameEnd : UIBase
 
     private void OnDestroy()
     {
-        CHMAdmob.Instance.AcquireReward -= AcquireReward;
+        ChvjUnityInfra.CHMAdmob.Instance.AcquireReward -= AcquireReward;
     }
 
     private void Start()
@@ -60,7 +60,7 @@ public class UIGameEnd : UIBase
             }
         }
 
-        CHMAdmob.Instance.AcquireReward += AcquireReward;
+        ChvjUnityInfra.CHMAdmob.Instance.AcquireReward += AcquireReward;
 
         BindUI();
     }
@@ -121,13 +121,13 @@ public class UIGameEnd : UIBase
 
         adBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            if (CHMIAP.Instance.CanBuyFromID(CHMString.Instance.Product_ID_RemoveAD) == false)
+            if (ChvjUnityInfra.CHMIAP.Instance.CanBuyFromID(CHMString.Instance.Product_ID_RemoveAD) == false)
             {
                 AcquireReward();
             }
             else
             {
-                CHMAdmob.Instance.ShowRewardedAd();
+                ChvjUnityInfra.CHMAdmob.Instance.ShowRewardedAd();
             }
         }).AddTo(this);
     }

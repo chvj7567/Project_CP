@@ -58,7 +58,7 @@ public class LBLobbyScene : MonoBehaviour
             if (!_loginHandler.GetGPGSLogin()) return;
             await _loginHandler.SetGPGSLogin(false, "");
 #if UNITY_ANDROID
-            CHMGPGS.Instance.Logout();
+            ChvjUnityInfra.CHMGPGS.Instance.Logout();
 #endif
         });
 
@@ -79,7 +79,7 @@ public class LBLobbyScene : MonoBehaviour
             if (!CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).connectGPGS)
             {
                 objWait.SetActive(true);
-                CHMGPGS.Instance.Login(async (success, localUser) =>
+                ChvjUnityInfra.CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
                     await _loginHandler.SetGPGSLogin(success, localUser.userName);
                     objWait.SetActive(false);
@@ -127,8 +127,8 @@ public class LBLobbyScene : MonoBehaviour
         guideBackground.SetActive(false);
         guideBackgroundBtn.gameObject.SetActive(false);
 
-        CHMIAP.Instance.Init();
-        CHMAdmob.Instance.Init();
+        ChvjUnityInfra.CHMIAP.Instance.Init();
+        ChvjUnityInfra.CHMAdmob.Instance.Init();
 
         bundleDownload.Subscribe(async bl =>
         {
@@ -138,7 +138,7 @@ public class LBLobbyScene : MonoBehaviour
                 {
                     objWait.SetActive(true);
 #if UNITY_ANDROID
-                    CHMGPGS.Instance.Login(async (success, localUser) =>
+                    ChvjUnityInfra.CHMGPGS.Instance.Login(async (success, localUser) =>
                     {
                         await _loginHandler.SetGPGSLogin(success, localUser.userName);
                         objWait.SetActive(false);

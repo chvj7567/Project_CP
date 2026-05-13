@@ -23,19 +23,19 @@ public class ShopScrollViewItem : MonoBehaviour
 
     void Start()
     {
-        CHMIAP.Instance.purchaseState += (purchaseState) =>
+        ChvjUnityInfra.CHMIAP.Instance.purchaseState += (purchaseState) =>
         {
             if (purchaseState.productName != info.productName)
                 return;
 
             switch (purchaseState.state)
             {
-                case Defines.EPurchase.Success:
+                case ChvjUnityInfra.EPurchase.Success:
                     {
                         shopData.buy = true;
                     }
                     break;
-                case Defines.EPurchase.Failure:
+                case ChvjUnityInfra.EPurchase.Failure:
                     break;
             }
         };
@@ -88,7 +88,7 @@ public class ShopScrollViewItem : MonoBehaviour
             }
             else
             {
-                CHMIAP.Instance.Purchase(info.productName);
+                ChvjUnityInfra.CHMIAP.Instance.Purchase(info.productName);
             }
         });
 
@@ -118,8 +118,8 @@ public class ShopScrollViewItem : MonoBehaviour
         }
         else
         {
-            var price = CHMIAP.Instance.GetPrice(info.productName);
-            var priceUnit = CHMIAP.Instance.GetPriceUnit(info.productName);
+            var price = ChvjUnityInfra.CHMIAP.Instance.GetPrice(info.productName);
+            var priceUnit = ChvjUnityInfra.CHMIAP.Instance.GetPriceUnit(info.productName);
 
             costText.SetText(price, priceUnit);
 
@@ -159,7 +159,7 @@ public class ShopScrollViewItem : MonoBehaviour
         }
         else
         {
-            if (CHMIAP.Instance.CanBuyFromName(info.productName) == false)
+            if (ChvjUnityInfra.CHMIAP.Instance.CanBuyFromName(info.productName) == false)
             {
                 return false;
             }

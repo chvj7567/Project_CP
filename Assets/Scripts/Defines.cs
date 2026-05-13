@@ -270,12 +270,6 @@ public class Defines
         Max
     }
 
-    public enum EPurchase
-    {
-        Success,
-        Failure,
-    }
-
     public enum EReward
     {
         None = -1,
