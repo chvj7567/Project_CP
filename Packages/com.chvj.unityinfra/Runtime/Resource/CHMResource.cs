@@ -76,6 +76,63 @@ namespace ChvjUnityInfra
             return await saveComplete.Task;
         }
 
+        /// <summary>
+        /// 라벨에 속한 모든 Addressables 에셋을 순차적으로 preload하고 진행률을 보고.
+        /// onProgress(ratio 0~1, currentKey)로 현재 로드 중인 에셋 키도 전달.
+        /// 로드한 핸들은 _loadedHandles에 캐싱되어 이후 Load&lt;T&gt; 호출이 즉시 반환됨.
+        /// </summary>
+        public async Task<bool> PreloadByLabelAsync(string label = LabelName, Action<float, string> onProgress = null)
+        {
+            var locHandle = Addressables.LoadResourceLocationsAsync(label);
+            await locHandle.Task;
+
+            if (locHandle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Addressables.Release(locHandle);
+                onProgress?.Invoke(1f, string.Empty);
+                return false;
+            }
+
+            var locations = locHandle.Result;
+            int total = locations.Count;
+            if (total == 0)
+            {
+                Addressables.Release(locHandle);
+                onProgress?.Invoke(1f, string.Empty);
+                return true;
+            }
+
+            bool allOk = true;
+            for (int i = 0; i < total; i++)
+            {
+                var loc = locations[i];
+                string key = loc.ToString().Split('/').Last().Split('.').First();
+                onProgress?.Invoke((float)i / total, key);
+
+                if (_loadedHandles.ContainsKey(key) == false)
+                {
+                    var assetHandle = Addressables.LoadAssetAsync<UnityEngine.Object>(loc);
+                    await assetHandle.Task;
+                    if (assetHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        _loadedHandles[key] = assetHandle;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[CHMResource] Preload failed: {key}");
+                        Addressables.Release(assetHandle);
+                        allOk = false;
+                    }
+                }
+
+                onProgress?.Invoke((float)(i + 1) / total, key);
+            }
+
+            Addressables.Release(locHandle);
+            onProgress?.Invoke(1f, string.Empty);
+            return allOk;
+        }
+
         public void Load<T>(Enum key, Action<T> callback) where T : UnityEngine.Object
         {
             Load(key.ToString(), callback);
@@ -117,6 +174,11 @@ namespace ChvjUnityInfra
         }
 
         public void Instantiate<T>(Enum key, Action<T> callback) where T : UnityEngine.Object
+        {
+            Instantiate(key.ToString(), callback);
+        }
+
+        public void Instantiate<T>(string key, Action<T> callback) where T : UnityEngine.Object
         {
             Load<T>(key, (resource) =>
             {

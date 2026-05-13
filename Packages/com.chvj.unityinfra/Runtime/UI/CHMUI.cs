@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ChvjUnityInfra
 {
@@ -11,8 +12,10 @@ namespace ChvjUnityInfra
     /// </summary>
     public class CHMUI : CHSingleton<CHMUI>
     {
-        private const string MyCanvasName = "UICanvas";
+        private const string UICanvasTag = "UICanvas";
+        private const string UICanvasKey = "UICanvas";
         private bool _initialize = false;
+        private bool _canvasRequestInFlight = false;
         private Transform _rootTransform;
 
         // 현재 활성 UI
@@ -40,17 +43,72 @@ namespace ChvjUnityInfra
             if (_initialize)
                 return;
 
-            if (_rootTransform == null)
-            {
-                var uiCanvas = GameObject.FindGameObjectWithTag("UICanvas");
-                if (uiCanvas == null)
-                    return;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            _initialize = true;
+        }
 
-                _rootTransform = uiCanvas.transform;
-                DontDestroyOnLoad(_rootTransform);
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // 새 씬으로 전환되면 기존 캔버스/인스턴스 캐시는 무효. 다음 ShowUI 호출 시 새 캔버스를 찾음.
+            _rootTransform = null;
+            _dicCurrentUI.Clear();
+            _dicCashingUI.Clear();
+            _dicWaitCloseUI.Clear();
+        }
+
+        // 패키지 사용자가 미리 UICanvas 인스턴스를 주입할 수 있는 hook. null이면 ShowUI가 직접 instantiate.
+        public void SetRoot(Transform root)
+        {
+            _rootTransform = root;
+        }
+
+        // 비동기로 UI 전용 캔버스 확보:
+        // 1) 이미 _rootTransform 있으면 즉시 콜백
+        // 2) 씬에 UICanvas 태그된 GameObject가 있으면 그것을 사용
+        // 3) 둘 다 없으면 UICanvas 프리팹을 Addressables로 instantiate
+        private void EnsureRootAsync(Action<Transform> onReady)
+        {
+            if (_rootTransform != null)
+            {
+                onReady?.Invoke(_rootTransform);
+                return;
             }
 
-            _initialize = true;
+            var existing = GameObject.FindGameObjectWithTag(UICanvasTag);
+            if (existing != null)
+            {
+                _rootTransform = existing.transform;
+                onReady?.Invoke(_rootTransform);
+                return;
+            }
+
+            if (_canvasRequestInFlight)
+            {
+                // 동시 ShowUI 호출 race 처리 — 한 프레임 뒤 재시도
+                StartCoroutine(WaitAndRetry(onReady));
+                return;
+            }
+
+            _canvasRequestInFlight = true;
+            CHMResource.Instance.Instantiate<GameObject>(UICanvasKey, canvas =>
+            {
+                _canvasRequestInFlight = false;
+                if (canvas == null)
+                {
+                    Debug.LogWarning($"[CHMUI] '{UICanvasKey}' 프리팹을 로드할 수 없습니다.");
+                    onReady?.Invoke(null);
+                    return;
+                }
+                _rootTransform = canvas.transform;
+                onReady?.Invoke(_rootTransform);
+            });
+        }
+
+        private System.Collections.IEnumerator WaitAndRetry(Action<Transform> onReady)
+        {
+            while (_canvasRequestInFlight)
+                yield return null;
+            EnsureRootAsync(onReady);
         }
 
         public void ShowUI(Enum uiType, UIArg arg = null, Action<UIBase> callback = null)
@@ -58,6 +116,16 @@ namespace ChvjUnityInfra
             if (arg == null)
                 arg = new UIArg();
 
+            EnsureRootAsync(root =>
+            {
+                if (root == null)
+                    return;
+                ShowUIInternal(root, uiType, arg, callback);
+            });
+        }
+
+        private void ShowUIInternal(Transform root, Enum uiType, UIArg arg, Action<UIBase> callback)
+        {
             // 캐시된 UI가 있다면 재사용
             if (_dicCashingUI.TryGetValue(uiType, out var cached))
             {
@@ -68,7 +136,9 @@ namespace ChvjUnityInfra
                 // 비동기 로드 — 콜백에서 _dicWaitCloseUI 검사 (race 처리)
                 CHMResource.Instance.Instantiate<GameObject>(uiType, (ui) =>
                 {
-                    ui.transform.SetParent(_rootTransform);
+                    if (_rootTransform == null)
+                        return;
+                    ui.transform.SetParent(_rootTransform, false);
                     var rectTransform = ui.GetComponent<RectTransform>();
                     // Stretch 설정
                     rectTransform.anchorMin = new Vector2(0, 0);

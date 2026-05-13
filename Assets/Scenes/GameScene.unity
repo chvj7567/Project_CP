@@ -801,6 +801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -1290,6 +1291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -1656,6 +1658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -1952,6 +1955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 76
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -2897,6 +2901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -5185,6 +5190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -5557,6 +5563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -6070,6 +6077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -6398,6 +6406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}

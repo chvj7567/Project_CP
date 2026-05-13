@@ -2283,6 +2283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 5
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -3062,6 +3063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 7
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -3492,6 +3494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 105
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -3789,6 +3792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 4
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -4434,6 +4438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 108
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -4780,6 +4785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 6
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -5126,6 +5132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -5499,6 +5506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 2
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -5652,6 +5660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 3
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -6173,6 +6182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 15
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -6957,6 +6967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f369b568c166c48b2cc836d87ab447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stringID: -1
   stringID: 1
   rtText: {fileID: 0}
   text: {fileID: 0}
@@ -7074,7 +7085,7 @@ GameObject:
   - component: {fileID: 2057816450}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: UICanvas
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

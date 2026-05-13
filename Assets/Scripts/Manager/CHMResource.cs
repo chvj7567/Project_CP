@@ -15,6 +15,9 @@ public class CHMResource : ChvjUnityInfra.CHSingletonStatic<CHMResource>
         return _initTask;
     }
 
+    public Task<bool> PreloadAsync(Action<float, string> onProgress = null) =>
+        ChvjUnityInfra.CHMResource.Instance.PreloadByLabelAsync("Resource", onProgress);
+
     public void LoadData(string name, Action<TextAsset> _callback)
     {
         ChvjUnityInfra.CHMResource.Instance.Load<TextAsset>(name, _callback);

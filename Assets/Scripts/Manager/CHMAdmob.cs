@@ -1,213 +1,27 @@
-using UnityEngine;
-using GoogleMobileAds.Api;
 using System;
+using GoogleMobileAds.Api;
 
-public class CHMAdmob : CHSingleton<CHMAdmob>
+// 글로벌 CHMAdmob 어댑터: 게임 코드의 CHMAdmob.Instance.X 호출을 패키지 ChvjUnityInfra.CHMAdmob에 위임.
+// 광고 ID는 Assets/Resources/ChvjUnityInfra/AdConfig.asset에서 로드됨.
+public class CHMAdmob
 {
-#if UNITY_EDITOR
-    string bannerAdUnitId = string.Empty;
-    string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
-    string rewardedAdUnitId = "ca-app-pub-3940256099942544/5224354917";
-#else
-    string bannerAdUnitId = "ca-app-pub-3940256099942544/6300978111";
-    string interstitialAdUnitId = "ca-app-pub-7085378387310828/3775873067";
-    string rewardedAdUnitId = "ca-app-pub-7085378387310828/7433429939";
-#endif
-    
+    private static CHMAdmob _instance;
+    public static CHMAdmob Instance => _instance ??= new CHMAdmob();
 
-    BannerView bannerView;
-    InterstitialAd interstitialAd;
-    RewardedAd rewardedAd;
-
-    AdRequest adRequest;
-
-    bool checkInit = false;
-
-    public Action AcquireReward;
-    public Action CloseAD;
-
-    public void Init()
+    public Action AcquireReward
     {
-        if (checkInit == true)
-            return;
-
-        checkInit = true;
-
-        MobileAds.Initialize(initStatus => { });
-
-        adRequest = new AdRequest();
-
-        LoadInterstitialAd();
-        LoadRewardedAd();
-        //ShowBanner(AdPosition.Top);
+        get => ChvjUnityInfra.CHMAdmob.Instance.AcquireReward;
+        set => ChvjUnityInfra.CHMAdmob.Instance.AcquireReward = value;
     }
 
-    public void ShowBanner(AdPosition _position)
+    public Action CloseAD
     {
-        bannerView = new BannerView(bannerAdUnitId, AdSize.Banner, _position);
-        bannerView.LoadAd(adRequest);
+        get => ChvjUnityInfra.CHMAdmob.Instance.CloseAD;
+        set => ChvjUnityInfra.CHMAdmob.Instance.CloseAD = value;
     }
 
-    void LoadInterstitialAd(bool _show = false)
-    {
-        if (interstitialAd != null)
-        {
-            interstitialAd.Destroy();
-            interstitialAd = null;
-        }
-
-        InterstitialAd.Load(interstitialAdUnitId, adRequest,
-                (InterstitialAd ad, LoadAdError error) =>
-                {
-                    // if error is not null, the load request failed.
-                    if (error != null || ad == null)
-                    {
-                        Debug.LogError("interstitial ad failed to load an ad " +
-                                       "with error : " + error);
-                        return;
-                    }
-
-                    Debug.Log("Interstitial ad loaded with response : "
-                              + ad.GetResponseInfo());
-
-                    interstitialAd = ad;
-                    RegisterEventHandlers(interstitialAd);
-
-                    if (_show == true)
-                    {
-                        interstitialAd.Show();
-                    }
-                });
-    }
-
-    public void ShowInterstitialAd()
-    {
-        if (interstitialAd != null && interstitialAd.CanShowAd() == true)
-        {
-            interstitialAd.Show();
-        }
-        else
-        {
-            LoadInterstitialAd(true);
-        }
-    }
-
-    void LoadRewardedAd(bool _show = false)
-    {
-        if (rewardedAd != null)
-        {
-            rewardedAd.Destroy();
-            rewardedAd = null;
-        }
-
-        RewardedAd.Load(rewardedAdUnitId, adRequest,
-                (RewardedAd ad, LoadAdError error) =>
-                {
-                    // if error is not null, the load request failed.
-                    if (error != null || ad == null)
-                    {
-                        Debug.LogError("interstitial ad failed to load an ad " +
-                                       "with error : " + error);
-                        return;
-                    }
-
-                    Debug.Log("Interstitial ad loaded with response : "
-                              + ad.GetResponseInfo());
-
-                    rewardedAd = ad;
-                    RegisterEventHandlers(rewardedAd);
-
-                    if (_show == true)
-                    {
-                        rewardedAd.Show(RewardHandler);
-                    }
-                });
-    }
-
-    public void ShowRewardedAd()
-    {
-        if (rewardedAd != null && rewardedAd.CanShowAd() == true)
-        {
-            rewardedAd.Show(RewardHandler);
-        }
-        else
-        {
-            LoadRewardedAd(true);
-        }
-    }
-
-    void RewardHandler(Reward _reward)
-    {
-        double currencyAmount = _reward.Amount;
-        string currencyType = _reward.Type;
-
-        if (AcquireReward != null)
-        {
-            AcquireReward.Invoke();
-        }
-    }
-
-    void RegisterEventHandlers(RewardedAd ad)
-    {
-        ad.OnAdImpressionRecorded += () =>
-        {
-            Debug.Log("Rewarded ad recorded an impression.");
-        };
-        ad.OnAdClicked += () =>
-        {
-            Debug.Log("Rewarded ad was clicked.");
-        };
-        ad.OnAdFullScreenContentOpened += () =>
-        {
-            Debug.Log("Rewarded ad full screen content opened.");
-        };
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            Debug.Log("Rewarded ad full screen content closed.");
-
-            if (CloseAD != null)
-            {
-                CloseAD.Invoke();
-            }
-
-            LoadRewardedAd();
-        };
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Debug.LogError("Rewarded ad failed to open full screen content " +
-                           "with error : " + error);
-        };
-    }
-
-    void RegisterEventHandlers(InterstitialAd ad)
-    {
-        ad.OnAdImpressionRecorded += () =>
-        {
-            Debug.Log("Interstitial ad recorded an impression.");
-        };
-        ad.OnAdClicked += () =>
-        {
-            Debug.Log("Interstitial ad was clicked.");
-        };
-        ad.OnAdFullScreenContentOpened += () =>
-        {
-            Debug.Log("Interstitial ad full screen content opened.");
-        };
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            Debug.Log("Interstitial ad full screen content closed.");
-
-            if (CloseAD != null)
-            {
-                CloseAD.Invoke();
-            }
-
-            LoadInterstitialAd();
-        };
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Debug.LogError("Interstitial ad failed to open full screen content " +
-                           "with error : " + error);
-        };
-    }
+    public void Init() => ChvjUnityInfra.CHMAdmob.Instance.Init();
+    public void ShowBanner(AdPosition position) => ChvjUnityInfra.CHMAdmob.Instance.ShowBanner(position);
+    public void ShowInterstitialAd() => ChvjUnityInfra.CHMAdmob.Instance.ShowInterstitialAd();
+    public void ShowRewardedAd() => ChvjUnityInfra.CHMAdmob.Instance.ShowRewardedAd();
 }

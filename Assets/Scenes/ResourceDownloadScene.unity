@@ -351,6 +351,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundList:
   - {fileID: 1646192822}
+  loadingBar: {fileID: 1729841307}
+  loadingText: {fileID: 1993908461}
+  downloadText: {fileID: 1151519856}
 --- !u!1 &888528392
 GameObject:
   m_ObjectHideFlags: 0
