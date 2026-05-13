@@ -62,7 +62,7 @@ namespace ChvjUnityInfra
             foreach (var p in config.Products)
             {
                 _productList.Add(p);
-                builder.AddProduct(p.productName, p.productType, new StoreSpecificIds
+                builder.AddProduct(p.productName, p.productType, new IDs
                 {
                     { p.productID, GooglePlay.Name }
                 });

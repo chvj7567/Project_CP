@@ -33,9 +33,16 @@ public class CHMMain : MonoBehaviour
 
         await CHMResource.Instance.EnsureInit();
         await CHMJson.Instance.Init();
+        await GameFontProvider.PreloadAsync();
         CHMPool.Instance.Init();
         CHMSound.Instance.Init();
         ChvjUnityInfra.CHMUI.Instance.Init();
+
+        // CHText/CHButton/CHToggle이 stringID/SFX 흐름에서 사용할 hook/provider 등록
+        ChvjUnityInfra.CHText.StringProvider = new GameStringProvider();
+        ChvjUnityInfra.CHText.FontProvider = new GameFontProvider();
+        ChvjUnityInfra.CHButton.ClickSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Cat);
+        ChvjUnityInfra.CHToggle.ChangeSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Cat);
     }
 
     /// <summary>

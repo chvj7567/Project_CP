@@ -3,7 +3,10 @@
   "rootNamespace": "ChvjUnityInfra",
   "references": [
     "com.chvj.unityinfra",
-    "Unity.Purchasing"
+    "UnityEngine.Purchasing",
+    "UnityEngine.Purchasing.Stores",
+    "UnityEngine.Purchasing.Apple",
+    "Purchasing.Common"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
