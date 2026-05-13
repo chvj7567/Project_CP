@@ -277,17 +277,20 @@ public class GPGameScene : MonoBehaviour
 
     private async Task LoadImage()
     {
+        var tasks = new List<Task>();
         for (EBlockState i = 0; i < EBlockState.Max; ++i)
         {
             if ((int)i >= 7 && (int)i <= 9) continue;
-            var t = new TaskCompletionSource<Sprite>();
-            CHMResource.Instance.LoadSprite(i, sprite =>
+            var blockState = i;
+            var tcs = new TaskCompletionSource<Sprite>();
+            CHMResource.Instance.LoadSprite(blockState, sprite =>
             {
-                if (sprite != null) _blockSpriteList[i] = sprite;
-                t.SetResult(sprite);
+                if (sprite != null) _blockSpriteList[blockState] = sprite;
+                tcs.SetResult(sprite);
             });
-            await t.Task;
+            tasks.Add(tcs.Task);
         }
+        await Task.WhenAll(tasks);
     }
 
     private void InitData()

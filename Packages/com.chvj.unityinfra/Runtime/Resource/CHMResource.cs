@@ -77,9 +77,10 @@ namespace ChvjUnityInfra
         }
 
         /// <summary>
-        /// 라벨에 속한 모든 Addressables 에셋을 병렬로 preload하고 진행률을 보고.
-        /// onProgress(ratio 0~1, currentKey)로 아직 로드 중인 키 하나를 표시용으로 전달.
-        /// 로드한 핸들은 _loadedHandles에 캐싱되어 이후 Load&lt;T&gt; 호출이 즉시 반환됨.
+        /// 라벨에 속한 Addressables의 번들 의존성을 download/캐시 워밍 + 키 리스트 순회로 진행률 보고.
+        /// onProgress(ratio 0~1, currentKey)로 현재 표시할 키 하나를 전달.
+        /// 에셋을 메모리에 적재하지는 않음 — 게임 측 Load&lt;T&gt;에서 lazy 로드됨.
+        /// 타입 mismatch (PNG가 Texture2D로 캐싱되어 Sprite 로드 시 실패) 회피.
         /// </summary>
         public async Task<bool> PreloadByLabelAsync(string label = LabelName, Action<float, string> onProgress = null)
         {
@@ -94,25 +95,7 @@ namespace ChvjUnityInfra
             }
 
             var locations = locHandle.Result;
-            if (locations.Count == 0)
-            {
-                Addressables.Release(locHandle);
-                onProgress?.Invoke(1f, string.Empty);
-                return true;
-            }
-
-            // 1) 캐시 미적중 키만 추려 병렬 launch
-            var pending = new List<(string key, AsyncOperationHandle<UnityEngine.Object> handle)>(locations.Count);
-            foreach (var loc in locations)
-            {
-                string key = loc.ToString().Split('/').Last().Split('.').First();
-                if (_loadedHandles.ContainsKey(key))
-                    continue;
-                var h = Addressables.LoadAssetAsync<UnityEngine.Object>(loc);
-                pending.Add((key, h));
-            }
-
-            int total = pending.Count;
+            int total = locations.Count;
             if (total == 0)
             {
                 Addressables.Release(locHandle);
@@ -120,44 +103,26 @@ namespace ChvjUnityInfra
                 return true;
             }
 
-            // 2) 한 프레임마다 완료 카운트 + 미완료 키 하나 보고
-            while (true)
+            // 키 표시용 순회 진행률과 번들 다운로드를 병렬 처리.
+            // 번들 다운로드는 로컬 빌드에서 거의 즉시 완료되고, 원격에서는 실제 바이트 진행을 반영.
+            var downloadHandle = Addressables.DownloadDependenciesAsync(label, false);
+
+            int displayIdx = 0;
+            while (!downloadHandle.IsDone)
             {
-                int done = 0;
-                string currentKey = null;
-                for (int i = 0; i < pending.Count; i++)
-                {
-                    var p = pending[i];
-                    if (p.handle.IsDone) done++;
-                    else if (currentKey == null) currentKey = p.key;
-                }
-                onProgress?.Invoke((float)done / total, currentKey ?? string.Empty);
-                if (done == total) break;
+                float ratio = downloadHandle.PercentComplete;
+                string key = locations[displayIdx % total].ToString().Split('/').Last().Split('.').First();
+                onProgress?.Invoke(ratio, key);
+                displayIdx++;
                 await Task.Yield();
             }
 
-            // 3) 캐시 적재 + 실패 핸들 release
-            bool allOk = true;
-            foreach (var (key, handle) in pending)
-            {
-                if (handle.Status == AsyncOperationStatus.Succeeded)
-                {
-                    if (_loadedHandles.ContainsKey(key) == false)
-                        _loadedHandles[key] = handle;
-                    else
-                        Addressables.Release(handle);
-                }
-                else
-                {
-                    Debug.LogWarning($"[CHMResource] Preload failed: {key}");
-                    Addressables.Release(handle);
-                    allOk = false;
-                }
-            }
-
+            bool success = downloadHandle.Status == AsyncOperationStatus.Succeeded;
+            Addressables.Release(downloadHandle);
             Addressables.Release(locHandle);
+
             onProgress?.Invoke(1f, string.Empty);
-            return allOk;
+            return success;
         }
 
         public void Load<T>(Enum key, Action<T> callback) where T : UnityEngine.Object
@@ -167,7 +132,7 @@ namespace ChvjUnityInfra
 
         public void Load<T>(string key, Action<T> callback) where T : UnityEngine.Object
         {
-            if (_dicAssetInfo.TryGetValue(key, out var pathInfo) == false)
+            if (_dicAssetInfo.ContainsKey(key) == false)
             {
                 Debug.LogWarning($"[CHMResource] Asset key not found: {key}");
                 callback?.Invoke(null);
@@ -184,7 +149,10 @@ namespace ChvjUnityInfra
                 }
             }
 
-            var handle = Addressables.LoadAssetAsync<T>(pathInfo);
+            // address(string)으로 로드 — IResourceLocation 사용 시 ResourceType과 T가 정확히 일치해야 하지만
+            // 문자열 키로 로드하면 Addressables의 sub-asset resolution이 작동
+            // (예: Sprite-imported PNG location.ResourceType이 Texture2D여도 LoadAssetAsync<Sprite>가 sprite 반환).
+            var handle = Addressables.LoadAssetAsync<T>(key);
             _loadedHandles[key] = handle;
             handle.Completed += h =>
             {
