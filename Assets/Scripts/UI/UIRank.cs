@@ -26,8 +26,6 @@ public class UIRank : UIBase
     [SerializeField] Button hardRankTapBtn;
     [SerializeField] Button bossRankTapBtn;
 
-    [SerializeField] CHText curRankDesc;
-
     [SerializeField] GameObject noRankingDataObj;
 
     [SerializeField] int aiCount;
@@ -45,7 +43,6 @@ public class UIRank : UIBase
             if (curTap == Defines.ESelectStage.Normal)
                 return;
 
-            curRankDesc.SetStringID(68);
             curTap = Defines.ESelectStage.Normal;
             var rankList = await GetRankList(Defines.ESelectStage.Normal);
 
@@ -64,7 +61,6 @@ public class UIRank : UIBase
             if (curTap == Defines.ESelectStage.Hard)
                 return;
 
-            curRankDesc.SetStringID(77);
             curTap = Defines.ESelectStage.Hard;
             var rankList = await GetRankList(Defines.ESelectStage.Hard);
 
@@ -83,7 +79,6 @@ public class UIRank : UIBase
             if (curTap == Defines.ESelectStage.Boss)
                 return;
 
-            curRankDesc.SetStringID(69);
             curTap = Defines.ESelectStage.Boss;
             var rankList = await GetRankList(Defines.ESelectStage.Boss);
 
@@ -97,7 +92,6 @@ public class UIRank : UIBase
             scrollView.SetItemList(rankList);
         });
 
-        curRankDesc.SetStringID(68);
         curTap = Defines.ESelectStage.Normal;
 
         var rankList = await GetRankList(Defines.ESelectStage.Normal);
