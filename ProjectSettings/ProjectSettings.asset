@@ -812,7 +812,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: UNITY_INFRA_ADS
+    Android: UNITY_INFRA_ADS;UNITY_INFRA_IAP
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
