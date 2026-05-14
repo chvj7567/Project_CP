@@ -64,7 +64,7 @@ public class LBLobbyScene : MonoBehaviour
         {
             if (!_loginHandler.GetGPGSLogin()) return;
             await _loginHandler.SetGPGSLogin(false, "");
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
             ChvjUnityInfra.CHMGPGS.Instance.Logout();
 #endif
         });
@@ -82,7 +82,7 @@ public class LBLobbyScene : MonoBehaviour
 
         connectGPGSBtn.OnPointerClickAsObservable().Subscribe(_ =>
         {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
             if (!CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).connectGPGS)
             {
                 objWait.SetActive(true);
@@ -144,7 +144,7 @@ public class LBLobbyScene : MonoBehaviour
                 if (_loginHandler.GetPhoneLoginState())
                 {
                     objWait.SetActive(true);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
                     ChvjUnityInfra.CHMGPGS.Instance.Login(async (success, localUser) =>
                     {
                         await _loginHandler.SetGPGSLogin(success, localUser.userName);

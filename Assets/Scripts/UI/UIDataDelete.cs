@@ -31,7 +31,7 @@ public class UIDataDelete : UIBase
                     stringID = 126
                 });
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
                 ChvjUnityInfra.CHMGPGS.Instance.Logout();
 #endif
 

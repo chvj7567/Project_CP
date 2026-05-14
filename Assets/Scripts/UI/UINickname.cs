@@ -40,7 +40,7 @@ public class UINickname : UIBase
             {
                 if (loginData.connectGPGS)
                 {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
                     ChvjUnityInfra.CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, 0, (success) =>
                     {
                         if (success)
