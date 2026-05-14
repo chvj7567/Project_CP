@@ -189,8 +189,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uB418\uB3CC\uB9B4 \uC218 \uC5C6\uC5B4\uC694"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7a80753307b8a50448bbbee5e44ca78c, type: 2}
-  m_sharedMaterial: {fileID: 5296021857593776560, guid: 7a80753307b8a50448bbbee5e44ca78c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c8cec9ee73859da4697f7f615d1d9a6d, type: 2}
+  m_sharedMaterial: {fileID: 1920853086847873214, guid: c8cec9ee73859da4697f7f615d1d9a6d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288ac871b0c72164b8da2b27def4d408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stringID: 128
+  _stringID: 140
 --- !u!1 &2086419049576060683
 GameObject:
   m_ObjectHideFlags: 0

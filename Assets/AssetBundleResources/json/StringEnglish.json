@@ -558,5 +558,9 @@
         {
             "stringID": 139,
             "value": "Gold Earned"
+        },
+        {
+            "stringID": 140,
+            "value": "Cannot be undone"
         }
     ]

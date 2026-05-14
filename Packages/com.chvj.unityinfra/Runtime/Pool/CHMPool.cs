@@ -52,6 +52,10 @@ namespace ChvjUnityInfra
 
             public CHPoolable Pop(Transform parent)
             {
+                // 씬 전환 race 방어: parent가 fake-null(이미 Destroy 진행 중)이면 Pop 자체를 건너뜀.
+                // 그대로 SetParent 호출 시 "Cannot set the parent ... while its new parent is being destroyed" 에러 발생.
+                if (parent != null && parent.gameObject == null) return null;
+
                 CHPoolable poolable;
 
                 if (_stPool.Count > 0)
@@ -62,6 +66,8 @@ namespace ChvjUnityInfra
                 {
                     poolable = Create();
                 }
+
+                if (poolable == null) return null;
 
                 poolable.transform.SetParent(parent, false);
                 poolable.IsUse = true;
@@ -130,10 +136,13 @@ namespace ChvjUnityInfra
             _poolDic[key].Push(poolable);
         }
 
-        /// <summary>풀에서 인스턴스를 꺼낸다. 풀이 없으면 자동 생성(기본 count로 워밍).</summary>
+        /// <summary>풀에서 인스턴스를 꺼낸다. 풀이 없으면 자동 생성(기본 count로 워밍).
+        /// parent가 fake-null(이미 Destroy 진행 중)이면 null 반환 — 호출자가 안전하게 fallback.</summary>
         public CHPoolable Pop(GameObject original, Transform parent = null)
         {
             if (original == null) return null;
+            // 씬 전환 race 방어: parent의 gameObject가 destroy 중이면 즉시 null 반환.
+            if (parent != null && parent.gameObject == null) return null;
             if (_poolDic.ContainsKey(original.name) == false)
             {
                 CreatePool(original);

@@ -6,6 +6,7 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using ChvjUnityInfra;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Defines;
@@ -116,6 +117,10 @@ public class GPGameScene : MonoBehaviour
 
     private async void Start()
     {
+        // 앱플레이어 가상 터치 환경에서 IBeginDragHandler 간헐적 미발화 방지
+        // — 기본 픽셀 임계값(10)이 가상 터치의 작은 delta에 막혀 드래그가 클릭으로만 잡히는 케이스 우회
+        if (EventSystem.current != null) EventSystem.current.pixelDragThreshold = 5;
+
         InitUI();
         BindUI();
 
