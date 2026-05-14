@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 72b6752155ea5184d96a2d5b5afd3800
+guid: 16f16c96d7c07b847a708efd89bc97da
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 721390186749695584
-    second: Play_Chip_Heart_Sm_BG_0
+      213: 7291909746449256373
+    second: node_unlocked@1x_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Play_Chip_Heart_Sm_BG_0
+      name: node_unlocked@1x_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 3
-        width: 126
-        height: 54
+        x: 9
+        y: 5
+        width: 62
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0661ba18d84e20a00800000000000000
-      internalID: 721390186749695584
+      spriteID: 5bf015bb741123560800000000000000
+      internalID: 7291909746449256373
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Play_Chip_Heart_Sm_BG_0: 721390186749695584
+      node_unlocked@1x_0: 7291909746449256373
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
