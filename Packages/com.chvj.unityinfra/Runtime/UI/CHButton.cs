@@ -22,10 +22,18 @@ namespace ChvjUnityInfra
 
         private bool _initialize = false;
 
-        public bool Interatable
+        public bool Interactable
         {
-            get { return _button.interactable; }
-            set { _button.interactable = value; }
+            get
+            {
+                Init();
+                return _button.interactable;
+            }
+            set
+            {
+                Init();
+                _button.interactable = value;
+            }
         }
 
         private void Awake()

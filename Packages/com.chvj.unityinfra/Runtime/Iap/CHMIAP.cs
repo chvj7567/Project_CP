@@ -29,7 +29,8 @@ namespace ChvjUnityInfra
 
         public bool IsInitialized => _iStoreController != null && _iExtensionProvider != null;
 
-        public Action<PurchaseState> purchaseState;
+        /// <summary>구매/초기화 결과 통지. 등록은 += 로 (event라 = 대입 불가).</summary>
+        public event Action<PurchaseState> purchaseState;
 
         public bool IsConsumableType(string productName)
         {
@@ -62,9 +63,12 @@ namespace ChvjUnityInfra
             foreach (var p in config.Products)
             {
                 _productList.Add(p);
+                // 단일 productID를 양쪽 스토어에 동일하게 등록. 스토어별 ID가 다른 경우는
+                // IAPProductConfig를 확장해 productID_apple 같은 필드를 추가하면 된다.
                 builder.AddProduct(p.productName, p.productType, new IDs
                 {
-                    { p.productID, GooglePlay.Name }
+                    { p.productID, GooglePlay.Name },
+                    { p.productID, AppleAppStore.Name },
                 });
             }
 
@@ -81,11 +85,13 @@ namespace ChvjUnityInfra
         public void OnInitializeFailed(InitializationFailureReason error)
         {
             Debug.LogError($"[CHMIAP] 초기화 실패: {error}");
+            purchaseState?.Invoke(new PurchaseState { productName = null, state = EPurchase.InitFailed });
         }
 
         public void OnInitializeFailed(InitializationFailureReason error, string message)
         {
             Debug.LogError($"[CHMIAP] 초기화 실패: {error}\n{message}");
+            purchaseState?.Invoke(new PurchaseState { productName = null, state = EPurchase.InitFailed });
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
@@ -172,35 +178,28 @@ namespace ChvjUnityInfra
             return product?.metadata.isoCurrencyCode ?? "";
         }
 
+        /// <summary>스토어 productID로 구매 가능 여부 조회. 비소모성이면 이미 구매한 경우 false.</summary>
         public bool CanBuyFromID(string productID)
         {
             var product = _productList.Find(_ => _.productID == productID);
-            if (product == null) return false;
-
-            if (!IsConsumableType(product.productName))
-            {
-                if (HadPurchased(product.productName))
-                {
-                    Debug.Log($"[CHMIAP] 이미 구매한 상품: {product.productName}");
-                    return false;
-                }
-            }
-
-            return true;
+            return product != null && CanBuyInternal(product);
         }
 
+        /// <summary>게임 내 productName으로 구매 가능 여부 조회. 비소모성이면 이미 구매한 경우 false.</summary>
         public bool CanBuyFromName(string productName)
         {
             var product = _productList.Find(_ => _.productName == productName);
-            if (product == null) return false;
+            return product != null && CanBuyInternal(product);
+        }
 
-            if (!IsConsumableType(product.productName))
+        private bool CanBuyInternal(IAPProductConfig.Product product)
+        {
+            if (IsConsumableType(product.productName)) return true;
+
+            if (HadPurchased(product.productName))
             {
-                if (HadPurchased(product.productName))
-                {
-                    Debug.Log($"[CHMIAP] 이미 구매한 상품: {product.productName}");
-                    return false;
-                }
+                Debug.Log($"[CHMIAP] 이미 구매한 상품: {product.productName}");
+                return false;
             }
 
             return true;

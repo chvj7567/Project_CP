@@ -11,46 +11,61 @@ namespace ChvjUnityInfra
 {
     public class CHMResource : CHSingletonStatic<CHMResource>
     {
-        private const string LabelName = "Resource";
-        private bool _initialize = false;
+        public const string DefaultLabel = "Resource";
+
+        private string _label = DefaultLabel;
+        private Task<bool> _initTask;
 
         private Dictionary<string, IResourceLocation> _dicAssetInfo = new Dictionary<string, IResourceLocation>();
         // 로드된 핸들 보관 — 같은 키 재로드 시 캐시 사용 + 명시적 Unload 가능
         private Dictionary<string, AsyncOperationHandle> _loadedHandles = new Dictionary<string, AsyncOperationHandle>();
 
-        public async Task<bool> Init()
+        /// <summary>Init에 지정한 라벨. 키 인덱싱·기본 Preload 대상.</summary>
+        public string Label => _label;
+
+        /// <summary>
+        /// Addressables 초기화 + 라벨 키 인덱싱.
+        /// 동시 호출 시 같은 Task를 반환(race 방지). 실패 시 _initTask를 비워 다음 호출에서 retry 가능.
+        /// </summary>
+        /// <param name="label">키 인덱싱에 사용할 Addressables 라벨. 기본 "Resource".</param>
+        public Task<bool> Init(string label = DefaultLabel)
         {
-            if (_initialize)
-                return false;
+            if (_initTask != null) return _initTask;
+            _label = label;
+            _initTask = InitInternal();
+            return _initTask;
+        }
 
-            _initialize = true;
-
+        private async Task<bool> InitInternal()
+        {
             TaskCompletionSource<bool> initComplete = new TaskCompletionSource<bool>();
 
             Addressables.InitializeAsync().Completed += (handle) =>
             {
-                if (handle.Status != AsyncOperationStatus.Succeeded)
-                {
-                    initComplete.TrySetResult(false);
-                }
-                else
-                {
-                    initComplete.TrySetResult(true);
-                }
-
-                Addressables.Release(handle);
+                bool ok = handle.Status == AsyncOperationStatus.Succeeded;
+                initComplete.TrySetResult(ok);
+                // InitializeAsync 결과는 Addressables가 자체 lifecycle 관리. release 호출 안 함.
             };
 
-            await initComplete.Task;
+            if (await initComplete.Task == false)
+            {
+                _initTask = null;
+                return false;
+            }
 
-            return await SaveLocationInfo();
+            bool saveOk = await SaveLocationInfo();
+            if (saveOk == false)
+            {
+                _initTask = null;
+            }
+            return saveOk;
         }
 
         private async Task<bool> SaveLocationInfo()
         {
             TaskCompletionSource<bool> saveComplete = new TaskCompletionSource<bool>();
 
-            Addressables.LoadResourceLocationsAsync(LabelName).Completed += (handle) =>
+            Addressables.LoadResourceLocationsAsync(_label).Completed += (handle) =>
             {
                 if (handle.Status != AsyncOperationStatus.Succeeded)
                 {
@@ -82,8 +97,10 @@ namespace ChvjUnityInfra
         /// 에셋을 메모리에 적재하지는 않음 — 게임 측 Load&lt;T&gt;에서 lazy 로드됨.
         /// 타입 mismatch (PNG가 Texture2D로 캐싱되어 Sprite 로드 시 실패) 회피.
         /// </summary>
-        public async Task<bool> PreloadByLabelAsync(string label = LabelName, Action<float, string> onProgress = null)
+        /// <param name="label">대상 라벨. null이면 Init에 지정한 라벨 사용.</param>
+        public async Task<bool> PreloadByLabelAsync(string label = null, Action<float, string> onProgress = null)
         {
+            if (string.IsNullOrEmpty(label)) label = _label;
             var locHandle = Addressables.LoadResourceLocationsAsync(label);
             await locHandle.Task;
 
@@ -125,11 +142,13 @@ namespace ChvjUnityInfra
             return success;
         }
 
+        /// <summary>키(enum 이름)로 에셋 비동기 로드. 콜백에 결과 전달. 실패/키 없음 시 콜백에 null.</summary>
         public void Load<T>(Enum key, Action<T> callback) where T : UnityEngine.Object
         {
             Load(key.ToString(), callback);
         }
 
+        /// <summary>키(문자열)로 에셋 비동기 로드. 실패/키 없음 시 콜백에 null.</summary>
         public void Load<T>(string key, Action<T> callback) where T : UnityEngine.Object
         {
             if (_dicAssetInfo.ContainsKey(key) == false)
@@ -147,6 +166,9 @@ namespace ChvjUnityInfra
                     callback?.Invoke(cachedResult);
                     return;
                 }
+                // 타입 mismatch — 기존 핸들 release 후 새 타입으로 재로드 (핸들 leak 방지)
+                Addressables.Release(cached);
+                _loadedHandles.Remove(key);
             }
 
             // address(string)으로 로드 — IResourceLocation 사용 시 ResourceType과 T가 정확히 일치해야 하지만
@@ -168,11 +190,24 @@ namespace ChvjUnityInfra
             };
         }
 
+        /// <summary>Load의 async/await 버전. 결과가 null이면 실패.</summary>
+        public Task<T> LoadAsync<T>(Enum key) where T : UnityEngine.Object => LoadAsync<T>(key.ToString());
+
+        /// <summary>Load의 async/await 버전. 결과가 null이면 실패.</summary>
+        public Task<T> LoadAsync<T>(string key) where T : UnityEngine.Object
+        {
+            var tcs = new TaskCompletionSource<T>();
+            Load<T>(key, result => tcs.TrySetResult(result));
+            return tcs.Task;
+        }
+
+        /// <summary>키로 에셋 로드 후 Instantiate. 실패/키 없음 시 콜백에 null.</summary>
         public void Instantiate<T>(Enum key, Action<T> callback) where T : UnityEngine.Object
         {
             Instantiate(key.ToString(), callback);
         }
 
+        /// <summary>키로 에셋 로드 후 Instantiate. 실패/키 없음 시 콜백에 null.</summary>
         public void Instantiate<T>(string key, Action<T> callback) where T : UnityEngine.Object
         {
             Load<T>(key, (resource) =>
@@ -185,6 +220,17 @@ namespace ChvjUnityInfra
 
                 callback?.Invoke(UnityEngine.Object.Instantiate(resource));
             });
+        }
+
+        /// <summary>Instantiate의 async/await 버전.</summary>
+        public Task<T> InstantiateAsync<T>(Enum key) where T : UnityEngine.Object => InstantiateAsync<T>(key.ToString());
+
+        /// <summary>Instantiate의 async/await 버전.</summary>
+        public Task<T> InstantiateAsync<T>(string key) where T : UnityEngine.Object
+        {
+            var tcs = new TaskCompletionSource<T>();
+            Instantiate<T>(key, result => tcs.TrySetResult(result));
+            return tcs.Task;
         }
 
         /// <summary>

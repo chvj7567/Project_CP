@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -122,6 +123,14 @@ namespace ChvjUnityInfra
                     return;
                 ShowUIInternal(root, uiType, arg, callback);
             });
+        }
+
+        /// <summary>ShowUI의 async/await 버전. 캔버스 확보·인스턴스 로드 실패 시 결과는 null.</summary>
+        public Task<UIBase> ShowUIAsync(Enum uiType, UIArg arg = null)
+        {
+            var tcs = new TaskCompletionSource<UIBase>();
+            ShowUI(uiType, arg, ui => tcs.TrySetResult(ui));
+            return tcs.Task;
         }
 
         private void ShowUIInternal(Transform root, Enum uiType, UIArg arg, Action<UIBase> callback)

@@ -67,7 +67,7 @@ namespace ChvjUnityInfra
                 StringBuilder sb = new StringBuilder();
                 foreach (var arg in arrArg)
                 {
-                    sb.Append(arg.ToString());
+                    sb.Append(arg?.ToString() ?? string.Empty);
                 }
 
                 _text.text = sb.ToString();

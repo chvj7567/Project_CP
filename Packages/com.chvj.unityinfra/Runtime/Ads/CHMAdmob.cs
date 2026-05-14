@@ -22,8 +22,10 @@ namespace ChvjUnityInfra
 
         private bool _initialize = false;
 
-        public Action AcquireReward;
-        public Action CloseAD;
+        /// <summary>보상형 광고 시청 완료 시 발생.</summary>
+        public event Action AcquireReward;
+        /// <summary>전면/보상형 광고가 닫혔을 때 발생.</summary>
+        public event Action CloseAD;
 
         public void Init()
         {
@@ -54,19 +56,38 @@ namespace ChvjUnityInfra
             }
 #endif
 
-            MobileAds.Initialize(initStatus => { });
-
-            _adRequest = new AdRequest();
-
-            LoadInterstitialAd();
-            LoadRewardedAd();
+            // MobileAds 초기화 완료 후 광고 load (SDK 권장 순서).
+            MobileAds.Initialize(initStatus =>
+            {
+                _adRequest = new AdRequest();
+                LoadInterstitialAd();
+                LoadRewardedAd();
+            });
         }
 
+        /// <summary>배너 표시. 기존 배너가 있으면 destroy 후 새로 생성.</summary>
         public void ShowBanner(AdPosition position)
         {
+            HideBanner();
             _bannerView = new BannerView(_bannerAdUnitId, AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth), position);
             _bannerView.LoadAd(_adRequest);
         }
+
+        /// <summary>배너 제거. 호출 안전 (배너 없으면 무동작).</summary>
+        public void HideBanner()
+        {
+            if (_bannerView != null)
+            {
+                _bannerView.Destroy();
+                _bannerView = null;
+            }
+        }
+
+        /// <summary>전면 광고 즉시 표시 가능 여부.</summary>
+        public bool IsInterstitialReady => _interstitialAd != null && _interstitialAd.CanShowAd();
+
+        /// <summary>보상형 광고 즉시 표시 가능 여부.</summary>
+        public bool IsRewardedReady => _rewardedAd != null && _rewardedAd.CanShowAd();
 
         private void LoadInterstitialAd(bool show = false)
         {

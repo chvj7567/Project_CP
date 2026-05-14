@@ -17,25 +17,39 @@ namespace ChvjUnityInfra
     {
         private const string BGMVolumeKey = "CHMSound.BGMVolume";
         private const string EffectVolumeKey = "CHMSound.EffectVolume";
+        private const string MasterVolumeKey = "CHMSound.MasterVolume";
 
         private AudioSource[] _audioSourceArr;
         private Dictionary<int, AudioClip> _audioClipDict = new Dictionary<int, AudioClip>();
         private HashSet<int> _bgmIndices = new HashSet<int>();
         private bool _initialize = false;
 
+        /// <summary>BGM 볼륨 (0~1). PlayerPrefs에 영구 저장.</summary>
         public float BgmVolume
         {
             get => PlayerPrefs.GetFloat(BGMVolumeKey, 1f);
             private set => PlayerPrefs.SetFloat(BGMVolumeKey, value);
         }
 
+        /// <summary>효과음 볼륨 (0~1). PlayerPrefs에 영구 저장.</summary>
         public float EffectVolume
         {
             get => PlayerPrefs.GetFloat(EffectVolumeKey, 1f);
             private set => PlayerPrefs.SetFloat(EffectVolumeKey, value);
         }
 
-        public float Ratio { get; private set; } = 0.5f;
+        /// <summary>
+        /// 마스터 볼륨 multiplier. 실제 재생 볼륨 = (BgmVolume 또는 EffectVolume) × MasterVolume.
+        /// 기본 0.5 (전체 톤다운). PlayerPrefs에 영구 저장.
+        /// </summary>
+        public float MasterVolume
+        {
+            get => PlayerPrefs.GetFloat(MasterVolumeKey, 0.5f);
+            private set => PlayerPrefs.SetFloat(MasterVolumeKey, value);
+        }
+
+        /// <summary>기존 이름 호환 — <see cref="MasterVolume"/>의 별칭.</summary>
+        public float Ratio => MasterVolume;
 
         /// <summary>
         /// 게임 enum 타입의 사운드 채널 자동 구성. bgmKeys로 BGM(loop) 채널 명시.
@@ -45,6 +59,7 @@ namespace ChvjUnityInfra
         /// </summary>
         public void Init<TAudio>(params TAudio[] bgmKeys) where TAudio : struct, Enum
         {
+            // 중복 호출은 무시 (다른 enum 타입으로 재초기화하려면 Shutdown 먼저).
             if (_initialize)
                 return;
 
@@ -103,27 +118,94 @@ namespace ChvjUnityInfra
             DontDestroyOnLoad(root);
         }
 
+        /// <summary>BGM 채널 볼륨 변경 + 현재 재생 중인 BGM에 즉시 반영. PlayerPrefs 저장.</summary>
         public void SetBGMVolume(float volume)
         {
-            BgmVolume = volume;
+            BgmVolume = Mathf.Clamp01(volume);
+            if (_audioSourceArr == null) return;
             foreach (int idx in _bgmIndices)
             {
                 if (idx >= 0 && idx < _audioSourceArr.Length && _audioSourceArr[idx] != null)
                 {
-                    _audioSourceArr[idx].volume = BgmVolume * Ratio;
+                    _audioSourceArr[idx].volume = BgmVolume * MasterVolume;
                 }
             }
         }
 
+        /// <summary>효과음 볼륨 변경. (PlayOneShot은 호출 시점 source.volume을 곱하므로 다음 재생부터 반영)</summary>
         public void SetEffectVolume(float volume)
         {
-            EffectVolume = volume;
+            EffectVolume = Mathf.Clamp01(volume);
+            if (_audioSourceArr == null) return;
             for (int i = 0; i < _audioSourceArr.Length; i++)
             {
                 if (_bgmIndices.Contains(i)) continue;
                 if (_audioSourceArr[i] == null) continue;
-                _audioSourceArr[i].volume = EffectVolume * Ratio;
+                _audioSourceArr[i].volume = EffectVolume * MasterVolume;
             }
+        }
+
+        /// <summary>마스터 볼륨 변경 + 모든 채널에 즉시 반영. PlayerPrefs 저장.</summary>
+        public void SetMasterVolume(float volume)
+        {
+            MasterVolume = Mathf.Clamp01(volume);
+            if (_audioSourceArr == null) return;
+            for (int i = 0; i < _audioSourceArr.Length; i++)
+            {
+                if (_audioSourceArr[i] == null) continue;
+                _audioSourceArr[i].volume = (_bgmIndices.Contains(i) ? BgmVolume : EffectVolume) * MasterVolume;
+            }
+        }
+
+        /// <summary>특정 BGM 채널 정지. 효과음 채널엔 무효.</summary>
+        public void Stop(Enum audioType)
+        {
+            if (_audioSourceArr == null) return;
+            int v = Convert.ToInt32(audioType);
+            if (v < 0 || v >= _audioSourceArr.Length || _audioSourceArr[v] == null) return;
+            _audioSourceArr[v].Stop();
+        }
+
+        /// <summary>모든 BGM 채널 정지.</summary>
+        public void StopAllBGM()
+        {
+            if (_audioSourceArr == null) return;
+            foreach (int idx in _bgmIndices)
+            {
+                if (idx >= 0 && idx < _audioSourceArr.Length && _audioSourceArr[idx] != null)
+                {
+                    _audioSourceArr[idx].Stop();
+                }
+            }
+        }
+
+        /// <summary>모든 채널 일시정지(BGM·효과음). 게임 pause용.</summary>
+        public void PauseAll()
+        {
+            if (_audioSourceArr == null) return;
+            for (int i = 0; i < _audioSourceArr.Length; i++)
+            {
+                if (_audioSourceArr[i] != null) _audioSourceArr[i].Pause();
+            }
+        }
+
+        /// <summary>일시정지된 채널 재개.</summary>
+        public void UnPauseAll()
+        {
+            if (_audioSourceArr == null) return;
+            for (int i = 0; i < _audioSourceArr.Length; i++)
+            {
+                if (_audioSourceArr[i] != null) _audioSourceArr[i].UnPause();
+            }
+        }
+
+        /// <summary>해당 채널이 현재 재생 중인지. 채널 없으면 false.</summary>
+        public bool IsPlaying(Enum audioType)
+        {
+            if (_audioSourceArr == null) return false;
+            int v = Convert.ToInt32(audioType);
+            if (v < 0 || v >= _audioSourceArr.Length || _audioSourceArr[v] == null) return false;
+            return _audioSourceArr[v].isPlaying;
         }
 
         public async void Play(Enum audioType, float pitch = 1.0f)

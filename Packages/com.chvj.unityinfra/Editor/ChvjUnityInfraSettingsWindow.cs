@@ -22,6 +22,8 @@ namespace ChvjUnityInfra.Editor
 
         private static readonly string[] TabLabels = { "Ads", "IAP", "Social" };
 
+        private const string TabIndexKey = "ChvjUnityInfra.SettingsWindow.TabIndex";
+
         private int _tabIndex;
         private Vector2 _scroll;
 
@@ -33,10 +35,20 @@ namespace ChvjUnityInfra.Editor
             window.Show();
         }
 
+        private void OnEnable()
+        {
+            _tabIndex = SessionState.GetInt(TabIndexKey, 0);
+        }
+
         private void OnGUI()
         {
             EditorGUILayout.Space();
-            _tabIndex = GUILayout.Toolbar(_tabIndex, TabLabels, GUILayout.Height(28));
+            int next = GUILayout.Toolbar(_tabIndex, TabLabels, GUILayout.Height(28));
+            if (next != _tabIndex)
+            {
+                _tabIndex = next;
+                SessionState.SetInt(TabIndexKey, _tabIndex);
+            }
             EditorGUILayout.Space();
 
             _scroll = EditorGUILayout.BeginScrollView(_scroll);

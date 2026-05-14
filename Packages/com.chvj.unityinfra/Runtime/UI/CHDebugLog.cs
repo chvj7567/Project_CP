@@ -1,15 +1,17 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ChvjUnityInfra
 {
+    /// <summary>
+    /// Application.logMessageReceived를 구독해 <see cref="logText"/>에 로그 내용을 표시한다.
+    /// 디바이스 빌드에서 콘솔이 없을 때 게임 내 디버그 표시용. Warning은 표시하지 않음.
+    /// </summary>
     public class CHDebugLog : MonoBehaviour
     {
         public CHText logText;
 
         [ReadOnly]
-        private int _logCount = 0;
-        private Dictionary<string, GUIStyle> _dicLogInfo = new Dictionary<string, GUIStyle>();
+        [SerializeField] private int _logCount = 0;
 
         private void Awake()
         {
@@ -17,31 +19,21 @@ namespace ChvjUnityInfra
             Application.logMessageReceived += HandleLog;
         }
 
+        private void OnDestroy()
+        {
+            Application.logMessageReceived -= HandleLog;
+        }
+
         private void HandleLog(string logString, string stackTrace, LogType type)
         {
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 20;
-            switch (type)
-            {
-                case LogType.Log:
-                    style.normal.textColor = Color.white;
-                    break;
-                case LogType.Warning:
-                    return;
-                case LogType.Error:
-                case LogType.Exception:
-                case LogType.Assert:
-                    style.normal.textColor = Color.red;
-                    break;
-            }
+            if (type == LogType.Warning) return;
 
-            logString = $"<{++_logCount}>[{type}] : {logString}";
-
-            _dicLogInfo.Add(logString, style);
+            _logCount++;
+            string line = $"<{_logCount}>[{type}] : {logString}";
 
             if (logText != null)
             {
-                logText.SetPlusString(logString);
+                logText.SetPlusString(line);
                 logText.SetPlusString("\n");
             }
         }

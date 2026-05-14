@@ -16,7 +16,7 @@ namespace ChvjUnityInfra
 
         protected CompositeDisposable closeDisposable = new CompositeDisposable();
 
-        public void Init(Enum uiType)
+        internal void Init(Enum uiType)
         {
             closeDisposable?.Clear();
             closeDisposable = new CompositeDisposable();

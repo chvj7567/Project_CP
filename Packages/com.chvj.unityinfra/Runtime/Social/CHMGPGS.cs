@@ -13,10 +13,20 @@ namespace ChvjUnityInfra
     /// <summary>
     /// Google Play Games Services 매니저. Android only.
     /// 로그인, 클라우드 저장, 업적, 리더보드, 이벤트 지원.
+    ///
+    /// 주의: 이 구현은 GPGS Plugin v1 (PlayGamesClientConfiguration / SignInInteractivity) 기반.
+    /// v2(2023+) plugin은 PlayGamesClientConfiguration이 제거됐으므로,
+    /// v2 plugin을 가져온 프로젝트는 본 클래스 Init을 별도로 마이그레이션해야 한다.
     /// </summary>
     public class CHMGPGS : CHSingletonStatic<CHMGPGS>
     {
         private bool _initialized = false;
+
+        /// <summary>디버그 로그 출력 여부. Init 호출 전에 설정해야 반영된다. 기본 true.</summary>
+        public bool DebugLogEnabled { get; set; } = true;
+
+        /// <summary>현재 로그인되어 있는지 여부.</summary>
+        public bool IsAuthenticated => Social.localUser != null && Social.localUser.authenticated;
 
         private void Init()
         {
@@ -28,10 +38,11 @@ namespace ChvjUnityInfra
                 .RequestEmail()
                 .EnableSavedGames()
                 .Build());
-            PlayGamesPlatform.DebugLogEnabled = true;
+            PlayGamesPlatform.DebugLogEnabled = DebugLogEnabled;
             PlayGamesPlatform.Activate();
         }
 
+        /// <summary>GPGS 로그인. Init이 안 됐으면 자동 호출.</summary>
         public void Login(Action<bool, ILocalUser> onLoginSuccess = null)
         {
             Init();
@@ -41,12 +52,14 @@ namespace ChvjUnityInfra
             });
         }
 
-        public void Logout()
+        /// <summary>로그아웃. 비인증 상태에서 호출해도 안전.</summary>
+        public void Logout(Action onLoggedOut = null)
         {
-            if (Social.localUser.authenticated)
+            if (IsAuthenticated)
             {
                 PlayGamesPlatform.Instance.SignOut();
             }
+            onLoggedOut?.Invoke();
         }
 
         public void SaveCloud(string fileName, string saveData, Action<bool> onCloudSaved = null)
