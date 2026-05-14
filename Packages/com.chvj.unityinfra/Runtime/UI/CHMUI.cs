@@ -145,8 +145,15 @@ namespace ChvjUnityInfra
                 // 비동기 로드 — 콜백에서 _dicWaitCloseUI 검사 (race 처리)
                 CHMResource.Instance.Instantiate<GameObject>(uiType, (ui) =>
                 {
-                    if (_rootTransform == null)
+                    if (ui == null)
                         return;
+                    // 콜백이 씬 전환 후에 도착한 경우 — root가 무효화됐으니 인스턴스 폐기.
+                    // (prefab이 활성 상태로 저장된 경우 InitUI 없이 Start가 호출돼 NullRef 위험.)
+                    if (_rootTransform == null)
+                    {
+                        UnityEngine.Object.Destroy(ui);
+                        return;
+                    }
                     ui.transform.SetParent(_rootTransform, false);
                     var rectTransform = ui.GetComponent<RectTransform>();
                     // Stretch 설정
@@ -163,7 +170,10 @@ namespace ChvjUnityInfra
 
                     UIBase newUI = ui.GetComponent<UIBase>();
                     if (newUI == null)
+                    {
+                        UnityEngine.Object.Destroy(ui);
                         return;
+                    }
 
                     _dicCashingUI[uiType] = newUI;
 

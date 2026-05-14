@@ -28,6 +28,13 @@ public class UIAlarm : UIBase
 
     private async void Start()
     {
+        // InitUI 없이 Start가 호출되는 경합(씬 전환 직전 ShowUI 등)에서 self-destruct.
+        if (arg == null)
+        {
+            CHMUI.Instance.CloseUI(gameObject);
+            return;
+        }
+
         if (arg.useStringID)
         {
             alarmText.SetStringID(arg.stringID);

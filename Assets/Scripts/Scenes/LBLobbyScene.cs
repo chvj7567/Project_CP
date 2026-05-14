@@ -12,6 +12,9 @@ public class LBLobbyScene : MonoBehaviour
     // GPGameScene 등에서 lobby로 돌아올 때 true로 세팅 → Start에서 startBtn 단계 건너뛰고 스테이지 메뉴 직행
     public static bool fromGame = false;
 
+    // GameScene에서 다음 스테이지로 바로 이어가고 싶을 때 stage 번호 세팅 → 로비 진입 후 UIGameStart 자동 표시
+    public static int pendingShowGameStartStage = 0;
+
     [SerializeField] Canvas canvas;
     [SerializeField] GameObject stageSelect1;
     [SerializeField] GameObject stageSelect2;
@@ -168,7 +171,15 @@ public class LBLobbyScene : MonoBehaviour
         if (fromGame)
         {
             fromGame = false;
+            int autoStartStage = pendingShowGameStartStage;
+            pendingShowGameStartStage = 0;
+
             await StageSelect(PlayerPrefs.GetInt(CHMString.Instance.SelectStage));
+
+            if (autoStartStage > 0)
+            {
+                CHMUI.Instance.ShowUI(Defines.EUI.UIGameStart, new UIGameStartArg { stage = autoStartStage });
+            }
         }
         else
         {
@@ -182,13 +193,18 @@ public class LBLobbyScene : MonoBehaviour
     async Task StageSelect(int select)
     {
         PlayerPrefs.SetInt(CHMString.Instance.SelectStage, select);
+
+        // 페이지 초기화는 stageSelect1/2 컨테이너가 활성화된 뒤에 한다.
+        // 자식 CHButton들이 Awake에서 GetComponent<Button>()을 셋팅하므로,
+        // 비활성 상태로 두면 btnList[i].button이 null이라 OnClickAsObservable에서 NullRef.
+        stageSelect1.SetActive(true);
+        stageSelect2.SetActive(true);
         pageMove.Init((Defines.ESelectStage)select);
+
         startBtn.gameObject.SetActive(false);
         missionBtn.gameObject.SetActive(true);
         shopBtn.gameObject.SetActive(true);
         bombBtn.gameObject.SetActive(true);
-        stageSelect1.SetActive(true);
-        stageSelect2.SetActive(true);
         menuBtn.gameObject.SetActive(true);
         rankingBtn.gameObject.SetActive(true);
 

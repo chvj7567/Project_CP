@@ -550,5 +550,13 @@
         {
             "stringID": 137,
             "value": "데이터"
+        },
+        {
+            "stringID": 138,
+            "value": "다시"
+        },
+        {
+            "stringID": 139,
+            "value": "획득 골드"
         }
     ]
