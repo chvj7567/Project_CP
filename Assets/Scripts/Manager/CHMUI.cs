@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CHMUI : ChvjUnityInfra.CHSingletonStatic<CHMUI>
 {
+    public bool CheckUI => ChvjUnityInfra.CHMUI.Instance.CheckUI;
+
     public void ShowUI(Defines.EUI _uiType, CHUIArg _uiArg)
     {
         ChvjUnityInfra.CHMUI.Instance.ShowUI(_uiType, _uiArg);

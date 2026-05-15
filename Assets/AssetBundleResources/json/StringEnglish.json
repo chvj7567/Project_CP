@@ -562,5 +562,9 @@
         {
             "stringID": 140,
             "value": "Cannot be undone"
+        },
+        {
+            "stringID": 141,
+            "value": "Are you sure you want to quit?"
         }
     ]

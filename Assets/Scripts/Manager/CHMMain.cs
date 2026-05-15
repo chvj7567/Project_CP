@@ -59,6 +59,40 @@ public class CHMMain : MonoBehaviour
         _ = EnsureInitialized();
     }
 
+    // 직전 프레임의 UI 열림 여부. 같은 프레임에 패키지 CHMUI가 ESC로 UI를 닫은 경우
+    // CheckUI=false가 되어 즉시 재오픈되는 race를 막기 위함.
+    // Update 페이즈가 모두 끝난 LateUpdate에서 체크해야 EventSystem/패키지 CHMUI 처리 후의
+    // 결정적 상태를 볼 수 있다 (Update 순서는 비결정적).
+    bool _wasUIOpenLastFrame;
+
+    private void LateUpdate()
+    {
+        if (_initTask == null || !_initTask.IsCompleted)
+            return;
+
+        bool isUIOpen = CHMUI.Instance.CheckUI;
+
+        if (Input.GetKeyDown(KeyCode.Escape) && !isUIOpen && !_wasUIOpenLastFrame)
+        {
+            CHMUI.Instance.ShowUI(Defines.EUI.UIConfirm, new UIConfirmArg
+            {
+                confirmType = EConfirmType.YesNo,
+                txtTitle = CHMString.Instance.GetString(141),
+                txtDesc = "",
+                onYes = () =>
+                {
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#else
+                    Application.Quit();
+#endif
+                },
+            });
+        }
+
+        _wasUIOpenLastFrame = isUIOpen;
+    }
+
     private void OnApplicationQuit()
     {
         if (m_instance != null)
