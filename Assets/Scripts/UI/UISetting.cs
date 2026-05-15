@@ -95,7 +95,24 @@ public class UISetting : UIBase
 
         deleteBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            CHMUI.Instance.ShowUI(Defines.EUI.UIDataDelete, new UIDataDeleteArg());
+            CHMUI.Instance.ShowUI(Defines.EUI.UIConfirm, new UIConfirmArg
+            {
+                confirmType = EConfirmType.YesNo,
+                txtTitle = CHMString.Instance.GetString(128),
+                colorTitle = Color.red,
+                txtDesc = CHMString.Instance.GetString(140),
+                onYes = () =>
+                {
+                    CHMData.Instance.DeleteData(CHMString.Instance.CatPang, ret =>
+                    {
+                        CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg { stringID = 126 });
+#if UNITY_ANDROID && !UNITY_EDITOR
+                        ChvjUnityInfra.CHMGPGS.Instance.Logout();
+#endif
+                        SceneManager.LoadScene(1);
+                    });
+                },
+            });
         });
 
         redSlider.OnValueChangedAsObservable().Subscribe(_ =>

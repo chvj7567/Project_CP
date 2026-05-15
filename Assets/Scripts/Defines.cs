@@ -64,7 +64,6 @@ public class Defines
         EventSystem,
         UICamera,
         UICanvas,
-        UIChoice,
         UIAlarm,
         UIMission,
         UIShop,
@@ -74,7 +73,7 @@ public class Defines
         UIStageSelect,
         UINickname,
         UIRank,
-        UIDataDelete,
+        UIConfirm,
 
         Max
     }

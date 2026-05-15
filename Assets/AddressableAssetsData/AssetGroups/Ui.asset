@@ -82,7 +82,7 @@ MonoBehaviour:
     - Resource
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e84f3b912bf1fd74d9d74374ae5ed244
-    m_Address: UIDataDelete
+    m_Address: UIConfirm
     m_ReadOnly: 0
     m_SerializedLabels:
     - Resource
