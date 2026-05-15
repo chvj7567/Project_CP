@@ -28,6 +28,17 @@ public class Defines
         English,
     }
 
+    // 빌드 인덱스 순서 그대로. enum 이름은 Assets/Scenes 의 .unity 파일명과 정확히 일치시킬 것
+    // (SceneManager.GetActiveScene().name 과 nameof(EScene.X) 직접 비교를 위함).
+    public enum EScene
+    {
+        None = -1,
+
+        ResourceDownloadScene,
+        FirstScene,
+        GameScene,
+    }
+
     public enum EResourceType
     {
         None = -1,

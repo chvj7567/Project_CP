@@ -74,7 +74,7 @@ public class CHMMain : MonoBehaviour
         bool isUIOpen = CHMUI.Instance.CheckUI;
 
         // GameScene 씬은 GPGameScene이 자체 처리(퍼즐 정지 + 메뉴 이동 팝업). 중복 트리거 방지를 위해 skip.
-        bool inGameScene = SceneManager.GetActiveScene().name == "GameScene";
+        bool inGameScene = SceneManager.GetActiveScene().name == nameof(Defines.EScene.GameScene);
 
         if (!inGameScene && Input.GetKeyDown(KeyCode.Escape) && !isUIOpen && !_wasUIOpenLastFrame)
         {
