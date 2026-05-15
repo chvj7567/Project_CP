@@ -17,6 +17,9 @@ public class UIConfirmArg : CHUIArg
     public Color colorDesc = Color.black;
     public Action onYes;
     public Action onNo;
+    // Yes/No/ESC/Background 어떤 경로로 닫혀도 호출.
+    // 패키지 CHMUI가 ESC로 닫을 때 UIBase.CloseUI() 가상 메서드를 우회하므로 OnDisable에서 발화.
+    public Action onClose;
 }
 
 public class UIConfirm : UIBase
@@ -63,5 +66,10 @@ public class UIConfirm : UIBase
             _arg.onNo?.Invoke();
             CHMUI.Instance.CloseUI(gameObject);
         });
+    }
+
+    private void OnDisable()
+    {
+        _arg?.onClose?.Invoke();
     }
 }

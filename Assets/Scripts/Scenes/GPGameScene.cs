@@ -247,11 +247,33 @@ public class GPGameScene : MonoBehaviour
         }
     }
 
-    private void BindUI()
+    // 패키지 CHMUI가 ESC로 UI 닫는 같은 프레임 race 방지용. CHMMain과 동일 패턴.
+    bool _wasUIOpenLastFrame;
+
+    private void LateUpdate()
     {
-        if (backBtn)
+        bool isUIOpen = CHMUI.Instance.CheckUI;
+
+        // 진행 중인 게임에서 ESC(휴대폰 뒤로가기) → 메뉴 이동 확인 팝업.
+        // backBtn 클릭과 동일 경로로 처리.
+        if (Input.GetKeyDown(KeyCode.Escape) && !isUIOpen && !_wasUIOpenLastFrame && _init)
         {
-            backBtn.OnClickAsObservable().Subscribe(_ =>
+            ShowMenuConfirm();
+        }
+
+        _wasUIOpenLastFrame = isUIOpen;
+    }
+
+    private void ShowMenuConfirm()
+    {
+        // 진행 중인 퍼즐 정지. onClose에서 timeScale 복원하여 Yes/No/ESC 어떤 경로로 닫혀도 안전.
+        Time.timeScale = 0;
+        CHMUI.Instance.ShowUI(EUI.UIConfirm, new UIConfirmArg
+        {
+            confirmType = EConfirmType.YesNo,
+            txtTitle = CHMString.Instance.GetString(142),
+            txtDesc = CHMString.Instance.GetString(143),
+            onYes = () =>
             {
                 _tokenSource?.Cancel();
                 Time.timeScale = 1;
@@ -260,7 +282,19 @@ public class GPGameScene : MonoBehaviour
                 CHMPool.Instance.Clear();
                 LBLobbyScene.fromGame = true;
                 SceneManager.LoadScene(1);
-            });
+            },
+            onClose = () =>
+            {
+                Time.timeScale = 1;
+            },
+        });
+    }
+
+    private void BindUI()
+    {
+        if (backBtn)
+        {
+            backBtn.OnClickAsObservable().Subscribe(_ => ShowMenuConfirm());
         }
 
         if (arrowPang1 && arrowPang2)

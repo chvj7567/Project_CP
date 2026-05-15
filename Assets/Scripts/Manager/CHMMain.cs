@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CHMMain : MonoBehaviour
 {
@@ -72,7 +73,10 @@ public class CHMMain : MonoBehaviour
 
         bool isUIOpen = CHMUI.Instance.CheckUI;
 
-        if (Input.GetKeyDown(KeyCode.Escape) && !isUIOpen && !_wasUIOpenLastFrame)
+        // GameScene 씬은 GPGameScene이 자체 처리(퍼즐 정지 + 메뉴 이동 팝업). 중복 트리거 방지를 위해 skip.
+        bool inGameScene = SceneManager.GetActiveScene().name == "GameScene";
+
+        if (!inGameScene && Input.GetKeyDown(KeyCode.Escape) && !isUIOpen && !_wasUIOpenLastFrame)
         {
             CHMUI.Instance.ShowUI(Defines.EUI.UIConfirm, new UIConfirmArg
             {

@@ -566,5 +566,13 @@
         {
             "stringID": 141,
             "value": "Are you sure you want to quit?"
+        },
+        {
+            "stringID": 142,
+            "value": "Return to menu?"
+        },
+        {
+            "stringID": 143,
+            "value": "The current game will end."
         }
     ]
