@@ -59,7 +59,7 @@ CHMMain.IAP         → CHMIAP         (Unity Purchasing)
 
 | 번들 | 내용 |
 |------|------|
-| `ui/` | UI 프리팹 14개 (EUI별 1:1 대응) |
+| `ui/` | UI 프리팹 13개 (EUI별 1:1 대응) |
 | `unit/` | Block.prefab, GoldImg.prefab |
 | `effect/` | FireCracker, Damage, BlueBall 프리팹 |
 | `sprite/` | EBlockState별 스프라이트 이미지 |
@@ -76,11 +76,11 @@ CHMMain.IAP         → CHMIAP         (Unity Purchasing)
 - `ShowUI()` 반환값은 고유 UID이며, 이를 이용해 특정 인스턴스를 `CloseUI(uid)`로 닫을 수 있다
 - `showCurrentBackground = false`로 열면 UICamera + 별도 UICanvas가 생성되며 해당 UI 닫힐 때 자동 정리
 
-**EUI 목록** (총 14개):
+**EUI 목록** (총 13개):
 ```
-EventSystem, UICamera, UICanvas, UIChoice, UIAlarm
-UIMission, UIShop, UIGameStart, UIGameEnd, UISetting
-UIStageSelect, UINickname, UIRank, UIDataDelete
+EventSystem, UICamera, UICanvas, UIAlarm, UIMission
+UIShop, UIGameStart, UIGameEnd, UISetting, UIStageSelect
+UINickname, UIRank, UIConfirm
 ```
 
 **UIBase 상속 패턴**: `UIBase`가 `Awake()`에서 배경/뒤로가기 버튼 닫기 리스너를 자동 등록한다. 하위 클래스 구현 방식:
@@ -150,7 +150,8 @@ Data.Shop       → 상품 구매 여부 (key-bool)
 ## 주요 열거형 (`Assets/Scripts/Defines.cs`)
 
 - **EBlockState** (54개): Cat1~7, Arrow1~6, Wall, Portal, CatPang, 5색 특수폭탄, CatHat/CatSkin/Locker/CatBox/LockerBox(각 5종), WallCreator, PortalCreator, RainbowPang, Ball, Fish
-- **EUI** (14개): 위 UI 시스템 섹션 참조
+- **EUI** (13개): 위 UI 시스템 섹션 참조
+- **EScene**: ResourceDownloadScene, FirstScene, GameScene — 값 이름이 `Assets/Scenes/*.unity` 파일명과 1:1 일치하므로 `SceneManager.GetActiveScene().name == nameof(EScene.X)`로 비교
 - **EGameState**: CatPang, GameOver, GameClear, GameOverWait, GameClearWait, NormalOrHardStagePlay, BossStagePlay
 - **EJsonType**: StringKorea/English, Stage, StageBlock, Mission, Shop, Guide, Tutorial, ConstValue
 - **EClearState**: NotDoing, Doing, Clear
