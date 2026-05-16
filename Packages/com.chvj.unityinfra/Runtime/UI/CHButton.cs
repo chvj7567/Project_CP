@@ -49,6 +49,14 @@ namespace ChvjUnityInfra
             _initialize = true;
             _button = GetComponent<Button>();
             _text = GetComponentInChildren<TMP_Text>();
+
+            // 클릭 SFX는 Button.onClick에 1회 등록한다.
+            // 이렇게 두면 OnClick(callback) / Button.onClick.AddListener / OnClickAsObservable 어떤 경로로
+            // 핸들러를 붙여도 클릭 사운드가 1회 발화한다 (OnClick(callback)에서는 hook을 호출하지 않음).
+            if (_button != null)
+            {
+                _button.onClick.AddListener(() => ClickSoundHook?.Invoke());
+            }
         }
 
         public void SetText(string text)
@@ -69,11 +77,8 @@ namespace ChvjUnityInfra
         {
             Init();
 
-            _button.onClick.AddListener(() =>
-            {
-                ClickSoundHook?.Invoke();
-                callback?.Invoke();
-            });
+            // 클릭 SFX는 Init의 자동 listener가 처리하므로 여기서는 콜백만 등록.
+            _button.onClick.AddListener(() => callback?.Invoke());
         }
 
         /// <summary>
@@ -84,11 +89,7 @@ namespace ChvjUnityInfra
         {
             Init();
 
-            UnityAction action = () =>
-            {
-                ClickSoundHook?.Invoke();
-                callback?.Invoke();
-            };
+            UnityAction action = () => callback?.Invoke();
             _button.onClick.AddListener(action);
             disposable.Add(() =>
             {
