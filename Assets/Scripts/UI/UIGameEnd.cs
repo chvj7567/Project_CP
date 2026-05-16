@@ -16,6 +16,9 @@ public class UIGameEndArg : CHUIArg
 
 public class UIGameEnd : UIBase
 {
+    // 게임 결과 화면은 ESC로 임의 닫히면 안 됨 — Next/Retry/Claim 버튼으로만 진행.
+    public override bool BlockEscClose => true;
+
     private UIGameEndArg arg;
 
     [SerializeField] private TMP_Text resultText;

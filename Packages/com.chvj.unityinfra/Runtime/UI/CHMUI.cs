@@ -34,7 +34,9 @@ namespace ChvjUnityInfra
             {
                 if (_dicCurrentUI.Count > 0)
                 {
-                    CloseUI(_dicCurrentUI.Last().Value);
+                    var top = _dicCurrentUI.Last().Value;
+                    if (top != null && top.BlockEscClose) return;
+                    CloseUI(top);
                 }
             }
         }

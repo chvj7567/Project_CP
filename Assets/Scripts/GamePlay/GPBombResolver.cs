@@ -127,12 +127,14 @@ public class GPBombResolver
                     rt.DOAnchorPos(b.rectTransform.anchoredPosition, .05f);
                     blueHoleList.Add(rt.gameObject);
                     await Task.Delay(200, _token);
+                    await GPGameScene.WaitWhilePaused(_token);
                 }
             }
         }
         SaveBombCollectionData(specialBlock);
         if (ani) _onBoomTrigger();
         await Task.Delay(1000, _token);
+        await GPGameScene.WaitWhilePaused(_token);
         foreach (var go in blueHoleList) CHMResource.Instance.Destroy(go);
     }
 
@@ -419,7 +421,10 @@ public class GPBombResolver
         }
 
         if (createDelay)
+        {
             await Task.Delay((int)(_board.delay * _board.delayMillisecond), _token);
+            await GPGameScene.WaitWhilePaused(_token);
+        }
     }
 
     void ClearScoreNeighbors(int row, int col)

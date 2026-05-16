@@ -121,6 +121,10 @@ public class GPGameScene : MonoBehaviour
         // — 기본 픽셀 임계값(10)이 가상 터치의 작은 delta에 막혀 드래그가 클릭으로만 잡히는 케이스 우회
         if (EventSystem.current != null) EventSystem.current.pixelDragThreshold = 5;
 
+        // 정적 정지 플래그/timeScale 초기화. 이전 씬에서 비정상 종료된 경우 stale 상태 방어.
+        IsPaused = false;
+        Time.timeScale = 1;
+
         InitUI();
         BindUI();
 
@@ -209,6 +213,7 @@ public class GPGameScene : MonoBehaviour
                     var block = boardArr[_matcher.canMatchRow, _matcher.canMatchCol];
                     block.transform.DOScale(1.5f, 0.25f).OnComplete(() => block.transform.DOScale(1f, 0.25f));
                     await Task.Delay(3000, _tokenSource.Token);
+                    await WaitWhilePaused(_tokenSource.Token);
                 }
                 catch (TaskCanceledException) { }
                 oneTimeAlarm = false;
@@ -250,6 +255,16 @@ public class GPGameScene : MonoBehaviour
     // 패키지 CHMUI가 ESC로 UI 닫는 같은 프레임 race 방지용. CHMMain과 동일 패턴.
     bool _wasUIOpenLastFrame;
 
+    // 메뉴 확인 팝업 표시 중 게임 로직 정지 플래그. Task.Delay는 timeScale을 무시하므로
+    // GPBoard / GPBombResolver 의 await 지점에서 정지 해제까지 대기하도록 정적으로 노출한다.
+    public static bool IsPaused;
+
+    public static async Task WaitWhilePaused(CancellationToken token)
+    {
+        while (IsPaused && !token.IsCancellationRequested)
+            await Task.Delay(50, token);
+    }
+
     private void LateUpdate()
     {
         bool isUIOpen = CHMUI.Instance.CheckUI;
@@ -266,7 +281,7 @@ public class GPGameScene : MonoBehaviour
 
     private void ShowMenuConfirm()
     {
-        // 진행 중인 퍼즐 정지. onClose에서 timeScale 복원하여 Yes/No/ESC 어떤 경로로 닫혀도 안전.
+        IsPaused = true;
         Time.timeScale = 0;
         CHMUI.Instance.ShowUI(EUI.UIConfirm, new UIConfirmArg
         {
@@ -275,6 +290,7 @@ public class GPGameScene : MonoBehaviour
             txtDesc = CHMString.Instance.GetString(143),
             onYes = () =>
             {
+                IsPaused = false;
                 _tokenSource?.Cancel();
                 Time.timeScale = 1;
                 CHInstantiateButton.ResetBlockDict();
@@ -285,6 +301,7 @@ public class GPGameScene : MonoBehaviour
             },
             onClose = () =>
             {
+                IsPaused = false;
                 Time.timeScale = 1;
             },
         });
@@ -508,6 +525,7 @@ public class GPGameScene : MonoBehaviour
 
         Debug.Log("Create Map End");
         await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
+        await WaitWhilePaused(_tokenSource.Token);
     }
 
     private async Task UpdateMap()
@@ -545,7 +563,11 @@ public class GPGameScene : MonoBehaviour
 
                 reUpdate = !_matcher.CanPlay();
                 if (reUpdate) CHMUI.Instance.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 56 });
-                if (createDelay) await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
+                if (createDelay)
+                {
+                    await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
+                    await WaitWhilePaused(_tokenSource.Token);
+                }
 
                 if (count++ > updateMapCount)
                 {
@@ -609,6 +631,7 @@ public class GPGameScene : MonoBehaviour
         {
             CHMSound.Instance.Play(ESound.Ppauk);
             await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
+            await WaitWhilePaused(_tokenSource.Token);
         }
     }
 
@@ -668,7 +691,12 @@ public class GPGameScene : MonoBehaviour
                 }
             }
         }
-        if (inDelay) { await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token); return true; }
+        if (inDelay)
+        {
+            await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
+            await WaitWhilePaused(_tokenSource.Token);
+            return true;
+        }
         return false;
     }
 
@@ -687,11 +715,12 @@ public class GPGameScene : MonoBehaviour
 
         if (moveCount.Value == 0 && gameResult.Value != EGameState.CatPang) return;
 
-        Time.timeScale = 1;
+        if (!IsPaused) Time.timeScale = 1;
         _tutorial.HideGuide();
         isLock = true;
 
         await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
+        await WaitWhilePaused(_tokenSource.Token);
 
         if (block1 && block2 && block1.IsBlock() && block2.IsBlock())
         {
@@ -733,6 +762,7 @@ public class GPGameScene : MonoBehaviour
             block1.rectTransform.DOAnchorPos(block1.originPos, delay);
             block2.rectTransform.DOAnchorPos(block2.originPos, delay);
             await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
+            await WaitWhilePaused(_tokenSource.Token);
             back = true;
         }
 
