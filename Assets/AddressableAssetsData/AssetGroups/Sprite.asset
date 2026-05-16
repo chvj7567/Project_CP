@@ -729,6 +729,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Resource
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 819d5059b50ad4f49afdf0da6f734d6d
+    m_Address: Icon_Sparkle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 449b69bde62989b449ee5e535148ca6d, type: 2}
   m_SchemaSet:
