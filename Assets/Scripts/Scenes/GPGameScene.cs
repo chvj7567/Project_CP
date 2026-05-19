@@ -575,6 +575,8 @@ public class GPGameScene : MonoBehaviour
                     curScore.Value += 1;
                     removeDelay = true;
                     block.remove = true;
+                    // 일일 미션 — 매치로 사라지는 블록 카운트 (Wall/Locker 등 IsMatch=false인 항목 자동 제외)
+                    DailyMissionService.OnBlockDestroyed(1);
                     block.rectTransform.DOScale(0f, delay);
 
                     Image img = _selectStage == ESelectStage.Boss
@@ -867,6 +869,8 @@ public class GPGameScene : MonoBehaviour
                     ChvjUnityInfra.CHMGPGS.Instance.ReportLeaderboard(GPGSIds.leaderboard_normal_stage_rank, PlayerPrefs.GetInt(CHMString.Instance.NormalStage));
 #endif
                 }
+                // 일일 미션 — 노멀 클리어 카운터 +1 (재클리어 포함)
+                DailyMissionService.OnStageClear();
                 break;
         }
     }

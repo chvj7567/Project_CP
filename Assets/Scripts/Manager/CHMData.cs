@@ -172,7 +172,40 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         {
             Debug.Log("Login Cloud Data Load");
             var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(path, Defines.EData.Login.ToString());
-            loginLocalDataDic = loginCloudDataDic = data.MakeDict();
+
+            // 일일 미션 충돌 해소: 클라우드 데이터를 일괄 교체하기 전에
+            // 로컬과 클라우드의 lastDailyResetDateKey("yyyyMMdd" UTC)를 비교한다.
+            // 로컬이 더 미래(오늘 오프라인 진행)이면 로컬 일일 필드를 클라우드 엔트리에 덮어쓴다.
+            // 클라우드가 같거나 미래이면 클라우드 값을 그대로 신뢰한다.
+            var cloudDict = data.MakeDict();
+            if (loginLocalDataDic != null)
+            {
+                foreach (var kvp in cloudDict)
+                {
+                    if (loginLocalDataDic.TryGetValue(kvp.Key, out var localLogin) == false)
+                        continue;
+
+                    var cloudLogin = kvp.Value;
+
+                    // 로컬 날짜 키가 클라우드보다 미래이면 로컬 일일 필드 우선
+                    if (string.Compare(localLogin.lastDailyResetDateKey, cloudLogin.lastDailyResetDateKey, StringComparison.Ordinal) > 0)
+                    {
+                        Debug.Log($"[CHMData] 일일 미션 충돌: 로컬({localLogin.lastDailyResetDateKey}) > 클라우드({cloudLogin.lastDailyResetDateKey}) → 로컬 우선");
+                        cloudLogin.lastDailyResetDateKey      = localLogin.lastDailyResetDateKey;
+                        cloudLogin.stageClearCountToday       = localLogin.stageClearCountToday;
+                        cloudLogin.blockDestroyCountToday     = localLogin.blockDestroyCountToday;
+                        cloudLogin.adWatchCountToday          = localLogin.adWatchCountToday;
+                        cloudLogin.attendanceTodayDone        = localLogin.attendanceTodayDone;
+                        cloudLogin.dailyCollectionSnapshotJson = localLogin.dailyCollectionSnapshotJson;
+                    }
+                    else
+                    {
+                        Debug.Log($"[CHMData] 일일 미션 충돌: 클라우드({cloudLogin.lastDailyResetDateKey}) >= 로컬({localLogin.lastDailyResetDateKey}) → 클라우드 우선");
+                    }
+                }
+            }
+
+            loginLocalDataDic = loginCloudDataDic = cloudDict;
         }
 
         if (collectionCloudDataDic == null)

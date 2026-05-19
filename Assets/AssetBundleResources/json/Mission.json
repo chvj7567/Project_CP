@@ -15,5 +15,10 @@
   {"missionID":"14", "tapIndex":"2", "collectionType":40,"clearValue":51, "addValue":-1, "reward":0, "rewardCount":1000},
   {"missionID":"15", "tapIndex":"2", "collectionType":45,"clearValue":71, "addValue":-1, "reward":0, "rewardCount":1000},
   {"missionID":"16", "tapIndex":"2", "collectionType":52,"clearValue":91, "addValue":-1, "reward":0, "rewardCount":1000},
-  {"missionID":"17", "tapIndex":"2", "collectionType":53,"clearValue":131, "addValue":-1, "reward":0, "rewardCount":1000}
+  {"missionID":"17", "tapIndex":"2", "collectionType":53,"clearValue":131, "addValue":-1, "reward":0, "rewardCount":1000},
+  {"missionID":"100", "tapIndex":"3", "collectionType":-1,"dailyCounter":0, "clearValue":1, "addValue":0, "reward":0, "rewardCount":100},
+  {"missionID":"101", "tapIndex":"3", "collectionType":-1,"dailyCounter":1, "clearValue":3, "addValue":0, "reward":0, "rewardCount":300},
+  {"missionID":"102", "tapIndex":"3", "collectionType":-1,"dailyCounter":2, "clearValue":100, "addValue":0, "reward":1, "rewardCount":1},
+  {"missionID":"103", "tapIndex":"3", "collectionType":-1,"dailyCounter":3, "clearValue":1, "addValue":0, "reward":2, "rewardCount":1},
+  {"missionID":"104", "tapIndex":"3", "collectionType":18,"dailyCounter":-1, "clearValue":3, "addValue":0, "reward":0, "rewardCount":200}
 ]

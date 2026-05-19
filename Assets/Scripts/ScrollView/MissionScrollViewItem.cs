@@ -85,6 +85,14 @@ public class MissionScrollViewItem : MonoBehaviour
 
                 rewardBtn.interactable = false;
             }
+            else if (_info.tapIndex == 3)
+            {
+                // 일일 미션 — 1회 수령으로 완료 처리. repeatCount 미사용.
+                _missionData.clearState = Defines.EClearState.Clear;
+                clearObj.SetActive(true);
+                rewardBtn.interactable = false;
+                CHMData.Instance.SaveData(CHMString.Instance.CatPang);
+            }
         });
     }
 
@@ -147,6 +155,33 @@ public class MissionScrollViewItem : MonoBehaviour
                 }
 
                 rewardBtn.interactable = false;
+            }
+        }
+        else if (_info.tapIndex == 3)
+        {
+            // 일일 미션 — 진행도는 DailyMissionService가 카운터/스냅샷 차분으로 계산
+            _missionData = CHMData.Instance.GetMissionData(_info.missionID.ToString());
+
+            missionText.SetStringID(13); // 기존 "수집" — 일일 미션용 StringID 추후 분리 가능
+            clearObj.SetActive(false);
+
+            SetMissionImage(_info.collectionType);
+            SetRewardImage(_info.reward);
+
+            int current = DailyMissionService.GetDailyProgress(_info);
+            int target = _info.clearValue;
+
+            if (_missionData.clearState == Defines.EClearState.Clear)
+            {
+                missionValueText.SetText(target, target);
+                clearObj.SetActive(true);
+                rewardBtn.interactable = false;
+            }
+            else
+            {
+                missionValueText.SetStringID(20);
+                missionValueText.SetText(Mathf.Min(current, target), target);
+                rewardBtn.interactable = current >= target;
             }
         }
     }

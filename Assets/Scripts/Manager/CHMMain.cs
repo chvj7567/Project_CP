@@ -14,6 +14,7 @@ public class CHMMain : MonoBehaviour
     public static CHMJson Json { get { EnsureKickoff(); return CHMJson.Instance; } }
     public static CHMString String { get { EnsureKickoff(); return CHMString.Instance; } }
     public static CHMSound Sound { get { EnsureKickoff(); return CHMSound.Instance; } }
+    public static CHMTime Time { get { EnsureKickoff(); return CHMTime.Instance; } }
     #endregion
 
     /// <summary>
@@ -37,6 +38,7 @@ public class CHMMain : MonoBehaviour
         await GameFontProvider.PreloadAsync();
         CHMPool.Instance.Init();
         CHMSound.Instance.Init();
+        await CHMTime.Instance.Init(); // NTP 첫 시도 (실패해도 완료, 백그라운드 재시도)
         ChvjUnityInfra.CHMUI.Instance.Init();
 
         // CHText/CHButton/CHToggle이 stringID/SFX 흐름에서 사용할 hook/provider 등록
@@ -44,6 +46,9 @@ public class CHMMain : MonoBehaviour
         ChvjUnityInfra.CHText.FontProvider = new GameFontProvider();
         ChvjUnityInfra.CHButton.ClickSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Cat);
         ChvjUnityInfra.CHToggle.ChangeSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Cat);
+
+        // 일일 미션 — 보상형 광고 시청 시 카운터 +1
+        ChvjUnityInfra.CHMAdmob.Instance.AcquireReward += () => DailyMissionService.OnAdWatched();
     }
 
     /// <summary>

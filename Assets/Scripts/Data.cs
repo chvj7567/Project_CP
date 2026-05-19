@@ -24,6 +24,25 @@ namespace Data
         public int useMoveItemCount = 0;
         public int hp = 100;
         public int attack = 0;
+
+        // 일일 미션 리셋 키 ("yyyyMMdd" UTC 형식, NTP 기준)
+        public string lastDailyResetDateKey = "";
+
+        // 오늘 노멀 스테이지 클리어 횟수 (재클리어 포함)
+        public int stageClearCountToday = 0;
+
+        // 오늘 매치로 파괴된 블록 총 개수
+        public int blockDestroyCountToday = 0;
+
+        // 오늘 보상형 광고 시청 횟수
+        public int adWatchCountToday = 0;
+
+        // 오늘 출석 완료 여부
+        public bool attendanceTodayDone = false;
+
+        // CatPang 등 EBlockState 기반 일일 카운터용 자정 스냅샷
+        // 형식: {"18": 42, "0": 12, ...}  키 = (int)EBlockState, 값 = 자정 시점 누적치
+        public string dailyCollectionSnapshotJson = "";
     }
 
     [Serializable]

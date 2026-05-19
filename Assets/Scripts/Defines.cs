@@ -280,6 +280,24 @@ public class Defines
         Max
     }
 
+    public enum EDailyCounter
+    {
+        // 미션에서 카운터 미사용 — collectionType 기반 또는 일일 미션이 아닌 경우
+        None = -1,
+
+        // 출석 (UIMission 일일 탭 진입 시 즉시 1로 설정)
+        Attendance = 0,
+
+        // 오늘 노멀 스테이지 클리어 횟수 (재클리어 포함)
+        NormalStageClear = 1,
+
+        // 오늘 매치로 파괴된 블록 총 개수 (Wall/Locker 등 직접 매치 불가 항목 제외)
+        BlockDestroy = 2,
+
+        // 오늘 보상형 광고 시청 횟수
+        AdWatch = 3,
+    }
+
     public enum EReward
     {
         None = -1,
