@@ -21,6 +21,9 @@ namespace ChvjUnityInfra
         private AdRequest _adRequest;
 
         private bool _initialize = false;
+        // MobileAds.Initialize 콜백이 떨어진 뒤에만 광고 호출이 안전. 그 전엔 _pendingShow에 큐잉.
+        private bool _adsReady = false;
+        private Action _pendingShow;
 
         /// <summary>보상형 광고 시청 완료 시 발생.</summary>
         public event Action AcquireReward;
@@ -60,14 +63,26 @@ namespace ChvjUnityInfra
             MobileAds.Initialize(initStatus =>
             {
                 _adRequest = new AdRequest();
+                _adsReady = true;
                 LoadInterstitialAd();
                 LoadRewardedAd();
+
+                // 초기화 전에 들어왔던 Show 요청 1건 처리.
+                var pending = _pendingShow;
+                _pendingShow = null;
+                pending?.Invoke();
             });
         }
 
         /// <summary>배너 표시. 기존 배너가 있으면 destroy 후 새로 생성.</summary>
         public void ShowBanner(AdPosition position)
         {
+            if (!_adsReady)
+            {
+                _pendingShow = () => ShowBanner(position);
+                return;
+            }
+
             HideBanner();
             _bannerView = new BannerView(_bannerAdUnitId, AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth), position);
             _bannerView.LoadAd(_adRequest);
@@ -115,6 +130,12 @@ namespace ChvjUnityInfra
 
         public void ShowInterstitialAd()
         {
+            if (!_adsReady)
+            {
+                _pendingShow = ShowInterstitialAd;
+                return;
+            }
+
             if (_interstitialAd != null && _interstitialAd.CanShowAd())
             {
                 _interstitialAd.Show();
@@ -151,6 +172,12 @@ namespace ChvjUnityInfra
 
         public void ShowRewardedAd()
         {
+            if (!_adsReady)
+            {
+                _pendingShow = ShowRewardedAd;
+                return;
+            }
+
             if (_rewardedAd != null && _rewardedAd.CanShowAd())
             {
                 _rewardedAd.Show(RewardHandler);

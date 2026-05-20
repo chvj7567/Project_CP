@@ -129,6 +129,9 @@ public class GPBoard
         }
 
         if (downDelay)
+        {
             await Task.Delay((int)(delay * delayMillisecond), _token);
+            await GPGameScene.WaitWhilePaused(_token);
+        }
     }
 }

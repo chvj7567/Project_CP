@@ -1612,7 +1612,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 895240882603900089}
-  - {fileID: 296352196197890816}
+  - {fileID: 676108979499295974}
   - {fileID: 6569965869463319666}
   - {fileID: 1786530300079604355}
   - {fileID: 4840430410058102495}
@@ -1645,7 +1645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backgroundButton: {fileID: 0}
-  _backButton: {fileID: 4786002998894383132}
+  _backButton: {fileID: 5698622629246930938}
   soundObj: {fileID: 3914140452056511756}
   bgmSlider: {fileID: 5007135408958808817}
   effectSlider: {fileID: 7217380798162944620}
@@ -5880,7 +5880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stringID: 97
---- !u!1001 &665567872414605845
+--- !u!1001 &306892646174342643
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -5898,23 +5898,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 300
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_SizeDelta.y
@@ -5950,11 +5950,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 200
+      value: -160
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -80
+      value: 560
       objectReference: {fileID: 0}
     - target: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5989,15 +5989,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
---- !u!224 &296352196197890816 stripped
+--- !u!224 &676108979499295974 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
-  m_PrefabInstance: {fileID: 665567872414605845}
+  m_PrefabInstance: {fileID: 306892646174342643}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4786002998894383132 stripped
+--- !u!114 &5698622629246930938 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5429052151582339593, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
-  m_PrefabInstance: {fileID: 665567872414605845}
+  m_PrefabInstance: {fileID: 306892646174342643}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1

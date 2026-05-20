@@ -14,6 +14,9 @@ namespace ChvjUnityInfra
         [SerializeField] private Button _backgroundButton;
         [SerializeField] private Button _backButton;
 
+        // 게임 결과 화면 등 ESC로 임의 닫히면 안 되는 UI는 true로 오버라이드.
+        public virtual bool BlockEscClose => false;
+
         protected CompositeDisposable closeDisposable = new CompositeDisposable();
 
         internal void Init(Enum uiType)
