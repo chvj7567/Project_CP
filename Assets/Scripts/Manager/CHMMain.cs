@@ -44,8 +44,8 @@ public class CHMMain : MonoBehaviour
         // CHText/CHButton/CHToggle이 stringID/SFX 흐름에서 사용할 hook/provider 등록
         ChvjUnityInfra.CHText.StringProvider = new GameStringProvider();
         ChvjUnityInfra.CHText.FontProvider = new GameFontProvider();
-        ChvjUnityInfra.CHButton.ClickSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Cat);
-        ChvjUnityInfra.CHToggle.ChangeSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Cat);
+        ChvjUnityInfra.CHButton.ClickSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Ppauk);
+        ChvjUnityInfra.CHToggle.ChangeSoundHook = () => CHMSound.Instance.Play(Defines.ESound.Ppauk);
 
         // 일일 미션 — 보상형 광고 시청 시 카운터 +1
         ChvjUnityInfra.CHMAdmob.Instance.AcquireReward += () => DailyMissionService.OnAdWatched();
