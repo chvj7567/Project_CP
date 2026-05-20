@@ -24,6 +24,12 @@ public class UIShop : UIBase
 
     [SerializeField, ReadOnly] public ReactiveProperty<int> curTapIndex = new ReactiveProperty<int>();
 
+    // 상점 탭 인덱스 — 스킨 탭 / 캐시(IAP) 탭
+    const int ShopTabSkin = 1;
+    const int ShopTabCash = 2;
+    // IAP 상품 구매 시 지급하는 아이템 수량
+    const int PurchaseItemGrantCount = 10;
+
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIShopArg;
@@ -61,7 +67,7 @@ public class UIShop : UIBase
         {
             var shopList = shopScriptList.FindAll(_ => _.tapIndex == tapIndex);
 
-            if (tapIndex == 2 && ChvjUnityInfra.CHMIAP.Instance.IsInitialized == false)
+            if (tapIndex == ShopTabCash && ChvjUnityInfra.CHMIAP.Instance.IsInitialized == false)
             {
                 CHMUI.Instance.ShowUI(Defines.EUI.UIAlarm, new UIAlarmArg
                 {
@@ -79,12 +85,12 @@ public class UIShop : UIBase
 
         tap1Btn.OnClickAsObservable().Subscribe(_ =>
         {
-            curTapIndex.Value = 1;
+            curTapIndex.Value = ShopTabSkin;
         });
 
         tap2Btn.OnClickAsObservable().Subscribe(_ =>
         {
-            curTapIndex.Value = 2;
+            curTapIndex.Value = ShopTabCash;
         });
 
         ChvjUnityInfra.CHMIAP.Instance.purchaseState += PurchaseState;
@@ -132,11 +138,11 @@ public class UIShop : UIBase
         
         if (productName == CHMString.Instance.Product_Name_AddTime)
         {
-            loginData.addTimeItemCount += 10;
+            loginData.addTimeItemCount += PurchaseItemGrantCount;
         }
         else if (productName == CHMString.Instance.Product_Name_AddMove)
         {
-            loginData.addMoveItemCount += 10;
+            loginData.addMoveItemCount += PurchaseItemGrantCount;
         }
 
         CHMData.Instance.SaveData(CHMString.Instance.CatPang);

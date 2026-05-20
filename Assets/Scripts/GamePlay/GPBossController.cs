@@ -21,6 +21,21 @@ public class GPBossController
     GameObject _cryBossObj;
     bool _bossSkill;
 
+    // 보스 HP가 자동으로 1씩 줄어드는 주기(초)
+    const int BossHpDrainIntervalSeconds = 1;
+    // 보스 HP 게이지 채움 트윈 시간(초)
+    const float BossHpFillDuration = 0.5f;
+    // 보스가 분노(스킬) 상태로 전환되는 HP 비율
+    const float BossSkillHpThreshold = 0.5f;
+    // 보스 스킬로 생성되는 블록 HP의 난수 상한 (0~상한-1, 0은 -1로 보정)
+    const int BossSkillBlockMaxHp = 10;
+    // 스테이지 그룹 크기 (stage % 그룹 크기로 그룹 내 위치를 계산)
+    const int StageGroupSize = 10;
+    // 보스 스킬 발동 기본 쿨타임(초)
+    const int BossSkillBaseCooldownSeconds = 10;
+    // 그룹 내 위치(mod)가 이 값 이상이면 보스가 스킬을 2개 사용
+    const int BossMultiSkillModThreshold = 6;
+
     public void Init(
         GPBoard board,
         StageInfo stageInfo,
@@ -46,18 +61,18 @@ public class GPBossController
         hp.Subscribe(_ => { if (_ >= 0) _hpText.SetText(hp); }).AddTo(owner);
         hp.Value = loginData.hp;
 
-        Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
+        Observable.Timer(TimeSpan.FromSeconds(BossHpDrainIntervalSeconds), TimeSpan.FromSeconds(BossHpDrainIntervalSeconds))
             .Subscribe(_ => hp.Value -= 1)
             .AddTo(owner);
 
         curScore.Subscribe(_ =>
         {
             var fillAmount = (_stageInfo.targetScore - _) / (float)_stageInfo.targetScore;
-            _bossHpImage.DOFillAmount(fillAmount, .5f);
+            _bossHpImage.DOFillAmount(fillAmount, BossHpFillDuration);
             var bossHp = Mathf.Max(0, _stageInfo.targetScore - _);
             _bossHpText.SetText(bossHp);
 
-            if (!_bossSkill && fillAmount <= .5f)
+            if (!_bossSkill && fillAmount <= BossSkillHpThreshold)
             {
                 _bossSkill = true;
                 _normalBossObj.SetActive(false);
@@ -66,10 +81,10 @@ public class GPBossController
                 CHMUI.Instance.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 78 });
 
                 int coolTime;
-                int mod = _stageInfo.stage % 10;
-                if (mod == 0) { coolTime = 10; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => { BossSkill(1); BossSkill(2); BossSkill(3); }).AddTo(owner); }
-                else if (mod >= 6) { coolTime = 10 - mod + 10; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => { BossSkill(1); BossSkill(2); }).AddTo(owner); }
-                else { coolTime = 10 - mod + 10; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => BossSkill(1)).AddTo(owner); }
+                int mod = _stageInfo.stage % StageGroupSize;
+                if (mod == 0) { coolTime = BossSkillBaseCooldownSeconds; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => { BossSkill(EBossSkillType.Wall); BossSkill(EBossSkillType.Creator); BossSkill(EBossSkillType.CatBox); }).AddTo(owner); }
+                else if (mod >= BossMultiSkillModThreshold) { coolTime = StageGroupSize - mod + BossSkillBaseCooldownSeconds; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => { BossSkill(EBossSkillType.Wall); BossSkill(EBossSkillType.Creator); }).AddTo(owner); }
+                else { coolTime = StageGroupSize - mod + BossSkillBaseCooldownSeconds; Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(coolTime)).Subscribe(_ => BossSkill(EBossSkillType.Wall)).AddTo(owner); }
             }
         }).AddTo(owner);
     }
@@ -81,9 +96,9 @@ public class GPBossController
         _cryBossObj.SetActive(true);
     }
 
-    public void BossSkill(int type)
+    public void BossSkill(EBossSkillType type)
     {
-        var blockHp = UnityEngine.Random.Range(0, 10);
+        var blockHp = UnityEngine.Random.Range(0, BossSkillBlockMaxHp);
         if (blockHp == 0) blockHp = -1;
 
         int w, h;
@@ -94,9 +109,9 @@ public class GPBossController
         } while (!_board.boardArr[w, h].IsNormalBlock());
 
         EBlockState block;
-        if (type == 1)
+        if (type == EBossSkillType.Wall)
             block = (EBlockState)UnityEngine.Random.Range((int)EBlockState.Wall, (int)EBlockState.Potal + 1);
-        else if (type == 2)
+        else if (type == EBossSkillType.Creator)
             block = (EBlockState)UnityEngine.Random.Range((int)EBlockState.WallCreator, (int)EBlockState.PotalCreator + 1);
         else
             block = (EBlockState)UnityEngine.Random.Range((int)EBlockState.CatBox1, (int)EBlockState.CatBox5 + 1);

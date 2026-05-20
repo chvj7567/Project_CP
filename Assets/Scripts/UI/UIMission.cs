@@ -26,6 +26,11 @@ public class UIMission : UIBase
 
     [SerializeField, ReadOnly] int curTapIndex;
 
+    // 미션 탭 인덱스 — 일반 / 특별 / 일일 (MissionScrollViewItem과 공유)
+    public const int MissionTabNormal = 1;
+    public const int MissionTabSpecial = 2;
+    public const int MissionTabDaily = 3;
+
     string _lastDateKey = "";
 
     public override void InitUI(CHUIArg _uiArg)
@@ -45,7 +50,7 @@ public class UIMission : UIBase
             CHMMain.Time.OnAvailable.Subscribe(_ =>
             {
                 UpdateDailyLockState();
-                if (curTapIndex == 3)
+                if (curTapIndex == MissionTabDaily)
                     ShowDailyTab();
             }).AddTo(this);
         }
@@ -54,8 +59,8 @@ public class UIMission : UIBase
         DailyMissionService.CheckAndResetIfNeeded();
         DailyMissionService.MarkAttendance();
 
-        normalTapBtn.OnClickAsObservable().Subscribe(_ => ShowNormalTab(1)).AddTo(this);
-        specialTapBtn.OnClickAsObservable().Subscribe(_ => ShowNormalTab(2)).AddTo(this);
+        normalTapBtn.OnClickAsObservable().Subscribe(_ => ShowNormalTab(MissionTabNormal)).AddTo(this);
+        specialTapBtn.OnClickAsObservable().Subscribe(_ => ShowNormalTab(MissionTabSpecial)).AddTo(this);
 
         if (dailyTapBtn != null)
             dailyTapBtn.OnClickAsObservable().Subscribe(_ => ShowDailyTab()).AddTo(this);
@@ -81,7 +86,7 @@ public class UIMission : UIBase
     // 일일 탭(3). NTP 수신 시에만 내용·리셋 타이머 표시, 미수신 시 잠금 오버레이
     void ShowDailyTab()
     {
-        curTapIndex = 3;
+        curTapIndex = MissionTabDaily;
 
         bool available = CHMMain.Time != null && CHMMain.Time.IsAvailable;
         if (offlineLockObj != null) offlineLockObj.SetActive(!available);
@@ -90,13 +95,13 @@ public class UIMission : UIBase
         if (!available) return;
 
         DailyMissionService.CheckAndResetIfNeeded();
-        scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(3));
+        scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(MissionTabDaily));
     }
 
     // 리워드 광고 시청 완료 콜백 — 일일 탭이면 진행도 즉시 갱신
     void OnRewardAcquired()
     {
-        if (curTapIndex == 3)
+        if (curTapIndex == MissionTabDaily)
             ShowDailyTab();
     }
 
@@ -116,7 +121,7 @@ public class UIMission : UIBase
         if (CHMMain.Time == null || !CHMMain.Time.IsAvailable) return;
 
         // 카운트다운 텍스트 갱신
-        if (curTapIndex == 3 && resetTimerText != null)
+        if (curTapIndex == MissionTabDaily && resetTimerText != null)
             resetTimerText.SetText(DailyMissionService.GetResetCountdown());
 
         // 자정 넘김 자동 감지
@@ -126,7 +131,7 @@ public class UIMission : UIBase
         {
             _lastDateKey = todayKey;
             DailyMissionService.CheckAndResetIfNeeded();
-            if (curTapIndex == 3)
+            if (curTapIndex == MissionTabDaily)
                 scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
         }
     }

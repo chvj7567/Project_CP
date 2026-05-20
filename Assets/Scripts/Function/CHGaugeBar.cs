@@ -16,6 +16,16 @@ public class CHGaugeBar : MonoBehaviour
 
     float originPosYText;
 
+    // 게이지 바 트윈 시간 — 뒤쪽 바는 느리게(잔상 효과), 앞쪽 바는 빠르게
+    const float BackGaugeFillDuration = 1.5f;
+    const float FrontGaugeFillDuration = 1f;
+    // 게이지 바 리셋 시 채움 트윈 시간(초)
+    const float GaugeResetDuration = 0.1f;
+    // 데미지 텍스트 표시 시간(초)
+    const float DamageTextShowDuration = 2f;
+    // 데미지 텍스트가 위로 떠오르는 거리
+    const float DamageTextRiseOffset = 10f;
+
     private void Update()
     {
         transform.rotation = Camera.main.transform.rotation;
@@ -32,16 +42,16 @@ public class CHGaugeBar : MonoBehaviour
 
     public void SetGaugeBar(float _maxValue, float _curValue, float _damage)
     {
-        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, 1.5f);
-        if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, 1f);
+        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(_curValue / _maxValue, BackGaugeFillDuration);
+        if (imgGaugeBar) imgGaugeBar.DOFillAmount(_curValue / _maxValue, FrontGaugeFillDuration);
 
-        ShowDamageText(_damage, 2f);
+        ShowDamageText(_damage, DamageTextShowDuration);
     }
 
     public void ResetGaugeBar()
     {
-        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(1f, 0.1f);
-        if (imgGaugeBar) imgGaugeBar.DOFillAmount(1f, 0.1f);
+        if (imgBackGaugeBar) imgBackGaugeBar.DOFillAmount(1f, GaugeResetDuration);
+        if (imgGaugeBar) imgGaugeBar.DOFillAmount(1f, GaugeResetDuration);
     }
 
     void ShowDamageText(float _damage, float _time)
@@ -72,7 +82,7 @@ public class CHGaugeBar : MonoBehaviour
             var rtTextDamage = copyTextDamage.GetComponent<RectTransform>();
             if (rtTextDamage)
             {
-                rtTextDamage.DOAnchorPosY(originPosYText + 10f, _time).OnComplete(() =>
+                rtTextDamage.DOAnchorPosY(originPosYText + DamageTextRiseOffset, _time).OnComplete(() =>
                 {
                     copyTmp.alpha = 1f;
                     rtTextDamage.anchoredPosition = new Vector2(rtTextDamage.anchoredPosition.x, originPosYText);

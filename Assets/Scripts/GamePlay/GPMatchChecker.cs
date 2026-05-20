@@ -4,6 +4,9 @@ using static Defines;
 
 public class GPMatchChecker
 {
+    // 매치가 성립하는 최소 블록 수 (3-매치)
+    public const int MinMatchCount = 3;
+
     public bool isMatch;
     public int canMatchRow = -1;
     public int canMatchCol = -1;
@@ -127,7 +130,7 @@ public class GPMatchChecker
             else if (blockState == b.GetBlockState())
             {
                 ++matchCount;
-                if (matchCount >= 3)
+                if (matchCount >= MinMatchCount)
                 {
                     if (!test)
                     {
@@ -153,7 +156,7 @@ public class GPMatchChecker
     public bool CanPlay()
     {
         isMatch = false;
-        int max = 9;
+        int max = _board.boardSize;
         var arr = _board.boardArr;
 
         for (int i = 0; i < max; ++i)

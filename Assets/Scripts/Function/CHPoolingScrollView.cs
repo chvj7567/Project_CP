@@ -98,6 +98,9 @@ public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TI
     protected int _rowCount = 0;
     protected int _columnCount = 0;
 
+    // 화면 밖 위/아래 여유분으로 추가 생성하는 풀링 라인 수
+    const int ExtraPoolLines = 2;
+
     public int LineCount
     {
         get
@@ -268,14 +271,14 @@ public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TI
                 case PoolingScrollViewDirection.Vertical:
                     {
                         int line = Mathf.RoundToInt(_rtViewPort.rect.size.y / itemSize.y);
-                        line += 2;
+                        line += ExtraPoolLines;
                         poolItemCount = line * _columnCount;
                     }
                     break;
                 case PoolingScrollViewDirection.Horizontal:
                     {
                         int line = Mathf.RoundToInt(_rtViewPort.rect.size.x / itemSize.x);
-                        line += 2;
+                        line += ExtraPoolLines;
                         poolItemCount = line * _rowCount;
                     }
                     break;

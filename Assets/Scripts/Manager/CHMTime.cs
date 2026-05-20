@@ -24,6 +24,7 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
     const int MaxRetries = 5;
     const float RetryIntervalSec = 30f;
     const int NtpPacketSize = 48;                  // SNTP 패킷 고정 크기 (RFC 4330)
+    const int NtpPort = 123;                       // NTP 표준 UDP 포트
     const ulong NtpFractionDenominator = 0x100000000UL; // 2^32 — NTP 분수부 → 밀리초 변환용 분모
 
     // 첫 NTP 조회 — 실패해도 즉시 완료. 백그라운드 재시도가 IsAvailable을 갱신.
@@ -95,7 +96,7 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
 
         var addresses = await Dns.GetHostAddressesAsync(host);
         if (addresses.Length == 0) throw new Exception("DNS 실패");
-        var endpoint = new IPEndPoint(addresses[0], 123);
+        var endpoint = new IPEndPoint(addresses[0], NtpPort);
 
         using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
         {

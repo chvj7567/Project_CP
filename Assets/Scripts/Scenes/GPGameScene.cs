@@ -16,6 +16,37 @@ public class GPGameScene : MonoBehaviour
 {
     private const int MAX = 9;
 
+    // 가상 터치 환경에서 드래그로 인식하기 위한 픽셀 임계값
+    private const int PixelDragThreshold = 5;
+    // 입력이 없을 때 힌트(블록 강조)를 띄우기까지의 대기 시간(초)
+    private const float HintIdleDelaySeconds = 3f;
+    // 힌트 강조 후 다음 힌트까지의 쿨다운(ms)
+    private const int HintCooldownMs = 3000;
+    // 힌트 블록 강조 시 확대 배율과 트윈 시간
+    private const float HintPulseScale = 1.5f;
+    private const float HintPulseDuration = 0.25f;
+    // 자동 플레이 모드에서 연속 드래그 간격(초)
+    private const float AutoPlayDragIntervalSeconds = 0.5f;
+    // 이동 횟수 제한이 없는 스테이지에서 사용하는 표시용 이동 수
+    private const int UnlimitedMoveCount = 99;
+    // 폭탄 블록이 매치로 제거될 때 주는 보너스 점수
+    private const int BombClearBonusScore = 20;
+    // 폭탄끼리 합쳐질 때 주는 보너스 점수
+    private const int BombMergeBonusScore = 30;
+    // 공(Ball) 블록 자리에 생성되는 포탈 블록의 HP
+    private const int PortalBlockHp = 5;
+    // 공 블록 주변으로 연쇄 생성되는 포탈의 시작 HP
+    private const int BallPortalStartHp = 4;
+    // 매치 시 떨어지는 골드 연출의 이동 시간 범위(초)
+    private const float GoldFlyDurationMin = 0.4f;
+    private const float GoldFlyDurationMax = 0.8f;
+    // CatPang 연출 시 알림 UI 표시 시간(ms)
+    private const int CatPangAlarmDurationMs = 1000;
+    // 일시정지 해제를 기다리며 폴링하는 간격(ms)
+    private const int PausePollIntervalMs = 50;
+    // 폭탄 선택 ban 표시가 좌우로 이동하는 트윈 시간(초)
+    private const float ArrowPangSlideDuration = 0.5f;
+
     [Header("뒤로 가기")]
     [SerializeField] private Button backBtn;
 
@@ -119,7 +150,7 @@ public class GPGameScene : MonoBehaviour
     {
         // 앱플레이어 가상 터치 환경에서 IBeginDragHandler 간헐적 미발화 방지
         // — 기본 픽셀 임계값(10)이 가상 터치의 작은 delta에 막혀 드래그가 클릭으로만 잡히는 케이스 우회
-        if (EventSystem.current != null) EventSystem.current.pixelDragThreshold = 5;
+        if (EventSystem.current != null) EventSystem.current.pixelDragThreshold = PixelDragThreshold;
 
         // 정적 정지 플래그/timeScale 초기화. 이전 씬에서 비정상 종료된 경우 stale 상태 방어.
         IsPaused = false;
@@ -202,17 +233,17 @@ public class GPGameScene : MonoBehaviour
         if (isLock) { teachTime = _gameTime; dragTime = _gameTime; }
         else
         {
-            if (autoPlay && dragTime + .5f < _gameTime)
+            if (autoPlay && dragTime + AutoPlayDragIntervalSeconds < _gameTime)
                 boardArr[_matcher.canMatchRow, _matcher.canMatchCol].Drag(_matcher.canMatchDrag);
 
-            if (teachTime + 3 < _gameTime && !oneTimeAlarm && _matcher.canMatchRow >= 0 && _matcher.canMatchCol >= 0)
+            if (teachTime + HintIdleDelaySeconds < _gameTime && !oneTimeAlarm && _matcher.canMatchRow >= 0 && _matcher.canMatchCol >= 0)
             {
                 oneTimeAlarm = true;
                 try
                 {
                     var block = boardArr[_matcher.canMatchRow, _matcher.canMatchCol];
-                    block.transform.DOScale(1.5f, 0.25f).OnComplete(() => block.transform.DOScale(1f, 0.25f));
-                    await Task.Delay(3000, _tokenSource.Token);
+                    block.transform.DOScale(HintPulseScale, HintPulseDuration).OnComplete(() => block.transform.DOScale(1f, HintPulseDuration));
+                    await Task.Delay(HintCooldownMs, _tokenSource.Token);
                     await WaitWhilePaused(_tokenSource.Token);
                 }
                 catch (TaskCanceledException) { }
@@ -262,7 +293,7 @@ public class GPGameScene : MonoBehaviour
     public static async Task WaitWhilePaused(CancellationToken token)
     {
         while (IsPaused && !token.IsCancellationRequested)
-            await Task.Delay(50, token);
+            await Task.Delay(PausePollIntervalMs, token);
     }
 
     private void LateUpdate()
@@ -297,7 +328,7 @@ public class GPGameScene : MonoBehaviour
                 CHMUI.Instance.CloseUI(EUI.UIAlarm);
                 CHMPool.Instance.Clear();
                 LBLobbyScene.fromGame = true;
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene((int)EScene.FirstScene);
             },
             onClose = () =>
             {
@@ -320,13 +351,13 @@ public class GPGameScene : MonoBehaviour
             {
                 arrowPangIndex = 1;
                 _bombResolver?.SetArrowPangIndex(1);
-                banView.rectTransform.DOAnchorPosX(arrowPang2.rectTransform.anchoredPosition.x, .5f);
+                banView.rectTransform.DOAnchorPosX(arrowPang2.rectTransform.anchoredPosition.x, ArrowPangSlideDuration);
             });
             arrowPang2.button.OnClickAsObservable().Subscribe(_ =>
             {
                 arrowPangIndex = 2;
                 _bombResolver?.SetArrowPangIndex(2);
-                banView.rectTransform.DOAnchorPosX(arrowPang1.rectTransform.anchoredPosition.x, .5f);
+                banView.rectTransform.DOAnchorPosX(arrowPang1.rectTransform.anchoredPosition.x, ArrowPangSlideDuration);
             });
         }
 
@@ -396,7 +427,7 @@ public class GPGameScene : MonoBehaviour
         if (_stageInfo.moveCount > 0) moveCount.Value = _stageInfo.moveCount + _loginData.useMoveItemCount * addMoveItemValue;
         else
         {
-            moveCount.Value = 99;
+            moveCount.Value = UnlimitedMoveCount;
             if (_loginData.useMoveItemCount > 0) _loginData.addMoveItemCount += _loginData.useMoveItemCount;
         }
 
@@ -619,14 +650,14 @@ public class GPGameScene : MonoBehaviour
                             // 도착지는 씬에 배치된 goldImgTarget을 사용 (goldImg는 프리팹 템플릿이라 .position이 의미 없음).
                             rect.position = block.rectTransform.position;
                             var destPos = goldImgTarget != null ? goldImgTarget.position : img.rectTransform.position;
-                            rect.DOMove(destPos, UnityEngine.Random.Range(.4f, .8f)).OnComplete(() =>
+                            rect.DOMove(destPos, UnityEngine.Random.Range(GoldFlyDurationMin, GoldFlyDurationMax)).OnComplete(() =>
                                 CHMResource.Instance.Destroy(gold));
                         }
                     }
 
                     if (block.IsBombBlock() && !block.boom)
                     {
-                        bonusScore.Value += 20;
+                        bonusScore.Value += BombClearBonusScore;
                         await block.Bomb(false);
                         i = -1; break;
                     }
@@ -657,9 +688,9 @@ public class GPGameScene : MonoBehaviour
             {
                 block.tutorialBlock = false;
                 block.changeBlockState = EBlockState.Potal;
-                block.changeHp = 5;
+                block.changeHp = PortalBlockHp;
 
-                int ballHp = 4;
+                int ballHp = BallPortalStartHp;
                 for (int k = i + 1; k < boardSize; ++k)
                 {
                     var cb = boardArr[row, k];
@@ -667,7 +698,7 @@ public class GPGameScene : MonoBehaviour
                     if (cb.IsNormalBlock() || cb.remove) { cb.changeBlockState = EBlockState.Potal; cb.changeHp = ballHp--; cb.checkHp = true; }
                     else break;
                 }
-                ballHp = 4;
+                ballHp = BallPortalStartHp;
                 for (int k = i - 1; k >= 0; --k)
                 {
                     var cb = boardArr[row, k];
@@ -751,7 +782,7 @@ public class GPGameScene : MonoBehaviour
             else if (block1.IsBombBlock() && block2.IsBombBlock())
             {
                 moveCount.Value -= 1;
-                bonusScore.Value += 30;
+                bonusScore.Value += BombMergeBonusScore;
                 block2.match = true;
                 block1.changeBlockState = (EBlockState)UnityEngine.Random.Range((int)EBlockState.PinkBomb, (int)EBlockState.BlueBomb + 1);
             }
@@ -857,7 +888,7 @@ public class GPGameScene : MonoBehaviour
         {
             gameResult.Value = EGameState.CatPang;
             CHMUI.Instance.ShowUI(EUI.UIAlarm, new UIAlarmArg { stringID = 55, closeTime = 1 });
-            await Task.Delay(1000);
+            await Task.Delay(CatPangAlarmDurationMs);
             await _bombResolver.CatPang();
             gameEnd = false;
             gameResult.Value = _selectStage == ESelectStage.Boss ? EGameState.BossStagePlay : EGameState.NormalOrHardStagePlay;

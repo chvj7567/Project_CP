@@ -22,6 +22,12 @@ public class ShopScrollViewItem : MonoBehaviour
     Data.Collection collectionData;
     Data.Shop shopData;
 
+    // 능력치 강화 상품의 shopID
+    const int ShopIdHpUpgrade = 7;
+    const int ShopIdAttackUpgrade = 8;
+    // HP 강화 상품 구매 시 증가하는 HP
+    const int HpUpgradeAmount = 10;
+
     void Start()
     {
         ChvjUnityInfra.CHMIAP.Instance.purchaseState += (purchaseState) =>
@@ -173,13 +179,13 @@ public class ShopScrollViewItem : MonoBehaviour
     {
         switch (shopID)
         {
-            case 7:
+            case ShopIdHpUpgrade:
                 {
                     var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
-                    loginData.hp += 10;
+                    loginData.hp += HpUpgradeAmount;
                 }
                 break;
-            case 8:
+            case ShopIdAttackUpgrade:
                 {
                     var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                     loginData.attack += 1;

@@ -60,6 +60,11 @@ public class Block : MonoBehaviour
     // 중복 데미지 처리 방지 플래그
     [SerializeField, ReadOnly] bool checkDamage = false;
 
+    // 드래그로 인식하기 위한 최소 이동 거리
+    const float MinDragMagnitude = 0.2f;
+    // 스킨 테마당 고양이 종류 수 (Cat1~5)
+    const int SkinCatCount = 5;
+
     private void Start()
     {
         changeBlockState = EBlockState.None;
@@ -236,7 +241,7 @@ public class Block : MonoBehaviour
     float EvalDragAngle(Vector2 vtStart, Vector2 vtEnd)
     {
         Vector2 dragDirection = vtEnd - vtStart;
-        if (dragDirection.magnitude <= 0.2f)
+        if (dragDirection.magnitude <= MinDragMagnitude)
             return -1f;
 
         float aimAngle = Mathf.Atan2(dragDirection.y, dragDirection.x);
@@ -353,7 +358,7 @@ public class Block : MonoBehaviour
             return _state;
 
         if (v >= (int)EBlockState.CatCrown1 && v <= (int)EBlockState.CatStrawberry5)
-            return EBlockState.Cat1 + ((v - (int)EBlockState.CatCrown1) % 5);
+            return EBlockState.Cat1 + ((v - (int)EBlockState.CatCrown1) % SkinCatCount);
 
         return EBlockState.None;
     }

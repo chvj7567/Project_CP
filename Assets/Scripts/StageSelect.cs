@@ -15,6 +15,11 @@ public class StageSelect : MonoBehaviour
 
     List<IDisposable> disposeList = new List<IDisposable>();
 
+    // 스테이지 잠금 해제 연출 — 잠금 표시 후 대기, 그 다음 위로 떠오르며 해제
+    const int UnlockAnimDelayMs = 1000;
+    const float UnlockRiseOffset = 30f;
+    const float UnlockRiseDuration = 1f;
+
     public void Init(Defines.ESelectStage select)
     {
         Color color = Color.white;
@@ -176,7 +181,7 @@ public class StageSelect : MonoBehaviour
             if (lastPlayStage == beforeStage && clearStage < stage)
             {
                 btnList[index].lockObj.SetActive(true);
-                await Task.Delay(1000);
+                await Task.Delay(UnlockAnimDelayMs);
 
                 if (btnList[index] == null)
                 {
@@ -187,7 +192,7 @@ public class StageSelect : MonoBehaviour
                 btnList[index].lockObj.SetActive(false);
                 btnList[index].unlockObj.SetActive(true);
                 var rectTransform = btnList[index].unlockObj.GetComponent<RectTransform>();
-                rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + 30f, 1f).OnComplete(() =>
+                rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + UnlockRiseOffset, UnlockRiseDuration).OnComplete(() =>
                 {
                     btnList[index].button.interactable = true;
                     btnList[index].unlockObj.SetActive(false);

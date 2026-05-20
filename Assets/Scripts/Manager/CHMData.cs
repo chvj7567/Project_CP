@@ -17,6 +17,9 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
     public readonly int BossStageStartValue = 100000;
     public bool newUser = false;
 
+    // 신규 유저 기본 볼륨 (BGM/효과음)
+    const float DefaultVolume = 0.2f;
+
     public Dictionary<string, Data.Login> loginLocalDataDic = null;
     public Dictionary<string, Data.Collection> collectionLocalDataDic = null;
     public Dictionary<string, Data.Mission> missionLocalDataDic = null;
@@ -80,8 +83,8 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
             PlayerPrefs.SetInt(CHMString.Instance.NormalStage, 0);
             PlayerPrefs.SetInt(CHMString.Instance.BossStage, 0 + CHMData.Instance.BossStageStartValue);
 
-            PlayerPrefs.SetFloat(CHMString.Instance.BGMVolume, .2f);
-            PlayerPrefs.SetFloat(CHMString.Instance.EffectVolume, .2f);
+            PlayerPrefs.SetFloat(CHMString.Instance.BGMVolume, DefaultVolume);
+            PlayerPrefs.SetFloat(CHMString.Instance.EffectVolume, DefaultVolume);
             PlayerPrefs.SetFloat(CHMString.Instance.Red, 1f);
             PlayerPrefs.SetFloat(CHMString.Instance.Green, 1f);
             PlayerPrefs.SetFloat(CHMString.Instance.Blue, 1f);

@@ -55,7 +55,7 @@ public class UISetting : UIBase
 
             Debug.Log(loginData.languageType);
 
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene((int)Defines.EScene.FirstScene);
         });
 
         englishBtn.OnClickAsObservable().Subscribe(_ =>
@@ -67,7 +67,7 @@ public class UISetting : UIBase
 
             Debug.Log(loginData.languageType);
 
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene((int)Defines.EScene.FirstScene);
         });
 
         bgmSlider.value = CHMSound.Instance.bgmVolume;
@@ -90,7 +90,7 @@ public class UISetting : UIBase
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene((int)Defines.EScene.FirstScene);
         });
 
         deleteBtn.OnClickAsObservable().Subscribe(_ =>
@@ -109,7 +109,7 @@ public class UISetting : UIBase
 #if UNITY_ANDROID && !UNITY_EDITOR
                         ChvjUnityInfra.CHMGPGS.Instance.Logout();
 #endif
-                        SceneManager.LoadScene(1);
+                        SceneManager.LoadScene((int)Defines.EScene.FirstScene);
                     });
                 },
             });

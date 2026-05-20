@@ -371,4 +371,12 @@ public class Defines
         AddMoveItemValue = 5,
         AddTimeItemValue = 6
     }
+
+    // 보스 스킬 종류 — Wall: 벽 생성, Creator: 생성기 블록, CatBox: 고양이 상자
+    public enum EBossSkillType
+    {
+        Wall,
+        Creator,
+        CatBox,
+    }
 }

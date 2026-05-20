@@ -17,6 +17,13 @@ public class ResourceDownload : MonoBehaviour
     CancellationTokenSource tokenSource;
     int backgroundIndex = 0;
 
+    // 첫 배경 전환까지의 대기 시간(ms)
+    const int FirstBackgroundChangeDelayMs = 5000;
+    // 이후 배경 전환 주기(ms)
+    const int BackgroundChangeIntervalMs = 10000;
+    // 배경 페이드 인/아웃 트윈 시간(초)
+    const float BackgroundFadeDuration = 5f;
+
     private async void Start()
     {
         tokenSource = new CancellationTokenSource();
@@ -32,7 +39,7 @@ public class ResourceDownload : MonoBehaviour
 
         SetProgress(1f, string.Empty);
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene((int)Defines.EScene.FirstScene);
     }
 
     void SetProgress(float ratio, string key)
@@ -53,11 +60,11 @@ public class ResourceDownload : MonoBehaviour
 
         try
         {
-            await Task.Delay(5000, tokenSource.Token);
+            await Task.Delay(FirstBackgroundChangeDelayMs, tokenSource.Token);
             while (true)
             {
                 backgroundIndex = ChangeBackground();
-                await Task.Delay(10000, tokenSource.Token);
+                await Task.Delay(BackgroundChangeIntervalMs, tokenSource.Token);
             }
         }
         catch (TaskCanceledException)
@@ -72,8 +79,8 @@ public class ResourceDownload : MonoBehaviour
         int nextIndex = backgroundIndex + 1;
         if (nextIndex >= backgroundList.Count) nextIndex = 0;
 
-        backgroundList[backgroundIndex].DOFade(0f, 5f);
-        backgroundList[nextIndex].DOFade(1f, 5f);
+        backgroundList[backgroundIndex].DOFade(0f, BackgroundFadeDuration);
+        backgroundList[nextIndex].DOFade(1f, BackgroundFadeDuration);
         return nextIndex;
     }
 

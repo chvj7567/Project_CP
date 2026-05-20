@@ -30,6 +30,9 @@ public class UIRank : UIBase
 
     [SerializeField] int aiCount;
 
+    // 리더보드에서 불러올 상위 랭킹 수
+    const int TopRankLoadCount = 10;
+
     [SerializeField, ReadOnly] public Defines.ESelectStage curTap;
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -130,7 +133,7 @@ public class UIRank : UIBase
         {
             TaskCompletionSource<bool> rankTaskComplete = new TaskCompletionSource<bool>();
 
-            ChvjUnityInfra.CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, 10, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
+            ChvjUnityInfra.CHMGPGS.Instance.LoadCustomLeaderboardArray(gpgsID, TopRankLoadCount, LeaderboardStart.TopScores, LeaderboardTimeSpan.AllTime, (success, data) =>
             {
                 if (success)
                 {

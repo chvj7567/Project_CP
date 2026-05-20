@@ -138,7 +138,7 @@ public class UIGameStart : UIBase
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);
 
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene((int)Defines.EScene.GameScene);
         });
 
         myAddMoveItemBtn.OnClickAsObservable().Subscribe(_ =>

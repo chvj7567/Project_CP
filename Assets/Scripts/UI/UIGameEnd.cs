@@ -33,6 +33,11 @@ public class UIGameEnd : UIBase
 
     private bool received = false;
 
+    // 결과 텍스트(Failed/CLEAR) 연출 시간(초)
+    private const float ResultTextRevealDuration = 1f;
+    // 광고 시청 보상으로 지급하는 골드 배수
+    private const int AdRewardGoldMultiplier = 3;
+
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIGameEndArg;
@@ -50,7 +55,7 @@ public class UIGameEnd : UIBase
             if (successObj != null) successObj.SetActive(false);
             if (failedObj != null) failedObj.SetActive(true);
 
-            resultText.DOText("Failed...", 1f);
+            resultText.DOText("Failed...", ResultTextRevealDuration);
             goldText.SetText(0);
             goldx2Text.SetText(0);
         }
@@ -59,7 +64,7 @@ public class UIGameEnd : UIBase
             if (successObj != null) successObj.SetActive(true);
             if (failedObj != null) failedObj.SetActive(false);
 
-            resultText.DOText("CLEAR!", 1f);
+            resultText.DOText("CLEAR!", ResultTextRevealDuration);
 
             if (arg.clearState == Defines.EClearState.Clear)
             {
@@ -110,7 +115,7 @@ public class UIGameEnd : UIBase
             CHInstantiateButton.ResetBlockDict();
             CHMPool.Instance.Clear();
 
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene((int)EScene.FirstScene);
 
         }).AddTo(this);
 
@@ -135,7 +140,7 @@ public class UIGameEnd : UIBase
                 CHInstantiateButton.ResetBlockDict();
                 CHMPool.Instance.Clear();
 
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene((int)EScene.FirstScene);
 
             }).AddTo(this);
         }
@@ -152,7 +157,7 @@ public class UIGameEnd : UIBase
                 CHMUI.Instance.CloseUI(Defines.EUI.UIAlarm);
                 CHMPool.Instance.Clear();
 
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene((int)EScene.FirstScene);
                 return;
             }
 
@@ -177,7 +182,7 @@ public class UIGameEnd : UIBase
             CHMPool.Instance.Clear();
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene((int)EScene.FirstScene);
         }).AddTo(this);
 
         adBtn.OnClickAsObservable().Subscribe(_ =>
@@ -206,7 +211,7 @@ public class UIGameEnd : UIBase
         }
 
         var before = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
-        var after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold * 3;
+        var after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold * AdRewardGoldMultiplier;
 
         received = true;
 

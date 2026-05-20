@@ -75,14 +75,14 @@ public class MissionScrollViewItem : MonoBehaviour
                     break;
             }
 
-            if (_info.tapIndex == 1)
+            if (_info.tapIndex == UIMission.MissionTabNormal)
             {
                 _missionData.repeatCount++;
                 var clearValue = _info.clearValue + (_missionData.repeatCount * _info.addValue);
                 SetBtnInteractable(clearValue);
                 missionValueText.SetText(_collectionData.value - _missionData.startValue, clearValue);
             }
-            else if (_info.tapIndex == 2)
+            else if (_info.tapIndex == UIMission.MissionTabSpecial)
             {
                 var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                 if (loginData.normalStage >= _info.clearValue &&
@@ -95,7 +95,7 @@ public class MissionScrollViewItem : MonoBehaviour
 
                 rewardBtn.interactable = false;
             }
-            else if (_info.tapIndex == 3)
+            else if (_info.tapIndex == UIMission.MissionTabDaily)
             {
                 // 일일 미션 — 1회 수령으로 완료 처리. repeatCount 미사용.
                 _missionData.clearState = Defines.EClearState.Clear;
@@ -121,7 +121,7 @@ public class MissionScrollViewItem : MonoBehaviour
         if (rewardCountText != null)
             rewardCountText.SetText("x", _info.rewardCount);
 
-        if (_info.tapIndex == 1)
+        if (_info.tapIndex == UIMission.MissionTabNormal)
         {
             _collectionData = CHMData.Instance.GetCollectionData(_info.collectionType.ToString());
             _missionData = CHMData.Instance.GetMissionData(_info.missionID.ToString());
@@ -152,7 +152,7 @@ public class MissionScrollViewItem : MonoBehaviour
                 missionValueText.SetText(_collectionData.value - _missionData.startValue, clearValue);
             }
         }
-        else if (_info.tapIndex == 2)
+        else if (_info.tapIndex == UIMission.MissionTabSpecial)
         {
             // 풀링 재사용 시 이전 미션의 클리어 표시가 남지 않도록 초기화
             clearObj.SetActive(false);
@@ -178,7 +178,7 @@ public class MissionScrollViewItem : MonoBehaviour
                 rewardBtn.interactable = false;
             }
         }
-        else if (_info.tapIndex == 3)
+        else if (_info.tapIndex == UIMission.MissionTabDaily)
         {
             // 일일 미션 — 진행도는 DailyMissionService가 카운터/스냅샷 차분으로 계산
             _missionData = CHMData.Instance.GetMissionData(_info.missionID.ToString());
@@ -215,7 +215,7 @@ public class MissionScrollViewItem : MonoBehaviour
     bool IsAdWatchMission()
     {
         return _info != null
-            && _info.tapIndex == 3
+            && _info.tapIndex == UIMission.MissionTabDaily
             && _info.dailyCounter == Defines.EDailyCounter.AdWatch;
     }
 
