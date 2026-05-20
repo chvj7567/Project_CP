@@ -11,6 +11,7 @@ public class MissionScrollViewItem : MonoBehaviour
     [SerializeField] CHText missionValueText;
     [SerializeField] List<GameObject> missionImgList = new List<GameObject>();
     [SerializeField] List<GameObject> rewardImgList = new List<GameObject>();
+    [SerializeField] CHText rewardCountText;   // 보상 개수 (x10 형식)
     [SerializeField] Button rewardBtn;
     [SerializeField] CHText rewardBtnText;   // 보상 버튼 라벨 (광고 미션: 보기/받기 전환)
     [SerializeField] GameObject clearObj;
@@ -116,6 +117,10 @@ public class MissionScrollViewItem : MonoBehaviour
         if (rewardBtnText != null)
             rewardBtnText.SetStringID(173);
 
+        // 보상 개수 표시 (x10 형식)
+        if (rewardCountText != null)
+            rewardCountText.SetText("x", _info.rewardCount);
+
         if (_info.tapIndex == 1)
         {
             _collectionData = CHMData.Instance.GetCollectionData(_info.collectionType.ToString());
@@ -149,6 +154,9 @@ public class MissionScrollViewItem : MonoBehaviour
         }
         else if (_info.tapIndex == 2)
         {
+            // 풀링 재사용 시 이전 미션의 클리어 표시가 남지 않도록 초기화
+            clearObj.SetActive(false);
+
             missionValueText.SetStringID(27);
             missionValueText.SetText(_info.clearValue);
             SetMissionImage(_info.collectionType);

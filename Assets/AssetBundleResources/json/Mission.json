@@ -19,6 +19,6 @@
   {"missionID":"100", "tapIndex":"3", "descStringID":167, "collectionType":-1,"dailyCounter":0, "clearValue":1, "addValue":0, "reward":0, "rewardCount":100},
   {"missionID":"101", "tapIndex":"3", "descStringID":168, "collectionType":-1,"dailyCounter":1, "clearValue":3, "addValue":0, "reward":0, "rewardCount":300},
   {"missionID":"102", "tapIndex":"3", "descStringID":169, "collectionType":-1,"dailyCounter":2, "clearValue":100, "addValue":0, "reward":1, "rewardCount":1},
-  {"missionID":"103", "tapIndex":"3", "descStringID":170, "collectionType":-1,"dailyCounter":3, "clearValue":1, "addValue":0, "reward":2, "rewardCount":1},
+  {"missionID":"103", "tapIndex":"3", "descStringID":170, "collectionType":-1,"dailyCounter":3, "clearValue":1, "addValue":0, "reward":2, "rewardCount":10},
   {"missionID":"104", "tapIndex":"3", "descStringID":171, "collectionType":18,"dailyCounter":-1, "clearValue":3, "addValue":0, "reward":0, "rewardCount":200}
 ]
