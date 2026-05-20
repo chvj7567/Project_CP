@@ -39,14 +39,14 @@ public class UIMission : UIBase
         if (offlineLockObj != null) offlineLockObj.SetActive(false);
         UpdateDailyLockState();
 
-        // NTP가 나중에라도 동기화되면 잠금 해제
+        // NTP가 나중에라도 동기화되면 잠금 해제 + 일일 탭이면 내용 갱신
         if (CHMMain.Time != null && CHMMain.Time.OnAvailable != null)
         {
             CHMMain.Time.OnAvailable.Subscribe(_ =>
             {
                 UpdateDailyLockState();
                 if (curTapIndex == 3)
-                    scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
+                    ShowDailyTab();
             }).AddTo(this);
         }
 
@@ -54,36 +54,40 @@ public class UIMission : UIBase
         DailyMissionService.CheckAndResetIfNeeded();
         DailyMissionService.MarkAttendance();
 
-        normalTapBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            curTapIndex = 1;
-            scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
-        }).AddTo(this);
-
-        specialTapBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            curTapIndex = 2;
-            scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
-        }).AddTo(this);
+        normalTapBtn.OnClickAsObservable().Subscribe(_ => ShowNormalTab(1)).AddTo(this);
+        specialTapBtn.OnClickAsObservable().Subscribe(_ => ShowNormalTab(2)).AddTo(this);
 
         if (dailyTapBtn != null)
-        {
-            dailyTapBtn.OnClickAsObservable().Subscribe(_ =>
-            {
-                if (!CHMMain.Time.IsAvailable)
-                {
-                    if (offlineLockObj != null) offlineLockObj.SetActive(true);
-                    return;
-                }
-                curTapIndex = 3;
-                DailyMissionService.CheckAndResetIfNeeded();
-                scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
-            }).AddTo(this);
-        }
+            dailyTapBtn.OnClickAsObservable().Subscribe(_ => ShowDailyTab()).AddTo(this);
 
-        curTapIndex = 1;
         curTapText.SetStringID(121);
-        scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(curTapIndex));
+
+        // 기본 탭 = 일일 탭
+        ShowDailyTab();
+    }
+
+    // 일반/특별 탭(1, 2). 리셋 타이머는 일일 탭 전용이라 숨김
+    void ShowNormalTab(int index)
+    {
+        curTapIndex = index;
+        if (offlineLockObj != null) offlineLockObj.SetActive(false);
+        if (resetTimerText != null) resetTimerText.gameObject.SetActive(false);
+        scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(index));
+    }
+
+    // 일일 탭(3). NTP 수신 시에만 내용·리셋 타이머 표시, 미수신 시 잠금 오버레이
+    void ShowDailyTab()
+    {
+        curTapIndex = 3;
+
+        bool available = CHMMain.Time != null && CHMMain.Time.IsAvailable;
+        if (offlineLockObj != null) offlineLockObj.SetActive(!available);
+        if (resetTimerText != null) resetTimerText.gameObject.SetActive(available);
+
+        if (!available) return;
+
+        DailyMissionService.CheckAndResetIfNeeded();
+        scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(3));
     }
 
     void UpdateDailyLockState()

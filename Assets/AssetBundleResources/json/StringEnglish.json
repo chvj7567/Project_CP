@@ -598,5 +598,93 @@
         {
             "stringID": 149,
             "value": "A cat decorated with strawberries!"
+        },
+        {
+            "stringID": 150,
+            "value": "Pop Arrow Block 1"
+        },
+        {
+            "stringID": 151,
+            "value": "Pop Arrow Block 2"
+        },
+        {
+            "stringID": 152,
+            "value": "Pop Arrow Block 3"
+        },
+        {
+            "stringID": 153,
+            "value": "Pop Arrow Block 4"
+        },
+        {
+            "stringID": 154,
+            "value": "Pop Arrow Block 5"
+        },
+        {
+            "stringID": 155,
+            "value": "Pop Arrow Block 6"
+        },
+        {
+            "stringID": 156,
+            "value": "Pop CatPang Blocks"
+        },
+        {
+            "stringID": 157,
+            "value": "Pop Pink Bombs"
+        },
+        {
+            "stringID": 158,
+            "value": "Pop Yellow Bombs"
+        },
+        {
+            "stringID": 159,
+            "value": "Pop Orange Bombs"
+        },
+        {
+            "stringID": 160,
+            "value": "Pop Green Bombs"
+        },
+        {
+            "stringID": 161,
+            "value": "Pop Blue Bombs"
+        },
+        {
+            "stringID": 162,
+            "value": "Reach Normal Stage 31"
+        },
+        {
+            "stringID": 163,
+            "value": "Reach Normal Stage 51"
+        },
+        {
+            "stringID": 164,
+            "value": "Reach Normal Stage 71"
+        },
+        {
+            "stringID": 165,
+            "value": "Reach Normal Stage 91"
+        },
+        {
+            "stringID": 166,
+            "value": "Reach Normal Stage 131"
+        },
+        {
+            "stringID": 167,
+            "value": "Check in today"
+        },
+        {
+            "stringID": 168,
+            "value": "Clear 3 normal stages"
+        },
+        {
+            "stringID": 169,
+            "value": "Destroy 100 blocks"
+        },
+        {
+            "stringID": 170,
+            "value": "Watch 1 ad"
+        },
+        {
+            "stringID": 171,
+            "value": "Pop 3 CatPang blocks"
         }
     ]

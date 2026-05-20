@@ -598,5 +598,93 @@
         {
             "stringID": 149,
             "value": "딸기로 꾸민 고양이예요!"
+        },
+        {
+            "stringID": 150,
+            "value": "화살표 블록 1 터트리기"
+        },
+        {
+            "stringID": 151,
+            "value": "화살표 블록 2 터트리기"
+        },
+        {
+            "stringID": 152,
+            "value": "화살표 블록 3 터트리기"
+        },
+        {
+            "stringID": 153,
+            "value": "화살표 블록 4 터트리기"
+        },
+        {
+            "stringID": 154,
+            "value": "화살표 블록 5 터트리기"
+        },
+        {
+            "stringID": 155,
+            "value": "화살표 블록 6 터트리기"
+        },
+        {
+            "stringID": 156,
+            "value": "캣팡 블록 터트리기"
+        },
+        {
+            "stringID": 157,
+            "value": "분홍 폭탄 터트리기"
+        },
+        {
+            "stringID": 158,
+            "value": "노랑 폭탄 터트리기"
+        },
+        {
+            "stringID": 159,
+            "value": "주황 폭탄 터트리기"
+        },
+        {
+            "stringID": 160,
+            "value": "초록 폭탄 터트리기"
+        },
+        {
+            "stringID": 161,
+            "value": "파랑 폭탄 터트리기"
+        },
+        {
+            "stringID": 162,
+            "value": "노멀 31스테이지 달성"
+        },
+        {
+            "stringID": 163,
+            "value": "노멀 51스테이지 달성"
+        },
+        {
+            "stringID": 164,
+            "value": "노멀 71스테이지 달성"
+        },
+        {
+            "stringID": 165,
+            "value": "노멀 91스테이지 달성"
+        },
+        {
+            "stringID": 166,
+            "value": "노멀 131스테이지 달성"
+        },
+        {
+            "stringID": 167,
+            "value": "오늘 출석하기"
+        },
+        {
+            "stringID": 168,
+            "value": "노멀 스테이지 3회 클리어"
+        },
+        {
+            "stringID": 169,
+            "value": "블록 100개 부수기"
+        },
+        {
+            "stringID": 170,
+            "value": "광고 1회 시청"
+        },
+        {
+            "stringID": 171,
+            "value": "캣팡 블록 3개 터트리기"
         }
     ]

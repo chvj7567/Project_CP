@@ -58,6 +58,7 @@ public class Infomation
     {
         public int missionID = -1;
         public int tapIndex = -1;
+        public int descStringID = -1;
         public Defines.EBlockState collectionType = Defines.EBlockState.None;
         public Defines.EDailyCounter dailyCounter = Defines.EDailyCounter.None; // 일일 미션 전용 카운터
         public int clearValue = -1;

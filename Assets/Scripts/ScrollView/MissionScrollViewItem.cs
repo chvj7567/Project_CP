@@ -100,12 +100,13 @@ public class MissionScrollViewItem : MonoBehaviour
     {
         _info = info;
 
+        // 미션별 설명 (Mission.json의 descStringID)
+        missionText.SetStringID(_info.descStringID);
+
         if (_info.tapIndex == 1)
         {
             _collectionData = CHMData.Instance.GetCollectionData(_info.collectionType.ToString());
             _missionData = CHMData.Instance.GetMissionData(_info.missionID.ToString());
-
-            missionText.SetStringID(13);
 
             clearObj.SetActive(false);
 
@@ -135,7 +136,6 @@ public class MissionScrollViewItem : MonoBehaviour
         }
         else if (_info.tapIndex == 2)
         {
-            missionText.SetStringID(123);
             missionValueText.SetStringID(27);
             missionValueText.SetText(_info.clearValue);
             SetMissionImage(_info.collectionType);
@@ -162,7 +162,6 @@ public class MissionScrollViewItem : MonoBehaviour
             // 일일 미션 — 진행도는 DailyMissionService가 카운터/스냅샷 차분으로 계산
             _missionData = CHMData.Instance.GetMissionData(_info.missionID.ToString());
 
-            missionText.SetStringID(13); // 기존 "수집" — 일일 미션용 StringID 추후 분리 가능
             clearObj.SetActive(false);
 
             SetMissionImage(_info.collectionType);
