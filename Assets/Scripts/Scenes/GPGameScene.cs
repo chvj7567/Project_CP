@@ -476,6 +476,7 @@ public class GPGameScene : MonoBehaviour
         _matcher.CheckMap();
 
         bool canMatch = true;
+        bool stillMatch = false;
         do
         {
             if (!canMatch)
@@ -518,11 +519,14 @@ public class GPGameScene : MonoBehaviour
             }
 
             isMatch = false;
-            _matcher.CheckMap();
-            if (!_matcher.isMatch) canMatch = _matcher.CanPlay();
+            // CheckMap은 isMatch를 누적(true로만)하므로 호출 전 반드시 초기화해야 현재 보드 상태가 정확히 반영된다.
             _matcher.isMatch = false;
+            _matcher.CheckMap();
+            // CanPlay가 내부에서 isMatch를 덮어쓰기 전에 현재 매치 여부를 보존한다.
+            stillMatch = _matcher.isMatch;
+            if (!stillMatch) canMatch = _matcher.CanPlay();
 
-        } while (_matcher.isMatch || !canMatch);
+        } while (stillMatch || !canMatch);
 
         Debug.Log("Create Map End");
         await Task.Delay((int)(delay * delayMillisecond), _tokenSource.Token);
