@@ -574,5 +574,29 @@
         {
             "stringID": 143,
             "value": "The current game will end."
+        },
+        {
+            "stringID": 144,
+            "value": "A cat wearing a crown!"
+        },
+        {
+            "stringID": 145,
+            "value": "A cat decorated with flowers!"
+        },
+        {
+            "stringID": 146,
+            "value": "A cat with a mushroom hat!"
+        },
+        {
+            "stringID": 147,
+            "value": "A party-style cat!"
+        },
+        {
+            "stringID": 148,
+            "value": "A cat in a Santa outfit!"
+        },
+        {
+            "stringID": 149,
+            "value": "A cat decorated with strawberries!"
         }
     ]

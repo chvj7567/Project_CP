@@ -322,7 +322,8 @@ public class GPGameScene : MonoBehaviour
         var tasks = new List<Task>();
         for (EBlockState i = 0; i < EBlockState.Max; ++i)
         {
-            if ((int)i >= 7 && (int)i <= 9) continue;
+            // 미정의 enum 값(7~9, 옛 스킨 슬롯 25~39·47~51 등)은 스프라이트가 없으므로 스킵
+            if (!System.Enum.IsDefined(typeof(EBlockState), i)) continue;
             var blockState = i;
             var tcs = new TaskCompletionSource<Sprite>();
             CHMResource.Instance.LoadSprite(blockState, sprite =>

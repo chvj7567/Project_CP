@@ -131,23 +131,7 @@ public class Defines
 
         Fish      = 24,
 
-        CatHat1   = 25,
-        CatHat2   = 26,
-        CatHat3   = 27,
-        CatHat4   = 28,
-        CatHat5   = 29,
-
-        CatSkin1  = 30,
-        CatSkin2  = 31,
-        CatSkin3  = 32,
-        CatSkin4  = 33,
-        CatSkin5  = 34,
-
-        Locker1   = 35,
-        Locker2   = 36,
-        Locker3   = 37,
-        Locker4   = 38,
-        Locker5   = 39,
+        // 25~39: 옛 CatHat/CatSkin/Locker 스킨 슬롯 (삭제됨). StageBlock.json의 int 값 호환을 위해 빈 슬롯로 유지
 
         CatBox1   = 40,
         CatBox2   = 41,
@@ -158,17 +142,50 @@ public class Defines
         WallCreator  = 45,
         PotalCreator = 46,
 
-        LockerBox1 = 47,
-        LockerBox2 = 48,
-        LockerBox3 = 49,
-        LockerBox4 = 50,
-        LockerBox5 = 51,
+        // 47~51: 옛 LockerBox 슬롯 (삭제됨). StageBlock.json의 int 값 호환을 위해 빈 슬롯로 유지
 
         RainbowPang = 52,
 
         Ball      = 53,
 
-        Max       = 54
+        // 신규 고양이 스킨 (테마 6종 × Cat1~5). 끝에 append 하여 0~53 슬롯 보존
+        CatCrown1      = 54,
+        CatCrown2      = 55,
+        CatCrown3      = 56,
+        CatCrown4      = 57,
+        CatCrown5      = 58,
+
+        CatFlowers1    = 59,
+        CatFlowers2    = 60,
+        CatFlowers3    = 61,
+        CatFlowers4    = 62,
+        CatFlowers5    = 63,
+
+        CatMushroom1   = 64,
+        CatMushroom2   = 65,
+        CatMushroom3   = 66,
+        CatMushroom4   = 67,
+        CatMushroom5   = 68,
+
+        CatParty1      = 69,
+        CatParty2      = 70,
+        CatParty3      = 71,
+        CatParty4      = 72,
+        CatParty5      = 73,
+
+        CatSanta1      = 74,
+        CatSanta2      = 75,
+        CatSanta3      = 76,
+        CatSanta4      = 77,
+        CatSanta5      = 78,
+
+        CatStrawberry1 = 79,
+        CatStrawberry2 = 80,
+        CatStrawberry3 = 81,
+        CatStrawberry4 = 82,
+        CatStrawberry5 = 83,
+
+        Max            = 84
     }
 
     public enum EDirection

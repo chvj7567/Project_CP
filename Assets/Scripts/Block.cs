@@ -323,23 +323,11 @@ public class Block : MonoBehaviour
             case EBlockState.Fish:
                 background.color = new Color(0, 0, 0, .35f);
                 break;
-            case EBlockState.Locker1:
-            case EBlockState.Locker2:
-            case EBlockState.Locker3:
-            case EBlockState.Locker4:
-            case EBlockState.Locker5:
-                img.rectTransform.sizeDelta = new Vector2(70, 70);
-                break;
             case EBlockState.CatBox1:
             case EBlockState.CatBox2:
             case EBlockState.CatBox3:
             case EBlockState.CatBox4:
             case EBlockState.CatBox5:
-            case EBlockState.LockerBox1:
-            case EBlockState.LockerBox2:
-            case EBlockState.LockerBox3:
-            case EBlockState.LockerBox4:
-            case EBlockState.LockerBox5:
                 hpText.GetComponent<RectTransform>().DOAnchorPosY(30, .1f);
                 img.rectTransform.sizeDelta = new Vector2(10, 10);
                 background.color = new Color(0, 0, 0, 0);
@@ -355,74 +343,49 @@ public class Block : MonoBehaviour
         CheckNoneBlockLog(_log, _key);
     }
 
+    // 스킨 적용된 고양이 블록을 원본 Cat1~7 타입으로 환산. 고양이가 아니면 None
+    // 전제: Cat1~7(0~6)과 신규 스킨(CatCrown1~CatStrawberry5, 54~83)이 각각 연속 배치되어 있음
+    public static EBlockState GetBaseCat(EBlockState _state)
+    {
+        int v = (int)_state;
+
+        if (v >= (int)EBlockState.Cat1 && v <= (int)EBlockState.Cat7)
+            return _state;
+
+        if (v >= (int)EBlockState.CatCrown1 && v <= (int)EBlockState.CatStrawberry5)
+            return EBlockState.Cat1 + ((v - (int)EBlockState.CatCrown1) % 5);
+
+        return EBlockState.None;
+    }
+
     public EBlockState CheckSelectCatShop(EBlockState _blockState)
     {
         var data = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (data == null)
             return _blockState;
 
-        if (data.selectCatShop == 0)
-            return _blockState;
-        else if (data.selectCatShop == 1)
+        // selectCatShop: 0=없음, 1~6=스킨 테마. Cat1~5만 스킨 적용 대상
+        int catIndex;
+        switch (_blockState)
         {
-            switch (_blockState)
-            {
-                case EBlockState.Cat1:
-                    return EBlockState.CatHat1;
-                case EBlockState.Cat2:
-                    return EBlockState.CatHat2;
-                case EBlockState.Cat3:
-                    return EBlockState.CatHat3;
-                case EBlockState.Cat4:
-                    return EBlockState.CatHat4;
-                case EBlockState.Cat5:
-                    return EBlockState.CatHat5;
-            }
-        }
-        else if (data.selectCatShop == 2)
-        {
-            switch (_blockState)
-            {
-                case EBlockState.Cat1:
-                    return EBlockState.CatSkin1;
-                case EBlockState.Cat2:
-                    return EBlockState.CatSkin2;
-                case EBlockState.Cat3:
-                    return EBlockState.CatSkin3;
-                case EBlockState.Cat4:
-                    return EBlockState.CatSkin4;
-                case EBlockState.Cat5:
-                    return EBlockState.CatSkin5;
-            }
-        }
-        else if (data.selectCatShop == 3)
-        {
-            switch (_blockState)
-            {
-                case EBlockState.Cat1:
-                    return EBlockState.Locker1;
-                case EBlockState.Cat2:
-                    return EBlockState.Locker2;
-                case EBlockState.Cat3:
-                    return EBlockState.Locker3;
-                case EBlockState.Cat4:
-                    return EBlockState.Locker4;
-                case EBlockState.Cat5:
-                    return EBlockState.Locker5;
-                case EBlockState.CatBox1:
-                    return EBlockState.LockerBox1;
-                case EBlockState.CatBox2:
-                    return EBlockState.LockerBox2;
-                case EBlockState.CatBox3:
-                    return EBlockState.LockerBox3;
-                case EBlockState.CatBox4:
-                    return EBlockState.LockerBox4;
-                case EBlockState.CatBox5:
-                    return EBlockState.LockerBox5;
-            }
+            case EBlockState.Cat1: catIndex = 0; break;
+            case EBlockState.Cat2: catIndex = 1; break;
+            case EBlockState.Cat3: catIndex = 2; break;
+            case EBlockState.Cat4: catIndex = 3; break;
+            case EBlockState.Cat5: catIndex = 4; break;
+            default: return _blockState;
         }
 
-        return _blockState;
+        switch (data.selectCatShop)
+        {
+            case 1: return EBlockState.CatCrown1 + catIndex;
+            case 2: return EBlockState.CatFlowers1 + catIndex;
+            case 3: return EBlockState.CatMushroom1 + catIndex;
+            case 4: return EBlockState.CatParty1 + catIndex;
+            case 5: return EBlockState.CatSanta1 + catIndex;
+            case 6: return EBlockState.CatStrawberry1 + catIndex;
+            default: return _blockState;
+        }
     }
 
     public Defines.EBlockState GetBlockState()
@@ -518,34 +481,8 @@ public class Block : MonoBehaviour
 
     public bool IsNormalBlock()
     {
-        switch (blockState)
-        {
-            case Defines.EBlockState.Cat1:
-            case Defines.EBlockState.Cat2:
-            case Defines.EBlockState.Cat3:
-            case Defines.EBlockState.Cat4:
-            case Defines.EBlockState.Cat5:
-            case Defines.EBlockState.Cat6:
-            case Defines.EBlockState.Cat7:
-            case Defines.EBlockState.CatHat1:
-            case Defines.EBlockState.CatHat2:
-            case Defines.EBlockState.CatHat3:
-            case Defines.EBlockState.CatHat4:
-            case Defines.EBlockState.CatHat5:
-            case Defines.EBlockState.CatSkin1:
-            case Defines.EBlockState.CatSkin2:
-            case Defines.EBlockState.CatSkin3:
-            case Defines.EBlockState.CatSkin4:
-            case Defines.EBlockState.CatSkin5:
-            case Defines.EBlockState.Locker1:
-            case Defines.EBlockState.Locker2:
-            case Defines.EBlockState.Locker3:
-            case Defines.EBlockState.Locker4:
-            case Defines.EBlockState.Locker5:
-                return true;
-            default:
-                return false;
-        }
+        // Cat1~7 및 스킨 적용된 고양이 블록은 모두 일반 블록
+        return GetBaseCat(blockState) != Defines.EBlockState.None;
     }
 
     public bool IsBombBlock()
@@ -582,11 +519,6 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
-            case Defines.EBlockState.LockerBox1:
-            case Defines.EBlockState.LockerBox2:
-            case Defines.EBlockState.LockerBox3:
-            case Defines.EBlockState.LockerBox4:
-            case Defines.EBlockState.LockerBox5:
             case Defines.EBlockState.WallCreator:
             case Defines.EBlockState.PotalCreator:
                 return true;
@@ -605,11 +537,6 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
-            case Defines.EBlockState.LockerBox1:
-            case Defines.EBlockState.LockerBox2:
-            case Defines.EBlockState.LockerBox3:
-            case Defines.EBlockState.LockerBox4:
-            case Defines.EBlockState.LockerBox5:
             case Defines.EBlockState.WallCreator:
             case Defines.EBlockState.PotalCreator:
                 return true;
@@ -630,11 +557,6 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
-            case Defines.EBlockState.LockerBox1:
-            case Defines.EBlockState.LockerBox2:
-            case Defines.EBlockState.LockerBox3:
-            case Defines.EBlockState.LockerBox4:
-            case Defines.EBlockState.LockerBox5:
             case Defines.EBlockState.WallCreator:
             case Defines.EBlockState.PotalCreator:
             case Defines.EBlockState.RainbowPang:
@@ -700,11 +622,6 @@ public class Block : MonoBehaviour
             case Defines.EBlockState.CatBox3:
             case Defines.EBlockState.CatBox4:
             case Defines.EBlockState.CatBox5:
-            case Defines.EBlockState.LockerBox1:
-            case Defines.EBlockState.LockerBox2:
-            case Defines.EBlockState.LockerBox3:
-            case Defines.EBlockState.LockerBox4:
-            case Defines.EBlockState.LockerBox5:
                 return true;
             default:
                 return false;
@@ -717,80 +634,21 @@ public class Block : MonoBehaviour
         if (IsBoxBlock() == false)
             return false;
 
+        // 위 블록을 원본 고양이 타입으로 환산해 박스가 받는 고양이인지 판정
+        var baseCat = GetBaseCat(upBlockState);
+
         switch (blockState)
         {
             case EBlockState.CatBox1:
-            case EBlockState.LockerBox1:
-                {
-                    switch (upBlockState)
-                    {
-                        case Defines.EBlockState.Cat1:
-                        case Defines.EBlockState.Cat6:
-                        case Defines.EBlockState.CatHat1:
-                        case Defines.EBlockState.CatSkin1:
-                        case Defines.EBlockState.Locker1:
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
+                return baseCat == EBlockState.Cat1 || baseCat == EBlockState.Cat6;
             case EBlockState.CatBox2:
-            case EBlockState.LockerBox2:
-                {
-                    switch (upBlockState)
-                    {
-                        case Defines.EBlockState.Cat2:
-                        case Defines.EBlockState.Cat7:
-                        case Defines.EBlockState.CatHat2:
-                        case Defines.EBlockState.CatSkin2:
-                        case Defines.EBlockState.Locker2:
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
+                return baseCat == EBlockState.Cat2 || baseCat == EBlockState.Cat7;
             case EBlockState.CatBox3:
-            case EBlockState.LockerBox3:
-                {
-                    switch (upBlockState)
-                    {
-                        case Defines.EBlockState.Cat3:
-                        case Defines.EBlockState.CatHat3:
-                        case Defines.EBlockState.CatSkin3:
-                        case Defines.EBlockState.Locker3:
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
+                return baseCat == EBlockState.Cat3;
             case EBlockState.CatBox4:
-            case EBlockState.LockerBox4:
-                {
-                    switch (upBlockState)
-                    {
-                        case Defines.EBlockState.Cat4:
-                        case Defines.EBlockState.CatHat4:
-                        case Defines.EBlockState.CatSkin4:
-                        case Defines.EBlockState.Locker4:
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
+                return baseCat == EBlockState.Cat4;
             case EBlockState.CatBox5:
-            case EBlockState.LockerBox5:
-                {
-                    switch (upBlockState)
-                    {
-                        case Defines.EBlockState.Cat5:
-                        case Defines.EBlockState.CatHat5:
-                        case Defines.EBlockState.CatSkin5:
-                        case Defines.EBlockState.Locker5:
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
+                return baseCat == EBlockState.Cat5;
             default:
                 return false;
         }
