@@ -60,6 +60,9 @@ public class UIMission : UIBase
         if (dailyTapBtn != null)
             dailyTapBtn.OnClickAsObservable().Subscribe(_ => ShowDailyTab()).AddTo(this);
 
+        // 리워드 광고 시청 완료 시 일일 탭이면 진행도 즉시 갱신
+        CHMAdmob.Instance.AcquireReward += OnRewardAcquired;
+
         curTapText.SetStringID(121);
 
         // 기본 탭 = 일일 탭
@@ -88,6 +91,18 @@ public class UIMission : UIBase
 
         DailyMissionService.CheckAndResetIfNeeded();
         scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(3));
+    }
+
+    // 리워드 광고 시청 완료 콜백 — 일일 탭이면 진행도 즉시 갱신
+    void OnRewardAcquired()
+    {
+        if (curTapIndex == 3)
+            ShowDailyTab();
+    }
+
+    private void OnDestroy()
+    {
+        CHMAdmob.Instance.AcquireReward -= OnRewardAcquired;
     }
 
     void UpdateDailyLockState()

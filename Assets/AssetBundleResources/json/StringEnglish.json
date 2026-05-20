@@ -686,5 +686,13 @@
         {
             "stringID": 171,
             "value": "Pop 3 CatPang blocks"
+        },
+        {
+            "stringID": 172,
+            "value": "Watch"
+        },
+        {
+            "stringID": 173,
+            "value": "Get"
         }
     ]

@@ -163,8 +163,6 @@ public class LBLobbyScene : MonoBehaviour
         connectGPGSBtn.gameObject.SetActive(!login);
         logoutBtn.gameObject.SetActive(login);
 
-        adScript.GetAdvertise();
-
         InitButton();
         CHMData.Instance.GetShopData("1").buy = true;
 

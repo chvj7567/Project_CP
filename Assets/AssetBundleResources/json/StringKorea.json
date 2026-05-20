@@ -686,5 +686,13 @@
         {
             "stringID": 171,
             "value": "캣팡 블록 3개 터트리기"
+        },
+        {
+            "stringID": 172,
+            "value": "보기"
+        },
+        {
+            "stringID": 173,
+            "value": "받기"
         }
     ]

@@ -12,6 +12,7 @@ public class MissionScrollViewItem : MonoBehaviour
     [SerializeField] List<GameObject> missionImgList = new List<GameObject>();
     [SerializeField] List<GameObject> rewardImgList = new List<GameObject>();
     [SerializeField] Button rewardBtn;
+    [SerializeField] CHText rewardBtnText;   // 보상 버튼 라벨 (광고 미션: 보기/받기 전환)
     [SerializeField] GameObject clearObj;
 
     Infomation.MissionInfo _info;
@@ -22,6 +23,14 @@ public class MissionScrollViewItem : MonoBehaviour
     {
         rewardBtn.OnClickAsObservable().Subscribe(_ =>
         {
+            // 광고 시청 미션 — 목표 미달이면 클릭 시 리워드 광고 재생
+            if (IsAdWatchMission()
+                && DailyMissionService.GetDailyProgress(_info) < _info.clearValue)
+            {
+                CHMAdmob.Instance.ShowRewardedAd();
+                return;
+            }
+
             var reward = _info.rewardCount;
             switch (_info.reward)
             {
@@ -103,6 +112,10 @@ public class MissionScrollViewItem : MonoBehaviour
         // 미션별 설명 (Mission.json의 descStringID)
         missionText.SetStringID(_info.descStringID);
 
+        // 보상 버튼 라벨 기본값 "받기" (광고 미션 미시청 시 아래에서 "보기"로 변경)
+        if (rewardBtnText != null)
+            rewardBtnText.SetStringID(173);
+
         if (_info.tapIndex == 1)
         {
             _collectionData = CHMData.Instance.GetCollectionData(_info.collectionType.ToString());
@@ -180,9 +193,22 @@ public class MissionScrollViewItem : MonoBehaviour
             {
                 missionValueText.SetStringID(20);
                 missionValueText.SetText(Mathf.Min(current, target), target);
-                rewardBtn.interactable = current >= target;
+                // 광고 미션은 미달 시에도 버튼 활성화 (클릭 시 리워드 광고 재생)
+                rewardBtn.interactable = IsAdWatchMission() || current >= target;
+
+                // 광고 미션 미시청 — 버튼 라벨 "보기"
+                if (IsAdWatchMission() && current < target && rewardBtnText != null)
+                    rewardBtnText.SetStringID(172);
             }
         }
+    }
+
+    // 광고 시청 일일 미션 여부
+    bool IsAdWatchMission()
+    {
+        return _info != null
+            && _info.tapIndex == 3
+            && _info.dailyCounter == Defines.EDailyCounter.AdWatch;
     }
 
     void SetBtnInteractable(int clearValue)
