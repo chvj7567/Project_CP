@@ -28,7 +28,7 @@ public class UIShop : UIBase
     const int ShopTabSkin = 1;
     const int ShopTabCash = 2;
     // IAP 상품 구매 시 지급하는 아이템 수량
-    const int PurchaseItemGrantCount = 10;
+    const int PurchaseItemGrantCount = 100;
 
     public override void InitUI(CHUIArg _uiArg)
     {
