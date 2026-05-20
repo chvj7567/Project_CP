@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ChvjUnityInfra;
@@ -9,7 +9,6 @@ public class MissionScrollViewItem : MonoBehaviour
 {
     [SerializeField] CHText missionText;
     [SerializeField] CHText missionValueText;
-    [SerializeField] List<GameObject> missionImgList = new List<GameObject>();
     [SerializeField] List<GameObject> rewardImgList = new List<GameObject>();
     [SerializeField] CHText rewardCountText;   // 보상 개수 (x10 형식)
     [SerializeField] Button rewardBtn;
@@ -19,6 +18,9 @@ public class MissionScrollViewItem : MonoBehaviour
     Infomation.MissionInfo _info;
     Data.Mission _missionData;
     Data.Collection _collectionData;
+
+    // 미션 아이콘 Image — iconItem 아래 단일 Image. 어드레서블 스프라이트를 런타임 로드해 교체.
+    Image _missionIcon;
 
     void Start()
     {
@@ -121,6 +123,9 @@ public class MissionScrollViewItem : MonoBehaviour
         if (rewardCountText != null)
             rewardCountText.SetText("x", _info.rewardCount);
 
+        // 미션 아이콘 — 어드레서블에서 스프라이트를 이름으로 로드해 단일 Image에 적용
+        SetMissionIcon(GetMissionSpriteName(_info));
+
         if (_info.tapIndex == UIMission.MissionTabNormal)
         {
             _collectionData = CHMData.Instance.GetCollectionData(_info.collectionType.ToString());
@@ -128,7 +133,6 @@ public class MissionScrollViewItem : MonoBehaviour
 
             clearObj.SetActive(false);
 
-            SetMissionImage(_info.collectionType);
             SetRewardImage(_info.reward);
 
             if (_missionData.clearState == Defines.EClearState.Clear)
@@ -159,7 +163,6 @@ public class MissionScrollViewItem : MonoBehaviour
 
             missionValueText.SetStringID(27);
             missionValueText.SetText(_info.clearValue);
-            SetMissionImage(_info.collectionType);
             SetRewardImage(_info.reward);
 
             var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
@@ -185,7 +188,6 @@ public class MissionScrollViewItem : MonoBehaviour
 
             clearObj.SetActive(false);
 
-            SetMissionImage(_info.collectionType);
             SetRewardImage(_info.reward);
 
             int current = DailyMissionService.GetDailyProgress(_info);
@@ -231,69 +233,50 @@ public class MissionScrollViewItem : MonoBehaviour
         }
     }
 
-    void SetMissionImage(Defines.EBlockState blockState)
+    // 미션 아이콘 Image 조회 (iconItem 아래 단일 Image, 경로로 캐싱)
+    Image GetMissionIcon()
     {
-        if (missionImgList == null)
-            return;
-
-        for (int i = 0; i < missionImgList.Count; ++i)
+        if (_missionIcon == null)
         {
-            missionImgList[i].SetActive(false);
+            var t = transform.Find("iconMission/iconItem/missionIcon");
+            if (t != null) _missionIcon = t.GetComponent<Image>();
+        }
+        return _missionIcon;
+    }
+
+    // 미션 아이콘 스프라이트를 어드레서블 이름으로 로드해 적용
+    void SetMissionIcon(string spriteName)
+    {
+        var icon = GetMissionIcon();
+        if (icon == null) return;
+
+        if (string.IsNullOrEmpty(spriteName))
+        {
+            icon.enabled = false;
+            return;
         }
 
-        switch (blockState)
+        icon.enabled = true;
+        CHMResource.Instance.LoadSprite(spriteName, sprite =>
         {
-            case Defines.EBlockState.Arrow1:
-                missionImgList[0].SetActive(true);
-                break;
-            case Defines.EBlockState.Arrow2:
-                missionImgList[1].SetActive(true);
-                break;
-            case Defines.EBlockState.Arrow3:
-                missionImgList[2].SetActive(true);
-                break;
-            case Defines.EBlockState.Arrow4:
-                missionImgList[3].SetActive(true);
-                break;
-            case Defines.EBlockState.Arrow5:
-                missionImgList[4].SetActive(true);
-                break;
-            case Defines.EBlockState.Arrow6:
-                missionImgList[5].SetActive(true);
-                break;
-            case Defines.EBlockState.CatPang:
-                missionImgList[6].SetActive(true);
-                break;
-            case Defines.EBlockState.PinkBomb:
-                missionImgList[7].SetActive(true);
-                break;
-            case Defines.EBlockState.YellowBomb:
-                missionImgList[8].SetActive(true);
-                break;
-            case Defines.EBlockState.OrangeBomb:
-                missionImgList[9].SetActive(true);
-                break;
-            case Defines.EBlockState.GreenBomb:
-                missionImgList[10].SetActive(true);
-                break;
-            case Defines.EBlockState.BlueBomb:
-                missionImgList[11].SetActive(true);
-                break;
-            case Defines.EBlockState.Fish:
-                missionImgList[12].SetActive(true);
-                break;
-            case Defines.EBlockState.CatBox1:
-                missionImgList[13].SetActive(true);
-                break;
-            case Defines.EBlockState.WallCreator:
-                missionImgList[14].SetActive(true);
-                break;
-            case Defines.EBlockState.RainbowPang:
-                missionImgList[15].SetActive(true);
-                break;
-            case Defines.EBlockState.Ball:
-                missionImgList[16].SetActive(true);
-                break;
+            if (icon != null && sprite != null) icon.sprite = sprite;
+        });
+    }
+
+    // 미션 아이콘 스프라이트 이름 — collectionType이 있으면 블록 이름,
+    // 없으면(일일 카운터 미션) dailyCounter별 전용 스프라이트
+    string GetMissionSpriteName(Infomation.MissionInfo info)
+    {
+        if (info.collectionType != Defines.EBlockState.None)
+            return info.collectionType.ToString();
+
+        switch (info.dailyCounter)
+        {
+            case Defines.EDailyCounter.Attendance:       return "CatPang-Mission-Checkin";
+            case Defines.EDailyCounter.NormalStageClear: return "CatPang-Mission-Stages";
+            case Defines.EDailyCounter.BlockDestroy:     return "Cat3";
+            case Defines.EDailyCounter.AdWatch:          return "CatPang-Mission-Ad";
+            default:                                     return "";
         }
     }
 

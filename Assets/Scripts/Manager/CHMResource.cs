@@ -38,6 +38,11 @@ public class CHMResource : ChvjUnityInfra.CHSingletonStatic<CHMResource>
         ChvjUnityInfra.CHMResource.Instance.Load<Sprite>(_spriteType.ToString(), _callback);
     }
 
+    public void LoadSprite(string _spriteName, Action<Sprite> _callback)
+    {
+        ChvjUnityInfra.CHMResource.Instance.Load<Sprite>(_spriteName, _callback);
+    }
+
     public void LoadSound(Defines.ESound _soundType, Action<AudioClip> _callback)
     {
         ChvjUnityInfra.CHMResource.Instance.Load<AudioClip>(_soundType.ToString(), _callback);

@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Sprite
   m_GUID: 70e5079927d576e43a9a6bad8562fc0a
   m_SerializeEntries:
+  - m_GUID: 01bcbab8cffbc46408f2af8b9d9eb9c0
+    m_Address: CatPang-Mission-Checkin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 044b9c5ab3ebf914e98ead4276cc9d1d
     m_Address: Nav_Left
     m_ReadOnly: 0
@@ -105,6 +111,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Resource
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 285a8363b3865494fbf55e9e7668a40d
+    m_Address: CatPang-Menu-BG
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2a91e5952af9b11469e92a96dd385e1f
     m_Address: CatPang
     m_ReadOnly: 0
@@ -119,6 +131,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2c877577faec68f49bf1360484915516
     m_Address: Icon_SFX
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2cbd43209c0b34940a0bfe08dd6b18e8
+    m_Address: CatPang-Splash
     m_ReadOnly: 0
     m_SerializedLabels:
     - Resource
@@ -359,6 +377,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7158f4c7204ba62439cf5fae514b5487
     m_Address: GoalBar_Track
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71e3d872268ce8a4cbfdb0e9bfac6af0
+    m_Address: CatPang-Mission-Ad
     m_ReadOnly: 0
     m_SerializedLabels:
     - Resource
@@ -723,6 +747,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Resource
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df2e1a74baf4d5a4b83d20d8d84bde4f
+    m_Address: CatPang-Ingame-BG
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: df61201f8555d5040a3f9db691a83125
     m_Address: Map_BG
     m_ReadOnly: 0
@@ -761,6 +791,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f2b9bdf1e1e44b5b9326d57b9b319374
     m_Address: CatSanta4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Resource
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3a58dc9d90c8ed4e858e6fb8b7689f3
+    m_Address: CatPang-Mission-Stages
     m_ReadOnly: 0
     m_SerializedLabels:
     - Resource
