@@ -694,5 +694,29 @@
         {
             "stringID": 173,
             "value": "받기"
+        },
+        {
+            "stringID": 174,
+            "value": "시간 초과"
+        },
+        {
+            "stringID": 175,
+            "value": "이동 횟수 소진"
+        },
+        {
+            "stringID": 176,
+            "value": "체력 소진"
+        },
+        {
+            "stringID": 177,
+            "value": "보스 HP {0}% 남음"
+        },
+        {
+            "stringID": 178,
+            "value": "점수 {0} / {1}"
+        },
+        {
+            "stringID": 179,
+            "value": "남은 목표 블록"
         }
     ]

@@ -899,7 +899,8 @@ public class GPGameScene : MonoBehaviour
         {
             clearState = GetClearState(),
             result = gameResult.Value,
-            gold = curScore.Value
+            gold = curScore.Value,
+            failInfo = clear ? null : BuildFailInfo(),
         });
 
         if (clear) SaveClearData();
@@ -950,6 +951,53 @@ public class GPGameScene : MonoBehaviour
             case ESelectStage.Normal: if (CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).normalStage >= PlayerPrefs.GetInt(CHMString.Instance.NormalStage)) return EClearState.Clear; break;
         }
         return EClearState.Doing;
+    }
+
+    // 게임 실패 시 사유 데이터 생성. ShowUI(UIGameEnd) 직전(부활 경로 통과 후)에만 호출된다.
+    private GameEndFailInfo BuildFailInfo()
+    {
+        var info = new GameEndFailInfo();
+
+        if (_selectStage == ESelectStage.Boss)
+        {
+            info.reason = EFailReason.HpOver;
+            info.bossHpRatio = bossHpImage.fillAmount;
+            return info;
+        }
+
+        // 일반/하드 — 종료 트리거 재유도. Update에서 일반/하드 실패(GameEnd(false))는
+        // 시간 초과 또는 이동 소진으로만 도달하므로, 시간 초과가 아니면 곧 이동 소진이다.
+        bool timeOver = _stageInfo.time > 0 && timerImg.fillAmount >= 1f;
+        info.reason = timeOver ? EFailReason.TimeOver : EFailReason.MoveOver;
+        info.curScore = curScore.Value;
+        info.targetScore = _stageInfo.targetScore;
+        info.remainBlocks = CollectRemainingObjectiveBlocks();
+        return info;
+    }
+
+    // 클리어 판정(Update의 보드 스캔)과 동일 조건으로 남은 목표 블록을 EBlockState별로 집계.
+    private List<BlockTypeCount> CollectRemainingObjectiveBlocks()
+    {
+        var result = new List<BlockTypeCount>();
+
+        for (int i = 0; i < boardSize; ++i)
+        {
+            for (int j = 0; j < boardSize; ++j)
+            {
+                var block = boardArr[i, j];
+                if (block.GetBlockState() == EBlockState.RainbowPang) continue;
+                if (!block.checkHp) continue;
+                if (block.GetHp() > 0 || block.IsFishBlock() || block.IsBallBlock())
+                {
+                    var state = block.GetBlockState();
+                    var entry = result.Find(e => e.state == state);
+                    if (entry != null) entry.count++;
+                    else result.Add(new BlockTypeCount { state = state, count = 1 });
+                }
+            }
+        }
+
+        return result;
     }
 
     // Block.cs 에서 호출하는 public 파사드

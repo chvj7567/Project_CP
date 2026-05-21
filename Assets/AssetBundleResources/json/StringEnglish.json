@@ -694,5 +694,29 @@
         {
             "stringID": 173,
             "value": "Get"
+        },
+        {
+            "stringID": 174,
+            "value": "Time's Up"
+        },
+        {
+            "stringID": 175,
+            "value": "Out of Moves"
+        },
+        {
+            "stringID": 176,
+            "value": "Out of HP"
+        },
+        {
+            "stringID": 177,
+            "value": "Boss HP {0}% Left"
+        },
+        {
+            "stringID": 178,
+            "value": "Score {0} / {1}"
+        },
+        {
+            "stringID": 179,
+            "value": "Blocks Remaining"
         }
     ]

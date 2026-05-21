@@ -5,13 +5,32 @@ using UnityEngine;
 using ChvjUnityInfra;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using static Defines;
+
+// 실패 화면에 표시할 '남은 목표 블록' 1종류
+public class BlockTypeCount
+{
+    public Defines.EBlockState state;
+    public int count;
+}
+
+// 게임 실패 사유 데이터. 클리어 시에는 생성하지 않는다(null).
+public class GameEndFailInfo
+{
+    public Defines.EFailReason reason;
+    public int curScore;                       // 일반/하드
+    public int targetScore;                    // 일반/하드
+    public List<BlockTypeCount> remainBlocks;  // 일반/하드, EBlockState별 그룹
+    public float bossHpRatio;                  // 보스전, 0~1
+}
 
 public class UIGameEndArg : CHUIArg
 {
     public Defines.EClearState clearState = Defines.EClearState.None;
     public Defines.EGameState result = Defines.EGameState.None;
     public int gold;
+    public GameEndFailInfo failInfo;           // 실패 시에만, 클리어 시 null
 }
 
 public class UIGameEnd : UIBase
@@ -31,12 +50,28 @@ public class UIGameEnd : UIBase
     [SerializeField] private Button adBtn;
     [SerializeField] private Button claimBtn;
 
+    [Header("실패 사유 표시")]
+    [SerializeField] private CHText failReasonText;
+    [SerializeField] private GameObject failBlockRoot;          // 남은 목표 블록 섹션 루트(FailReason2)
+    [SerializeField] private CHText failBlockHeaderText;
+    [SerializeField] private Transform failBlockIconContainer;
+    [SerializeField] private FailBlockIconItem failBlockIconTemplate;
+    [SerializeField] private CHText failDetailText;
+
     private bool received = false;
 
     // 결과 텍스트(Failed/CLEAR) 연출 시간(초)
     private const float ResultTextRevealDuration = 1f;
     // 광고 시청 보상으로 지급하는 골드 배수
     private const int AdRewardGoldMultiplier = 3;
+
+    // 실패 사유 로컬라이제이션 문자열 ID (StringKorea/StringEnglish.json)
+    private const int FailTimeOverStringID = 174;
+    private const int FailMoveOverStringID = 175;
+    private const int FailHpOverStringID = 176;
+    private const int FailBossHpStringID = 177;
+    private const int FailScoreStringID = 178;
+    private const int FailBlockHeaderStringID = 179;
 
     public override void InitUI(CHUIArg _uiArg)
     {
@@ -58,6 +93,8 @@ public class UIGameEnd : UIBase
             resultText.DOText("Failed...", ResultTextRevealDuration);
             goldText.SetText(0);
             goldx2Text.SetText(0);
+
+            ShowFailReason(arg.failInfo);
         }
         else if (arg.result == Defines.EGameState.GameClear)
         {
@@ -81,6 +118,84 @@ public class UIGameEnd : UIBase
         ChvjUnityInfra.CHMAdmob.Instance.AcquireReward += AcquireReward;
 
         BindUI();
+    }
+
+    // 실패 화면에 종료 사유와 미달 목표를 표시한다.
+    private void ShowFailReason(GameEndFailInfo info)
+    {
+        // 템플릿 자체는 항상 숨김 — 복제본만 표시
+        if (failBlockIconTemplate != null)
+            failBlockIconTemplate.gameObject.SetActive(false);
+
+        if (info == null)
+        {
+            if (failReasonText != null) failReasonText.gameObject.SetActive(false);
+            if (failBlockRoot != null) failBlockRoot.SetActive(false);
+            if (failDetailText != null) failDetailText.gameObject.SetActive(false);
+            return;
+        }
+
+        // 트리거 줄
+        if (failReasonText != null)
+        {
+            failReasonText.gameObject.SetActive(true);
+            failReasonText.SetText(CHMString.Instance.GetString(FailReasonStringID(info.reason)));
+        }
+
+        // 남은 목표 블록 섹션 (일반/하드 전용) — 루트(FailReason2)를 통째로 토글
+        bool hasBlocks = info.remainBlocks != null && info.remainBlocks.Count > 0;
+        if (failBlockRoot != null)
+            failBlockRoot.SetActive(hasBlocks);
+        if (hasBlocks)
+        {
+            if (failBlockHeaderText != null)
+                failBlockHeaderText.SetText(CHMString.Instance.GetString(FailBlockHeaderStringID));
+            if (failBlockIconTemplate != null && failBlockIconContainer != null)
+            {
+                foreach (var entry in info.remainBlocks)
+                {
+                    var item = Instantiate(failBlockIconTemplate, failBlockIconContainer);
+                    item.gameObject.SetActive(true);
+                    item.Setup(entry.state, entry.count);
+                }
+            }
+        }
+
+        // 점수 줄(일반/하드) 또는 보스 HP 줄(보스전)
+        if (failDetailText != null)
+        {
+            if (info.reason == Defines.EFailReason.HpOver)
+            {
+                failDetailText.gameObject.SetActive(true);
+                failDetailText.SetText(string.Format(
+                    CHMString.Instance.GetString(FailBossHpStringID),
+                    Mathf.RoundToInt(info.bossHpRatio * 100f)));
+            }
+            else if (info.targetScore > 0)
+            {
+                // 목표 점수가 있는 스테이지면 달성 여부와 무관하게 항상 점수 줄 표시
+                failDetailText.gameObject.SetActive(true);
+                failDetailText.SetText(string.Format(
+                    CHMString.Instance.GetString(FailScoreStringID),
+                    info.curScore.ToString("N0"), info.targetScore.ToString("N0")));
+            }
+            else
+            {
+                failDetailText.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    // EFailReason → 트리거 문자열 ID
+    private static int FailReasonStringID(Defines.EFailReason reason)
+    {
+        switch (reason)
+        {
+            case Defines.EFailReason.TimeOver: return FailTimeOverStringID;
+            case Defines.EFailReason.MoveOver: return FailMoveOverStringID;
+            case Defines.EFailReason.HpOver:   return FailHpOverStringID;
+            default:                           return FailTimeOverStringID;
+        }
     }
 
     private void BindUI()

@@ -286,6 +286,16 @@ public class Defines
         Max
     }
 
+    public enum EFailReason
+    {
+        // 0 = 기본값. 명시적으로 -1을 두지 않아 default(EFailReason)이 None이 되도록 한다.
+        None,
+
+        TimeOver,   // 시간 초과
+        MoveOver,   // 이동 횟수 소진
+        HpOver,     // 체력 소진 (보스전)
+    }
+
     public enum EClearState
     {
         None = -1,
