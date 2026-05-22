@@ -69,12 +69,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Resource
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 19289507a19cbd2478eb6a3c29dba37b
-    m_Address: MainIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Resource
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1bca458fe3d05d04aa84c3e60a57d1d3
     m_Address: Cat4
     m_ReadOnly: 0
