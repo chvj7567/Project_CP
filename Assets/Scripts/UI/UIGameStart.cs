@@ -62,10 +62,15 @@ public class UIGameStart : UIBase
         var stageInfo = CHMJson.Instance.GetStageInfo(arg.stage);
         if (stageInfo != null)
         {
+            // 노말은 GPGameScene과 동일한 보정(시간 제거·목표 점수 절반·이동 횟수 2배)을 적용해
+            // 시작 화면에도 실제 플레이 값이 표시되도록 한다.
+            if (selectStage == Defines.ESelectStage.Normal)
+                stageInfo.ApplyNormalModifiers();
+
             if (stageInfo.targetScore < 0) targetScoreText.SetStringID(135);
             else { targetScoreText.SetStringID(1); targetScoreText.SetText(stageInfo.targetScore); }
 
-            if (selectStage == Defines.ESelectStage.Normal || stageInfo.time < 0) timeText.SetStringID(135);
+            if (stageInfo.time < 0) timeText.SetStringID(135);
             else { timeText.SetStringID(1); timeText.SetText(stageInfo.time); }
 
             if (stageInfo.moveCount < 0) moveCountText.SetStringID(135);

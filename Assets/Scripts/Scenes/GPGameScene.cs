@@ -412,9 +412,7 @@ public class GPGameScene : MonoBehaviour
                 foreach (var b in _stageBlockInfoList) b.tutorialBlock = false;
                 break;
             case ESelectStage.Normal:
-                _stageInfo.time = -1;
-                if (_stageInfo.targetScore > 0) _stageInfo.targetScore /= 2;
-                else if (_stageInfo.moveCount > 0) _stageInfo.moveCount *= 2;
+                _stageInfo.ApplyNormalModifiers();
                 break;
         }
 

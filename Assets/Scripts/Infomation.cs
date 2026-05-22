@@ -40,6 +40,15 @@ public class Infomation
         public int targetScore = -1;
         public int moveCount = -1;
         public int tutorialID = -1;
+
+        // 노말 모드 보정: 시간 제한 제거, 그리고 목표 점수가 있으면 절반 / 없으면 이동 횟수 2배.
+        // GPGameScene(실제 게임 로직)와 UIGameStart(시작 화면 표시)가 동일하게 호출해 값이 어긋나지 않도록 한다.
+        public void ApplyNormalModifiers()
+        {
+            time = -1;
+            if (targetScore > 0) targetScore /= 2;
+            else if (moveCount > 0) moveCount *= 2;
+        }
     }
 
     [Serializable]
