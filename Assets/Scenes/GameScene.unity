@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963d151f3a2117440b0812e9a5814ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backBtn: {fileID: 0}
+  backBtn: {fileID: 1201263913}
   timerImg: {fileID: 957118122}
   timerText: {fileID: 390776629}
   curTimer: 0
@@ -3884,6 +3884,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: btnBack
       objectReference: {fileID: 0}
+    - target: {fileID: 3712518788044111534, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
+      propertyPath: m_text
+      value: "\uBA54\uB274"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3712518788044111534, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
+      propertyPath: m_fontSize
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597576830446616397, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
+      propertyPath: _stringID
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3894,6 +3906,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 945835862764509461, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
   m_PrefabInstance: {fileID: 1201263911}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1201263913 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5429052151582339593, guid: 79c1be358b427734ea93faa0c700de9b, type: 3}
+  m_PrefabInstance: {fileID: 1201263911}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1203002253
 GameObject:
   m_ObjectHideFlags: 0
