@@ -19,10 +19,9 @@ public class UIMission : UIBase
     [SerializeField] MissionScrollView scrollView;
     [SerializeField] Button normalTapBtn;
     [SerializeField] Button specialTapBtn;
-    [SerializeField] Button dailyTapBtn;        // 일일 탭 (신규)
+    [SerializeField] Button dailyTapBtn;        // 일일 탭
     [SerializeField] CHText curTapText;
-    [SerializeField] CHText resetTimerText;     // 리셋까지 남은 시간 표시 (HH:MM:SS)
-    [SerializeField] GameObject offlineLockObj; // NTP 미수신 시 표시할 잠금 오버레이
+    [SerializeField] CHText resetTimerText;     // 리셋까지 남은 시간 표시 (HH:MM:SS) — NTP 미수신 시 숨김
 
     [SerializeField, ReadOnly] int curTapIndex;
 
@@ -40,16 +39,11 @@ public class UIMission : UIBase
 
     private void Start()
     {
-        // 일일 탭 잠금 초기 상태
-        if (offlineLockObj != null) offlineLockObj.SetActive(false);
-        UpdateDailyLockState();
-
-        // NTP가 나중에라도 동기화되면 잠금 해제 + 일일 탭이면 내용 갱신
+        // NTP가 나중에라도 동기화되면 일일 탭 내용 갱신 (보상 받기 버튼 활성화 + 자정 리셋 반영)
         if (CHMMain.Time != null && CHMMain.Time.OnAvailable != null)
         {
             CHMMain.Time.OnAvailable.Subscribe(_ =>
             {
-                UpdateDailyLockState();
                 if (curTapIndex == MissionTabDaily)
                     ShowDailyTab();
             }).AddTo(this);
@@ -78,21 +72,18 @@ public class UIMission : UIBase
     void ShowNormalTab(int index)
     {
         curTapIndex = index;
-        if (offlineLockObj != null) offlineLockObj.SetActive(false);
         if (resetTimerText != null) resetTimerText.gameObject.SetActive(false);
         scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(index));
     }
 
-    // 일일 탭(3). NTP 수신 시에만 내용·리셋 타이머 표시, 미수신 시 잠금 오버레이
+    // 일일 탭(3). NTP 미수신이어도 리스트는 표시 — 보상 받기 버튼은 MissionScrollViewItem에서 NTP 가드로 잠금.
+    // 리셋 타이머만 NTP 수신 시 표시 (자정까지 남은 시간 계산이 NTP에 의존)
     void ShowDailyTab()
     {
         curTapIndex = MissionTabDaily;
 
         bool available = CHMMain.Time != null && CHMMain.Time.IsAvailable;
-        if (offlineLockObj != null) offlineLockObj.SetActive(!available);
         if (resetTimerText != null) resetTimerText.gameObject.SetActive(available);
-
-        if (!available) return;
 
         DailyMissionService.CheckAndResetIfNeeded();
         scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(MissionTabDaily));
@@ -108,12 +99,6 @@ public class UIMission : UIBase
     private void OnDestroy()
     {
         CHMAdmob.Instance.AcquireReward -= OnRewardAcquired;
-    }
-
-    void UpdateDailyLockState()
-    {
-        if (dailyTapBtn == null) return;
-        dailyTapBtn.interactable = CHMMain.Time != null && CHMMain.Time.IsAvailable;
     }
 
     private void Update()
