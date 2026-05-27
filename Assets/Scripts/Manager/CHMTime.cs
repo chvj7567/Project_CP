@@ -47,7 +47,7 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
             bool ok = await TryFetchNtpAsync();
             if (ok) return;
         }
-        Debug.LogWarning("[CHMTime] NTP 재시도 모두 실패. 일일 미션 잠금 유지.");
+        Debug.LogWarning("[CHMTime] NTP 재시도 모두 실패. 디바이스 UTC 폴백으로 진행.");
     }
 
     async Task<bool> TryFetchNtpAsync()
@@ -127,7 +127,7 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
     {
         get
         {
-            if (!IsAvailable) return DateTime.UtcNow; // 폴백 — 호출자가 IsAvailable 체크해야 함
+            if (!IsAvailable) return DateTime.UtcNow; // NTP 미수신 폴백 — 디바이스 UTC (위변조 가능)
             return _lastNtpUtc.AddSeconds(Time.realtimeSinceStartup - _capturedRealtime);
         }
     }

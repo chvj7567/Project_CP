@@ -76,14 +76,13 @@ public class UIMission : UIBase
         scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(index));
     }
 
-    // 일일 탭(3). NTP 미수신이어도 리스트는 표시 — 보상 받기 버튼은 MissionScrollViewItem에서 NTP 가드로 잠금.
-    // 리셋 타이머만 NTP 수신 시 표시 (자정까지 남은 시간 계산이 NTP에 의존)
+    // 일일 탭(3). NTP 미수신이어도 리스트·타이머 모두 표시 — 보상 받기 버튼은 MissionScrollViewItem에서 NTP 가드로 잠금.
+    // 타이머는 NTP 수신 전엔 디바이스 UTC 기준 폴백 카운트다운 (보상 수령은 별도 잠금이므로 위변조 영향 없음)
     void ShowDailyTab()
     {
         curTapIndex = MissionTabDaily;
 
-        bool available = CHMMain.Time != null && CHMMain.Time.IsAvailable;
-        if (resetTimerText != null) resetTimerText.gameObject.SetActive(available);
+        if (resetTimerText != null) resetTimerText.gameObject.SetActive(true);
 
         DailyMissionService.CheckAndResetIfNeeded();
         scrollView.SetItemList(CHMJson.Instance.GetMissionInfoList(MissionTabDaily));
@@ -103,13 +102,13 @@ public class UIMission : UIBase
 
     private void Update()
     {
-        if (CHMMain.Time == null || !CHMMain.Time.IsAvailable) return;
-
-        // 카운트다운 텍스트 갱신
+        // 카운트다운 텍스트 — NTP 미수신 시 디바이스 UTC 폴백 (GetResetCountdown 내부 분기)
         if (curTapIndex == MissionTabDaily && resetTimerText != null)
             resetTimerText.SetText(DailyMissionService.GetResetCountdown());
 
-        // 자정 넘김 자동 감지
+        // 자정 넘김 자동 감지 — NTP 신뢰 시각이 있을 때만 의미 있음 (위변조 방지)
+        if (CHMMain.Time == null || !CHMMain.Time.IsAvailable) return;
+
         var todayKey = CHMMain.Time.GetUtcDateKey();
         if (string.IsNullOrEmpty(_lastDateKey)) { _lastDateKey = todayKey; return; }
         if (_lastDateKey != todayKey)

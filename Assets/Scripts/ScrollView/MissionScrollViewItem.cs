@@ -183,16 +183,14 @@ public class MissionScrollViewItem : MonoBehaviour
         }
         else if (_info.tapIndex == UIMission.MissionTabDaily)
         {
-            // 일일 미션 — 진행도는 DailyMissionService가 카운터/스냅샷 차분으로 계산
+            // 일일 미션 — 진행도는 DailyMissionService가 카운터/스냅샷 차분으로 계산.
+            // NTP 미수신이어도 디바이스 UTC 폴백으로 정상 진행 (DailyMissionService 정책)
             _missionData = CHMData.Instance.GetMissionData(_info.missionID.ToString());
 
             clearObj.SetActive(false);
 
             SetRewardImage(_info.reward);
 
-            // NTP 미수신 — 자정 리셋/카운터 누적이 모두 잠겨 있어 보상 수령을 막아야 한다.
-            // (특히 광고 미션은 클릭이 광고 재생을 트리거하므로 가드 없이 두면 카운터 누락된 채 광고만 소비됨)
-            bool ntpReady = CHMMain.Time != null && CHMMain.Time.IsAvailable;
             int current = DailyMissionService.GetDailyProgress(_info);
             int target = _info.clearValue;
 
@@ -207,20 +205,12 @@ public class MissionScrollViewItem : MonoBehaviour
                 missionValueText.SetStringID(20);
                 missionValueText.SetText(Mathf.Min(current, target), target);
 
-                if (!ntpReady)
-                {
-                    // NTP 수신 시 UIMission이 OnAvailable 구독으로 ShowDailyTab 재호출 → 이 분기 재평가됨
-                    rewardBtn.interactable = false;
-                }
-                else
-                {
-                    // 광고 미션은 미달 시에도 버튼 활성화 (클릭 시 리워드 광고 재생)
-                    rewardBtn.interactable = IsAdWatchMission() || current >= target;
+                // 광고 미션은 미달 시에도 버튼 활성화 (클릭 시 리워드 광고 재생)
+                rewardBtn.interactable = IsAdWatchMission() || current >= target;
 
-                    // 광고 미션 미시청 — 버튼 라벨 "보기"
-                    if (IsAdWatchMission() && current < target && rewardBtnText != null)
-                        rewardBtnText.SetStringID(172);
-                }
+                // 광고 미션 미시청 — 버튼 라벨 "보기"
+                if (IsAdWatchMission() && current < target && rewardBtnText != null)
+                    rewardBtnText.SetStringID(172);
             }
         }
     }

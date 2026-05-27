@@ -4,16 +4,17 @@ using UnityEngine;
 
 // 일일 미션 리셋 판정 + 카운터 hook + 진행도 조회 일원화.
 // 모든 진입점에서 가장 먼저 CheckAndResetIfNeeded()를 호출해 자정 넘김을 처리.
+// 시각 출처: CHMMain.Time.UtcNow — NTP 수신 시 서버 UTC, 미수신 시 디바이스 UTC 폴백.
+// (NTP 폴백 시 디바이스 시각 위변조로 일일 리셋을 부당하게 트리거 가능하지만,
+//  플레이 자체는 진행되어야 한다는 UX 우선으로 결정. 엄격한 위변조 방지가 필요해지면
+//  여기 가드를 부활시키고 OnAvailable 큐잉 패턴으로 재구성할 것.)
 public static class DailyMissionService
 {
     const int DailyTapIndex = 3;
 
     // 일일 탭 진입 시, 게임 클리어 시, 광고 시청 시, 블록 파괴 시 매번 호출.
-    // NTP 미수신 상태에서는 리셋하지 않음 (위변조 안전).
     public static void CheckAndResetIfNeeded()
     {
-        if (!CHMMain.Time.IsAvailable) return;
-
         var login = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (login == null) return;
 
@@ -45,7 +46,6 @@ public static class DailyMissionService
 
     public static void MarkAttendance()
     {
-        if (!CHMMain.Time.IsAvailable) return;
         CheckAndResetIfNeeded();
         var login = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (login == null || login.attendanceTodayDone) return;
@@ -55,7 +55,6 @@ public static class DailyMissionService
 
     public static void OnStageClear()
     {
-        if (!CHMMain.Time.IsAvailable) return;
         CheckAndResetIfNeeded();
         var login = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (login == null) return;
@@ -65,7 +64,6 @@ public static class DailyMissionService
 
     public static void OnBlockDestroyed(int count)
     {
-        if (!CHMMain.Time.IsAvailable) return;
         CheckAndResetIfNeeded();
         var login = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (login == null) return;
@@ -76,7 +74,6 @@ public static class DailyMissionService
 
     public static void OnAdWatched()
     {
-        if (!CHMMain.Time.IsAvailable) return;
         CheckAndResetIfNeeded();
         var login = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (login == null) return;
@@ -113,9 +110,9 @@ public static class DailyMissionService
         return 0;
     }
 
+    // 일일 미션 리셋까지 남은 시간 표시. CHMTime이 NTP 미수신 시 디바이스 UTC로 폴백한다.
     public static string GetResetCountdown()
     {
-        if (!CHMMain.Time.IsAvailable) return "--:--:--";
         var sec = CHMMain.Time.GetSecondsUntilNextUtcMidnight();
         var ts = TimeSpan.FromSeconds(sec);
         return $"{(int)ts.TotalHours:00}:{ts.Minutes:00}:{ts.Seconds:00}";
