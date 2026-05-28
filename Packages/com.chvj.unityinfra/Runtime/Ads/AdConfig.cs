@@ -18,6 +18,10 @@ namespace ChvjUnityInfra
         public string InterstitialAdUnitId;
         public string RewardedAdUnitId;
 
+        [Header("Play 가족 정책 (Google Play Families Policy)")]
+        [Tooltip("true 설정 시 아동 대상 앱으로 광고 등급 G, COPPA/EEA 미성년자 태그를 자동 적용합니다.")]
+        public bool FamiliesPolicy = false;
+
         [Header("Test IDs (Google 공식 테스트 광고 ID — 변경 비추천)")]
         public string TestBannerAdUnitId = "ca-app-pub-3940256099942544/9214589741";
         public string TestInterstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";

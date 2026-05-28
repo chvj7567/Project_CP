@@ -59,6 +59,17 @@ namespace ChvjUnityInfra
             }
 #endif
 
+            // Play 가족 정책 준수: Initialize 전에 RequestConfiguration 설정 필수.
+            if (config.FamiliesPolicy)
+            {
+                MobileAds.SetRequestConfiguration(new RequestConfiguration
+                {
+                    TagForChildDirectedTreatment = TagForChildDirectedTreatment.True,
+                    TagForUnderAgeOfConsent = TagForUnderAgeOfConsent.True,
+                    MaxAdContentRating = MaxAdContentRating.G,
+                });
+            }
+
             // MobileAds 초기화 완료 후 광고 load (SDK 권장 순서).
             MobileAds.Initialize(initStatus =>
             {
