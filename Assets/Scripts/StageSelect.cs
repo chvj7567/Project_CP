@@ -26,10 +26,10 @@ public class StageSelect : MonoBehaviour
         switch (select)
         {
             case ESelectStage.Hard:
-                color = Color.cyan;
+                color = new Color(0.56f, 0.80f, 0.96f); // 하늘색
                 break;
             case ESelectStage.Boss:
-                color = Color.red;
+                color = new Color(0.98f, 0.60f, 0.50f); // 코랄
                 break;
             case ESelectStage.Normal:
                 color = Color.white;

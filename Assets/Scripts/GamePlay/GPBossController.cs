@@ -20,6 +20,8 @@ public class GPBossController
     GameObject _angryBossObj;
     GameObject _cryBossObj;
     bool _bossSkill;
+    bool _isCleared;
+    Tween _hitReactionTween;
 
     // 보스 HP가 자동으로 1씩 줄어드는 주기(초)
     const int BossHpDrainIntervalSeconds = 1;
@@ -89,8 +91,31 @@ public class GPBossController
         }).AddTo(owner);
     }
 
+    // 공격 도착 시 잠깐 우는 이미지로 전환 후 복귀
+    const float HitReactionDuration = 0.3f;
+
+    public void ShowHitReaction()
+    {
+        if (_isCleared) return;
+
+        _hitReactionTween?.Kill();
+        _normalBossObj.SetActive(false);
+        _angryBossObj.SetActive(false);
+        _cryBossObj.SetActive(true);
+
+        _hitReactionTween = DOVirtual.DelayedCall(HitReactionDuration, () =>
+        {
+            if (_isCleared) return;
+            _cryBossObj.SetActive(false);
+            (_bossSkill ? _angryBossObj : _normalBossObj).SetActive(true);
+            _hitReactionTween = null;
+        });
+    }
+
     public void OnClear()
     {
+        _isCleared = true;
+        _hitReactionTween?.Kill();
         _normalBossObj.SetActive(false);
         _angryBossObj.SetActive(false);
         _cryBossObj.SetActive(true);

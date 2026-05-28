@@ -642,14 +642,24 @@ public class GPGameScene : MonoBehaviour
                     var gold = CHMResource.Instance.Instantiate(img.gameObject, transform.parent);
                     if (gold != null)
                     {
+                        if (_selectStage == ESelectStage.Boss)
+                        {
+                            var flyImg = gold.GetComponent<Image>();
+                            if (flyImg != null) flyImg.sprite = block.img.sprite;
+                        }
+
                         var rect = gold.GetComponent<RectTransform>();
                         if (rect != null)
                         {
-                            // 도착지는 씬에 배치된 goldImgTarget을 사용 (goldImg는 프리팹 템플릿이라 .position이 의미 없음).
                             rect.position = block.rectTransform.position;
-                            var destPos = goldImgTarget != null ? goldImgTarget.position : img.rectTransform.position;
+                            var destPos = _selectStage == ESelectStage.Boss && normalBossObj != null
+                                ? normalBossObj.transform.position
+                                : (goldImgTarget != null ? goldImgTarget.position : img.rectTransform.position);
                             rect.DOMove(destPos, UnityEngine.Random.Range(GoldFlyDurationMin, GoldFlyDurationMax)).OnComplete(() =>
-                                CHMResource.Instance.Destroy(gold));
+                            {
+                                CHMResource.Instance.Destroy(gold);
+                                if (_selectStage == ESelectStage.Boss) _boss?.ShowHitReaction();
+                            });
                         }
                     }
 
