@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 프로젝트 개요
 
-**CatPang** — Unity로 제작된 Android용 모바일 매치-3 퍼즐 게임. 개발 환경은 Windows, 빌드 타겟은 Android (Google Play). Unity 2022.3.
+**CatPang** — Unity로 제작된 Android용 모바일 매치-3 퍼즐 게임. 개발 환경은 Windows, 빌드 타겟은 Android (Google Play). Unity 6000.0.68f1 (Unity 6).
 
 게임 코드는 `Assets/Scripts/`에, 재사용 가능한 인프라는 임베디드 UPM 패키지 `Packages/com.chvj.unityinfra/`에 분리되어 있다.
 
@@ -149,6 +149,11 @@ Data.Shop       → 상품 구매 여부 (key-bool)
 `Block.cs` (`Assets/Scripts/`): 개별 블록 컴포넌트. 드래그(`OnBeginDrag`/`OnEndDrag`로 4방향 `EDrag` 계산), `IsNormalBlock()` / `IsBombBlock()` / `IsFixdBlock()` / `IsSpecialBombBlock()` 분류 메서드 제공.
 
 게임 상태는 `ReactiveProperty<EGameState>` (UniRx)로 추적하며, 게임 모드는 시간 제한/이동 횟수 제한 두 가지다. 실패 시 `EFailReason`(TimeOver/MoveOver/HpOver)이 `UIGameEnd`에 표시된다.
+
+**스테이지 구조** (`Assets/AssetBundleResources/json/Stage.json`):
+- Stage.json 행 수는 250개이지만, 플레이 모드 기준 실제 스테이지 수는 **노멀 150 + 하드 150 + 보스 100 = 400**이다.
+- `group < 100000` (group 1~15) → 하드·노멀 공유 스테이지 150개. 노멀 모드는 별도 JSON 없이 하드 데이터 재사용, 실행 시 **시간제한 제거 + 이동횟수 2배** 적용.
+- `group >= 100000` (group 100001~100010) → 보스 스테이지 100개.
 
 ## 네이밍 규칙
 
