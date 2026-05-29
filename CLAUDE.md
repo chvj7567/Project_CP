@@ -155,6 +155,51 @@ Data.Shop       → 상품 구매 여부 (key-bool)
 - `group < 100000` (group 1~15) → 하드·노멀 공유 스테이지 150개. 노멀 모드는 별도 JSON 없이 하드 데이터 재사용, 실행 시 **시간제한 제거 + 이동횟수 2배** 적용.
 - `group >= 100000` (group 100001~100010) → 보스 스테이지 100개.
 
+**블록 메커니즘** (`GPMatchChecker` / `GPBombResolver` / `Block.cs` / `GPGameScene`):
+
+*매치 → 특수블록 생성* (`GPBombResolver.CreateBombBlock`)
+- **2×2 정사각형 매치** → `CatPang` 생성 (`squareMatch` 플래그)
+- **가로+세로 동시 3↑ 교차** (hScore≥3 && vScore≥3) → `Arrow5`/`Arrow6`
+- **가로 4매치 초과** (hScore>3) → `Arrow1`/`Arrow4`
+- **세로 4매치 초과** (vScore>3) → `Arrow3`/`Arrow2`
+- 둘 중 어느 쪽이 나오는지는 `_arrowPangIndex`로 분기.
+
+*폭탄 발동 효과* (`Block.Bomb()` → 각 `BombN`)
+| 블록 | 메서드 | 범위 |
+|---|---|---|
+| `CatPang` | Bomb1 | 자기 포함 3×3 (8방향) |
+| `Arrow1` | Bomb4 | 가로 한 줄 |
+| `Arrow3` | Bomb5 | 세로 한 줄 |
+| `Arrow5` | Bomb2 | 가로+세로 십자(+) |
+| `Arrow6` | Bomb6 | 대각선 X (45°) |
+| `Arrow2` | Bomb7 | 대각선 `/` 양방향 |
+| `Arrow4` | Bomb8 | 대각선 `\` 양방향 |
+| `YellowBomb` | Bomb9 | 작은 마름모 |
+| `OrangeBomb` | Bomb10 | 5×5 테두리 |
+| `BlueBomb` | Bomb11 | 5×5 모서리 |
+| `GreenBomb` | Bomb12 | 5×5 변형 |
+| `PinkBomb` | — | 단독 발동 X (조합 전용) |
+| `RainbowPang` | RainbowPang | 보드에 색폭탄 랜덤 살포 |
+
+*폭탄 조합* (`GPGameScene.AfterDrag` — 두 폭탄 스왑)
+- 특수폭탄(5색) + 특수폭탄 → `BoomAll` (전체 폭발)
+- `PinkBomb` + 일반블록 → `Boom3` (상대 블록과 같은 색 전부 제거)
+- 화살표폭탄 + 화살표폭탄 → 색폭탄(PinkBomb~BlueBomb)으로 승급
+- 색폭탄 다른 생성 경로: `Fish`가 맨 아래줄 도달 시 색폭탄으로 변환(`SetDissapearBlock`)
+
+*장애물 블록 제거* — 매치된 칸이 사라질 때 4방향 인접 칸에 `CheckArround → DamageBlock`(HP 1) 적용(`RemoveMatchBlock`).
+| 블록 | 드래그 | 제거 방법 |
+|---|---|---|
+| `Wall` / `Potal` | 불가 | 인접 매치로 HP 감소, 0이면 일반 블록 변환·소멸 |
+| `CatBox1~5` | 불가 | **상자 위 칸**에 받는 색 고양이를 놓으면 빨려들어가며 HP 감소(`CatInTheBox`). 매치가 아님. 받는 색: Box1=Cat1/6, Box2=Cat2/7, Box3=Cat3, Box4=Cat4, Box5=Cat5 |
+| `Fish` | 불가 | 폭탄으로 제거 불가(`ChangeMatchState`가 명시 제외). 맨 아래줄 도달로만 탈출 |
+| `Ball` | **가능** | ① 폭탄 범위에 넣어 직접 제거(`ChangeMatchState`에서 match 처리) ② 맨 아래줄 도달 시 Potal 변환·좌우 확산 |
+| `WallCreator` / `PotalCreator` | 불가 | 매 턴 주변 일반블록을 Wall/Potal로 생성(`BlockCreatorBlock`). 인접 매치로 HP 깎아 제거 |
+
+*클리어 목표 판정* (`GPGameScene` ~188, ~1003 — `checkHp && (GetHp()>0 || IsFishBlock() || IsBallBlock())`이 하나라도 남으면 미클리어)
+- **HP를 가진 블록(hp>0) = 목표 블록**. 일반 고양이 블록은 `SetHp(-1)`이라 목표 아님. HP를 0으로 만들면 목표에서 사라짐(= 클리어).
+- 예외: `Fish`/`Ball`은 HP 무관하게 목표. `RainbowPang`은 무조건 목표 제외(가드 `continue`). `WallCreator`/`PotalCreator`는 `CheckHpBlock()==false`라 `checkHp=false` → 목표 집계 제외(HP는 있어 제거는 됨).
+
 ## 네이밍 규칙
 
 | 접두사 | 의미 |
