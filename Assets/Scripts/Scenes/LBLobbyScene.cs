@@ -107,6 +107,10 @@ public class LBLobbyScene : MonoBehaviour
     {
         tokenSource = new CancellationTokenSource();
 
+        //# 로비(FirstScene) 진입 즉시 BGM 재생. 시작 버튼/StageSelect 까지 기다리지 않는다.
+        //# (이미 재생 중이면 CHMSound.Play 가 isPlaying 체크로 중복 무시)
+        CHMSound.Instance.Play(Defines.ESound.Bgm);
+
         _loginHandler = new LBLoginHandler();
         _loginHandler.Init(userID, connectGPGSBtn, logoutBtn, objWait, async (success) =>
         {
