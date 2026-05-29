@@ -718,5 +718,25 @@
         {
             "stringID": 179,
             "value": "Blocks Remaining"
+        },
+        {
+            "stringID": 180,
+            "value": "Pop Cat Block 1"
+        },
+        {
+            "stringID": 181,
+            "value": "Pop Cat Block 2"
+        },
+        {
+            "stringID": 182,
+            "value": "Pop Cat Block 3"
+        },
+        {
+            "stringID": 183,
+            "value": "Pop Cat Block 4"
+        },
+        {
+            "stringID": 184,
+            "value": "Pop Cat Block 5"
         }
     ]

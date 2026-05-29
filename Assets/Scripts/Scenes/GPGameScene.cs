@@ -633,6 +633,13 @@ public class GPGameScene : MonoBehaviour
                     block.remove = true;
                     // 일일 미션 — 매치로 사라지는 블록 카운트 (Wall/Locker 등 IsMatch=false인 항목 자동 제외)
                     DailyMissionService.OnBlockDestroyed(1);
+                    //# tapIndex1 Cat 수집 미션 — 일반 고양이 블록 누적. 스킨은 GetBaseCat으로 기본 색(Cat1~5)에 합산.
+                    //# 폭탄/특수폭탄/Wall 등은 GetBaseCat이 None을 반환해 제외 (폭탄은 SaveBombCollectionData에서 별도 적립)
+                    EBlockState collectBaseCat = Block.GetBaseCat(block.GetBlockState());
+                    if (collectBaseCat != EBlockState.None)
+                    {
+                        CHMData.Instance.GetCollectionData(collectBaseCat.ToString()).value += 1;
+                    }
                     block.rectTransform.DOScale(0f, delay);
 
                     Image img = _selectStage == ESelectStage.Boss

@@ -1,4 +1,9 @@
 [
+  {"missionID":"18", "tapIndex":"1", "descStringID":180, "collectionType":0,"clearValue":100, "addValue":100, "reward":0, "rewardCount":100},
+  {"missionID":"19", "tapIndex":"1", "descStringID":181, "collectionType":1,"clearValue":100, "addValue":100, "reward":0, "rewardCount":100},
+  {"missionID":"20", "tapIndex":"1", "descStringID":182, "collectionType":2,"clearValue":100, "addValue":100, "reward":0, "rewardCount":100},
+  {"missionID":"21", "tapIndex":"1", "descStringID":183, "collectionType":3,"clearValue":100, "addValue":100, "reward":0, "rewardCount":100},
+  {"missionID":"22", "tapIndex":"1", "descStringID":184, "collectionType":4,"clearValue":100, "addValue":100, "reward":0, "rewardCount":100},
   {"missionID":"1", "tapIndex":"1", "descStringID":150, "collectionType":10,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
   {"missionID":"2", "tapIndex":"1", "descStringID":151, "collectionType":11,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
   {"missionID":"3", "tapIndex":"1", "descStringID":152, "collectionType":12,"clearValue":10, "addValue":10, "reward":0, "rewardCount":100},
