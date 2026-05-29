@@ -232,7 +232,7 @@ MonoBehaviour:
     - Resource
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c19f7244a8d2034c8931ec887353299
-    m_Address: ball
+    m_Address: Ball
     m_ReadOnly: 0
     m_SerializedLabels:
     - Resource
