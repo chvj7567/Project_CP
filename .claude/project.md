@@ -1,0 +1,132 @@
+# Project Meta
+
+이 파일은 `.claude/agents/*.md` 의 모든 서브에이전트가 작업 시작 시 가장 먼저 읽는 **프로젝트 메타** 다. agent 정의는 도메인 정보를 직접 들고 있지 않고 이 파일을 통해서만 프로젝트를 인지한다.
+
+다른 프로젝트로 `.claude/agents/` 와 `.claude/rules/` 를 옮길 때는 **이 파일만 새 프로젝트 값으로 갈아끼우면 된다** — `CLAUDE.md` 는 자유 양식.
+
+자세한 규약은 `.claude/rules/00-project-meta-file.md` 참조.
+
+---
+
+## 프로젝트
+
+- **name**: CatPang
+- **one_liner**: Unity로 제작된 Android용 모바일 매치-3 퍼즐 게임 — 고양이 테마, 노멀/하드/보스 3모드, Google Play 출시 목표
+
+## 컨셉 / 단계
+
+- **concept_doc**: `CLAUDE.md`
+- **stage**: Beta
+- **stage_goal**: 400 스테이지(노멀 150·하드 150·보스 100) 콘텐츠 완성 및 일일 미션·광고·IAP 리텐션 루프 안정화
+
+## 코드 / 인프라
+
+- **engine**: Unity 6 (6000.0.68f1)
+- **language**: C#
+- **namespace**: 글로벌 (별도 namespace 없음; Data.cs 만 `namespace Data`)
+- **architecture**: MVVM (UI 계층 한정)
+- **code_root**: `Assets/Scripts/`
+- **test_paths**
+  - **edit_mode**: `Assets/Tests/EditMode/`
+  - **play_mode**: `Assets/Tests/PlayMode/`
+- **test_framework**: Unity Test Framework (NUnit)
+- **test_method_naming**: korean
+- **infrastructure**
+  - **package_id**: com.chvj.unityinfra
+  - **alias**: ChvjPackage
+  - **path**: `Packages/com.chvj.unityinfra/`
+
+## 문서 위치
+
+- **docs**
+  - **design**: `docs/design/` — game-designer 기획서
+  - **qa_reports**: `docs/qa-reports/` — qa-simulator 리포트
+  - **specs**: `docs/superpowers/specs/` — superpowers:brainstorming 산출물 (uses_superpowers: true 일 때만)
+  - **plans**: `docs/superpowers/plans/` — superpowers:writing-plans 산출물 (uses_superpowers: true 일 때만)
+
+## 협업 흐름 (Workflow)
+
+- **uses_superpowers**: true   ## 슈퍼파워 플러그인 사용 여부. false 면 아래 표준 흐름의 0·1 단계(brainstorming · writing-plans) 를 생략하고 2번부터 시작 (간이 흐름 참조).
+
+### 표준 흐름 (uses_superpowers: true)
+
+새 기능 개발은 다음 순서를 따른다. 각 단계의 산출물이 다음 단계의 입력이 된다 — 단방향 흐름으로 desync 를 줄인다.
+
+| 단계 | 주체 | 행위 | 산출물 |
+|---|---|---|---|
+| 0 | 메인 + `superpowers:brainstorming` | 사용자와 의도·범위·메커니즘 윤곽 합의, 결정 락 | `docs.specs/YYYY-MM-DD-[기능명]-design.md` |
+| 1 | 메인 + `superpowers:writing-plans` | spec 을 Task 단계로 분해 — 파일 경로·시그니처·TDD·verification gate | `docs.plans/YYYY-MM-DD-[기능명].md` |
+| 2 | **game-designer** | plan 의 파일 구조 안에서 도메인 결정 채움 — 수치·UX·시각·밸런스·페이싱·시너지 | `docs.design/[기능명].md` |
+| 3 | **design-reviewer** | 기획서 1차 검토 (사용자 리뷰 전) — BLOCKER 있으면 game-designer 재작업 | 검토 보고 |
+| 4 | **사용자** | 기획서 리뷰·승인 게이트 | 승인 |
+| 5 | **gameplay-programmer** | spec + plan + 기획서 모두 참조해 `.cs` 구현 | 코드 |
+| 6 | **code-reviewer** | 14 룰 + 기획서 일치 검토 — BLOCKER 있으면 재작업 | 검토 보고 |
+| 7 | **test-engineer** | 본격 테스트 스위트 (엣지·회귀·통합) | 테스트 .cs |
+| 8 | **qa-simulator** (게임플레이 영향 큰 경우) | 헤드리스 시뮬레이션 + 메트릭 리포트 | `docs.qa_reports/YYYY-MM-DD.md` |
+| 9 | 메인 | 변경 요약 + `git add` + 한글 커밋 메시지(안) (Rule 01) | 스테이징 + 메시지(안) |
+
+### 간이 흐름 (uses_superpowers: false)
+
+슈퍼파워 플러그인이 없거나 throwaway 프로토타입이면 0·1 단계를 생략한다.
+
+- 메인이 사용자와 의도·범위를 직접 합의 (별도 spec 파일 작성 없이 대화로 종결)
+- 2번 game-designer 가 사용자 요구·컨셉서를 직접 입력으로 받아 기획서 작성
+- 이후 3~9 단계는 표준 흐름과 동일
+
+> 간이 흐름에서는 `docs.specs/` · `docs.plans/` 폴더 자체가 비어 있어도 무방. game-designer / gameplay-programmer 의 self-review "스펙 커버리지" 항목은 "스펙 없음 — 사용자 요구 직접 매핑" 으로 처리.
+
+### 스킬 미지정 요청 — 메인 후보 제시 규칙
+
+사용자가 **코드/에셋 변경이 명확한 작업 요청**을 보냈는데 메시지에 스킬 이름(`/start-develop*`)을 명시하지 않은 경우, 메인 오케스트레이터는 즉시 작업을 시작하지 않는다. 4개 후보를 표로 제시하고 사용자가 선택할 때까지 멈춘다.
+
+| 스킬 | 적합 작업 | 파이프라인 단계 |
+|---|---|---|
+| `/start-develop`       | 본격 기능 + 사람 검토 + 승인 게이트 | game-designer → design-reviewer → ⛔승인 → gameplay-programmer → code-reviewer → test-engineer |
+| `/start-develop-auto`  | 본격 기능 + 자동 리뷰어, 게이트 없음 | 위와 동일하되 ⛔승인 생략 |
+| `/start-develop-simple`| 프로토타입 — 리뷰·시뮬 생략, 테스트는 유지 | game-designer → gameplay-programmer → test-engineer |
+| `/start-develop-quick` | 사소한 수정 · 작은 버그 · 리네임 · 문구 변경 | gameplay-programmer → code-reviewer |
+
+`uses_superpowers: true` 면 위 모든 후보에 0·1단계(brainstorming·writing-plans) 가 앞단에 붙는다 — 단 `/start-develop-quick` 은 본인 정의상 0·1 도 스킵한다.
+
+**제외 케이스** — 다음은 후보 제시 없이 메인이 즉시 답변한다:
+- 메타 질문 ("X 가 뭐임?", "어떻게 해야 돼?", "이거 왜 이래?")
+- 단순 조회 · 탐색 · 파일 읽기 요청
+- 조언 · 추천 요청 (코드 변경을 명시하지 않은 의견 요청)
+- 일반 대화 · 명령 의도가 모호한 발화
+
+**스킬 이름이 메시지에 명시된 경우** — 후보 제시 생략. 박힌 스킬로 즉시 진행.
+
+**메인의 자체 분기 금지** — 메인이 "이건 quick 이면 충분" 같은 임의 판단으로 한 스킬에 직진하지 않는다. 잘못 판단하면 큰 작업이 게이트 없이 직진할 위험이 있으므로 사용자 선택이 단일 진실.
+
+### 문서 분담 (uses_superpowers: true 일 때 — 3 문서가 같이 있을 때)
+
+세 문서는 같은 추상의 다른 버전이 아니라 **다른 차원**이다. 결합되어야 완전.
+
+| 문서 | 위치 | 다루는 영역 | 단일 진실 |
+|---|---|---|---|
+| **spec** | `docs.specs/` | 의도·범위·메커니즘 윤곽 + 결정 락 | **무엇을** 만들지의 골격 |
+| **plan** | `docs.plans/` | 파일 경로·시그니처·TDD 단계·체크박스·verification gate | **어떻게 단계별로** 만들지 |
+| **기획서** | `docs.design/` | 도메인 — 수치·UX·시각·밸런스·페이싱·시너지 | **어떤 수치/디자인으로** 만들지 |
+
+**plan ↔ 기획서 sync 규칙**: 구현 후 화면/사용자 검증 결과로 기획서가 갱신되면 (예: 가시성 문제로 수치 조정), **plan 도 동일 시점에 delta 마일스톤으로 보강**한다. 두 문서가 단방향 흐름에서 어긋나는 순간 후속 구현이 어느 쪽을 따라야 할지 갈린다.
+
+### 밸런스 조정 흐름 (별도 짧은 사이클)
+
+새 기능이 아닌 기존 시스템의 밸런스 조정은 다음 짧은 사이클을 돈다 — 0·1 단계 (spec·plan) 없음.
+
+1. 사용자 또는 game-designer 가 밸런스 의심 제기
+2. **qa-simulator** → N판 시뮬 후 데이터 리포트
+3. **game-designer** → 데이터 기반 조정안 작성 (기존 기획서 갱신 또는 짧은 patch note)
+4. **design-reviewer** → 조정안 검토
+5. **사용자 승인**
+6. **gameplay-programmer** → SO/수치 수정
+7. **code-reviewer** → 수정 검토
+8. **test-engineer** → 회귀 테스트 통과 확인
+9. **qa-simulator** → 조정 후 재시뮬로 검증
+
+## 도메인 데이터 (선택)
+
+- **stage_json**: `Assets/AssetBundleResources/json/Stage.json` — 스테이지 메타 (group/mode/시간제한/이동횟수 등)
+- **stage_block_json**: `Assets/AssetBundleResources/json/StageBlock.json` — 스테이지별 9×9 블록 배치
+- **asset_bundle_root**: `Assets/AssetBundleResources/` — Addressables 에셋 루트 (`"Resource"` 라벨)
+- **defines_file**: `Assets/Scripts/Defines.cs` — 모든 공용 Enum (EBlockState/EUI/EScene 등)
