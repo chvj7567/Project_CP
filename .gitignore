@@ -75,3 +75,5 @@ crashlytics-build.properties
 
 # Android CMake temp build artifacts
 /.utmp/
+# 헤드리스 시뮬 배치 산출물 (런타임 생성)
+docs/qa-reports/sim-output/

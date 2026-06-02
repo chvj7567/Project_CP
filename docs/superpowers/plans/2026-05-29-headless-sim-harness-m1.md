@@ -1,5 +1,18 @@
 # 헤드리스 시뮬 하니스 M1 (일반 매치 + 낙하/리필 + 승패) Implementation Plan
 
+> **상태: M1 구현 완료 (2026-06-01).** Task 1~8 전부 구현·통과. EditMode 자동 테스트 **19 PASS / 0 FAIL** (자체 러너 SimTestRunner). 배치 러너 실행 성공 → `docs/qa-reports/sim-output/m1-batch-*.json` (gitignore).
+>
+> **핵심 실측 결과 (M1 의 정직한 한계):** stage 1~150 중 **실제 측정 가능 4개**(stage 1·2·39·49), **146개는 특수블록(Wall/Potal/Fish 등) 포함으로 Unsupported**. 즉 CatPang 콘텐츠는 초반부터 특수블록을 광범위하게 써서 **M1(일반블록 전용)으로는 평가 불가 → M2/M3(폭탄·특수블록·보스)가 실질 필수**. 이게 "추측 아닌 실측" 이라는 하니스 목적이 작동한 증거.
+> - 측정된 4개 샘플: stage1[ScoreGoal] Random클리어율100%·avgTurns15.1 vs Greedy13.7 / stage2[Move] Random클리어율6.7%·moveOver28 / stage39·49[ScoreGoal] avgTurns 379·240(고난도).
+>
+> **검증 신뢰 경계 (M1 리포트 필수 명기):** Task3 **매치 판정만** 실게임 `GPMatchChecker` 골든으로 동등성 검증됨. 낙하/턴루프/승패/점수(Task4/7/8)는 `GPGameScene` 정독 기반 **수작업 골든(self-referential)** — 실게임 직접 대조 아님. PASS 카운트가 이 둘을 뭉뚱그리지 않게.
+>
+> **남은 교차검증 (M1 done 선언 전 1회):** 자체 러너 SimTestRunner 가 source-of-truth 이므로, 실제 Unity Test Runner(사용자 수동 클릭)로 전체 스위트 1회 교차확인해 NUnit 과 일치 확인 권장 (Sim 네임스페이스 19/19 = 러너 결과 일치).
+>
+> **알려진 한계 (M2 가 재발견하지 않게):**
+> - `SimBlock.IsNormal()` 은 Cat1~7(0~6)만 일반블록으로 봄. 실게임 `IsNormalBlock` 은 스킨 고양이(54~83, `GetBaseCat`)도 일반 취급. M1 배치엔 무영향(스킨은 StageBlock.json 에 없고 런타임 `CheckSelectCatShop` 으로 적용) — M2/M3 에서 스킨 보드 다루면 `IsNormal` 확장 필요.
+> - **150 커버 범위 실측(2026-06-03)**: M2/M3 설계 근거. Wall(73 stage)·Potal(57)·Fish(33)·RainbowPang(27)·Creator(25/17)·CatBox(22)·Ball(19) + 초기배치 Arrow/특수폭탄. → **M2=정적(Wall/Potal/Fish/Ball/CatBox), M3=동적+폭탄(Arrow·특수폭탄 연쇄 GPBombResolver 12종·Creator·Rainbow), 보스 AI=M4.**
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** CatPang 일반 매치 스테이지(폭탄·특수블록·보스 제외)를 헤드리스로 N판 자동 플레이해 클리어율·이동수·실패사유 메트릭 JSON을 출력하고, 매치 판정 동등성을 실게임 `GPMatchChecker` 직호출 골든으로 검증한다.
@@ -14,6 +27,18 @@
 
 > 출처: `GPMatchChecker.cs` 전문, `GPBoard.cs` 전문, `Block.cs` 전문, `GPGameScene.cs`(CreateMap 473-565 / RemoveMatchBlock 619-689 / Update 177-253 / InitData 404-435), `Infomation.cs`(StageInfo/StageBlockInfo/ApplyNormalModifiers), `Stage.json`·`StageBlock.json` 실제 샘플.
 
+### 모드 분포 실측 (stage 1~150, group<100000) — Task8 메트릭 설계 근거
+| 모드 | 하드(원본) | 노멀(변형 후) | M1 |
+|---|---|---|---|
+| 시간모드 `Time>0` | 73 | 0 | **Unsupported** |
+| 이동모드 `MoveCount>0` | 77 | 89 | 정확 — 클리어율 + avgMoves 유효 |
+| 무제한+점수목표 `Time≤0,Move≤0,Target>0` | 0 | 50 | 정확 — **클리어율 degenerate(≈100%)** → avgTurns-to-target 로 난이도 봐야 |
+| 무제한+목표없음 | 0 | 11 | 즉시 클리어 |
+
+→ **하드는 77/150 만 측정 가능**(시간 73 제외). **노멀은 150 전부 측정 가능**(시간 0).
+→ **Task8: 클리어율을 전 모드 평균내지 말 것.** 모드별 세그먼트 — 이동모드=클리어율+avgMoves, 점수목표=avgTurns, 시간모드=Unsupported 카운트.
+→ **M1 리포트 명시 의무**: Task3 매치판정만 실게임 골든 검증됨. 낙하/턴루프/승패/점수(Task4/7/8)는 GPGameScene 정독 기반 수작업 골든(self-referential) — 실게임 직접 대조 아님. PASS 카운트가 이 둘을 뭉뚱그리지 않게 리포트에 경계 표기.
+
 ### 데이터 스키마 (실제)
 - **Stage.json** = `StageInfo[]` (루트가 곧 배열). 필드:
   `{ "group":int, "stage":int, "tutorialID":int, "blockTypeCount":int, "boardSize":int, "time":float, "targetScore":int, "moveCount":int }`
@@ -24,8 +49,9 @@
 - **보드 구성**(CreateMap): 각 칸 `(r,c)` 에 대해 StageBlock 레코드를 찾아 → 있으면 그 `blockState`,
   **없으면 `Random(0, blockTypeCount)` 일반블록**. 시작 보드는 매치/가능수 없을 때까지 재생성.
 - **모드 판정**: `time > 0` → 시간제한, `moveCount > 0` → 이동제한, **둘 다 ≤0 → 무제한**.
-- **노멀 변형**(`StageInfo.ApplyNormalModifiers`): `time = -1; moveCount = moveCount > 0 ? moveCount*2 : 30(NormalModeBaseMoveCount)`.
-  → **노멀 모드는 항상 이동제한**(시간 제거). 하드 모드는 원본 그대로(시간/이동/무제한 혼재).
+- **노멀 변형**(`StageInfo.ApplyNormalModifiers` 실제 — Infomation.cs:46-51): `time = -1; if (targetScore > 0) targetScore /= 2; else if (moveCount > 0) moveCount *= 2;`.
+  → **(Task5 실측 정정)** 노멀 모드가 "항상 이동제한"이 **아니다**. `targetScore>0` 스테이지(대다수 노멀)는 시간만 제거되고 **무제한+점수목표(절반)** 가 된다. `targetScore<=0 && moveCount>0` 스테이지만 이동 2배. `NormalModeBaseMoveCount=30` 상수는 **존재하지 않음**(plan 초안 오류).
+  → 하드 모드는 원본 그대로(시간/이동/무제한 혼재).
 
 ### 점수 (실제 — RemoveMatchBlock 631)
 - 매치되어 제거되는 블록 **1개당 `curScore += 1`**. (M1 일반 매치 점수는 **제거 블록 수와 동일**.)
@@ -56,11 +82,14 @@ swap → `CheckMap` → 매치 없으면 swap 되돌리고 종료(이동 차감 
 - **무제한 + 점수목표**: 점수 도달(`clear` true) 즉시 GameEnd(true).
 - 실패 사유(BuildFailInfo): 시간초과면 `TimeOver`, 아니면 `MoveOver`.
 
-### → M1 정확 시뮬 경계 (중요)
-- **노멀 모드(항상 이동제한) = 완전 정확 시뮬 가능.** ← M1 1차 타깃.
-- **무제한+점수목표 스테이지 = 정확**(점수 게임, 무한방지 턴 캡).
-- **하드 원본의 시간모드 스테이지 = 실시간 의존 → M1 정확 불가 → `Unsupported` 로 분류**(메트릭에서 제외+카운트).
+### → M1 정확 시뮬 경계 (중요 — Task5 실측 반영)
+모드는 "노멀/하드" 라벨이 아니라 **변형 적용 후의 time/moveCount/targetScore 조합**으로 결정한다 (`SimStageData.IsTimeMode = Time>0`, `IsMoveMode = MoveCount>0`):
+- **이동제한 (`MoveCount>0`) = 완전 정확 시뮬 가능.** (이동 예산 소진 → MoveOver)
+- **무제한+점수목표 (`Time<=0 && MoveCount<=0 && TargetScore>0`) = 정확**(점수 게임, 무한방지 턴 캡). ← 노멀 변형된 대다수 스테이지가 여기 해당(targetScore 절반).
+- **시간모드 (`Time>0`) = 실시간 의존 → M1 정확 불가 → `Unsupported`**(메트릭 제외+카운트). 하드 원본의 시간 스테이지가 해당.
 - **특수블록/폭탄 포함 스테이지 = M1 비대상 → `Unsupported`.**
+
+> Task 7/8 주의: "노멀=이동제한" 가정 금지. 승패는 `IsTimeMode`(Unsupported) / `IsMoveMode`(예산 소진 MoveOver) / 그 외(무제한 점수목표, 턴 캡) 로 분기. 테스트에서 이동제한을 검증하려면 `targetScore<=0 && moveCount>0` 인 스테이지(예: stage13: time=-1, targetScore=-1, moveCount=20)를 쓴다.
 
 > **M1 비대상(M2/M3)**: 폭탄 생성·연쇄, 특수블록(Wall/Potal/CatBox/Creator/Fish/Ball), 보스 AI, 시간모드 실시간 모델.
 
