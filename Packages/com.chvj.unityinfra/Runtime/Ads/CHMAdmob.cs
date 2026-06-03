@@ -70,7 +70,10 @@ namespace ChvjUnityInfra
                 });
             }
 
-            // MobileAds 초기화 완료 후 광고 load (SDK 권장 순서).
+            //# 모든 광고 이벤트 콜백(보상/닫힘 등)을 Unity 메인 스레드로 마샬링 — 콜백 내 Unity API 호출 시 네이티브 크래시 방지. v8.5.2 기본값 false.
+            MobileAds.RaiseAdEventsOnUnityMainThread = true;
+
+            //# MobileAds 초기화 완료 후 광고 load (SDK 권장 순서).
             MobileAds.Initialize(initStatus =>
             {
                 _adRequest = new AdRequest();
