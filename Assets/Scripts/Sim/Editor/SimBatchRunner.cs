@@ -63,6 +63,37 @@ namespace CatPang.Sim.EditorTools
             AssetDatabase.Refresh();
         }
 
+        //# cap-hitter 6개에 GreedyAi(숙련 정책) 1판 — 클리어하면 "하드 stage(RandomAi 약함)"로 sim 정확성 확정.
+        //# Greedy 도 캡이면 unwinnable(sim 버그 후보). 동결 wall 수정 후라 빠름. stage 마다 증분 기록.
+        public static string CheckCapHittersWinnable()
+        {
+            string stageJson = File.ReadAllText(StageJsonPath);
+            string stageBlockJson = File.ReadAllText(StageBlockJsonPath);
+
+            int[] stages = { 35, 73, 74, 77, 82, 119 };
+
+            string dir = "docs/qa-reports/sim-output";
+            Directory.CreateDirectory(dir);
+            string path = Path.Combine(dir, "m2-caphitter-greedy.txt");
+            File.WriteAllText(path, "M2 cap-hitter winnable 검증 (GreedyAi seed42)\n\n");
+
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            foreach (int stage in stages)
+            {
+                SimStageData data = SimStageLoader.Load(stageJson, stageBlockJson, stage, normalMode: true);
+                sw.Restart();
+                SimResult r = new SimGame().Run(data, new GreedyAiPolicy(42), 42);
+                sw.Stop();
+
+                string mark = r.CapHit ? " [CAP]" : "";
+                string verdict = r.Clear ? "WINNABLE(클리어)" : (r.CapHit ? "캡도달(미확정)" : "미클리어(이동소진)");
+                File.AppendAllText(path,
+                    $"stage{stage} (target={data.TargetScore} moveCount={data.MoveCount}): {verdict}\n"
+                    + $"  {sw.ElapsedMilliseconds}ms clear={r.Clear} turns={r.Turns} moves={r.MovesUsed} score={r.FinalScore} fail={r.FailReason}{mark}\n\n");
+            }
+            return $"done → {path}";
+        }
+
         //# 커버리지 게이트(Task8 목표 59/150) 전용: play 없이 IsSupported 분류만으로 supported 수 집계.
         //# IsSupported 는 IsTimeMode + InitialStates 블록타입 스캔(턴루프 진입 전) 이라 hang 위험 0, 밀리초 완료.
         //# 결과를 파일에 기록 — MCP 응답 timeout 과 무관하게 결과 보존. 반환 문자열도 짧음.

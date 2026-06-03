@@ -16,7 +16,7 @@ namespace CatPang.Sim
             {
                 for (int c = 0; c < size; ++c)
                 {
-                    Grid[r, c] = new SimBlock { Row = r, Col = c, State = EBlockState.None };
+                    Grid[r, c] = new SimBlock { Row = r, Col = c, Index = r * size + c, State = EBlockState.None };
                 }
             }
         }

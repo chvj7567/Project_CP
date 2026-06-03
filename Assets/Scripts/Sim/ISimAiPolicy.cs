@@ -50,6 +50,16 @@ namespace CatPang.Sim
                         if (board.Grid[r, c].CanNotDrag() || board.Grid[nr, nc].CanNotDrag())
                             continue;
 
+                        //# 폭탄 계열이 관여하면 매치 없이도 유효(조합/발동). 단 RainbowPang/고정블록은 위 CanNotDrag 가드에서 이미 제외.
+                        bool bombMove = board.Grid[r, c].IsBomb() || board.Grid[r, c].IsSpecialBomb()
+                            || board.Grid[nr, nc].IsBomb() || board.Grid[nr, nc].IsSpecialBomb();
+                        if (bombMove)
+                        {
+                            moves.Add(new SimMove(r, c, d.dr, d.dc));
+                            continue;
+                        }
+
+                        //# (기존) 일반 매치 검사: swap → CheckMap → IsMatch 면 추가 → swap 복원
                         board.Swap(r, c, nr, nc);
                         checker.CheckMap(board);
                         bool matched = checker.IsMatch;

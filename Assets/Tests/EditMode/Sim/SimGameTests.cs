@@ -110,6 +110,34 @@ namespace CatPang.Sim.Tests
         }
 
         [Test]
+        public void IsSupported_초기폭탄블록은_지원_Fish는_미지원()
+        {
+            //# stage1(노멀) 을 베이스로 InitialStates[0] 을 교체해 분류만 확인.
+            //# stage1-normal 은 일반블록만 있어 기본 supported — 한판_특수블록스테이지는_Unsupported(Fish) 가 이 전제를 이미 검증.
+            SimStageData s = SimStageLoader.Load(StageJson, StageBlockJson, 1, normalMode: true);
+
+            //# Arrow1(10) → M3a 화이트리스트 — supported.
+            s.InitialStates[0] = EBlockState.Arrow1;
+            Assert.IsTrue(SimGame.IsSupported(s), "초기 Arrow1 → 지원(M3a)");
+
+            //# YellowBomb(20) → 5색폭탄 범위 PinkBomb~BlueBomb 에 포함 — supported.
+            s.InitialStates[0] = EBlockState.YellowBomb;
+            Assert.IsTrue(SimGame.IsSupported(s), "초기 색폭탄(YellowBomb) → 지원(M3a)");
+
+            //# RainbowPang(52) → M3a 화이트리스트 — supported.
+            s.InitialStates[0] = EBlockState.RainbowPang;
+            Assert.IsTrue(SimGame.IsSupported(s), "초기 RainbowPang → 지원(M3a)");
+
+            //# Fish(24) → M3b 영역, 화이트리스트 미포함 — 여전히 미지원.
+            s.InitialStates[0] = EBlockState.Fish;
+            Assert.IsFalse(SimGame.IsSupported(s), "Fish → 미지원(M3b)");
+
+            //# Ball(53) → M3b 영역, 화이트리스트 미포함 — 여전히 미지원.
+            s.InitialStates[0] = EBlockState.Ball;
+            Assert.IsFalse(SimGame.IsSupported(s), "Ball → 미지원(M3b)");
+        }
+
+        [Test]
         public void 메트릭_클리어율을_집계한다()
         {
             //# Clear 2판 + MoveOver 1판(총 3 plays) 누적 → 클리어율 2/3.

@@ -9,6 +9,16 @@ namespace CatPang.Sim
         public const int MinMatchCount = 3;
         public bool IsMatch;
 
+        //# M3a: 이번 수에서 이동한 두 블록 index. squareMatch 위치 결정에 사용. 실 GPMatchChecker._moveIndex 미러.
+        private int _moveIndex1 = -1;
+        private int _moveIndex2 = -1;
+
+        public void SetMoveIndices(int idx1, int idx2)
+        {
+            _moveIndex1 = idx1;
+            _moveIndex2 = idx2;
+        }
+
         //# 사각 → 행별 3매치 → 열별 3매치 순서. GPMatchChecker.CheckMap 과 동일. 호출 시 IsMatch 초기화.
         public void CheckMap(SimBoard board)
         {
@@ -36,7 +46,7 @@ namespace CatPang.Sim
                 {
                     line.Add(board.Grid[r, c]);
                 }
-                Check3(line);
+                Check3(line, true);
             }
 
             for (int c = 0; c < size; ++c)
@@ -46,7 +56,7 @@ namespace CatPang.Sim
                 {
                     line.Add(board.Grid[r, c]);
                 }
-                Check3(line);
+                Check3(line, false);
             }
         }
 
@@ -69,12 +79,34 @@ namespace CatPang.Sim
                 return;
 
             a.Match = b.Match = d.Match = e.Match = true;
-            a.SquareMatch = true; //# 이동관여 칸 추적은 M2. M1 은 좌상단 고정.
             IsMatch = true;
+
+            //# M3a: 실 CheckSquareMatch 95~104 미러 — 이동한 블록 우선, 없으면 좌상단(a).
+            if (_moveIndex1 == a.Index || _moveIndex2 == a.Index)
+            {
+                a.SquareMatch = true;
+            }
+            else if (_moveIndex1 == b.Index || _moveIndex2 == b.Index)
+            {
+                b.SquareMatch = true;
+            }
+            else if (_moveIndex1 == d.Index || _moveIndex2 == d.Index)
+            {
+                d.SquareMatch = true;
+            }
+            else if (_moveIndex1 == e.Index || _moveIndex2 == e.Index)
+            {
+                e.SquareMatch = true;
+            }
+            else
+            {
+                a.SquareMatch = true;
+            }
         }
 
-        //# 한 행/열에서 동일 일반블록이 MinMatchCount 이상 연속이면 Match. 비일반 블록서 카운트 리셋.
-        private void Check3(List<SimBlock> line)
+        //# 한 행/열에서 동일 일반블록이 MinMatchCount 이상 연속이면 Match + SetScore. 비일반 블록서 카운트 리셋.
+        //# horizontal: true=가로(hScore), false=세로(vScore). 실 Check3Match(EDirection) 미러.
+        private void Check3(List<SimBlock> line, bool horizontal)
         {
             EBlockState state = EBlockState.None;
             int count = 0;
@@ -98,10 +130,14 @@ namespace CatPang.Sim
                     ++count;
                     if (count >= MinMatchCount)
                     {
+                        //# 실 Check3Match 138~143: bl 변수로 한 번만 역참조 후 감소 — 이중 감소 방지.
                         int t = i;
                         for (int j = 0; j < count; ++j)
                         {
-                            line[t--].Match = true;
+                            SimBlock bl = line[t];
+                            bl.SetScore(count, horizontal);
+                            bl.Match = true;
+                            --t;
                         }
                         IsMatch = true;
                     }
@@ -168,6 +204,30 @@ namespace CatPang.Sim
             {
                 board.Grid[row, col].Damage(blockTypeCount);
             }
+        }
+
+        //# M3a: 폭탄 발동이 칸을 match 처리. 실 GPMatchChecker.ChangeMatchState L243-256 미러.
+        //# 제외 조건: 범위 밖, RainbowPang(hp>0), 고정블록(Wall/Potal/CatBox/Creator), PinkBomb.
+        //# 주의: 실 버전은 DamageBlock 호출(벽 마모) + bool 반환도 포함하지만
+        //# Sim 에서는 blast 데미지를 Task4 SimBombResolver 가 담당하므로 여기선 match 플래그만 셋.
+        //# Fish 제외 조건 없음 — M3a 보드에 Fish 없음.
+        public void ChangeMatchState(SimBoard board, int row, int col)
+        {
+            if (board.IsValid(row, col) == false)
+                return;
+
+            SimBlock b = board.Grid[row, col];
+
+            if (b.State == EBlockState.RainbowPang && b.Hp > 0)
+                return;
+
+            if (b.IsWall() || b.State == EBlockState.Potal || b.IsCatBox() || b.IsCreator())
+                return;
+
+            if (b.State == EBlockState.PinkBomb)
+                return;
+
+            b.Match = true;
         }
     }
 }
