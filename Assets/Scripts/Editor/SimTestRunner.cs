@@ -91,7 +91,17 @@ namespace CatPang.Sim.EditorTools
                         fail += 1;
                         //# 리플렉션 호출 예외는 InnerException 에 실제 Assert 실패가 담긴다.
                         Exception real = ex.InnerException ?? ex;
-                        sb.Append($"\nFAIL {type.Name}.{test.Name}: {real.GetType().Name} {real.Message}");
+                        //# NRE 등 디버깅 위해 스택트레이스 첫 줄(발생 위치)도 첨부.
+                        string firstFrame = "";
+                        if (real.StackTrace != null)
+                        {
+                            string[] frames = real.StackTrace.Split('\n');
+                            if (frames.Length > 0)
+                            {
+                                firstFrame = " @ " + frames[0].Trim();
+                            }
+                        }
+                        sb.Append($"\nFAIL {type.Name}.{test.Name}: {real.GetType().Name} {real.Message}{firstFrame}");
                     }
                 }
             }

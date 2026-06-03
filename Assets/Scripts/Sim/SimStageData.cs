@@ -14,6 +14,7 @@ namespace CatPang.Sim
         public int TargetScore;     //# >0 점수목표
         public int BlockTypeCount;
         public EBlockState[] InitialStates; //# 길이 BoardSize^2. None=레코드 없음(런타임 랜덤 채움)
+        public int[] InitialHps; //# 길이 BoardSize^2. 각 칸 hp(StageBlock hp). 레코드 없으면 -1.
 
         public bool IsTimeMode => Time > 0;
         public bool IsMoveMode => MoveCount > 0;

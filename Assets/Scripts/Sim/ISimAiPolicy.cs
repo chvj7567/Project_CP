@@ -45,6 +45,11 @@ namespace CatPang.Sim
                         if (board.IsValid(nr, nc) == false)
                             continue;
 
+                        //# 실게임 규칙: 양쪽 칸 모두 드래그 가능해야 스왑. 고정블록(Wall 등) 스왑 금지.
+                        //# (SimBoard.Swap 은 State 만 교환하므로, 고정블록을 스왑하면 Hp 가 칸에 남아 유령 동결블록 발생.)
+                        if (board.Grid[r, c].CanNotDrag() || board.Grid[nr, nc].CanNotDrag())
+                            continue;
+
                         board.Swap(r, c, nr, nc);
                         checker.CheckMap(board);
                         bool matched = checker.IsMatch;

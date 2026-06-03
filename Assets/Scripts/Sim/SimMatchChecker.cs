@@ -14,6 +14,11 @@ namespace CatPang.Sim
         {
             IsMatch = false;
             board.ResetAllMatch();
+            //# 실게임 GPMatchChecker.CheckMap 42-44: 매 검사 시작 시 데미지 가드 리셋.
+            foreach (SimBlock b in board.Grid)
+            {
+                b.ResetCheckDamage();
+            }
             int size = board.Size;
 
             for (int r = 0; r < size; ++r)
@@ -125,6 +130,10 @@ namespace CatPang.Sim
                         if (board.IsValid(nr, nc) == false)
                             continue;
 
+                        //# 실게임 규칙: 양쪽 칸 모두 드래그 가능해야 스왑(고정블록 제외).
+                        if (board.Grid[r, c].CanNotDrag() || board.Grid[nr, nc].CanNotDrag())
+                            continue;
+
                         board.Swap(r, c, nr, nc);
                         CheckMap(board);
                         bool matched = IsMatch;
@@ -139,6 +148,26 @@ namespace CatPang.Sim
             }
             board.ResetAllMatch();
             return false;
+        }
+
+        //# 실게임 GPMatchChecker.CheckArround 223-241: (row,col) 의 상하좌우를 데미지.
+        public void CheckArround(SimBoard board, int row, int col, int blockTypeCount = 5)
+        {
+            if (board.IsValid(row, col) == false)
+                return;
+            DamageBlock(board, row - 1, col, blockTypeCount);
+            DamageBlock(board, row, col + 1, blockTypeCount);
+            DamageBlock(board, row, col - 1, blockTypeCount);
+            DamageBlock(board, row + 1, col, blockTypeCount);
+        }
+
+        //# 실게임 DamageBlock 232-241. M2 엔 RainbowPang 없으므로 일반 Damage.
+        public void DamageBlock(SimBoard board, int row, int col, int blockTypeCount)
+        {
+            if (board.IsValid(row, col))
+            {
+                board.Grid[row, col].Damage(blockTypeCount);
+            }
         }
     }
 }

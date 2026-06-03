@@ -11,6 +11,9 @@ namespace CatPang.Sim.Tests
         private static readonly FieldInfo BlockStateField =
             typeof(Block).GetField("blockState", BindingFlags.NonPublic | BindingFlags.Instance);
 
+        private static readonly FieldInfo HpField =
+            typeof(Block).GetField("hp", BindingFlags.NonPublic | BindingFlags.Instance);
+
         public static Block[,] CreateBoard(EBlockState[,] states)
         {
             int size = states.GetLength(0);
@@ -24,6 +27,26 @@ namespace CatPang.Sim.Tests
                     BlockStateField.SetValue(b, states[r, c]);
                     arr[r, c] = b;
                 }
+            return arr;
+        }
+
+        //# state + hp 를 함께 세팅. hps[r,c] = -1 이면 hp 미설정(일반블록).
+        public static Block[,] CreateBoard(EBlockState[,] states, int[,] hps)
+        {
+            int size = states.GetLength(0);
+            Block[,] arr = new Block[size, size];
+            for (int r = 0; r < size; ++r)
+            {
+                for (int c = 0; c < size; ++c)
+                {
+                    GameObject go = new GameObject($"B{r}_{c}");
+                    Block b = go.AddComponent<Block>();
+                    b.row = r; b.col = c; b.index = r * size + c;
+                    BlockStateField.SetValue(b, states[r, c]);
+                    HpField.SetValue(b, hps[r, c]);
+                    arr[r, c] = b;
+                }
+            }
             return arr;
         }
 

@@ -103,7 +103,8 @@ namespace CatPang.Sim.Tests
         public void 한판_특수블록스테이지는_Unsupported()
         {
             SimStageData s = SimStageLoader.Load(StageJson, StageBlockJson, 1, normalMode: true);
-            s.InitialStates[0] = EBlockState.Wall; //# 특수블록 강제 삽입 → Unsupported
+            //# Fish(24) 는 M3 대상(폭탄 변환) — M2 에서도 Unsupported. (Wall 은 M2 부터 지원되므로 부적합.)
+            s.InitialStates[0] = EBlockState.Fish;
             SimResult r = new SimGame().Run(s, new RandomAiPolicy(1), seed: 1);
             Assert.IsTrue(r.Unsupported);
         }

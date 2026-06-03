@@ -38,15 +38,19 @@ namespace CatPang.Sim
             }
 
             EBlockState[] states = new EBlockState[size * size];
+            int[] hps = new int[size * size];
             for (int i = 0; i < states.Length; ++i)
             {
                 states[i] = EBlockState.None;
+                hps[i] = -1;
             }
             foreach (StageBlockDto b in blocks.Where(b => b.stage == stage))
             {
                 if (b.row >= 0 && b.row < size && b.col >= 0 && b.col < size)
                 {
-                    states[b.row * size + b.col] = (EBlockState)b.blockState;
+                    int idx = b.row * size + b.col;
+                    states[idx] = (EBlockState)b.blockState;
+                    hps[idx] = b.hp;
                 }
             }
 
@@ -60,6 +64,7 @@ namespace CatPang.Sim
                 TargetScore = targetScore,
                 BlockTypeCount = meta.blockTypeCount,
                 InitialStates = states,
+                InitialHps = hps,
             };
         }
     }
