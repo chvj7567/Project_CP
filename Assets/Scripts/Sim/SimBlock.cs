@@ -68,15 +68,28 @@ namespace CatPang.Sim
             return IsWall() || IsCatBox() || IsCreator();
         }
 
+        //# M3b: Fish 블록 여부. 실게임 Block.IsFishBlock 미러.
+        public bool IsFish()
+        {
+            return State == EBlockState.Fish;
+        }
+
+        //# M3b: Ball 블록 여부. 실게임 Block.IsBallBlock 미러.
+        public bool IsBall()
+        {
+            return State == EBlockState.Ball;
+        }
+
         //# 드래그(스왑) 불가 블록 — 실게임 Block.CanNotDragBlock 미러.
-        //# Wall/Potal/Fish/CatBox/Creator/RainbowPang. M3a: Fish 미포함(보드에 없음), RainbowPang 추가.
+        //# Wall/Potal/Fish/CatBox/Creator/RainbowPang. M3b: Fish 추가.
         public bool CanNotDrag()
         {
             return IsWall()
                 || State == EBlockState.Potal
                 || IsCatBox()
                 || IsCreator()
-                || State == EBlockState.RainbowPang;
+                || State == EBlockState.RainbowPang
+                || IsFish();
         }
 
         //# 매치로 제거 가능한 블록인가(인접 데미지 대상 아님, 직접 매치 대상). 일반블록만.

@@ -100,20 +100,20 @@ namespace CatPang.Sim.Tests
         }
 
         [Test]
-        public void 한판_특수블록스테이지는_Unsupported()
+        public void 한판_Fish스테이지는_M3b부터_지원()
         {
+            //# Fish(24) 는 M3b 부터 지원(맨아래줄→색폭탄). 과거 M2/M3a 에선 Unsupported 였으나 이제 supported.
+            //# (노멀모드는 time=-1 이라 시간모드 미지원은 한판_시간모드는_Unsupported 가 별도 검증.)
             SimStageData s = SimStageLoader.Load(StageJson, StageBlockJson, 1, normalMode: true);
-            //# Fish(24) 는 M3 대상(폭탄 변환) — M2 에서도 Unsupported. (Wall 은 M2 부터 지원되므로 부적합.)
             s.InitialStates[0] = EBlockState.Fish;
             SimResult r = new SimGame().Run(s, new RandomAiPolicy(1), seed: 1);
-            Assert.IsTrue(r.Unsupported);
+            Assert.IsFalse(r.Unsupported, "Fish 는 M3b 부터 지원");
         }
 
         [Test]
-        public void IsSupported_초기폭탄블록은_지원_Fish는_미지원()
+        public void IsSupported_초기폭탄블록은_지원()
         {
             //# stage1(노멀) 을 베이스로 InitialStates[0] 을 교체해 분류만 확인.
-            //# stage1-normal 은 일반블록만 있어 기본 supported — 한판_특수블록스테이지는_Unsupported(Fish) 가 이 전제를 이미 검증.
             SimStageData s = SimStageLoader.Load(StageJson, StageBlockJson, 1, normalMode: true);
 
             //# Arrow1(10) → M3a 화이트리스트 — supported.
@@ -128,13 +128,33 @@ namespace CatPang.Sim.Tests
             s.InitialStates[0] = EBlockState.RainbowPang;
             Assert.IsTrue(SimGame.IsSupported(s), "초기 RainbowPang → 지원(M3a)");
 
-            //# Fish(24) → M3b 영역, 화이트리스트 미포함 — 여전히 미지원.
+            //# Fish(24)/Ball(53) → M3b 부터 지원(IsSupported_Fish와_Ball_stage가_지원된다 가 별도 검증).
             s.InitialStates[0] = EBlockState.Fish;
-            Assert.IsFalse(SimGame.IsSupported(s), "Fish → 미지원(M3b)");
-
-            //# Ball(53) → M3b 영역, 화이트리스트 미포함 — 여전히 미지원.
+            Assert.IsTrue(SimGame.IsSupported(s), "Fish → 지원(M3b)");
             s.InitialStates[0] = EBlockState.Ball;
-            Assert.IsFalse(SimGame.IsSupported(s), "Ball → 미지원(M3b)");
+            Assert.IsTrue(SimGame.IsSupported(s), "Ball → 지원(M3b)");
+        }
+
+        [Test]
+        public void IsSupported_Fish와_Ball_stage가_지원된다()
+        {
+            SimStageData fishStage = SimStageLoader.Load(StageJson, StageBlockJson, 31, normalMode: true);
+            Assert.IsFalse(new SimGame().Run(fishStage, new RandomAiPolicy(1), 1).Unsupported, "Fish stage 지원(M3b)");
+            SimStageData ballStage = SimStageLoader.Load(StageJson, StageBlockJson, 131, normalMode: true);
+            Assert.IsFalse(new SimGame().Run(ballStage, new RandomAiPolicy(1), 1).Unsupported, "Ball stage 지원(M3b)");
+        }
+
+        [Test]
+        public void 낙하_Fish는_IsWallLike가아니라_gravity로_하강()
+        {
+            //# 3x3, (0,1) Fish, (2,1) 제거 → Fish 가 한 칸 하강.
+            SimBoard b = new SimBoard(3);
+            b.SetState(0, 1, EBlockState.Fish);
+            b.SetState(1, 1, EBlockState.Cat1);
+            b.SetState(2, 1, EBlockState.Cat2);
+            b.Grid[2, 1].Match = true; //# 맨아래 칸 제거 → 위가 내려옴
+            new SimGravity(1).Apply(b, blockTypeCount: 3);
+            Assert.AreEqual(EBlockState.Fish, b.GetState(1, 1), "Fish 가 한 칸 하강(맨아래 제거로)");
         }
 
         [Test]

@@ -206,11 +206,11 @@ namespace CatPang.Sim
             }
         }
 
-        //# M3a: 폭탄 발동이 칸을 match 처리. 실 GPMatchChecker.ChangeMatchState L243-256 미러.
-        //# 제외 조건: 범위 밖, RainbowPang(hp>0), 고정블록(Wall/Potal/CatBox/Creator), PinkBomb.
+        //# M3b: 폭탄 발동이 칸을 match 처리. 실 GPMatchChecker.ChangeMatchState L243-256 미러.
+        //# 제외 조건: 범위 밖, RainbowPang(hp>0), 고정블록(Wall/Potal/CatBox/Creator), Fish, PinkBomb.
         //# 주의: 실 버전은 DamageBlock 호출(벽 마모) + bool 반환도 포함하지만
         //# Sim 에서는 blast 데미지를 Task4 SimBombResolver 가 담당하므로 여기선 match 플래그만 셋.
-        //# Fish 제외 조건 없음 — M3a 보드에 Fish 없음.
+        //# Ball 은 제외 안 함 — 폭탄으로 제거 가능(실게임 ChangeMatchState L250 Fish 전용 guard 미러).
         public void ChangeMatchState(SimBoard board, int row, int col)
         {
             if (board.IsValid(row, col) == false)
@@ -222,6 +222,9 @@ namespace CatPang.Sim
                 return;
 
             if (b.IsWall() || b.State == EBlockState.Potal || b.IsCatBox() || b.IsCreator())
+                return;
+
+            if (b.IsFish())
                 return;
 
             if (b.State == EBlockState.PinkBomb)

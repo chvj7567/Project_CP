@@ -48,6 +48,9 @@ namespace CatPang.Sim
         //# M3a: 조합 색폭탄 승급 RNG. seed+3 으로 분리.
         private System.Random _comboRng;
 
+        //# M3b: Fish 색폭탄 변환 RNG. seed+4 로 분리.
+        private System.Random _disappearRng;
+
         //# M3a: 화살표 생성 방향 토글(arrowPangIndex). result.Turns 홀짝으로 결정성 유지.
         //# 실게임 _arrowPangIndex 는 0/1 토글, 여기선 턴수 기반으로 동일 패턴 모방.
         private int ArrowPangIndex(int turns) { return turns % 2; }
@@ -106,6 +109,11 @@ namespace CatPang.Sim
                 {
                     continue;
                 }
+                //# M3b: Fish/Ball 이동블록 지원.
+                if (st == EBlockState.Fish || st == EBlockState.Ball)
+                {
+                    continue;
+                }
                 return false;
             }
             return true;
@@ -135,6 +143,7 @@ namespace CatPang.Sim
             //# M3a: 폭탄용 RNG(seed+2), 조합 색폭탄 승급용 RNG(seed+3).
             _bombResolver = new SimBombResolver(new System.Random(seed + 2));
             _comboRng = new System.Random(seed + 3);
+            _disappearRng = new System.Random(seed + 4);
 
             //# 보드 구성: 레코드(None 아님)면 그 state, None 이면 랜덤 일반(시드 RNG).
             SimBoard board = BuildInitialBoard(s, seed);
@@ -516,6 +525,11 @@ namespace CatPang.Sim
                 if ((matchedThisIter || collectedThisIter) == false)
                     break;
             }
+
+            //# M3b: cascade settle 후 맨아래줄 Fish/Ball 변환(실 AfterDrag 의 SetDissapearBlock).
+            //# 예약 → ApplyChanges 적용. 변환된 색폭탄/Potal 은 자동 매치 안 되므로 추가 cascade 불필요.
+            SimDisappearResolver.Resolve(board, _disappearRng);
+            SimSpecialBlocks.ApplyChanges(board);
         }
 
         //# M3a: 매치 상태인 폭탄을 발동. iteration 당 1회 호출, 기존 MaxCascadeDepth 가 무한 연쇄 종국 안전망.
@@ -572,7 +586,9 @@ namespace CatPang.Sim
                         continue;
                     if (b.CheckHp() == false)
                         continue;
-                    //# M3 대비 Fish/Ball 검사 자리(M2 엔 해당 블록 없음).
+                    //# M3b: Fish/Ball 은 hp 무관 목표블록(실 Update L190·L1005). 보드에 남으면 미클리어.
+                    if (b.IsFish() || b.IsBall())
+                        return false;
                     if (b.Hp > 0)
                         return false;
                 }
