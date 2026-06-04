@@ -30,8 +30,8 @@ public class UIRank : UIBase
 
     [SerializeField] int aiCount;
 
-    // 리더보드에서 불러올 상위 랭킹 수
-    const int TopRankLoadCount = 10;
+    //# 리더보드 상위 랭킹 로드 수. GPGS LoadScores rowCount 상한이 25이므로 그 이상 지정 불가(초과 시 클램프됨)
+    const int TopRankLoadCount = 25;
 
     [SerializeField, ReadOnly] public Defines.ESelectStage curTap;
     public override void InitUI(CHUIArg _uiArg)

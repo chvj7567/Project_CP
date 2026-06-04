@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
@@ -44,12 +45,52 @@ public class LBLobbyScene : MonoBehaviour
     LBLoginHandler _loginHandler;
     LBTutorial _tutorial;
 
+    //# 로그인 진행 중 다른 UI 클릭을 차단하는 런타임 전체화면 raycast blocker (최초 1회 생성·재사용)
+    GameObject _loginInputBlocker;
+
+    //# 로그인 시작/종료 시 호출. on이면 blocker 생성·활성·최상단, off면 비활성.
+    //# objWait 텍스트가 blocker에 가리지 않도록 blocker 위로 다시 올린다.
+    void SetLoginBlocker(bool on)
+    {
+        if (on)
+        {
+            if (_loginInputBlocker == null)
+            {
+                _loginInputBlocker = new GameObject("LoginInputBlocker", typeof(RectTransform), typeof(Image));
+                _loginInputBlocker.transform.SetParent(objWait.transform.parent, false);
+
+                RectTransform rect = _loginInputBlocker.GetComponent<RectTransform>();
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+
+                Image image = _loginInputBlocker.GetComponent<Image>();
+                image.color = new Color(0f, 0f, 0f, 0f);
+                image.raycastTarget = true;
+            }
+
+            _loginInputBlocker.SetActive(true);
+            _loginInputBlocker.transform.SetAsLastSibling();
+            objWait.transform.SetAsLastSibling();
+        }
+        else
+        {
+            if (_loginInputBlocker == null)
+                return;
+
+            _loginInputBlocker.SetActive(false);
+        }
+    }
+
     void InitButton()
     {
         if (initButton) return;
         initButton = true;
 
-        startBtn.OnClickAsObservable().Subscribe(async _ =>
+        startBtn.OnClickAsObservable()
+            .ThrottleFirst(TimeSpan.FromSeconds(0.5))
+            .Subscribe(async _ =>
         {
             if (!bundleDownload.Value || !dataDownload.Value) return;
             firstStartBtnClick = true;
@@ -86,10 +127,12 @@ public class LBLobbyScene : MonoBehaviour
             if (!CHMData.Instance.GetLoginData(CHMString.Instance.CatPang).connectGPGS)
             {
                 objWait.SetActive(true);
+                SetLoginBlocker(true);
                 ChvjUnityInfra.CHMGPGS.Instance.Login(async (success, localUser) =>
                 {
                     await _loginHandler.SetGPGSLogin(success, localUser.userName);
                     objWait.SetActive(false);
+                    SetLoginBlocker(false);
                 });
             }
 #endif
@@ -149,10 +192,12 @@ public class LBLobbyScene : MonoBehaviour
                 {
                     objWait.SetActive(true);
 #if UNITY_ANDROID && !UNITY_EDITOR
+                    SetLoginBlocker(true);
                     ChvjUnityInfra.CHMGPGS.Instance.Login(async (success, localUser) =>
                     {
                         await _loginHandler.SetGPGSLogin(success, localUser.userName);
                         objWait.SetActive(false);
+                        SetLoginBlocker(false);
                     });
 #endif
                 }
@@ -186,6 +231,8 @@ public class LBLobbyScene : MonoBehaviour
         else
         {
             startBtn.gameObject.SetActive(true);
+            //# 첫 시작 화면에도 설정 버튼 노출
+            bombBtn.gameObject.SetActive(true);
             pageMove.ActiveMoveBtn(false);
         }
     }
