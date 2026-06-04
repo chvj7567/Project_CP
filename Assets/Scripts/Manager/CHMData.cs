@@ -190,6 +190,9 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
 
                     var cloudLogin = kvp.Value;
 
+                    //# 언어는 기기 로컬 전용 — 클라우드 값으로 덮어쓰지 않는다 (옵션에서만 변경)
+                    cloudLogin.languageType = localLogin.languageType;
+
                     // 로컬 날짜 키가 클라우드보다 미래이면 로컬 일일 필드 우선
                     if (string.Compare(localLogin.lastDailyResetDateKey, cloudLogin.lastDailyResetDateKey, StringComparison.Ordinal) > 0)
                     {
