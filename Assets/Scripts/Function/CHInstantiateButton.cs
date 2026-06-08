@@ -15,6 +15,15 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
     static float buttonWidth;
     static float buttonHeight;
 
+    //# 9×9 기준 풋프린트 정규화 배율
+    const int ReferenceBoardSize = 9;
+    static float scaleFactor = 1f;
+
+    static public float GetScaleFactor()
+    {
+        return scaleFactor;
+    }
+
     static public float GetHorizontalDistance()
     {
         return buttonWidth + margin;
@@ -65,6 +74,14 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
         buttonWidth = Mathf.Abs(buttonRectTransform.rect.x * 2);
         buttonHeight = Mathf.Abs(buttonRectTransform.rect.y * 2);
 
+        //# 정사각 보드 전제(_horizontalCount == _verticalCount) — 작은 보드일수록 9×9 풋프린트를 채우도록 확대
+        scaleFactor = (float)ReferenceBoardSize / _horizontalCount;
+        buttonWidth *= scaleFactor;
+        buttonHeight *= scaleFactor;
+        margin *= scaleFactor;
+        //# 좌표 산출(아래 posDict)이 쓰는 간격값도 factor를 추종하도록 파라미터 margin 동기화
+        _margin *= scaleFactor;
+
         Dictionary<Vector2, Vector2> posDict = new Dictionary<Vector2, Vector2>();
 
         int row = 0;
@@ -86,6 +103,7 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
             GameObject addObject = Instantiate(_origin, _parent);
             RectTransform rectTransform = addObject.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = pos.Value;
+            rectTransform.localScale = Vector3.one * scaleFactor;
             var block = addObject.GetOrAddComponent<Block>();
 
             block.row = (int)pos.Key.x;

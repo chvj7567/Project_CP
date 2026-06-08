@@ -91,7 +91,11 @@ public class GPTutorial
         _guideFinger.transform.SetAsLastSibling();
 
         var holeValue = GetTutorialStageImgSettingValue(stageBlockInfoList);
+        //# 홀/핑거 크기는 블럭 sizeDelta(스케일 미반영) 기반이므로 블럭과 동일 배율로 맞춘다 (9×9면 factor=1)
+        float scaleFactor = CHInstantiateButton.GetScaleFactor();
         _guideHole.sizeDelta = holeValue.Item1;
+        _guideHole.localScale = Vector3.one * scaleFactor;
+        _guideFinger.localScale = Vector3.one * scaleFactor;
         _guideHole.anchoredPosition = holeValue.Item2;
 
         var tutorialInfo = CHMJson.Instance.GetTutorialInfo(stageInfo.tutorialID);

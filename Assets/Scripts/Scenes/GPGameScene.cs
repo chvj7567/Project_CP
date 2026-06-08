@@ -242,7 +242,9 @@ public class GPGameScene : MonoBehaviour
                 try
                 {
                     var block = boardArr[_matcher.canMatchRow, _matcher.canMatchCol];
-                    block.transform.DOScale(HintPulseScale, HintPulseDuration).OnComplete(() => block.transform.DOScale(1f, HintPulseDuration));
+                    //# 블럭은 localScale=factor라 절대값 펄스가 아닌 factor 기준 상대 펄스로 복귀 (9×9면 factor=1)
+                    float scaleFactor = CHInstantiateButton.GetScaleFactor();
+                    block.transform.DOScale(scaleFactor * HintPulseScale, HintPulseDuration).OnComplete(() => block.transform.DOScale(scaleFactor, HintPulseDuration));
                     await Task.Delay(HintCooldownMs, _tokenSource.Token);
                     await WaitWhilePaused(_tokenSource.Token);
                 }
@@ -479,8 +481,14 @@ public class GPGameScene : MonoBehaviour
             if (block == null) continue;
             float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
             block.originPos.x -= moveDis;
+            //# X는 buttonX 중앙정렬, Y는 9×9 풋프린트와 같은 세로 위치에 오도록 작은 보드를 아래로 내린다.
+            //# 이동량 = 세로간격 * (9 - boardSize) / (2*9). 9×9는 0이라 이동 없음(회귀 0).
+            int referenceBoardSize = 9;
+            float moveDisY = CHInstantiateButton.GetVerticalDistance() * (referenceBoardSize - boardSize) / (2f * referenceBoardSize);
+            block.originPos.y -= moveDisY;
             block.SetOriginPos();
-            block.rectTransform.DOScale(1f, delay);
+            //# 스폰 트윈 목표 스케일을 CHInstantiateButton 산출 factor로 (9×9면 1.0)
+            block.rectTransform.DOScale(CHInstantiateButton.GetScaleFactor(), delay);
 
             var info = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
             if (info == null)
@@ -877,9 +885,13 @@ public class GPGameScene : MonoBehaviour
                     guideBackground.SetActive(true);
                     guideHole.gameObject.SetActive(true);
                     var sv = _tutorial.TutorialBlockSetting(tutInfo.connectNextBlock);
+                    //# 홀 크기는 블럭 sizeDelta(스케일 미반영) 기반이므로 블럭과 동일 배율로 맞춘다 (9×9면 factor=1)
+                    float guideScaleFactor = CHInstantiateButton.GetScaleFactor();
                     guideHole.sizeDelta = sv.Item1;
+                    guideHole.localScale = Vector3.one * guideScaleFactor;
                     guideHole.anchoredPosition = sv.Item2;
                     guideFinger.gameObject.SetActive(true);
+                    guideFinger.localScale = Vector3.one * guideScaleFactor;
                     guideFinger.anchoredPosition = sv.Item2;
                     guideDesc.SetStringID(tutInfo.descNextBlockStringID);
                 }

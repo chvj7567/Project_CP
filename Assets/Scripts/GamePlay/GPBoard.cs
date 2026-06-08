@@ -73,10 +73,16 @@ public class GPBoard
         block.boom = false;
         block.squareMatch = false;
         block.remove = false;
+        //# 블럭은 localScale=factor로 확대돼 있으므로 새 블럭도 동일 배율로 복귀시킨다 (9×9면 factor=1)
+        float scaleFactor = CHInstantiateButton.GetScaleFactor();
         if (isDelay)
-            block.rectTransform.DOScale(1f, delay);
+        {
+            block.rectTransform.DOScale(scaleFactor, delay);
+        }
         else
-            block.rectTransform.localScale = Vector3.one;
+        {
+            block.rectTransform.localScale = Vector3.one * scaleFactor;
+        }
     }
 
     public async Task DownBlock()
