@@ -393,6 +393,18 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
         return stageInfoList.Max(_ => _.group);
     }
 
+    //# 노멀/하드 난이도의 마지막 stage 번호 (maxGroup 이하 그룹 중 최대 stage)
+    public int GetMaxStage(int maxGroup)
+    {
+        return stageInfoList.FindAll(_ => _.group <= maxGroup).Max(_ => _.stage);
+    }
+
+    //# 보스 포함 전체 최대 stage 번호 (보스 stage가 오프셋 포함이라 전체 최대)
+    public int GetMaxStage()
+    {
+        return stageInfoList.Max(_ => _.stage);
+    }
+
     public List<StageBlockInfo> GetStageBlockInfoList(int stage)
     {
         return stageBlockInfoList.FindAll(_ => _.stage == stage);

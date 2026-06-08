@@ -117,7 +117,47 @@ public class UIGameEnd : UIBase
 
         ChvjUnityInfra.CHMAdmob.Instance.AcquireReward += AcquireReward;
 
+        UpdateNextButtonState();
+
         BindUI();
+    }
+
+    //# 현재 플레이한 스테이지 번호. 보스는 오프셋(BossStageStartValue) 포함 raw 값.
+    private int GetCurrentStage()
+    {
+        Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
+        switch (selectStage)
+        {
+            case ESelectStage.Hard: return PlayerPrefs.GetInt(CHMString.Instance.HardStage);
+            case ESelectStage.Boss: return PlayerPrefs.GetInt(CHMString.Instance.BossStage);
+            case ESelectStage.Normal: return PlayerPrefs.GetInt(CHMString.Instance.NormalStage);
+            default: return 0;
+        }
+    }
+
+    //# 현재 난이도의 마지막 스테이지면 다음 스테이지 버튼을 비활성화한다.
+    private void UpdateNextButtonState()
+    {
+        if (nextBtn == null)
+            return;
+
+        int currentStage = GetCurrentStage();
+
+        Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
+        int maxStage;
+        if (selectStage == ESelectStage.Boss)
+        {
+            //# 보스 stage는 오프셋 포함 — 전체 최대 stage가 보스 마지막
+            maxStage = CHMJson.Instance.GetMaxStage();
+        }
+        else
+        {
+            //# 노멀/하드는 공유 테이블(group <= BossStageStartValue)의 최대 stage
+            maxStage = CHMJson.Instance.GetMaxStage(CHMData.Instance.BossStageStartValue);
+        }
+
+        //# 마지막 스테이지면 다음 진행 불가 — 버튼은 보이되 클릭만 차단
+        nextBtn.interactable = currentStage < maxStage;
     }
 
     // 실패 화면에 종료 사유와 미달 목표를 표시한다.
@@ -202,14 +242,8 @@ public class UIGameEnd : UIBase
     {
         nextBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            int currentStage = 0;
             Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
-            switch (selectStage)
-            {
-                case ESelectStage.Hard: currentStage = PlayerPrefs.GetInt(CHMString.Instance.HardStage); break;
-                case ESelectStage.Boss: currentStage = PlayerPrefs.GetInt(CHMString.Instance.BossStage); break;
-                case ESelectStage.Normal: currentStage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage); break;
-            }
+            int currentStage = GetCurrentStage();
 
             int nextStage = currentStage + 1;
 
@@ -238,14 +272,7 @@ public class UIGameEnd : UIBase
         {
             retryBtn.OnClickAsObservable().Subscribe(_ =>
             {
-                int currentStage = 0;
-                Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
-                switch (selectStage)
-                {
-                    case ESelectStage.Hard: currentStage = PlayerPrefs.GetInt(CHMString.Instance.HardStage); break;
-                    case ESelectStage.Boss: currentStage = PlayerPrefs.GetInt(CHMString.Instance.BossStage); break;
-                    case ESelectStage.Normal: currentStage = PlayerPrefs.GetInt(CHMString.Instance.NormalStage); break;
-                }
+                int currentStage = GetCurrentStage();
 
                 // 같은 스테이지로 재시작 — PlayerPrefs는 그대로 두고, 로비 진입 후 동일 stage의 UIGameStart 자동 표시.
                 LBLobbyScene.fromGame = true;
