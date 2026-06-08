@@ -286,33 +286,3 @@ docs/design/                     기능 기획서 + 콘텐츠 감사
 docs/qa-reports/                 헤드리스 시뮬 리포트
 ```
 
----
-
-## 📸 스크린샷 현황
-
-`docs/images/` 에 반영된 캡처 (17컷). 캡처가 없는 항목(폭탄 합성 단독 컷·시뮬 리포트 화면)은 이미지 없이 본문 텍스트로만 설명한다.
-
-| 파일명 | 화면 | 위치 |
-|---|---|---|
-| `title_loading.png` · `title_first.png` | 로딩 · 타이틀(시작) | 상단 히어로 |
-| `gameplay_board.png` | 인게임 9×9 보드 | §어떤 게임인가 |
-| `game_clear.png` · `game_failed.png` | 클리어 · 실패 결과 | §어떤 게임인가 |
-| `select_mode.png` | 일반/하드/보스 모드 설명 | §모드 |
-| `ingame1.png` · `ingame2.png` · `ingame3.png` | 특수블록 생성 → 발동/폭발 → 보상 흐름 | §1 매치 코어 |
-| `boss1.png` · `boss2.png` · `boss3.png` | 보스전 진행(벽 소환 패턴 포함) | §3 장애물·보스 |
-| `daily_mission.png` | 일일 미션 진행도·보상 | §4 일일 미션 |
-| `skin_collection.jpg` · `shop.jpg` · `ranking.jpg` | 골드 상점·유료 상점·랭킹 | §5 컬렉션 |
-| `tool_create_map.png` · `tool_string.png` | 스테이지 에디터·로컬라이즈 툴 | §6 툴체인 |
-
-> 참고: `gameplay_board.png`(인게임 보드)·`boss1/3.png`·`ingame*.png` 은 작은 해상도로 캡처돼 다소 흐릿함 — 여유 될 때 고해상도 재촬영 권장.
-> (선택) 풀 플레이 영상은 `▶️ 전체 플레이 영상` 섹션의 주석을 풀고 GitHub 업로드 링크 또는 `docs/videos/full_play.mp4` 로 연결.
-
-**미사용 보너스 캡처:** `stage_start.png`(스테이지 시작 정보 팝업 — 노멀 "제한 없음 / 횟수 70" 근거) 는 `docs/images/` 에 복사돼 있으나 본문엔 미배치. 필요 시 §모드 또는 §실행 방법에 삽입 가능.
-
----
-
-## 링크
-
-- 개발 블로그: https://blog.naver.com/chvj7567
-
-> 본 README 는 개발 진행 단계 기준입니다. 콘텐츠 수치의 단일 진실은 `docs/design/` 기획서와 `Assets/AssetBundleResources/json/` 데이터에 있습니다.
