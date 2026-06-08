@@ -193,9 +193,13 @@ flowchart TB
 
 > **게임:** 왕관·딸기·산타 등 6종 테마 스킨을 수집해 고양이 블록 외형을 바꿉니다. 광고·인앱 결제·리더보드로 라이브 운영 요소를 갖췄습니다.
 
-| 골드 상점(스킨) | 유료 상점(IAP) | 랭킹(리더보드) |
-|:---:|:---:|:---:|
-| ![골드 상점 — 파티/산타/딸기 등 고양이 스킨 구매](docs/images/skin_collection.png) | ![유료 상점 — 광고 제거·시간/횟수 증가 인앱 결제](docs/images/shop.jpg) | ![랭킹 — 일반/하드/보스 도달 스테이지 리더보드](docs/images/ranking.jpg) |
+| 골드 상점(스킨) | 유료 상점(IAP) |
+|:---:|:---:|
+| ![골드 상점 — 파티/산타/딸기 등 고양이 스킨 구매](docs/images/skin_collection.jpg) | ![유료 상점 — 광고 제거·시간/횟수 증가 인앱 결제](docs/images/shop.jpg) |
+
+| 랭킹(리더보드) |
+|:---:|
+| ![랭킹 — 일반/하드/보스 도달 스테이지 리더보드](docs/images/ranking.jpg) |
 
 <details>
 <summary>구조 — 어떻게 구성했나</summary>
@@ -301,7 +305,7 @@ docs/qa-reports/                 헤드리스 시뮬 리포트
 | `ingame1.png` · `ingame2.png` · `ingame3.png` | 특수블록 생성 → 발동/폭발 → 보상 흐름 | §1 매치 코어 |
 | `boss1.png` · `boss2.png` · `boss3.png` | 보스전 진행(벽 소환 패턴 포함) | §3 장애물·보스 |
 | `daily_mission.png` | 일일 미션 진행도·보상 | §4 일일 미션 |
-| `skin_collection.png` · `shop.jpg` · `ranking.jpg` | 골드 상점·유료 상점·랭킹 | §5 컬렉션 |
+| `skin_collection.jpg` · `shop.jpg` · `ranking.jpg` | 골드 상점·유료 상점·랭킹 | §5 컬렉션 |
 | `tool_create_map.png` · `tool_string.png` | 스테이지 에디터·로컬라이즈 툴 | §6 툴체인 |
 
 > 참고: `gameplay_board.png`(인게임 보드)·`boss1/3.png`·`ingame*.png` 은 작은 해상도로 캡처돼 다소 흐릿함 — 여유 될 때 고해상도 재촬영 권장.
