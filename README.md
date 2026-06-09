@@ -2,18 +2,21 @@
 
 *9×9 보드 위에서 고양이를 밀어 터뜨린다 — 폭탄 합성·보스전·일일 미션까지 갖춘 모바일 매치-3.*
 
-> 🎯 **개인 프로젝트** · 코드네임 **CatPang** · Unity 6 · Android(Google Play) · 싱글플레이
+> 🎯 **개인 프로젝트** · 코드네임 **CatPang** · Unity 6 · Android(Google Play) · 싱글플레이 · **🚀 Google Play 정식 출시**
 >
 > 🎮 **한 줄 컨셉** · 9×9 격자에서 같은 색 3개·2×2 정사각형을 맞춰 터뜨리고, 매치 모양으로 만든 **특수블록을 합성**해 장애물과 보스를 돌파
 >
 > 🧱 **설계 키워드** · 매니저 허브 오케스트레이션 · 게임/인프라 분리(자체 UPM 패키지) · 데이터 주도(JSON + Addressables) · MVVM + UniRx · 헤드리스 밸런스 시뮬
 
+[![Google Play 다운로드](https://img.shields.io/badge/Google_Play-출시_·_다운로드-34A853?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=com.chvj7567.catpang)
 [![장르](https://img.shields.io/badge/장르-매치--3_퍼즐-8B5CF6)]()
 [![플랫폼](https://img.shields.io/badge/플랫폼-Android_·_Google_Play-3B82F6)]()
 [![보드](https://img.shields.io/badge/보드-9×9_그리드-EF4444)]()
 [![스테이지](https://img.shields.io/badge/스테이지-노멀_150_·_하드_150_·_보스_100-22C55E)]()
 [![블록](https://img.shields.io/badge/블록-80여_종_·_특수블록_합성-EAB308)]()
 [![개발](https://img.shields.io/badge/개발-1인_·_Unity_6-1F2937)]()
+
+> 📱 **지금 플레이하기** — [**Google Play 스토어에서 CatPang 다운로드**](https://play.google.com/store/apps/details?id=com.chvj7567.catpang) (`com.chvj7567.catpang`)
 
 ### ▶️ 전체 플레이 영상
 
