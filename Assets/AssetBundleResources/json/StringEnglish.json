@@ -738,5 +738,25 @@
         {
             "stringID": 184,
             "value": "Pop Cat Block 5"
+        },
+        {
+            "stringID": 185,
+            "value": "Daily"
+        },
+        {
+            "stringID": 186,
+            "value": "Update Required"
+        },
+        {
+            "stringID": 187,
+            "value": "Please update to the latest version to continue."
+        },
+        {
+            "stringID": 188,
+            "value": "Update Ready"
+        },
+        {
+            "stringID": 189,
+            "value": "Restart now to apply the update?"
         }
     ]
