@@ -33,17 +33,31 @@ public class UIShop : UIBase
     public override void InitUI(CHUIArg _uiArg)
     {
         arg = _uiArg as UIShopArg;
+
+        //# 매 ShowUI(재진입) 마다 골드/HP/공격력을 현재 데이터로 갱신
+        RefreshStatus();
     }
 
-    private void Start()
+    //# 골드/HP/공격력 텍스트를 현재 데이터로 갱신 (InitUI에서 매 진입 호출)
+    private void RefreshStatus()
     {
-        var checkPurchase = ChvjUnityInfra.CHMIAP.Instance.HadPurchased(CHMString.Instance.Product_Name_RemoveAD);
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData == null)
             return;
 
         hpText.SetText(loginData.hp);
         attackText.SetText(loginData.attack);
+
+        int gold = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
+        goldText.SetText(gold);
+    }
+
+    private void Start()
+    {
+        bool checkPurchase = ChvjUnityInfra.CHMIAP.Instance.HadPurchased(CHMString.Instance.Product_Name_RemoveAD);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        if (loginData == null)
+            return;
 
         if (checkPurchase)
         {
@@ -52,9 +66,6 @@ public class UIShop : UIBase
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);
         }
-
-        var gold = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
-        goldText.SetText(gold);
 
         var shopScriptList = CHMJson.Instance.GetShopInfoListAll();
         if (shopScriptList == null)
