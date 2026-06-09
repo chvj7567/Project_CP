@@ -46,6 +46,40 @@ namespace ChvjUnityInfra
 #endif
         }
 
+        //# 앱 재개(resume) 시 미완료 업데이트 재확인 (spec §5.1).
+        //# 최신 정보를 다시 받아 _info를 갱신한 뒤(부팅 시점 _info는 stale일 수 있음) 결과를 통지.
+        //# Immediate 진행 중 → ImmediateInProgress, Flexible 다운로드 완료 → FlexibleDownloaded.
+        public async Task<EAppUpdateResume> CheckResumeAsync()
+        {
+#if UNITY_EDITOR
+            return EAppUpdateResume.None;
+#else
+            try
+            {
+                PlayAsyncOperation<AppUpdateInfo, AppUpdateErrorCode> op = Manager.GetAppUpdateInfo();
+                await ToTask(op);
+
+                if (op.Error != AppUpdateErrorCode.NoError)
+                    return EAppUpdateResume.None;
+
+                _info = op.GetResult();
+
+                if (_info.UpdateAvailability == UpdateAvailability.DeveloperTriggeredUpdateInProgress)
+                    return EAppUpdateResume.ImmediateInProgress;
+
+                if (_info.AppUpdateStatus == AppUpdateStatus.Downloaded)
+                    return EAppUpdateResume.FlexibleDownloaded;
+
+                return EAppUpdateResume.None;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[CHMAppUpdate] CheckResumeAsync 실패: {e.Message}");
+                return EAppUpdateResume.None;
+            }
+#endif
+        }
+
         //# Immediate 강제 업데이트. 성공 시 시스템이 앱 재시작. 취소/실패면 false.
         public async Task<bool> StartImmediateAsync()
         {

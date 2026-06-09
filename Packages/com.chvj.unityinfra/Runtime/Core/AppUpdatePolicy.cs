@@ -8,6 +8,16 @@ namespace ChvjUnityInfra
         Flexible,
     }
 
+    //# 앱 재개(resume) 시 미완료 업데이트 재확인 결과 (spec §5.1)
+    public enum EAppUpdateResume
+    {
+        None,
+        //# Immediate가 진행 중이었음 → Immediate 재개 필요
+        ImmediateInProgress,
+        //# Flexible 다운로드가 이미 완료됨 → 재시작 안내 필요
+        FlexibleDownloaded,
+    }
+
     //# In-App Update 우선순위 → 처리 액션 판정. Google.Play 타입에 의존하지 않는 순수 로직.
     public static class AppUpdatePolicy
     {

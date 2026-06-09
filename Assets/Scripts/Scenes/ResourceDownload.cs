@@ -96,53 +96,22 @@ public class ResourceDownload : MonoBehaviour
 
 #if UNITY_INFRA_APPUPDATE
     //# 부팅 시 인앱 업데이트 흐름. Immediate는 차단(강제), Flexible은 백그라운드.
+    //# UI 표시/완료 콜백은 씬 비종속 호스트(CHMMain)에 위임한다 — 이 씬은 곧 파괴되므로
+    //# Flexible 다운로드 완료(수십 초~분) 시점엔 콜백 대상이 살아 있어야 한다.
     async Task RunAppUpdateFlow()
     {
         ChvjUnityInfra.EAppUpdateAction action = await ChvjUnityInfra.CHMAppUpdate.Instance.CheckAsync();
 
         if (action == ChvjUnityInfra.EAppUpdateAction.Immediate)
         {
-            bool ok = await ChvjUnityInfra.CHMAppUpdate.Instance.StartImmediateAsync();
             //# 강제 업데이트는 탈출 불가 — 취소(닫기)해도 안내 후 무한 재요청(spec §8).
-            while (ok == false)
-            {
-                await ShowForcedUpdateConfirm();
-                ok = await ChvjUnityInfra.CHMAppUpdate.Instance.StartImmediateAsync();
-            }
+            await CHMMain.Instance.RunForcedImmediateLoopAsync();
         }
         else if (action == ChvjUnityInfra.EAppUpdateAction.Flexible)
         {
-            ChvjUnityInfra.CHMAppUpdate.Instance.StartFlexible(ShowFlexibleCompleteConfirm);
+            //# 완료 콜백을 씬 비종속 호스트로 라우팅(부팅 씬 파괴 후에도 안전).
+            ChvjUnityInfra.CHMAppUpdate.Instance.StartFlexible(CHMMain.Instance.ShowFlexibleCompleteConfirm);
         }
-    }
-
-    //# 강제 업데이트 안내 팝업. 확인/닫기 어느 경로든 완료되면 호출부가 즉시 재요청한다(탈출 불가).
-    Task ShowForcedUpdateConfirm()
-    {
-        TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-        UIConfirmArg arg = new UIConfirmArg
-        {
-            confirmType = EConfirmType.Confirm,
-            txtTitle = CHMString.Instance.GetString(CHMString.Instance.AppUpdateForcedTitle),
-            txtDesc = CHMString.Instance.GetString(CHMString.Instance.AppUpdateForcedDesc),
-            onYes = () => tcs.TrySetResult(true),
-            onClose = () => tcs.TrySetResult(true),
-        };
-        CHMUI.Instance.ShowUI(Defines.EUI.UIConfirm, arg);
-        return tcs.Task;
-    }
-
-    //# Flexible 다운로드 완료 시 재시작 안내. Yes면 설치.
-    void ShowFlexibleCompleteConfirm()
-    {
-        UIConfirmArg arg = new UIConfirmArg
-        {
-            confirmType = EConfirmType.YesNo,
-            txtTitle = CHMString.Instance.GetString(CHMString.Instance.AppUpdateReadyTitle),
-            txtDesc = CHMString.Instance.GetString(CHMString.Instance.AppUpdateReadyDesc),
-            onYes = () => ChvjUnityInfra.CHMAppUpdate.Instance.CompleteFlexibleUpdate(),
-        };
-        CHMUI.Instance.ShowUI(Defines.EUI.UIConfirm, arg);
     }
 #endif
 }
