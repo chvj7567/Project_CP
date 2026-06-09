@@ -28,7 +28,6 @@ public class LBLobbyScene : MonoBehaviour
     [SerializeField] Button bombBtn;
     [SerializeField] Button menuBtn;
     [SerializeField] Button rankingBtn;
-    [SerializeField] CHAdvertise adScript;
     [SerializeField] ReactiveProperty<bool> dataDownload = new ReactiveProperty<bool>();
     [SerializeField] ReactiveProperty<bool> bundleDownload = new ReactiveProperty<bool>();
     [SerializeField] GameObject guideBackground;

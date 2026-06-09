@@ -30,7 +30,18 @@ public class MissionScrollViewItem : MonoBehaviour
             if (IsAdWatchMission()
                 && DailyMissionService.GetDailyProgress(_info) < _info.clearValue)
             {
-                CHMAdmob.Instance.ShowRewardedAd();
+                //# 광고 제거 구매자(구매 불가 == false)는 광고 없이 시청 효과를 직접 적용
+                if (ChvjUnityInfra.CHMIAP.Instance.CanBuyFromID(CHMString.Instance.Product_ID_RemoveAD) == false)
+                {
+                    //# 일일 광고 카운터 증가 + 저장 (실제 광고 시청 완료와 동일 효과)
+                    DailyMissionService.OnAdWatched();
+                    //# 이 아이템 표시 갱신 — 진행도/라벨("받기")/버튼 활성. 전체 리스트 리프레시는 외부 강제 불가.
+                    RefreshDailyDisplay();
+                }
+                else
+                {
+                    CHMAdmob.Instance.ShowRewardedAd();
+                }
                 return;
             }
 
@@ -202,15 +213,34 @@ public class MissionScrollViewItem : MonoBehaviour
             }
             else
             {
-                missionValueText.SetStringID(20);
-                missionValueText.SetText(Mathf.Min(current, target), target);
+                RefreshDailyDisplay();
+            }
+        }
+    }
 
-                // 광고 미션은 미달 시에도 버튼 활성화 (클릭 시 리워드 광고 재생)
-                rewardBtn.interactable = IsAdWatchMission() || current >= target;
+    //# 일일 미션(미클리어) 진행도/라벨/버튼 활성 상태를 현재 진행도 기준으로 갱신.
+    //# Init의 일일 탭 else 분기와 광고 가드 클릭 핸들러에서 공용으로 호출한다.
+    void RefreshDailyDisplay()
+    {
+        int current = DailyMissionService.GetDailyProgress(_info);
+        int target = _info.clearValue;
 
-                // 광고 미션 미시청 — 버튼 라벨 "보기"
-                if (IsAdWatchMission() && current < target && rewardBtnText != null)
-                    rewardBtnText.SetStringID(172);
+        missionValueText.SetStringID(20);
+        missionValueText.SetText(Mathf.Min(current, target), target);
+
+        //# 광고 미션은 미달 시에도 버튼 활성화 (클릭 시 리워드 광고 재생)
+        rewardBtn.interactable = IsAdWatchMission() || current >= target;
+
+        //# 라벨은 두 분기 모두 명시 — 광고 미션 미시청만 "보기"(172), 그 외 "받기"(173)
+        if (rewardBtnText != null)
+        {
+            if (IsAdWatchMission() && current < target)
+            {
+                rewardBtnText.SetStringID(172);
+            }
+            else
+            {
+                rewardBtnText.SetStringID(173);
             }
         }
     }
