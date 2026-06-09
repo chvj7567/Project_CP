@@ -21,13 +21,9 @@
 
 ### ▶️ 전체 플레이 영상
 
-<!-- TODO: 풀 플레이 영상 자리 — 아래 주석을 풀고 URL 을 채운다.
-     A) mp4 를 GitHub README/이슈/PR 편집창에 드래그업로드 → 생성된
-        https://github.com/user-attachments/assets/... 링크를 그대로 붙이면 인라인 재생
-     B) docs/videos/full_play.mp4 로 커밋 후 같은 경로 링크 -->
-<!-- https://github.com/user-attachments/assets/REPLACE_ME -->
+[![CatPang — 플레이 영상 (YouTube)](https://img.youtube.com/vi/i_XJVvsrXBw/hqdefault.jpg)](https://youtube.com/shorts/i_XJVvsrXBw)
 
-> 한 스테이지 플레이 — 상단 목표 블록 + 이동수/타이머, 드래그로 색 맞추기, 특수블록 생성과 연쇄 폭발, 클리어 연출.
+> 한 스테이지 플레이 — 상단 목표 블록 + 이동수/타이머, 드래그로 색 맞추기, 특수블록 생성과 연쇄 폭발, 클리어 연출. (썸네일 클릭 시 YouTube 로 이동)
 
 ---
 
