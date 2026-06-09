@@ -9,18 +9,19 @@ namespace ChvjUnityInfra.Editor
     /// <summary>
     /// ChvjUnityInfra 패키지의 모듈 설정 윈도우.
     /// Tools/ChvjUnityInfra/Settings 메뉴로 열림.
-    /// 탭: Ads / IAP / Social — 각 탭에서 모듈 토글 + Config 편집 + 사용 가이드.
+    /// 탭: Ads / IAP / Social / App Update — 각 탭에서 모듈 토글 + Config 편집 + 사용 가이드.
     /// </summary>
     public class ChvjUnityInfraSettingsWindow : EditorWindow
     {
         private const string ADS_DEFINE = "UNITY_INFRA_ADS";
         private const string IAP_DEFINE = "UNITY_INFRA_IAP";
         private const string SOCIAL_DEFINE = "UNITY_INFRA_SOCIAL";
+        private const string APPUPDATE_DEFINE = "UNITY_INFRA_APPUPDATE";
 
         private const string AD_CONFIG_PATH = "Assets/Resources/ChvjUnityInfra/AdConfig.asset";
         private const string IAP_CONFIG_PATH = "Assets/Resources/ChvjUnityInfra/IAPProductConfig.asset";
 
-        private static readonly string[] TabLabels = { "Ads", "IAP", "Social" };
+        private static readonly string[] TabLabels = { "Ads", "IAP", "Social", "App Update" };
 
         private const string TabIndexKey = "ChvjUnityInfra.SettingsWindow.TabIndex";
 
@@ -57,6 +58,7 @@ namespace ChvjUnityInfra.Editor
                 case 0: DrawAdsTab(); break;
                 case 1: DrawIapTab(); break;
                 case 2: DrawSocialTab(); break;
+                case 3: DrawAppUpdateTab(); break;
             }
             EditorGUILayout.EndScrollView();
         }
@@ -188,6 +190,41 @@ namespace ChvjUnityInfra.Editor
                 "GPGS 모듈이 꺼져 있습니다.\n" +
                 "'Use GPGS' 체크 → 컴파일 완료 후 사용 가이드가 표시됩니다.\n" +
                 "전제: Google Play Games Plugin for Unity 임포트 필요 + Android 플랫폼 빌드.",
+                MessageType.Warning);
+#endif
+        }
+
+        // ────────── App Update ──────────
+
+        private void DrawAppUpdateTab()
+        {
+            EditorGUILayout.LabelField("Google Play In-App Updates (Android)", EditorStyles.boldLabel);
+            EditorGUILayout.Space();
+
+            DrawToggle("Use App Update", APPUPDATE_DEFINE);
+
+            EditorGUILayout.Space();
+
+#if UNITY_INFRA_APPUPDATE
+            EditorGUILayout.HelpBox(
+                "사용 스텝:\n" +
+                "1. 'Use App Update' 체크 (이미 켜져 있음)\n" +
+                "2. Google 'In-App Updates' Unity 플러그인(.unitypackage) 임포트\n" +
+                "3. 부팅 코드는 ResourceDownload.cs에 이미 통합됨 (Android 한정):\n" +
+                "   #if UNITY_INFRA_APPUPDATE\n" +
+                "   EAppUpdateAction a = await CHMAppUpdate.Instance.CheckAsync();\n" +
+                "   #endif\n" +
+                "4. 정책: 우선순위 >= 4 → Immediate(강제), 그 외 → Flexible(권장)\n" +
+                "   우선순위는 Play Console/Developer API의 inAppUpdatePriority로 출시 시 지정\n" +
+                "\n" +
+                "주의: Android 전용. 에디터/사이드로드는 항상 '업데이트 없음'.\n" +
+                "실동작 검증은 내부 테스트 트랙 업로드 후 구버전→신버전 시나리오.",
+                MessageType.Info);
+#else
+            EditorGUILayout.HelpBox(
+                "App Update 모듈이 꺼져 있습니다.\n" +
+                "'Use App Update' 체크 → 컴파일 완료 후 사용 가이드가 표시됩니다.\n" +
+                "전제: Google 'In-App Updates' Unity 플러그인 임포트 필요 + Android 플랫폼 빌드.",
                 MessageType.Warning);
 #endif
         }

@@ -28,6 +28,12 @@ public class CHMString : ChvjUnityInfra.CHSingletonStatic<CHMString>
     public string Product_Name_AddMove = "AddMove";
     public string Product_ID_AddMove = "com.catpang.product3";
 
+    //# In-App Update UIConfirm 문구 stringID (String*.json 의 stringID 와 1:1)
+    public int AppUpdateForcedTitle = 186;
+    public int AppUpdateForcedDesc = 187;
+    public int AppUpdateReadyTitle = 188;
+    public int AppUpdateReadyDesc = 189;
+
     public string GetString(int stringID)
     {
         var loginData = CHMData.Instance.GetLoginData(CatPang);

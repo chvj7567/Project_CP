@@ -1,0 +1,24 @@
+{
+  "name": "com.chvj.unityinfra.appupdate",
+  "rootNamespace": "ChvjUnityInfra",
+  "references": [
+    "com.chvj.unityinfra",
+    "Google.Play.AppUpdate",
+    "Google.Play.Common",
+    "Google.Play.Core"
+  ],
+  "includePlatforms": [
+    "Android",
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [
+    "UNITY_INFRA_APPUPDATE"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
