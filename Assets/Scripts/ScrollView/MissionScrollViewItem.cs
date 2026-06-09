@@ -94,6 +94,8 @@ public class MissionScrollViewItem : MonoBehaviour
                 var clearValue = _info.clearValue + (_missionData.repeatCount * _info.addValue);
                 SetBtnInteractable(clearValue);
                 missionValueText.SetText(_collectionData.value - _missionData.startValue, clearValue);
+                //# 강제 종료 시 유실 방지 — 수령 즉시 영구 저장 (Daily/Special 탭과 동일)
+                CHMData.Instance.SaveData(CHMString.Instance.CatPang);
             }
             else if (_info.tapIndex == UIMission.MissionTabSpecial)
             {
