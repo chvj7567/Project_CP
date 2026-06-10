@@ -63,7 +63,7 @@ public class UIGameEnd : UIBase
     // 결과 텍스트(Failed/CLEAR) 연출 시간(초)
     private const float ResultTextRevealDuration = 1f;
     // 광고 시청 보상으로 지급하는 골드 배수
-    private const int AdRewardGoldMultiplier = 3;
+    private const int AdRewardGoldMultiplier = 2;
 
     // 실패 사유 로컬라이제이션 문자열 ID (StringKorea/StringEnglish.json)
     private const int FailTimeOverStringID = 174;
@@ -111,7 +111,8 @@ public class UIGameEnd : UIBase
             else
             {
                 goldText.SetText(arg.gold);
-                goldx2Text.SetText(arg.gold * 2);
+                //# 광고 보상 표시값을 실지급 배율(AdRewardGoldMultiplier)과 일치시킴
+                goldx2Text.SetText(arg.gold * AdRewardGoldMultiplier);
             }
         }
 

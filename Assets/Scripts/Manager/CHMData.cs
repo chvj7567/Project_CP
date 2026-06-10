@@ -269,12 +269,15 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         Debug.Log($"Delete : {Application.persistentDataPath}/{path}.json");
         File.Delete($"{Application.persistentDataPath}/{path}.json");
 
+        //# Clear() 이후에 GetLoginData 를 호출하면 connectGPGS=false 인 새 데이터가 생성되므로, Clear() 전에 값을 보관
+        bool connectGPGS = GetLoginData(path).connectGPGS;
+
         loginLocalDataDic.Clear();
         collectionLocalDataDic.Clear();
         missionLocalDataDic.Clear();
         shopLocalDataDic.Clear();
 
-        if (GetLoginData(path).connectGPGS)
+        if (connectGPGS)
         {
 #if UNITY_ANDROID
             ChvjUnityInfra.CHMGPGS.Instance.DeleteCloud(path, success =>

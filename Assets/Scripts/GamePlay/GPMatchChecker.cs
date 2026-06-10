@@ -25,6 +25,9 @@ public class GPMatchChecker
 
     public void SetBlockTypeCount(int count) => _blockTypeCount = count;
 
+    //# 크리에이터 블록 사망 시 변환할 일반 블록 종류 수 — GPBombResolver 가 Damage 인자로 사용
+    public int BlockTypeCount => _blockTypeCount;
+
     public void SetMoveIndices(int idx1, int idx2)
     {
         _moveIndex1 = idx1;

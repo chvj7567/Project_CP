@@ -145,7 +145,10 @@ public class GPBombResolver
             }
         }
         SaveBombCollectionData(specialBlock);
-        if (ani) _onBoomTrigger();
+        if (ani)
+        {
+            await _onBoomTrigger();
+        }
         await Task.Delay(Boom3CleanupDelayMs, _token);
         await GPGameScene.WaitWhilePaused(_token);
         foreach (var go in blueHoleList) CHMResource.Instance.Destroy(go);
@@ -480,10 +483,10 @@ public class GPBombResolver
                 {
                     switch (random)
                     {
-                        case 0: { tempW -= 1; var b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
-                        case 1: { tempW += 1; var b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
-                        case 2: { tempH -= 1; var b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
-                        case 3: { tempH += 1; var b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
+                        case 0: { tempW -= 1; Block b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(_matcher.BlockTypeCount); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
+                        case 1: { tempW += 1; Block b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(_matcher.BlockTypeCount); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
+                        case 2: { tempH -= 1; Block b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(_matcher.BlockTypeCount); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
+                        case 3: { tempH += 1; Block b = _board.IsValidIndex(tempW, tempH) ? arr[tempW, tempH] : null; if (b != null && b.IsNormalBlock()) { block.Damage(_matcher.BlockTypeCount); change = true; b.changeHp = 1; b.changeBlockState = changeBlock; b.checkHp = false; } } break;
                     }
                     if (tempW < 0 || tempW > size || tempH < 0 || tempH > size) break;
                 } while (!change);

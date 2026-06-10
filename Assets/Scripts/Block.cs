@@ -107,7 +107,11 @@ public class Block : MonoBehaviour
             Vector2 rectPosition;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(backRect, _.position, _.pressEventCamera, out rectPosition);
 
-            var angle = EvalDragAngle(originPos, rectPosition);
+            float angle = EvalDragAngle(originPos, rectPosition);
+
+            //# 드래그 거리가 임계값 미달이면 -1f 반환 — 스와이프로 처리하지 않고 무시
+            if (angle < 0f)
+                return;
 
             int swipe = (((int)angle + 45) % 360) / 90;
 
