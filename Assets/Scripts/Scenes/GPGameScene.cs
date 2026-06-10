@@ -930,7 +930,25 @@ public class GPGameScene : MonoBehaviour
             failInfo = clear ? null : BuildFailInfo(),
         });
 
-        if (clear) SaveClearData();
+        if (clear)
+        {
+            SaveClearData();
+            ShowInterstitialOnClear();
+        }
+    }
+
+    //# 클리어 시 10의 배수 스테이지면 전면 광고를 노출한다(광고 제거 구매자는 제외).
+    //# 노멀/하드 전용 — 보스는 PlayerPrefs 값이 오프셋(100000+)이라 1-based 간격 판정에 부적합하므로 제외.
+    private void ShowInterstitialOnClear()
+    {
+        if (_selectStage == ESelectStage.Boss)
+            return;
+
+        int clearedStage = _selectStage == ESelectStage.Hard
+            ? PlayerPrefs.GetInt(CHMString.Instance.HardStage)
+            : PlayerPrefs.GetInt(CHMString.Instance.NormalStage);
+
+        CHAdvertise.ShowInterstitialIfEligible(clearedStage);
     }
 
     private void SaveClearData()
