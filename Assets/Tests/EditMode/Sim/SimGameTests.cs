@@ -1,3 +1,4 @@
+#if UNITY_INCLUDE_TESTS
 using System.IO;
 using NUnit.Framework;
 using static Defines;
@@ -187,3 +188,4 @@ namespace CatPang.Sim.Tests
         }
     }
 }
+#endif

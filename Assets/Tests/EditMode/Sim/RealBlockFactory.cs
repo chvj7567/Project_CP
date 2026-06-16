@@ -1,3 +1,4 @@
+#if UNITY_INCLUDE_TESTS
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
@@ -99,3 +100,4 @@ namespace CatPang.Sim.Tests
         }
     }
 }
+#endif

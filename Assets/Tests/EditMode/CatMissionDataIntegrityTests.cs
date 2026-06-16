@@ -1,3 +1,4 @@
+#if UNITY_INCLUDE_TESTS
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -177,3 +178,4 @@ namespace CatPang.Tests.EditMode
         }
     }
 }
+#endif

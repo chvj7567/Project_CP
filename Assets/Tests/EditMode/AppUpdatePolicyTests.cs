@@ -1,3 +1,4 @@
+#if UNITY_INCLUDE_TESTS
 using NUnit.Framework;
 using ChvjUnityInfra;
 
@@ -67,3 +68,4 @@ namespace CatPang.Tests.EditMode
         }
     }
 }
+#endif

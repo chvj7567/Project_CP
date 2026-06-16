@@ -1,3 +1,4 @@
+#if UNITY_INCLUDE_TESTS
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
@@ -91,3 +92,4 @@ namespace CatPang.Sim.Tests
         }
     }
 }
+#endif
