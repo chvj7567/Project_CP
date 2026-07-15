@@ -23,7 +23,7 @@ public static class CHToolMigrateToAddressables
     [MenuItem("CatPang/Migrate To Addressables", priority = 100)]
     public static void Migrate()
     {
-        var settings = AddressableAssetSettingsDefaultObject.Settings;
+        AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
         if (settings == null)
         {
             settings = AddressableAssetSettingsDefaultObject.GetSettings(create: true);
@@ -34,10 +34,10 @@ public static class CHToolMigrateToAddressables
             settings.AddLabel(LabelName);
         }
 
-        var conflicts = ScanBasenameConflicts();
+        List<(string key, List<string> paths)> conflicts = ScanBasenameConflicts();
         if (conflicts.Count > 0)
         {
-            foreach (var (key, paths) in conflicts)
+            foreach ((string key, List<string> paths) in conflicts)
             {
                 Debug.LogError($"[Migrate] Basename 충돌: '{key}' ← {string.Join(", ", paths)}");
             }
@@ -46,30 +46,30 @@ public static class CHToolMigrateToAddressables
         }
 
         int totalAdded = 0;
-        foreach (var folder in BundleFolders)
+        foreach (string folder in BundleFolders)
         {
             string groupName = char.ToUpperInvariant(folder[0]) + folder.Substring(1);
-            var group = settings.FindGroup(groupName) ?? settings.CreateGroup(
+            AddressableAssetGroup group = settings.FindGroup(groupName) ?? settings.CreateGroup(
                 groupName, false, false, true, null,
                 typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
 
             string folderPath = Path.Combine(SourceRoot, folder);
             if (!AssetDatabase.IsValidFolder(folderPath)) continue;
 
-            var assetPaths = AssetDatabase.FindAssets("", new[] { folderPath })
+            List<string> assetPaths = AssetDatabase.FindAssets("", new[] { folderPath })
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Where(p => !AssetDatabase.IsValidFolder(p))
                 .Where(p => Path.GetExtension(p).ToLower() != ".meta")
                 .ToList();
 
-            foreach (var path in assetPaths)
+            foreach (string path in assetPaths)
             {
                 string guid = AssetDatabase.AssetPathToGUID(path);
-                var entry = settings.CreateOrMoveEntry(guid, group);
+                AddressableAssetEntry entry = settings.CreateOrMoveEntry(guid, group);
                 entry.address = Path.GetFileNameWithoutExtension(path);
                 entry.SetLabel(LabelName, true, true);
 
-                var importer = AssetImporter.GetAtPath(path);
+                AssetImporter importer = AssetImporter.GetAtPath(path);
                 if (importer != null && !string.IsNullOrEmpty(importer.assetBundleName))
                 {
                     importer.assetBundleName = "";
@@ -86,12 +86,12 @@ public static class CHToolMigrateToAddressables
 
     private static List<(string key, List<string> paths)> ScanBasenameConflicts()
     {
-        var map = new Dictionary<string, List<string>>();
-        foreach (var folder in BundleFolders)
+        Dictionary<string, List<string>> map = new Dictionary<string, List<string>>();
+        foreach (string folder in BundleFolders)
         {
             string folderPath = Path.Combine(SourceRoot, folder);
             if (!AssetDatabase.IsValidFolder(folderPath)) continue;
-            foreach (var guid in AssetDatabase.FindAssets("", new[] { folderPath }))
+            foreach (string guid in AssetDatabase.FindAssets("", new[] { folderPath }))
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 if (AssetDatabase.IsValidFolder(path)) continue;

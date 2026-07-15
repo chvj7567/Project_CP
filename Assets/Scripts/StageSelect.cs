@@ -46,9 +46,9 @@ public class StageSelect : MonoBehaviour
         for (int i = 0; i < btnList.Count; i++)
         {
             int index = i;
-            var btnDispose = btnList[index].button.OnClickAsObservable().Subscribe(_ =>
+            IDisposable btnDispose = btnList[index].button.OnClickAsObservable().Subscribe(_ =>
             {
-                var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
+                Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
                 switch (selectStage)
                 {
                     case ESelectStage.Hard:
@@ -102,14 +102,14 @@ public class StageSelect : MonoBehaviour
             page += CHMData.Instance.BossStageStartValue;
         }
 
-        var stageList = CHMJson.Instance.GetStageInfoList(page);
+        List<Infomation.StageInfo> stageList = CHMJson.Instance.GetStageInfoList(page);
         if (stageList == null || stageList.Count == 0)
         {
             Debug.Log($"SetPage Failed : {page}");
             return false;
         }
 
-        var stageCount = stageList.Count;
+        int stageCount = stageList.Count;
 
         for (int i = 0; i < btnList.Count; ++i)
         {
@@ -168,10 +168,10 @@ public class StageSelect : MonoBehaviour
             return;
         }
 
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
-        var beforeStage = stage - 1;
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        int beforeStage = stage - 1;
 
-        var lastPlayStage = GetLastPlayStage();
+        int lastPlayStage = GetLastPlayStage();
         int clearStage = GetClearStage();
 
         // 이전 스테이지를 클리어했다면
@@ -191,7 +191,7 @@ public class StageSelect : MonoBehaviour
 
                 btnList[index].lockObj.SetActive(false);
                 btnList[index].unlockObj.SetActive(true);
-                var rectTransform = btnList[index].unlockObj.GetComponent<RectTransform>();
+                RectTransform rectTransform = btnList[index].unlockObj.GetComponent<RectTransform>();
                 rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + UnlockRiseOffset, UnlockRiseDuration).OnComplete(() =>
                 {
                     btnList[index].button.interactable = true;
@@ -214,8 +214,8 @@ public class StageSelect : MonoBehaviour
 
     public int GetLastPlayStage()
     {
-        var lastPlayStage = 0;
-        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
+        int lastPlayStage = 0;
+        Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
 
         switch (selectStage)
         {
@@ -236,7 +236,7 @@ public class StageSelect : MonoBehaviour
     public int GetClearStage()
     {
         int clearStage = 0;
-        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
+        Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
 
         switch (selectStage)
         {

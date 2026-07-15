@@ -21,16 +21,16 @@ public class RankScrollViewItem : MonoBehaviour
 
         userID.SetText(info.userID);
 
-        foreach (var img in imageList)
+        foreach (Image img in imageList)
         {
             img.gameObject.SetActive(false);
         }
 
         if (index >= imageList.Count)
         {
-            var r = UnityEngine.Random.Range(0f, 1f);
-            var g = UnityEngine.Random.Range(0f, 1f);
-            var b = UnityEngine.Random.Range(0f, 1f);
+            float r = UnityEngine.Random.Range(0f, 1f);
+            float g = UnityEngine.Random.Range(0f, 1f);
+            float b = UnityEngine.Random.Range(0f, 1f);
 
             imageList[imageList.Count - 1].gameObject.SetActive(true);
             imageList[imageList.Count - 1].color = new Color(r, g, b);

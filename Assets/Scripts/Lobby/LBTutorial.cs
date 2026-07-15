@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
@@ -27,13 +28,13 @@ public class LBTutorial
         _guideBackground.SetActive(true);
         for (int i = 0; i < _guideHoleList.Count; ++i)
         {
-            var info = CHMJson.Instance.GetGuideInfo(i + 1);
+            Infomation.GuideInfo info = CHMJson.Instance.GetGuideInfo(i + 1);
             if (info == null) break;
             _guideHoleList[i].gameObject.SetActive(true);
             _guideDesc.SetStringID(info.descStringID);
 
-            var clickTask = new TaskCompletionSource<bool>();
-            var sub = _guideBackgroundBtn.OnClickAsObservable().Subscribe(_ => clickTask.SetResult(true));
+            TaskCompletionSource<bool> clickTask = new TaskCompletionSource<bool>();
+            IDisposable sub = _guideBackgroundBtn.OnClickAsObservable().Subscribe(_ => clickTask.SetResult(true));
             await clickTask.Task;
             _guideHoleList[i].gameObject.SetActive(false);
             sub.Dispose();

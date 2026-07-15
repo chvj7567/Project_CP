@@ -40,8 +40,8 @@ public class CHPurchaseButton : MonoBehaviour
             }
         }
 
-        var price = ChvjUnityInfra.CHMIAP.Instance.GetPrice(targetProductID);
-        var priceUnit = ChvjUnityInfra.CHMIAP.Instance.GetPriceUnit(targetProductID);
+        decimal price = ChvjUnityInfra.CHMIAP.Instance.GetPrice(targetProductID);
+        string priceUnit = ChvjUnityInfra.CHMIAP.Instance.GetPriceUnit(targetProductID);
 
         SetPrice(price, priceUnit);
 

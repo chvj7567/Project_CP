@@ -36,7 +36,7 @@ public class CHToolCreateMap : EditorWindow
     [MenuItem("CHTools/Create Map")]
     static void ShowWindow()
     {
-        var window = GetWindow(typeof(CHToolCreateMap));
+        EditorWindow window = GetWindow(typeof(CHToolCreateMap));
         window.titleContent.text = "Single Window";
         window.minSize = new Vector2(650, 950);
         window.maxSize = new Vector2(650, 950);
@@ -61,8 +61,8 @@ public class CHToolCreateMap : EditorWindow
         {
             CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.Stage.ToString(), (textAsset) =>
             {
-                var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
-                foreach (var data in jsonData.stageInfoArr)
+                CHMJson.JsonData jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
+                foreach (Infomation.StageInfo data in jsonData.stageInfoArr)
                 {
                     stageInfoList.Add(data);
                 }
@@ -75,8 +75,8 @@ public class CHToolCreateMap : EditorWindow
         {
             CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StageBlock.ToString(), (textAsset) =>
             {
-                var jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageBlockInfoArr\":" + textAsset.text + "}");
-                foreach (var data in jsonData.stageBlockInfoArr)
+                CHMJson.JsonData jsonData = JsonUtility.FromJson<CHMJson.JsonData>("{\"stageBlockInfoArr\":" + textAsset.text + "}");
+                foreach (Infomation.StageBlockInfo data in jsonData.stageBlockInfoArr)
                 {
                     stageBlockInfoList.Add(data);
                 }
@@ -248,8 +248,8 @@ public class CHToolCreateMap : EditorWindow
                 tempStage = stage;
             }
 
-            var stageInfo = stageInfoList.Find(_ => _.stage == tempStage);
-            var stageBlockInfo = stageBlockInfoList.FindAll(_ => _.stage == tempStage);
+            Infomation.StageInfo stageInfo = stageInfoList.Find(_ => _.stage == tempStage);
+            List<Infomation.StageBlockInfo> stageBlockInfo = stageBlockInfoList.FindAll(_ => _.stage == tempStage);
             if (stageInfo != null && stageBlockInfo != null)
             {
                 group = stageInfo.group;
@@ -264,7 +264,7 @@ public class CHToolCreateMap : EditorWindow
                 {
                     for (int h = 0; h < boardSize; h++)
                     {
-                        var findBlock = stageBlockInfo.Find(_ => _.row == w && _.col == h);
+                        Infomation.StageBlockInfo findBlock = stageBlockInfo.Find(_ => _.row == w && _.col == h);
                         if (findBlock == null)
                         {
                             textures[w, h] = null;
@@ -310,7 +310,7 @@ public class CHToolCreateMap : EditorWindow
                 tempStage = stage;
             }
 
-            var stageInfo = stageInfoList.Find(_ => _.stage == tempStage);
+            Infomation.StageInfo stageInfo = stageInfoList.Find(_ => _.stage == tempStage);
             if (stageInfo == null)
             {
                 stageInfoList.Add(new Infomation.StageInfo
@@ -363,7 +363,7 @@ public class CHToolCreateMap : EditorWindow
 
             string jsonData = JsonUtility.ToJson(stageInfoJson, true);
 
-            var splitData = jsonData.Split('[', ']');
+            string[] splitData = jsonData.Split('[', ']');
 
             jsonData = "[" + splitData[1] + "]";
             // JSON 파일로 저장 (Assets 폴더 내에 저장됨)

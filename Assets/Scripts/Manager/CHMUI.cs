@@ -12,7 +12,7 @@ public class CHMUI : ChvjUnityInfra.CHSingletonStatic<CHMUI>
     public void CloseUI(GameObject _uiObj)
     {
         if (_uiObj == null) return;
-        var ui = _uiObj.GetComponent<UIBase>();
+        UIBase ui = _uiObj.GetComponent<UIBase>();
         if (ui != null) ui.Close(false);
     }
 

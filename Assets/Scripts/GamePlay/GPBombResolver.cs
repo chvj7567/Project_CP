@@ -59,7 +59,7 @@ public class GPBombResolver
     void SaveBombCollectionData(Block block)
     {
         if (!block.IsBombBlock() && !block.IsSpecialBombBlock()) return;
-        var collectionData = CHMData.Instance.GetCollectionData(block.GetBlockState().ToString());
+        Data.Collection collectionData = CHMData.Instance.GetCollectionData(block.GetBlockState().ToString());
         collectionData.value += 1;
     }
 
@@ -69,7 +69,7 @@ public class GPBombResolver
         {
             for (int h = 0; h < _board.boardSize; ++h)
             {
-                var b = _board.boardArr[w, h];
+                Block b = _board.boardArr[w, h];
                 if (b.IsBombBlock() &&
                     b.GetBlockState() != EBlockState.PinkBomb &&
                     b.GetBlockState() != EBlockState.RainbowPang)
@@ -126,17 +126,17 @@ public class GPBombResolver
     {
         _addBonusScore(BombBonusScore);
         specialBlock.match = true; specialBlock.boom = true;
-        var blueHoleList = new List<GameObject>();
+        List<GameObject> blueHoleList = new List<GameObject>();
         for (int i = 0; i < _board.boardSize; ++i)
         {
             for (int j = 0; j < _board.boardSize; ++j)
             {
-                var b = _board.boardArr[i, j];
+                Block b = _board.boardArr[i, j];
                 if (b == null) continue;
                 if (b.GetBlockState() == blockState)
                 {
                     b.match = true;
-                    var rt = _createEffect(_bombEffectPS, specialBlock.rectTransform.anchoredPosition);
+                    RectTransform rt = _createEffect(_bombEffectPS, specialBlock.rectTransform.anchoredPosition);
                     rt.DOAnchorPos(b.rectTransform.anchoredPosition, Boom3EffectMoveDuration);
                     blueHoleList.Add(rt.gameObject);
                     await Task.Delay(Boom3BlockIntervalMs, _token);
@@ -151,7 +151,7 @@ public class GPBombResolver
         }
         await Task.Delay(Boom3CleanupDelayMs, _token);
         await GPGameScene.WaitWhilePaused(_token);
-        foreach (var go in blueHoleList) CHMResource.Instance.Destroy(go);
+        foreach (GameObject go in blueHoleList) CHMResource.Instance.Destroy(go);
     }
 
     public async Task Bomb4(Block block, bool ani = true)
@@ -159,9 +159,9 @@ public class GPBombResolver
         _addBonusScore(BombBonusScore);
         block.match = true; block.boom = true;
         _playSound(ESound.Pising);
-        var rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 0));
-        var rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, 180));
         for (int i = 0; i < _board.boardSize; ++i) _matcher.ChangeMatchState(block.row, i);
         SaveBombCollectionData(block);
@@ -173,9 +173,9 @@ public class GPBombResolver
         _addBonusScore(BombBonusScore);
         block.match = true; block.boom = true;
         _playSound(ESound.Pising);
-        var rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 90));
-        var rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, 270));
         for (int i = 0; i < _board.boardSize; ++i) _matcher.ChangeMatchState(i, block.col);
         SaveBombCollectionData(block);
@@ -187,7 +187,7 @@ public class GPBombResolver
         _addBonusScore(BombBonusScore);
         block.match = true; block.boom = true;
         _playSound(ESound.Pising);
-        var rt = _createEffect(_pangEffectList[(int)EPangEffect.Center_Hit], block.rectTransform.anchoredPosition);
+        RectTransform rt = _createEffect(_pangEffectList[(int)EPangEffect.Center_Hit], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 45));
         for (int i = 0; i < _board.boardSize; ++i)
         {
@@ -205,9 +205,9 @@ public class GPBombResolver
         _addBonusScore(BombBonusScore);
         block.match = true; block.boom = true;
         _playSound(ESound.Pising);
-        var rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, 45));
-        var rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, 225));
         for (int i = 0; i < _board.boardSize; ++i)
         {
@@ -223,9 +223,9 @@ public class GPBombResolver
         _addBonusScore(BombBonusScore);
         block.match = true; block.boom = true;
         _playSound(ESound.Pising);
-        var rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt.Rotate(new Vector3(0, 0, -45));
-        var rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
+        RectTransform rt2 = _createEffect(_pangEffectList[(int)EPangEffect.Move_Line2], block.rectTransform.anchoredPosition);
         rt2.Rotate(new Vector3(0, 0, -225));
         for (int i = 0; i < _board.boardSize; ++i)
         {
@@ -325,7 +325,7 @@ public class GPBombResolver
                 if (!CheckRainbowTargetBlock()) break;
                 int w = UnityEngine.Random.Range(0, _board.boardSize);
                 int h = UnityEngine.Random.Range(0, _board.boardSize);
-                var b = _board.boardArr[w, h];
+                Block b = _board.boardArr[w, h];
                 if (!b.remove && !b.IsNormalBlock()) continue;
                 if (b.changeBlockState != EBlockState.None) continue;
                 b.changeBlockState = bs;
@@ -349,14 +349,14 @@ public class GPBombResolver
     public async Task CreateBombBlock(int moveIndex1, int moveIndex2)
     {
         bool createDelay = false;
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
         int size = _board.boardSize;
 
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
             {
-                var block = arr[i, j];
+                Block block = arr[i, j];
                 if (block == null) continue;
                 int row = i, col = j;
 
@@ -382,7 +382,7 @@ public class GPBombResolver
         {
             for (int j = 0; j < size; ++j)
             {
-                var block = arr[i, j];
+                Block block = arr[i, j];
                 if (block == null) continue;
 
                 if (block.hScore > GPMatchChecker.MinMatchCount)
@@ -394,7 +394,7 @@ public class GPBombResolver
                     {
                         int tc = j + idx;
                         if (!_board.IsValidIndex(i, tc) || arr[i, tc] == null) continue;
-                        var tb = arr[i, tc];
+                        Block tb = arr[i, tc];
                         if (tb.index == moveIndex1 || tb.index == moveIndex2)
                         {
                             checkMove = true;
@@ -418,7 +418,7 @@ public class GPBombResolver
                     {
                         int tr = i + idx;
                         if (!_board.IsValidIndex(tr, j) || arr[tr, j] == null) continue;
-                        var tb = arr[tr, j];
+                        Block tb = arr[tr, j];
                         if (tb.index == moveIndex1 || tb.index == moveIndex2)
                         {
                             checkMove = true;
@@ -445,10 +445,10 @@ public class GPBombResolver
 
     void ClearScoreNeighbors(int row, int col)
     {
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
         int max = _board.boardSize;
-        var dirs = new (int dr, int dc)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
-        foreach (var d in dirs)
+        (int dr, int dc)[] dirs = new (int dr, int dc)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
+        foreach ((int dr, int dc) d in dirs)
         {
             for (int idx = 1; idx < max; ++idx)
             {
@@ -464,13 +464,13 @@ public class GPBombResolver
 
     public void BlockCreatorBlock(EBlockState creatorBlock, EBlockState changeBlock)
     {
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
         int size = _board.boardSize;
         for (int w = 0; w < size; w++)
         {
             for (int h = 0; h < size; h++)
             {
-                var block = arr[w, h];
+                Block block = arr[w, h];
                 if (block == null) continue;
                 if (block.GetBlockState() != creatorBlock) continue;
                 if (block.GetHp() == 0) continue;

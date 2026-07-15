@@ -69,9 +69,9 @@ public class GPBossController
 
         curScore.Subscribe(_ =>
         {
-            var fillAmount = (_stageInfo.targetScore - _) / (float)_stageInfo.targetScore;
+            float fillAmount = (_stageInfo.targetScore - _) / (float)_stageInfo.targetScore;
             _bossHpImage.DOFillAmount(fillAmount, BossHpFillDuration);
-            var bossHp = Mathf.Max(0, _stageInfo.targetScore - _);
+            int bossHp = Mathf.Max(0, _stageInfo.targetScore - _);
             _bossHpText.SetText(bossHp);
 
             if (!_bossSkill && fillAmount <= BossSkillHpThreshold)
@@ -123,7 +123,7 @@ public class GPBossController
 
     public void BossSkill(EBossSkillType type)
     {
-        var blockHp = UnityEngine.Random.Range(0, BossSkillBlockMaxHp);
+        int blockHp = UnityEngine.Random.Range(0, BossSkillBlockMaxHp);
         if (blockHp == 0) blockHp = -1;
 
         int w, h;

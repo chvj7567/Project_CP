@@ -36,7 +36,7 @@ public class GPMatchChecker
 
     public void CheckMap(bool test = false)
     {
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
         int size = _board.boardSize;
 
         if (!test)
@@ -52,8 +52,8 @@ public class GPMatchChecker
 
         for (int i = 0; i < size; ++i)
         {
-            var hList = new List<Block>();
-            foreach (var block in arr)
+            List<Block> hList = new List<Block>();
+            foreach (Block block in arr)
                 if (block != null && block.row == i)
                     hList.Add(block);
             Check3Match(hList, EDirection.Horizontal, test);
@@ -61,8 +61,8 @@ public class GPMatchChecker
 
         for (int i = 0; i < size; ++i)
         {
-            var vList = new List<Block>();
-            foreach (var block in arr)
+            List<Block> vList = new List<Block>();
+            foreach (Block block in arr)
                 if (block != null && block.col == i)
                     vList.Add(block);
             Check3Match(vList, EDirection.Vertical, test);
@@ -71,7 +71,7 @@ public class GPMatchChecker
 
     public bool CheckSquareMatch(int row, int col, bool test = false)
     {
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
 
         if (!_board.IsNormalBlock(row, col) || !_board.IsNormalBlock(row + 1, col) ||
             !_board.IsNormalBlock(row, col + 1) || !_board.IsNormalBlock(row + 1, col + 1))
@@ -117,7 +117,7 @@ public class GPMatchChecker
 
         for (int i = 0; i < blockList.Count; ++i)
         {
-            var b = blockList[i];
+            Block b = blockList[i];
             if (!b.IsNormalBlock() || b.IsFixdBlock() || b.IsBombBlock() || b.IsFishBlock())
             {
                 blockState = EBlockState.None;
@@ -140,7 +140,7 @@ public class GPMatchChecker
                         int temp = i;
                         for (int j = 0; j < matchCount; ++j)
                         {
-                            var bl = blockList[temp--];
+                            Block bl = blockList[temp--];
                             bl.SetScore(matchCount, direction);
                             bl.match = true;
                         }
@@ -160,17 +160,17 @@ public class GPMatchChecker
     {
         isMatch = false;
         int max = _board.boardSize;
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
 
         for (int i = 0; i < max; ++i)
         {
             for (int j = 0; j < max; ++j)
             {
                 if (arr[i, j] == null) continue;
-                var cur = arr[i, j];
+                Block cur = arr[i, j];
                 if (cur.CanNotDragBlock()) continue;
 
-                var canDrag = CanDragBlock(cur);
+                EDrag canDrag = CanDragBlock(cur);
                 if (cur.GetBlockState() == EBlockState.PinkBomb && canDrag != EDrag.None)
                 {
                     canMatchRow = cur.row; canMatchCol = cur.col; canMatchDrag = canDrag;
@@ -183,10 +183,10 @@ public class GPMatchChecker
                     return true;
                 }
 
-                var up    = _board.IsValidIndex(i - 1, j) ? arr[i - 1, j] : null;
-                var down  = _board.IsValidIndex(i + 1, j) ? arr[i + 1, j] : null;
-                var left  = _board.IsValidIndex(i, j - 1) ? arr[i, j - 1] : null;
-                var right = _board.IsValidIndex(i, j + 1) ? arr[i, j + 1] : null;
+                Block up    = _board.IsValidIndex(i - 1, j) ? arr[i - 1, j] : null;
+                Block down  = _board.IsValidIndex(i + 1, j) ? arr[i + 1, j] : null;
+                Block left  = _board.IsValidIndex(i, j - 1) ? arr[i, j - 1] : null;
+                Block right = _board.IsValidIndex(i, j + 1) ? arr[i, j + 1] : null;
 
                 if (up != null && !up.CanNotDragBlock())
                 {
@@ -248,7 +248,7 @@ public class GPMatchChecker
         if (!_board.IsValidIndex(row, col) || _board.boardArr[row, col] == null) return false;
         DamageBlock(row, col);
 
-        var b = _board.boardArr[row, col];
+        Block b = _board.boardArr[row, col];
         if (b.GetBlockState() == EBlockState.RainbowPang && b.GetHp() > 0) return false;
         if (!b.IsFishBlock() && !b.IsFixdBlock() && b.GetBlockState() != EBlockState.PinkBomb)
         {

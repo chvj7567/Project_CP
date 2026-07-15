@@ -50,7 +50,7 @@ public class PageMove : MonoBehaviour
 
     public void Init(Defines.ESelectStage select)
     {
-        var lastPlayStage = stageSelect1.GetLastPlayStage();
+        int lastPlayStage = stageSelect1.GetLastPlayStage();
 
         curSelect = select;
 

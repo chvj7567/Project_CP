@@ -109,7 +109,7 @@ public class UIMission : UIBase
         // 자정 넘김 자동 감지 — NTP 신뢰 시각이 있을 때만 의미 있음 (위변조 방지)
         if (CHMMain.Time == null || !CHMMain.Time.IsAvailable) return;
 
-        var todayKey = CHMMain.Time.GetUtcDateKey();
+        string todayKey = CHMMain.Time.GetUtcDateKey();
         if (string.IsNullOrEmpty(_lastDateKey)) { _lastDateKey = todayKey; return; }
         if (_lastDateKey != todayKey)
         {

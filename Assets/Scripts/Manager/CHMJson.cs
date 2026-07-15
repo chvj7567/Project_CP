@@ -108,8 +108,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.StringKorea, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>("{\"stringKoreaInfoArr\":" + textAsset.text + "}");
-            foreach (var data in jsonData.stringKoreaInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>("{\"stringKoreaInfoArr\":" + textAsset.text + "}");
+            foreach (StringInfo data in jsonData.stringKoreaInfoArr)
             {
                 stringKoreaInfoDic.Add(data.stringID, data.value);
             }
@@ -130,8 +130,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.StringEnglish, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>("{\"stringEnglishInfoArr\":" + textAsset.text + "}");
-            foreach (var data in jsonData.stringEnglishInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>("{\"stringEnglishInfoArr\":" + textAsset.text + "}");
+            foreach (StringInfo data in jsonData.stringEnglishInfoArr)
             {
                 stringEnglishInfoDic.Add(data.stringID, data.value);
             }
@@ -153,8 +153,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.Stage, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
-            foreach (var data in jsonData.stageInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>("{\"stageInfoArr\":" + textAsset.text + "}");
+            foreach (StageInfo data in jsonData.stageInfoArr)
             {
                 stageInfoList.Add(data);
             }
@@ -176,8 +176,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.StageBlock, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"stageBlockInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.stageBlockInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>(("{\"stageBlockInfoArr\":" + textAsset.text + "}"));
+            foreach (StageBlockInfo data in jsonData.stageBlockInfoArr)
             {
                 stageBlockInfoList.Add(data);
             }
@@ -199,8 +199,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.Mission, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"missionInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.missionInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>(("{\"missionInfoArr\":" + textAsset.text + "}"));
+            foreach (MissionInfo data in jsonData.missionInfoArr)
             {
                 missionInfoList.Add(data);
             }
@@ -222,8 +222,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.Shop, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"shopInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.shopInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>(("{\"shopInfoArr\":" + textAsset.text + "}"));
+            foreach (ShopInfo data in jsonData.shopInfoArr)
             {
                 shopInfoList.Add(data);
             }
@@ -245,8 +245,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.Guide, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"guideInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.guideInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>(("{\"guideInfoArr\":" + textAsset.text + "}"));
+            foreach (GuideInfo data in jsonData.guideInfoArr)
             {
                 guideInfoList.Add(data);
             }
@@ -268,8 +268,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.Tutorial, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"tutorialInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.tutorialInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>(("{\"tutorialInfoArr\":" + textAsset.text + "}"));
+            foreach (TutorialInfo data in jsonData.tutorialInfoArr)
             {
                 tutorialInfoList.Add(data);
             }
@@ -291,8 +291,8 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
         CHMResource.Instance.LoadJson(Defines.EJsonType.ConstValue, callback = (TextAsset textAsset) =>
         {
-            var jsonData = JsonUtility.FromJson<JsonData>(("{\"constValueInfoArr\":" + textAsset.text + "}"));
-            foreach (var data in jsonData.constValueInfoArr)
+            JsonData jsonData = JsonUtility.FromJson<JsonData>(("{\"constValueInfoArr\":" + textAsset.text + "}"));
+            foreach (ConstValueInfo data in jsonData.constValueInfoArr)
             {
                 constValueInfoList.Add(data);
             }
@@ -331,7 +331,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
     public SelectInfo GetSelectInfo(ESelect eSelect)
     {
-        var selectList = selectInfoList.FindAll(_ => _.eSelect == eSelect);
+        List<SelectInfo> selectList = selectInfoList.FindAll(_ => _.eSelect == eSelect);
 
         Int64 totFrequency = 0L;
         for (int i = 0; i < selectList.Count; ++i)
@@ -339,7 +339,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
             totFrequency += selectList[i].frequency;
         }
 
-        var selectFrequency = UnityEngine.Random.Range(0, totFrequency);
+        float selectFrequency = UnityEngine.Random.Range(0, totFrequency);
 
         Int64 tempFrequency = 0L;
         for (int i = 0; i < selectList.Count; ++i)
@@ -361,7 +361,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
     public StageInfo GetStageInfo(int stage)
     {
-        var stageInfo = stageInfoList.Find(_ => _.stage == stage);
+        StageInfo stageInfo = stageInfoList.Find(_ => _.stage == stage);
         if (stageInfo == null)
             return null;
 
@@ -432,7 +432,7 @@ public class CHMJson : ChvjUnityInfra.CHSingletonStatic<CHMJson>
 
     public Int64 GetConstValueInfo(Defines.EConstValue variable)
     {
-        var constValueInfo = constValueInfoList.Find(_ => _.variable == variable);
+        ConstValueInfo constValueInfo = constValueInfoList.Find(_ => _.variable == variable);
         if (constValueInfo == null)
             return 0;
 

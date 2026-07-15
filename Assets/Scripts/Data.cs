@@ -118,7 +118,7 @@ namespace Data
         {
             List<T> list = new List<T>();
 
-            foreach (var data in dict)
+            foreach (KeyValuePair<string, T> data in dict)
                 list.Add(data.Value);
 
             return list;
@@ -128,9 +128,9 @@ namespace Data
         {
             if (typeof(T) == typeof(Login))
             {
-                foreach (var data in dict)
+                foreach (KeyValuePair<string, T> data in dict)
                 {
-                    var temp = data.Value as Login;
+                    Login temp = data.Value as Login;
                     if (temp == null)
                         return false;
 
@@ -140,9 +140,9 @@ namespace Data
             }
             else if (typeof(T) == typeof(Collection))
             {
-                foreach (var data in dict)
+                foreach (KeyValuePair<string, T> data in dict)
                 {
-                    var temp = data.Value as Collection;
+                    Collection temp = data.Value as Collection;
                     if (temp == null)
                         return false;
 
@@ -155,9 +155,9 @@ namespace Data
             }
             else if (typeof(T) == typeof(Mission))
             {
-                foreach (var data in dict)
+                foreach (KeyValuePair<string, T> data in dict)
                 {
-                    var temp = data.Value as Mission;
+                    Mission temp = data.Value as Mission;
                     if (temp == null)
                         return false;
 
@@ -172,9 +172,9 @@ namespace Data
             }
             else if (typeof(T) == typeof(Shop))
             {
-                foreach (var data in dict)
+                foreach (KeyValuePair<string, T> data in dict)
                 {
-                    var temp = data.Value as Shop;
+                    Shop temp = data.Value as Shop;
                     if (temp == null)
                         return false;
 

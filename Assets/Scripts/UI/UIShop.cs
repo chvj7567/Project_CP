@@ -61,13 +61,13 @@ public class UIShop : UIBase
 
         if (checkPurchase)
         {
-            var shopData = CHMData.Instance.GetShopData("0");
+            Data.Shop shopData = CHMData.Instance.GetShopData("0");
             shopData.buy = true;
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);
         }
 
-        var shopScriptList = CHMJson.Instance.GetShopInfoListAll();
+        List<Infomation.ShopInfo> shopScriptList = CHMJson.Instance.GetShopInfoListAll();
         if (shopScriptList == null)
         {
             Debug.Log("Shop Script is Null");
@@ -76,7 +76,7 @@ public class UIShop : UIBase
 
         curTapIndex.Subscribe(tapIndex =>
         {
-            var shopList = shopScriptList.FindAll(_ => _.tapIndex == tapIndex);
+            List<Infomation.ShopInfo> shopList = shopScriptList.FindAll(_ => _.tapIndex == tapIndex);
 
             if (tapIndex == ShopTabCash && ChvjUnityInfra.CHMIAP.Instance.IsInitialized == false)
             {
@@ -143,7 +143,7 @@ public class UIShop : UIBase
     {
         Debug.Log($"PurchaseSuccess {productName}");
 
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData == null)
             return;
         
@@ -177,7 +177,7 @@ public class UIShop : UIBase
             }
         }
 
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData != null)
         {
             loginData.selectCatShop = skinIndex;

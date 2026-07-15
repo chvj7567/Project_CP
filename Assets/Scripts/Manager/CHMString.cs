@@ -36,7 +36,7 @@ public class CHMString : ChvjUnityInfra.CHSingletonStatic<CHMString>
 
     public string GetString(int stringID)
     {
-        var loginData = CHMData.Instance.GetLoginData(CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CatPang);
         return CHMJson.Instance.GetStringInfo(stringID, loginData.languageType);
     }
 }

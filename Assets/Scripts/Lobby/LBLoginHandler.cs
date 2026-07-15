@@ -23,7 +23,7 @@ public class LBLoginHandler
 
     public bool GetGPGSLogin()
     {
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         Debug.Log($"GetLoginState : {loginData.connectGPGS}");
         return loginData.connectGPGS;
     }
@@ -32,7 +32,7 @@ public class LBLoginHandler
 
     public async Task<bool> SetGPGSLogin(bool success, string gpgsUserName)
     {
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         loginData.connectGPGS = success;
         Debug.Log($"SetLoginState : {loginData.connectGPGS}");
 

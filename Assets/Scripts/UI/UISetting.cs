@@ -48,7 +48,7 @@ public class UISetting : UIBase
 
         koreanBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+            Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             loginData.languageType = Defines.ELanguageType.Korea;
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);
@@ -60,7 +60,7 @@ public class UISetting : UIBase
 
         englishBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+            Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             loginData.languageType = Defines.ELanguageType.English;
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);
@@ -85,7 +85,7 @@ public class UISetting : UIBase
 
         guideInitBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+            Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             loginData.guideIndex = 0;
 
             CHMData.Instance.SaveData(CHMString.Instance.CatPang);

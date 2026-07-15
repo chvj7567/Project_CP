@@ -45,7 +45,7 @@ public class MissionScrollViewItem : MonoBehaviour
                 return;
             }
 
-            var reward = _info.rewardCount;
+            int reward = _info.rewardCount;
             switch (_info.reward)
             {
                 case Defines.EReward.Gold:
@@ -60,7 +60,7 @@ public class MissionScrollViewItem : MonoBehaviour
                     break;
                 case Defines.EReward.AddTime:
                     {
-                        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+                        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                         if (loginData == null)
                             return;
 
@@ -74,7 +74,7 @@ public class MissionScrollViewItem : MonoBehaviour
                     break;
                 case Defines.EReward.AddMove:
                     {
-                        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+                        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                         if (loginData == null)
                             return;
 
@@ -91,7 +91,7 @@ public class MissionScrollViewItem : MonoBehaviour
             if (_info.tapIndex == UIMission.MissionTabNormal)
             {
                 _missionData.repeatCount++;
-                var clearValue = _info.clearValue + (_missionData.repeatCount * _info.addValue);
+                int clearValue = _info.clearValue + (_missionData.repeatCount * _info.addValue);
                 SetBtnInteractable(clearValue);
                 missionValueText.SetText(_collectionData.value - _missionData.startValue, clearValue);
                 //# 강제 종료 시 유실 방지 — 수령 즉시 영구 저장 (Daily/Special 탭과 동일)
@@ -99,7 +99,7 @@ public class MissionScrollViewItem : MonoBehaviour
             }
             else if (_info.tapIndex == UIMission.MissionTabSpecial)
             {
-                var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+                Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                 if (loginData.normalStage >= _info.clearValue &&
                     loginData.rewardStage < _info.clearValue)
                 {
@@ -163,7 +163,7 @@ public class MissionScrollViewItem : MonoBehaviour
                     rewardBtn.interactable = false;
                 }
 
-                var clearValue = _info.clearValue + (_missionData.repeatCount * _info.addValue);
+                int clearValue = _info.clearValue + (_missionData.repeatCount * _info.addValue);
                 SetBtnInteractable(clearValue);
                 missionValueText.SetStringID(20);
                 missionValueText.SetText(_collectionData.value - _missionData.startValue, clearValue);
@@ -178,7 +178,7 @@ public class MissionScrollViewItem : MonoBehaviour
             missionValueText.SetText(_info.clearValue);
             SetRewardImage(_info.reward);
 
-            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+            Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             if (loginData.normalStage >= _info.clearValue &&
                 loginData.rewardStage < _info.clearValue)
             {
@@ -272,7 +272,7 @@ public class MissionScrollViewItem : MonoBehaviour
     {
         if (_missionIcon == null)
         {
-            var t = transform.Find("iconMission/iconItem/missionIcon");
+            Transform t = transform.Find("iconMission/iconItem/missionIcon");
             if (t != null) _missionIcon = t.GetComponent<Image>();
         }
         return _missionIcon;
@@ -281,7 +281,7 @@ public class MissionScrollViewItem : MonoBehaviour
     // 미션 아이콘 스프라이트를 어드레서블 이름으로 로드해 적용
     void SetMissionIcon(string spriteName)
     {
-        var icon = GetMissionIcon();
+        Image icon = GetMissionIcon();
         if (icon == null) return;
 
         if (string.IsNullOrEmpty(spriteName))

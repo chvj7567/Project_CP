@@ -9,7 +9,7 @@ public class GameFontProvider : ChvjUnityInfra.IFontProvider
 
     public static Task PreloadAsync()
     {
-        var tcs = new TaskCompletionSource<bool>();
+        TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
         ChvjUnityInfra.CHMResource.Instance.Load<TMP_FontAsset>("Gaegu-Bold SDF", font =>
         {
             _font = font;

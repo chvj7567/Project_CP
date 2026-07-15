@@ -35,7 +35,7 @@ public class UINickname : UIBase
 
         enterBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+            Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             if (loginData.userID == "")
             {
                 if (loginData.connectGPGS)

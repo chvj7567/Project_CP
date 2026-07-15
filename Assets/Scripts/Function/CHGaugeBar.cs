@@ -58,8 +58,8 @@ public class CHGaugeBar : MonoBehaviour
     {
         if (textDamage)
         {
-            var copyTextDamage = CHMResource.Instance.Instantiate(textDamage.gameObject, transform).GetComponent<CHText>();
-            var copyTmp = copyTextDamage.GetComponent<TMP_Text>();
+            CHText copyTextDamage = CHMResource.Instance.Instantiate(textDamage.gameObject, transform).GetComponent<CHText>();
+            TMP_Text copyTmp = copyTextDamage.GetComponent<TMP_Text>();
             copyTextDamage.gameObject.SetActive(true);
             copyTextDamage.transform.localPosition = Vector3.zero;
             copyTextDamage.SetText(_damage);
@@ -79,7 +79,7 @@ public class CHGaugeBar : MonoBehaviour
 
             copyTmp.DOFade(0, _time);
 
-            var rtTextDamage = copyTextDamage.GetComponent<RectTransform>();
+            RectTransform rtTextDamage = copyTextDamage.GetComponent<RectTransform>();
             if (rtTextDamage)
             {
                 rtTextDamage.DOAnchorPosY(originPosYText + DamageTextRiseOffset, _time).OnComplete(() =>

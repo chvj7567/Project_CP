@@ -54,7 +54,7 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
     {
         try
         {
-            var utc = await FetchNtpAsync(NtpServer1);
+            DateTime utc = await FetchNtpAsync(NtpServer1);
             ApplyNtp(utc);
             return true;
         }
@@ -63,7 +63,7 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
             Debug.LogWarning($"[CHMTime] {NtpServer1} 실패: {e1.Message}. 폴백 시도");
             try
             {
-                var utc = await FetchNtpAsync(NtpServer2);
+                DateTime utc = await FetchNtpAsync(NtpServer2);
                 ApplyNtp(utc);
                 return true;
             }
@@ -91,14 +91,14 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
     // SNTP 1회 조회. UDP 123 포트, 48바이트 패킷.
     static async Task<DateTime> FetchNtpAsync(string host)
     {
-        var data = new byte[NtpPacketSize];
+        byte[] data = new byte[NtpPacketSize];
         data[0] = 0x1B; // LI=0, VN=3, Mode=3 (client)
 
-        var addresses = await Dns.GetHostAddressesAsync(host);
+        IPAddress[] addresses = await Dns.GetHostAddressesAsync(host);
         if (addresses.Length == 0) throw new Exception("DNS 실패");
-        var endpoint = new IPEndPoint(addresses[0], NtpPort);
+        IPEndPoint endpoint = new IPEndPoint(addresses[0], NtpPort);
 
-        using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
         {
             socket.ReceiveTimeout = NtpTimeoutMs;
             socket.SendTimeout = NtpTimeoutMs;
@@ -118,7 +118,7 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
                        | ((ulong)data[offsetTransmitTime + 7]);
 
         ulong milliseconds = (intPart * 1000UL) + ((fracPart * 1000UL) / NtpFractionDenominator);
-        var networkDateTime = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds((long)milliseconds);
+        DateTime networkDateTime = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds((long)milliseconds);
         return networkDateTime;
     }
 
@@ -138,8 +138,8 @@ public class CHMTime : ChvjUnityInfra.CHSingletonStatic<CHMTime>
     // 다음 UTC 자정까지 남은 초
     public double GetSecondsUntilNextUtcMidnight()
     {
-        var now = UtcNow;
-        var nextMidnight = now.Date.AddDays(1);
+        DateTime now = UtcNow;
+        DateTime nextMidnight = now.Date.AddDays(1);
         return (nextMidnight - now).TotalSeconds;
     }
 }

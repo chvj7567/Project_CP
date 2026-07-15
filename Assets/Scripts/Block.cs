@@ -144,9 +144,9 @@ public class Block : MonoBehaviour
             // Right
             case Defines.EDrag.Right:
                 {
-                    var addDis = CHInstantiateButton.GetHorizontalDistance();
-                    var movePos = new Vector2(originPos.x + addDis, originPos.y);
-                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                    float addDis = CHInstantiateButton.GetHorizontalDistance();
+                    Vector2 movePos = new Vector2(originPos.x + addDis, originPos.y);
+                    (RectTransform, Block) ret = CHInstantiateButton.GetBlockInfo(movePos);
 
                     if (ret.Item1 != null)
                     {
@@ -168,9 +168,9 @@ public class Block : MonoBehaviour
             // Up
             case Defines.EDrag.Up:
                 {
-                    var addDis = CHInstantiateButton.GetVerticalDistance();
-                    var movePos = new Vector2(originPos.x, originPos.y + addDis);
-                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                    float addDis = CHInstantiateButton.GetVerticalDistance();
+                    Vector2 movePos = new Vector2(originPos.x, originPos.y + addDis);
+                    (RectTransform, Block) ret = CHInstantiateButton.GetBlockInfo(movePos);
                     if (ret.Item1 != null)
                     {
                         if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
@@ -191,9 +191,9 @@ public class Block : MonoBehaviour
             // Left
             case Defines.EDrag.Left:
                 {
-                    var addDis = CHInstantiateButton.GetHorizontalDistance();
-                    var movePos = new Vector2(originPos.x - addDis, originPos.y);
-                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                    float addDis = CHInstantiateButton.GetHorizontalDistance();
+                    Vector2 movePos = new Vector2(originPos.x - addDis, originPos.y);
+                    (RectTransform, Block) ret = CHInstantiateButton.GetBlockInfo(movePos);
                     if (ret.Item1 != null)
                     {
                         if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
@@ -214,9 +214,9 @@ public class Block : MonoBehaviour
             // Down
             case Defines.EDrag.Down:
                 {
-                    var addDis = CHInstantiateButton.GetVerticalDistance();
-                    var movePos = new Vector2(originPos.x, originPos.y - addDis);
-                    var ret = CHInstantiateButton.GetBlockInfo(movePos);
+                    float addDis = CHInstantiateButton.GetVerticalDistance();
+                    Vector2 movePos = new Vector2(originPos.x, originPos.y - addDis);
+                    (RectTransform, Block) ret = CHInstantiateButton.GetBlockInfo(movePos);
                     if (ret.Item1 != null)
                     {
                         if (ret.Item2.IsFixdBlock() || ret.Item2.CanNotDragBlock())
@@ -369,7 +369,7 @@ public class Block : MonoBehaviour
 
     public EBlockState CheckSelectCatShop(EBlockState _blockState)
     {
-        var data = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login data = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (data == null)
             return _blockState;
 
@@ -425,7 +425,7 @@ public class Block : MonoBehaviour
             {
                 if (changeNormalBlock)
                 {
-                    var random = UnityEngine.Random.Range(0, _blockMaxIndex);
+                    int random = UnityEngine.Random.Range(0, _blockMaxIndex);
                     changeBlockState = (Defines.EBlockState)random;
                 }
             }
@@ -644,7 +644,7 @@ public class Block : MonoBehaviour
             return false;
 
         // 위 블록을 원본 고양이 타입으로 환산해 박스가 받는 고양이인지 판정
-        var baseCat = GetBaseCat(upBlockState);
+        EBlockState baseCat = GetBaseCat(upBlockState);
 
         switch (blockState)
         {

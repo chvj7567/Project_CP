@@ -47,7 +47,7 @@ public class UIRank : UIBase
                 return;
 
             curTap = Defines.ESelectStage.Normal;
-            var rankList = await GetRankList(Defines.ESelectStage.Normal);
+            List<Infomation.RankInfo> rankList = await GetRankList(Defines.ESelectStage.Normal);
 
             noRankingDataObj.SetActive(false);
 
@@ -65,7 +65,7 @@ public class UIRank : UIBase
                 return;
 
             curTap = Defines.ESelectStage.Hard;
-            var rankList = await GetRankList(Defines.ESelectStage.Hard);
+            List<Infomation.RankInfo> rankList = await GetRankList(Defines.ESelectStage.Hard);
 
             noRankingDataObj.SetActive(false);
 
@@ -83,7 +83,7 @@ public class UIRank : UIBase
                 return;
 
             curTap = Defines.ESelectStage.Boss;
-            var rankList = await GetRankList(Defines.ESelectStage.Boss);
+            List<Infomation.RankInfo> rankList = await GetRankList(Defines.ESelectStage.Boss);
 
             noRankingDataObj.SetActive(false);
 
@@ -97,7 +97,7 @@ public class UIRank : UIBase
 
         curTap = Defines.ESelectStage.Normal;
 
-        var rankList = await GetRankList(Defines.ESelectStage.Normal);
+        List<Infomation.RankInfo> rankList = await GetRankList(Defines.ESelectStage.Normal);
 
         noRankingDataObj.SetActive(false);
 
@@ -139,7 +139,7 @@ public class UIRank : UIBase
                 {
                     if (data != null && data.Scores != null)
                     {
-                        var scores = data.Scores;
+                        UnityEngine.SocialPlatforms.IScore[] scores = data.Scores;
 
                         if (scores.Length == 0)
                         {

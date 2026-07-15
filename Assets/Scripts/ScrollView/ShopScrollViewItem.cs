@@ -79,7 +79,7 @@ public class ShopScrollViewItem : MonoBehaviour
 
                 if (info.skinIndex > 0)
                 {
-                    var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+                    Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                     loginData.selectCatShop = info.skinIndex;
                 }
 
@@ -125,8 +125,8 @@ public class ShopScrollViewItem : MonoBehaviour
         }
         else
         {
-            var price = ChvjUnityInfra.CHMIAP.Instance.GetPrice(info.productName);
-            var priceUnit = ChvjUnityInfra.CHMIAP.Instance.GetPriceUnit(info.productName);
+            decimal price = ChvjUnityInfra.CHMIAP.Instance.GetPrice(info.productName);
+            string priceUnit = ChvjUnityInfra.CHMIAP.Instance.GetPriceUnit(info.productName);
 
             costText.SetText(price, priceUnit);
 
@@ -181,13 +181,13 @@ public class ShopScrollViewItem : MonoBehaviour
         {
             case ShopIdHpUpgrade:
                 {
-                    var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+                    Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                     loginData.hp += HpUpgradeAmount;
                 }
                 break;
             case ShopIdAttackUpgrade:
                 {
-                    var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+                    Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
                     loginData.attack += 1;
                 }
                 break;

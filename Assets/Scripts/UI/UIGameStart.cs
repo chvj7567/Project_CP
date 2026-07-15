@@ -53,13 +53,13 @@ public class UIGameStart : UIBase
         useAddMoveItemCount = 0;
         useAddTimeItemCount = 0;
 
-        var selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
+        Defines.ESelectStage selectStage = (Defines.ESelectStage)PlayerPrefs.GetInt(CHMString.Instance.SelectStage);
         bool isBoss = selectStage == Defines.ESelectStage.Boss;
 
         if (isBoss) stageText.SetText(arg.stage - CHMData.Instance.BossStageStartValue);
         else stageText.SetText(arg.stage);
 
-        var stageInfo = CHMJson.Instance.GetStageInfo(arg.stage);
+        Infomation.StageInfo stageInfo = CHMJson.Instance.GetStageInfo(arg.stage);
         if (stageInfo != null)
         {
             // 노말은 GPGameScene과 동일한 보정(시간 제거·목표 점수 절반·이동 횟수 2배)을 적용해
@@ -77,7 +77,7 @@ public class UIGameStart : UIBase
             else { moveCountText.SetStringID(1); moveCountText.SetText(stageInfo.moveCount); }
         }
 
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData != null)
         {
             maxMoveItemCount = myAddMoveItemCount = loginData.addMoveItemCount;
@@ -125,7 +125,7 @@ public class UIGameStart : UIBase
 
         startBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+            Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
             if (loginData == null)
                 return;
 

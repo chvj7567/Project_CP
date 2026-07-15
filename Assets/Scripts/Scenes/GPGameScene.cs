@@ -241,7 +241,7 @@ public class GPGameScene : MonoBehaviour
                 oneTimeAlarm = true;
                 try
                 {
-                    var block = boardArr[_matcher.canMatchRow, _matcher.canMatchCol];
+                    Block block = boardArr[_matcher.canMatchRow, _matcher.canMatchCol];
                     //# 블럭은 localScale=factor라 절대값 펄스가 아닌 factor 기준 상대 펄스로 복귀 (9×9면 factor=1)
                     float scaleFactor = CHInstantiateButton.GetScaleFactor();
                     block.transform.DOScale(scaleFactor * HintPulseScale, HintPulseDuration).OnComplete(() => block.transform.DOScale(scaleFactor, HintPulseDuration));
@@ -274,12 +274,12 @@ public class GPGameScene : MonoBehaviour
         onlyBossStageObject.SetActive(false);
         guideBackgroundBtn.gameObject.SetActive(false);
 
-        foreach (var h in normalStageGuideHoleList)
+        foreach (RectTransform h in normalStageGuideHoleList)
         {
             h.gameObject.SetActive(false);
         }
 
-        foreach (var h in bossStageGuideHoleList)
+        foreach (RectTransform h in bossStageGuideHoleList)
         {
             h.gameObject.SetActive(false);
         }
@@ -369,13 +369,13 @@ public class GPGameScene : MonoBehaviour
 
     private async Task LoadImage()
     {
-        var tasks = new List<Task>();
+        List<Task> tasks = new List<Task>();
         for (EBlockState i = 0; i < EBlockState.Max; ++i)
         {
             // 미정의 enum 값(7~9, 옛 스킨 슬롯 25~39·47~51 등)은 스프라이트가 없으므로 스킵
             if (!System.Enum.IsDefined(typeof(EBlockState), i)) continue;
-            var blockState = i;
-            var tcs = new TaskCompletionSource<Sprite>();
+            EBlockState blockState = i;
+            TaskCompletionSource<Sprite> tcs = new TaskCompletionSource<Sprite>();
             CHMResource.Instance.LoadSprite(blockState, sprite =>
             {
                 if (sprite != null) _blockSpriteList[blockState] = sprite;
@@ -411,7 +411,7 @@ public class GPGameScene : MonoBehaviour
         {
             case ESelectStage.Hard:
                 _stageInfo.tutorialID = -1;
-                foreach (var b in _stageBlockInfoList) b.tutorialBlock = false;
+                foreach (StageBlockInfo b in _stageBlockInfoList) b.tutorialBlock = false;
                 break;
             case ESelectStage.Normal:
                 _stageInfo.ApplyNormalModifiers();
@@ -421,8 +421,8 @@ public class GPGameScene : MonoBehaviour
         targetScoreText.SetText(_stageInfo.targetScore);
         if (_stageInfo.targetScore < 0) targetScoreText.gameObject.SetActive(false);
 
-        var addMoveItemValue = (int)CHMJson.Instance.GetConstValueInfo(EConstValue.AddMoveItemValue);
-        var addTimeItemValue = (int)CHMJson.Instance.GetConstValueInfo(EConstValue.AddTimeItemValue);
+        int addMoveItemValue = (int)CHMJson.Instance.GetConstValueInfo(EConstValue.AddMoveItemValue);
+        int addTimeItemValue = (int)CHMJson.Instance.GetConstValueInfo(EConstValue.AddTimeItemValue);
 
         if (_stageInfo.moveCount > 0) moveCount.Value = _stageInfo.moveCount + _loginData.useMoveItemCount * addMoveItemValue;
         else
@@ -476,7 +476,7 @@ public class GPGameScene : MonoBehaviour
     {
         instBtn.InstantiateButton(origin, margin, boardSize, boardSize, parent, boardArr);
 
-        foreach (var block in boardArr)
+        foreach (Block block in boardArr)
         {
             if (block == null) continue;
             float moveDis = CHInstantiateButton.GetHorizontalDistance() * (boardSize - 1) / 2;
@@ -490,10 +490,10 @@ public class GPGameScene : MonoBehaviour
             //# 스폰 트윈 목표 스케일을 CHInstantiateButton 산출 factor로 (9×9면 1.0)
             block.rectTransform.DOScale(CHInstantiateButton.GetScaleFactor(), delay);
 
-            var info = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
+            StageBlockInfo info = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
             if (info == null)
             {
-                var random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
+                EBlockState random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                 random = block.CheckSelectCatShop(random);
                 block.SetBlockState(ELog.CreateMap, 1, _blockSpriteList[random], random);
                 block.checkHp = block.CheckHpBlock();
@@ -501,7 +501,7 @@ public class GPGameScene : MonoBehaviour
             }
             else
             {
-                var blockState = block.CheckSelectCatShop(info.blockState);
+                EBlockState blockState = block.CheckSelectCatShop(info.blockState);
                 block.SetBlockState(ELog.CreateMap, 2, _blockSpriteList[blockState], blockState);
                 block.checkHp = block.CheckHpBlock();
                 block.tutorialBlock = info.tutorialBlock;
@@ -518,20 +518,20 @@ public class GPGameScene : MonoBehaviour
         {
             if (!canMatch)
             {
-                foreach (var block in boardArr)
+                foreach (Block block in boardArr)
                 {
                     if (block == null) continue;
-                    var info = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
+                    StageBlockInfo info = _stageBlockInfoList.Find(_ => _.row == block.row && _.col == block.col);
                     if (info == null)
                     {
-                        var random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
+                        EBlockState random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                         random = block.CheckSelectCatShop(random);
                         block.SetBlockState(ELog.CreateMap, 3, _blockSpriteList[random], random);
                         block.SetHp(-1);
                     }
                     else
                     {
-                        var blockState = block.CheckSelectCatShop(info.blockState);
+                        EBlockState blockState = block.CheckSelectCatShop(info.blockState);
                         block.SetBlockState(ELog.CreateMap, 4, _blockSpriteList[blockState], blockState);
                         block.tutorialBlock = info.tutorialBlock;
                         block.SetHp(block.IsNormalBlock() ? -1 : info.hp);
@@ -543,11 +543,11 @@ public class GPGameScene : MonoBehaviour
             {
                 for (int j = 0; j < boardSize; ++j)
                 {
-                    var block = boardArr[i, j];
+                    Block block = boardArr[i, j];
                     if (block == null) continue;
                     if (block.squareMatch || block.IsMatch())
                     {
-                        var random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
+                        EBlockState random = (EBlockState)UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                         random = block.CheckSelectCatShop(random);
                         block.SetBlockState(ELog.CreateMap, 5, _blockSpriteList[random], random);
                         block.SetHp(-1); block.ResetScore(); block.match = false; block.squareMatch = false;
@@ -581,7 +581,7 @@ public class GPGameScene : MonoBehaviour
 
             do
             {
-                foreach (var block in boardArr)
+                foreach (Block block in boardArr)
                 {
                     if (block == null) continue;
                     if (block.changeBlockState != EBlockState.None)
@@ -596,7 +596,7 @@ public class GPGameScene : MonoBehaviour
                         if (block.IsFixdBlock() || block.IsFishBlock()) continue;
                         if (reUpdate && (block.GetBlockState() == EBlockState.RainbowPang || block.IsBallBlock())) continue;
                         firstRow = block.row; firstCol = block.col;
-                        var random = UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
+                        int random = UnityEngine.Random.Range(0, _stageInfo.blockTypeCount);
                         createDelay = true;
                         _board.CreateNewBlock(block, ELog.UpdateMap, 2, (EBlockState)random);
                         block.SetHp(-1); block.ResetScore(); block.SetOriginPos();
@@ -631,7 +631,7 @@ public class GPGameScene : MonoBehaviour
         {
             for (int j = 0; j < boardSize; ++j)
             {
-                var block = boardArr[i, j];
+                Block block = boardArr[i, j];
                 if (block == null) continue;
                 if (block.IsMatch() && !block.remove)
                 {
@@ -654,20 +654,20 @@ public class GPGameScene : MonoBehaviour
                         ? catFootImgList[UnityEngine.Random.Range(0, catFootImgList.Count)]
                         : goldImg;
 
-                    var gold = CHMResource.Instance.Instantiate(img.gameObject, transform.parent);
+                    GameObject gold = CHMResource.Instance.Instantiate(img.gameObject, transform.parent);
                     if (gold != null)
                     {
                         if (_selectStage == ESelectStage.Boss)
                         {
-                            var flyImg = gold.GetComponent<Image>();
+                            Image flyImg = gold.GetComponent<Image>();
                             if (flyImg != null) flyImg.sprite = block.img.sprite;
                         }
 
-                        var rect = gold.GetComponent<RectTransform>();
+                        RectTransform rect = gold.GetComponent<RectTransform>();
                         if (rect != null)
                         {
                             rect.position = block.rectTransform.position;
-                            var destPos = _selectStage == ESelectStage.Boss && normalBossObj != null
+                            Vector3 destPos = _selectStage == ESelectStage.Boss && normalBossObj != null
                                 ? normalBossObj.transform.position
                                 : (goldImgTarget != null ? goldImgTarget.position : img.rectTransform.position);
                             rect.DOMove(destPos, UnityEngine.Random.Range(GoldFlyDurationMin, GoldFlyDurationMax)).OnComplete(() =>
@@ -701,7 +701,7 @@ public class GPGameScene : MonoBehaviour
         int row = boardSize - 1;
         for (int i = 0; i < boardSize; ++i)
         {
-            var block = boardArr[row, i];
+            Block block = boardArr[row, i];
             if (block.IsFishBlock())
             {
                 block.tutorialBlock = false;
@@ -716,7 +716,7 @@ public class GPGameScene : MonoBehaviour
                 int ballHp = BallPortalStartHp;
                 for (int k = i + 1; k < boardSize; ++k)
                 {
-                    var cb = boardArr[row, k];
+                    Block cb = boardArr[row, k];
                     if (ballHp <= 0) break;
                     if (cb.IsNormalBlock() || cb.remove) { cb.changeBlockState = EBlockState.Potal; cb.changeHp = ballHp--; cb.checkHp = true; }
                     else break;
@@ -724,7 +724,7 @@ public class GPGameScene : MonoBehaviour
                 ballHp = BallPortalStartHp;
                 for (int k = i - 1; k >= 0; --k)
                 {
-                    var cb = boardArr[row, k];
+                    Block cb = boardArr[row, k];
                     if (cb.IsNormalBlock() || cb.remove) { cb.changeBlockState = EBlockState.Potal; cb.changeHp = ballHp--; cb.checkHp = true; }
                     else break;
                 }
@@ -739,9 +739,9 @@ public class GPGameScene : MonoBehaviour
         {
             for (int h = 0; h < boardSize; h++)
             {
-                var block = boardArr[w, h];
+                Block block = boardArr[w, h];
                 if (block == null || !block.IsBoxBlock()) continue;
-                var upBlock = _board.IsValidIndex(w - 1, h) ? boardArr[w - 1, h] : null;
+                Block upBlock = _board.IsValidIndex(w - 1, h) ? boardArr[w - 1, h] : null;
                 if (upBlock == null) continue;
                 if (block.CatInTheBox(upBlock.GetBlockState()))
                 {
@@ -763,9 +763,9 @@ public class GPGameScene : MonoBehaviour
 
     private RectTransform CreateEffect(ParticleSystem effect, Vector2 movePos)
     {
-        var copyObj = CHMResource.Instance.Instantiate(effect.gameObject, transform.parent);
+        GameObject copyObj = CHMResource.Instance.Instantiate(effect.gameObject, transform.parent);
         copyObj.SetActive(true);
-        var rt = copyObj.GetComponent<RectTransform>();
+        RectTransform rt = copyObj.GetComponent<RectTransform>();
         rt.anchoredPosition = movePos;
         return rt;
     }
@@ -880,11 +880,11 @@ public class GPGameScene : MonoBehaviour
                 _tutorialNextBlock = true;
                 if (_selectStage != ESelectStage.Hard && _stageInfo.tutorialID > 0)
                 {
-                    var tutInfo = CHMJson.Instance.GetTutorialInfo(_stageInfo.tutorialID);
+                    TutorialInfo tutInfo = CHMJson.Instance.GetTutorialInfo(_stageInfo.tutorialID);
                     if (tutInfo == null || tutInfo.connectNextBlock == EBlockState.None) break;
                     guideBackground.SetActive(true);
                     guideHole.gameObject.SetActive(true);
-                    var sv = _tutorial.TutorialBlockSetting(tutInfo.connectNextBlock);
+                    (Vector2, Vector2) sv = _tutorial.TutorialBlockSetting(tutInfo.connectNextBlock);
                     //# 홀 크기는 블럭 sizeDelta(스케일 미반영) 기반이므로 블럭과 동일 배율로 맞춘다 (9×9면 factor=1)
                     float guideScaleFactor = CHInstantiateButton.GetScaleFactor();
                     guideHole.sizeDelta = sv.Item1;
@@ -1001,7 +1001,7 @@ public class GPGameScene : MonoBehaviour
     // 게임 실패 시 사유 데이터 생성. ShowUI(UIGameEnd) 직전(부활 경로 통과 후)에만 호출된다.
     private GameEndFailInfo BuildFailInfo()
     {
-        var info = new GameEndFailInfo();
+        GameEndFailInfo info = new GameEndFailInfo();
 
         if (_selectStage == ESelectStage.Boss)
         {
@@ -1023,19 +1023,19 @@ public class GPGameScene : MonoBehaviour
     // 클리어 판정(Update의 보드 스캔)과 동일 조건으로 남은 목표 블록을 EBlockState별로 집계.
     private List<BlockTypeCount> CollectRemainingObjectiveBlocks()
     {
-        var result = new List<BlockTypeCount>();
+        List<BlockTypeCount> result = new List<BlockTypeCount>();
 
         for (int i = 0; i < boardSize; ++i)
         {
             for (int j = 0; j < boardSize; ++j)
             {
-                var block = boardArr[i, j];
+                Block block = boardArr[i, j];
                 if (block.GetBlockState() == EBlockState.RainbowPang) continue;
                 if (!block.checkHp) continue;
                 if (block.GetHp() > 0 || block.IsFishBlock() || block.IsBallBlock())
                 {
-                    var state = block.GetBlockState();
-                    var entry = result.Find(e => e.state == state);
+                    EBlockState state = block.GetBlockState();
+                    BlockTypeCount entry = result.Find(e => e.state == state);
                     if (entry != null) entry.count++;
                     else result.Add(new BlockTypeCount { state = state, count = 1 });
                 }

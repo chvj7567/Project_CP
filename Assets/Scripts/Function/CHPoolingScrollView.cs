@@ -215,7 +215,7 @@ public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TI
     {
         origin.SetActive(false);
 
-        var scrollRect = GetComponent<ScrollRect>();
+        ScrollRect scrollRect = GetComponent<ScrollRect>();
         scrollRect.OnValueChangedAsObservable().Subscribe(OnScroll);
         scrollRect.OnRectTransformDimensionsChangeAsObservable().Subscribe(_ =>
         {
@@ -537,7 +537,7 @@ public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TI
 
                         if (contentRect.Overlaps(itemRect))
                         {
-                            var node = _liPoolItem.Last;
+                            LinkedListNode<PoolingScrollViewItem<TItem>> node = _liPoolItem.Last;
                             _liPoolItem.Remove(node);
 
                             InitItem(node.Value.item, i);
@@ -558,7 +558,7 @@ public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TI
 
                         if (contentRect.Overlaps(itemRect))
                         {
-                            var node = _liPoolItem.First;
+                            LinkedListNode<PoolingScrollViewItem<TItem>> node = _liPoolItem.First;
                             _liPoolItem.Remove(node);
 
                             InitItem(node.Value.item, i);
@@ -643,7 +643,7 @@ public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TI
 
     public virtual void InitItemTransform(GameObject item, int index)
     {
-        var rectTransform = item.GetComponent<RectTransform>();
+        RectTransform rectTransform = item.GetComponent<RectTransform>();
 
         rectTransform.anchorMax = new Vector2(0, 1);
         rectTransform.anchorMin = new Vector2(0, 1);
@@ -686,7 +686,7 @@ public abstract class CHPoolingScrollView<TItem, TData> : MonoBehaviour where TI
                 children[i] = _objContent.transform.GetChild(i).gameObject;
             }
 
-            foreach (var child in children)
+            foreach (GameObject child in children)
             {
                 child.SetActive(false);
             }

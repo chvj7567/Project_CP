@@ -21,7 +21,7 @@ public class CHToolString : EditorWindow
     [MenuItem("CHTools/String Tool")]
     static void ShowWindow()
     {
-        var window = GetWindow(typeof(CHToolString));
+        EditorWindow window = GetWindow(typeof(CHToolString));
         window.titleContent.text = "Single Window";
         window.minSize = new Vector2(650, 800);
         window.maxSize = new Vector2(650, 800);
@@ -33,8 +33,8 @@ public class CHToolString : EditorWindow
         {
             CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StringKorea.ToString(), (textAsset) =>
             {
-                var jsonData = JsonUtility.FromJson<JsonData>("{\"stringKoreaInfoArr\":" + textAsset.text + "}");
-                foreach (var data in jsonData.stringKoreaInfoArr)
+                JsonData jsonData = JsonUtility.FromJson<JsonData>("{\"stringKoreaInfoArr\":" + textAsset.text + "}");
+                foreach (Infomation.StringInfo data in jsonData.stringKoreaInfoArr)
                 {
                     stringKoreaList.Add(data);
                 }
@@ -47,8 +47,8 @@ public class CHToolString : EditorWindow
         {
             CHStatic.LoadAssetOnEditor<TextAsset>(Defines.EResourceType.Json.ToString(), Defines.EJsonType.StringEnglish.ToString(), (textAsset) =>
             {
-                var jsonData = JsonUtility.FromJson<JsonData>("{\"stringEnglishInfoArr\":" + textAsset.text + "}");
-                foreach (var data in jsonData.stringEnglishInfoArr)
+                JsonData jsonData = JsonUtility.FromJson<JsonData>("{\"stringEnglishInfoArr\":" + textAsset.text + "}");
+                foreach (Infomation.StringInfo data in jsonData.stringEnglishInfoArr)
                 {
                     stringEnglishList.Add(data);
                 }
@@ -74,7 +74,7 @@ public class CHToolString : EditorWindow
 
         if (GUILayout.Button("불러오기(Stage 값 기준)", GUILayout.Width(595), GUILayout.Height(30)))
         {
-            var stringInfo = stringKoreaList.Find(_ => _.stringID == stringID);
+            Infomation.StringInfo stringInfo = stringKoreaList.Find(_ => _.stringID == stringID);
             if (stringInfo != null)
             {
                 korea = stringInfo.value;
@@ -84,7 +84,7 @@ public class CHToolString : EditorWindow
                 korea = "";
             }
 
-            var stringInfo2 = stringEnglishList.Find(_ => _.stringID == stringID);
+            Infomation.StringInfo stringInfo2 = stringEnglishList.Find(_ => _.stringID == stringID);
             if (stringInfo2 != null)
             {
                 english = stringInfo2.value;
@@ -97,7 +97,7 @@ public class CHToolString : EditorWindow
 
         if (GUILayout.Button("저장하기", GUILayout.Width(595), GUILayout.Height(30)))
         {
-            var stringInfo = stringKoreaList.Find(_ => _.stringID == stringID);
+            Infomation.StringInfo stringInfo = stringKoreaList.Find(_ => _.stringID == stringID);
             if (stringInfo != null)
             {
                 stringInfo.value = korea;
@@ -111,7 +111,7 @@ public class CHToolString : EditorWindow
                 });
             }
 
-            var stringInfo2 = stringEnglishList.Find(_ => _.stringID == stringID);
+            Infomation.StringInfo stringInfo2 = stringEnglishList.Find(_ => _.stringID == stringID);
             if (stringInfo2 != null)
             {
                 stringInfo2.value = english;
@@ -130,7 +130,7 @@ public class CHToolString : EditorWindow
 
             string jsonData = JsonUtility.ToJson(stringKoreaInfoJson, true);
 
-            var splitData = jsonData.Split('[', ']');
+            string[] splitData = jsonData.Split('[', ']');
 
             jsonData = "[" + splitData[1] + "]";
             // JSON 파일로 저장 (Assets 폴더 내에 저장됨)

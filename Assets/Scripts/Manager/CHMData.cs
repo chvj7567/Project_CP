@@ -37,7 +37,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         if (loginLocalDataDic == null)
         {
             Debug.Log("Login Local Data Load");
-            var data = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
+            (bool, Data.ExtractData<Data.Login>) data = await LoadJsonToLocal<Data.ExtractData<Data.Login>, string, Data.Login>(_path, Defines.EData.Login.ToString());
             
             if (data.Item1)
             {
@@ -50,21 +50,21 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         if (collectionLocalDataDic == null)
         {
             Debug.Log("Collection Local Data Load");
-            var data = await LoadJsonToLocal<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
+            (bool, Data.ExtractData<Data.Collection>) data = await LoadJsonToLocal<Data.ExtractData<Data.Collection>, string, Data.Collection>(_path, Defines.EData.Collection.ToString());
             collectionLocalDataDic = data.Item2.MakeDict();
         }
 
         if (missionLocalDataDic == null)
         {
             Debug.Log("Mission Local Data Load");
-            var data = await LoadJsonToLocal<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
+            (bool, Data.ExtractData<Data.Mission>) data = await LoadJsonToLocal<Data.ExtractData<Data.Mission>, string, Data.Mission>(_path, Defines.EData.Mission.ToString());
             missionLocalDataDic = data.Item2.MakeDict();
         }
 
         if (shopLocalDataDic == null)
         {
             Debug.Log("Shop Local Data Load");
-            var data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
+            (bool, Data.ExtractData<Data.Shop>) data = await LoadJsonToLocal<Data.ExtractData<Data.Shop>, string, Data.Shop>(_path, Defines.EData.Shop.ToString());
             shopLocalDataDic = data.Item2.MakeDict();
         }
     }
@@ -95,7 +95,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         }
         else
         {
-            var data = File.ReadAllText(localPath);
+            string data = File.ReadAllText(localPath);
 
             // 데이터가 없거나 로드한 리스트 정보가 비어 있는 경우
             if (data.Contains($"{name.ToLower()}List") == false || data.Contains($"\"{name.ToLower()}List\":[]"))
@@ -122,7 +122,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
             taskCompletionSource.SetResult(data);
         });
 
-        var task = await taskCompletionSource.Task;
+        TextAsset task = await taskCompletionSource.Task;
 
         return JsonUtility.FromJson<Loader>($"{{\"{_name.ToLower()}List\":{task.text}}}");
     }
@@ -174,21 +174,21 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         if (loginCloudDataDic == null)
         {
             Debug.Log("Login Cloud Data Load");
-            var data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(path, Defines.EData.Login.ToString());
+            Data.ExtractData<Data.Login> data = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Login>, string, Data.Login>(path, Defines.EData.Login.ToString());
 
             // 일일 미션 충돌 해소: 클라우드 데이터를 일괄 교체하기 전에
             // 로컬과 클라우드의 lastDailyResetDateKey("yyyyMMdd" UTC)를 비교한다.
             // 로컬이 더 미래(오늘 오프라인 진행)이면 로컬 일일 필드를 클라우드 엔트리에 덮어쓴다.
             // 클라우드가 같거나 미래이면 클라우드 값을 그대로 신뢰한다.
-            var cloudDict = data.MakeDict();
+            Dictionary<string, Data.Login> cloudDict = data.MakeDict();
             if (loginLocalDataDic != null)
             {
-                foreach (var kvp in cloudDict)
+                foreach (KeyValuePair<string, Data.Login> kvp in cloudDict)
                 {
-                    if (loginLocalDataDic.TryGetValue(kvp.Key, out var localLogin) == false)
+                    if (loginLocalDataDic.TryGetValue(kvp.Key, out Data.Login localLogin) == false)
                         continue;
 
-                    var cloudLogin = kvp.Value;
+                    Data.Login cloudLogin = kvp.Value;
 
                     //# 언어는 기기 로컬 전용 — 클라우드 값으로 덮어쓰지 않는다 (옵션에서만 변경)
                     cloudLogin.languageType = localLogin.languageType;
@@ -222,21 +222,21 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
         if (collectionCloudDataDic == null)
         {
             Debug.Log("Collection Cloud Data Load");
-            var data2 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(path, Defines.EData.Collection.ToString());
+            Data.ExtractData<Data.Collection> data2 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Collection>, string, Data.Collection>(path, Defines.EData.Collection.ToString());
             collectionLocalDataDic = collectionCloudDataDic = data2.MakeDict();
         }
 
         if (missionCloudDataDic == null)
         {
             Debug.Log("Mission Cloud Data Load");
-            var data3 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(path, Defines.EData.Mission.ToString());
+            Data.ExtractData<Data.Mission> data3 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Mission>, string, Data.Mission>(path, Defines.EData.Mission.ToString());
             missionLocalDataDic = missionCloudDataDic = data3.MakeDict();
         }
 
         if (shopCloudDataDic == null)
         {
             Debug.Log("Shop Cloud Data Load");
-            var data4 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(path, Defines.EData.Shop.ToString());
+            Data.ExtractData<Data.Shop> data4 = await LoadJsonToGPGSCloud<Data.ExtractData<Data.Shop>, string, Data.Shop>(path, Defines.EData.Shop.ToString());
             shopLocalDataDic = shopCloudDataDic = data4.MakeDict();
         }
     }
@@ -251,7 +251,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
             taskCompletionSource.SetResult(data);
         });
 
-        var stringTask = await taskCompletionSource.Task;
+        string stringTask = await taskCompletionSource.Task;
 
         // 데이터가 없거나 로드한 리스트 정보가 비어 있는 경우
         if (stringTask.Contains($"{name.ToLower()}List") == false || stringTask.Contains($"\"{name.ToLower()}List\":[]"))
@@ -366,7 +366,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
 
     public Data.Login GetLoginData(string _key)
     {
-        if (loginLocalDataDic.TryGetValue(_key, out var data) == false)
+        if (loginLocalDataDic.TryGetValue(_key, out Data.Login data) == false)
         {
             return CreateLoginData(_key);
         }
@@ -376,7 +376,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
 
     public Data.Collection GetCollectionData(string _key)
     {
-        if (collectionLocalDataDic.TryGetValue(_key, out var data) == false)
+        if (collectionLocalDataDic.TryGetValue(_key, out Data.Collection data) == false)
         {
             data = CreateCollectionData(_key);
         }
@@ -386,7 +386,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
 
     public Data.Mission GetMissionData(string _key)
     {
-        if (missionLocalDataDic.TryGetValue(_key, out var data) == false)
+        if (missionLocalDataDic.TryGetValue(_key, out Data.Mission data) == false)
         {
             data = CreateMissionData(_key);
         }
@@ -396,7 +396,7 @@ public class CHMData : ChvjUnityInfra.CHSingletonStatic<CHMData>
 
     public Data.Shop GetShopData(string _key)
     {
-        if (shopLocalDataDic.TryGetValue(_key, out var data) == false)
+        if (shopLocalDataDic.TryGetValue(_key, out Data.Shop data) == false)
         {
             data = CreateShopData(_key);
         }

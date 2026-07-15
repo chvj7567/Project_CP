@@ -46,7 +46,7 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
 
     static public (RectTransform, Block) GetBlockInfo(Vector2 pos)
     {
-        foreach (var block in blockDict)
+        foreach (KeyValuePair<RectTransform, Block> block in blockDict)
         {
             if ((pos - block.Key.anchoredPosition).magnitude <= buttonWidth / 2f)
             {
@@ -98,13 +98,13 @@ public class CHInstantiateButton : CHSingleton<CHInstantiateButton>
             ++row;
         }
 
-        foreach (var pos in posDict)
+        foreach (KeyValuePair<Vector2, Vector2> pos in posDict)
         {
             GameObject addObject = Instantiate(_origin, _parent);
             RectTransform rectTransform = addObject.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = pos.Value;
             rectTransform.localScale = Vector3.one * scaleFactor;
-            var block = addObject.GetOrAddComponent<Block>();
+            Block block = addObject.GetOrAddComponent<Block>();
 
             block.row = (int)pos.Key.x;
             block.col = (int)pos.Key.y;

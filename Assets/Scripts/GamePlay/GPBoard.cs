@@ -42,19 +42,19 @@ public class GPBoard
 
     public void ChangeBlock(Block moveBlock, Block targetBlock)
     {
-        var tempPos = moveBlock.originPos;
+        Vector2 tempPos = moveBlock.originPos;
         moveBlock.originPos = targetBlock.originPos;
         targetBlock.originPos = tempPos;
 
-        var tempIndex = moveBlock.index;
+        int tempIndex = moveBlock.index;
         moveBlock.index = targetBlock.index;
         targetBlock.index = tempIndex;
 
-        var tempRow = moveBlock.row;
+        int tempRow = moveBlock.row;
         moveBlock.row = targetBlock.row;
         targetBlock.row = tempRow;
 
-        var tempCol = moveBlock.col;
+        int tempCol = moveBlock.col;
         moveBlock.col = targetBlock.col;
         targetBlock.col = tempCol;
 
@@ -87,13 +87,13 @@ public class GPBoard
 
     public async Task DownBlock()
     {
-        var order = new List<Block>();
+        List<Block> order = new List<Block>();
         for (int i = boardSize - 1; i >= 0; --i)
             for (int j = boardSize - 1; j >= 0; --j)
                 if (boardArr[i, j] != null)
                     order.Add(boardArr[i, j]);
 
-        foreach (var block in order)
+        foreach (Block block in order)
         {
             int row = block.row;
             int col = block.col;
@@ -124,7 +124,7 @@ public class GPBoard
         }
 
         bool downDelay = false;
-        foreach (var block in boardArr)
+        foreach (Block block in boardArr)
         {
             if (block == null) continue;
             if (!block.IsFixdBlock())

@@ -193,9 +193,9 @@ public class UIGameEnd : UIBase
                 failBlockHeaderText.SetText(CHMString.Instance.GetString(FailBlockHeaderStringID));
             if (failBlockIconTemplate != null && failBlockIconContainer != null)
             {
-                foreach (var entry in info.remainBlocks)
+                foreach (BlockTypeCount entry in info.remainBlocks)
                 {
-                    var item = Instantiate(failBlockIconTemplate, failBlockIconContainer);
+                    FailBlockIconItem item = Instantiate(failBlockIconTemplate, failBlockIconContainer);
                     item.gameObject.SetActive(true);
                     item.Setup(entry.state, entry.count);
                 }
@@ -304,8 +304,8 @@ public class UIGameEnd : UIBase
                 return;
             }
 
-            var before = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
-            var after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold;
+            int before = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
+            int after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold;
 
             received = true;
 
@@ -353,8 +353,8 @@ public class UIGameEnd : UIBase
             return;
         }
 
-        var before = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
-        var after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold * AdRewardGoldMultiplier;
+        int before = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value;
+        int after = CHMData.Instance.GetCollectionData(CHMString.Instance.Gold).value += arg.gold * AdRewardGoldMultiplier;
 
         received = true;
 

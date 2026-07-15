@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
@@ -90,7 +91,7 @@ public class GPTutorial
         _guideBackground.transform.SetAsLastSibling();
         _guideFinger.transform.SetAsLastSibling();
 
-        var holeValue = GetTutorialStageImgSettingValue(stageBlockInfoList);
+        (Vector2, Vector2) holeValue = GetTutorialStageImgSettingValue(stageBlockInfoList);
         //# 홀/핑거 크기는 블럭 sizeDelta(스케일 미반영) 기반이므로 블럭과 동일 배율로 맞춘다 (9×9면 factor=1)
         float scaleFactor = CHInstantiateButton.GetScaleFactor();
         _guideHole.sizeDelta = holeValue.Item1;
@@ -98,7 +99,7 @@ public class GPTutorial
         _guideFinger.localScale = Vector3.one * scaleFactor;
         _guideHole.anchoredPosition = holeValue.Item2;
 
-        var tutorialInfo = CHMJson.Instance.GetTutorialInfo(stageInfo.tutorialID);
+        TutorialInfo tutorialInfo = CHMJson.Instance.GetTutorialInfo(stageInfo.tutorialID);
         if (tutorialInfo != null)
             _guideDesc.SetStringID(tutorialInfo.descStringID);
     }
@@ -122,7 +123,7 @@ public class GPTutorial
 
     public (Vector2, Vector2) TutorialBlockSetting(EBlockState blockState)
     {
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
         for (int w = 0; w < _board.boardSize; w++)
             for (int h = 0; h < _board.boardSize; h++)
                 if (arr[w, h].GetBlockState() == blockState)
@@ -138,13 +139,13 @@ public class GPTutorial
         _guideBackground.SetActive(true);
         for (int i = 0; i < _normalGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMJson.Instance.GetGuideInfo(i + 1 + (int)CHMJson.Instance.GetConstValueInfo(EConstValue.NormalStageGuideMaxIndex));
+            GuideInfo guideInfo = CHMJson.Instance.GetGuideInfo(i + 1 + (int)CHMJson.Instance.GetConstValueInfo(EConstValue.NormalStageGuideMaxIndex));
             if (guideInfo == null) break;
             _normalGuideHoleList[i].gameObject.SetActive(true);
             _guideDesc.SetStringID(guideInfo.descStringID);
 
-            var buttonTask = new TaskCompletionSource<bool>();
-            var sub = _guideBackgroundBtn.OnClickAsObservable().Subscribe(_ => buttonTask.SetResult(true));
+            TaskCompletionSource<bool> buttonTask = new TaskCompletionSource<bool>();
+            IDisposable sub = _guideBackgroundBtn.OnClickAsObservable().Subscribe(_ => buttonTask.SetResult(true));
             await buttonTask.Task;
             _normalGuideHoleList[i].gameObject.SetActive(false);
             sub.Dispose();
@@ -157,13 +158,13 @@ public class GPTutorial
         _guideBackground.SetActive(true);
         for (int i = 0; i < _bossGuideHoleList.Count; ++i)
         {
-            var guideInfo = CHMJson.Instance.GetGuideInfo(i + 1 + (int)CHMJson.Instance.GetConstValueInfo(EConstValue.BossStageGuideMaxIndex));
+            GuideInfo guideInfo = CHMJson.Instance.GetGuideInfo(i + 1 + (int)CHMJson.Instance.GetConstValueInfo(EConstValue.BossStageGuideMaxIndex));
             if (guideInfo == null) break;
             _bossGuideHoleList[i].gameObject.SetActive(true);
             _guideDesc.SetStringID(guideInfo.descStringID);
 
-            var buttonTask = new TaskCompletionSource<bool>();
-            var sub = _guideBackgroundBtn.OnClickAsObservable().Subscribe(_ => buttonTask.SetResult(true));
+            TaskCompletionSource<bool> buttonTask = new TaskCompletionSource<bool>();
+            IDisposable sub = _guideBackgroundBtn.OnClickAsObservable().Subscribe(_ => buttonTask.SetResult(true));
             await buttonTask.Task;
             _bossGuideHoleList[i].gameObject.SetActive(false);
             sub.Dispose();
@@ -174,15 +175,15 @@ public class GPTutorial
     (Vector2, Vector2) GetTutorialStageImgSettingValue(List<StageBlockInfo> stageBlockInfoList)
     {
         if (stageBlockInfoList == null) return (Vector2.zero, Vector2.zero);
-        var tutorialBlocks = stageBlockInfoList.FindAll(_ => _.tutorialBlock);
+        List<StageBlockInfo> tutorialBlocks = stageBlockInfoList.FindAll(_ => _.tutorialBlock);
         if (tutorialBlocks.Count <= 0) return (Vector2.zero, Vector2.zero);
 
-        var arr = _board.boardArr;
+        Block[,] arr = _board.boardArr;
         float sizeX = 0, sizeY = 0, posX = 0, posY = 0;
 
         if (tutorialBlocks.Count == 1)
         {
-            var b = arr[tutorialBlocks[0].row, tutorialBlocks[0].col];
+            Block b = arr[tutorialBlocks[0].row, tutorialBlocks[0].col];
             sizeX = b.rectTransform.sizeDelta.x;
             sizeY = b.rectTransform.sizeDelta.y;
             posX = b.rectTransform.anchoredPosition.x;
@@ -191,8 +192,8 @@ public class GPTutorial
         }
         else
         {
-            var b1 = arr[tutorialBlocks[0].row, tutorialBlocks[0].col];
-            var b2 = arr[tutorialBlocks[1].row, tutorialBlocks[1].col];
+            Block b1 = arr[tutorialBlocks[0].row, tutorialBlocks[0].col];
+            Block b2 = arr[tutorialBlocks[1].row, tutorialBlocks[1].col];
             if (b1.row == b2.row)
             {
                 sizeX = b1.rectTransform.sizeDelta.x * 2;

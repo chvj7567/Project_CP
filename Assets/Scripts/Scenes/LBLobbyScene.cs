@@ -93,7 +93,7 @@ public class LBLobbyScene : MonoBehaviour
         {
             if (!bundleDownload.Value || !dataDownload.Value) return;
             firstStartBtnClick = true;
-            var arg = new UIStageSelectArg();
+            UIStageSelectArg arg = new UIStageSelectArg();
             arg.stageSelect += async (select) => await StageSelect(select);
             CHMUI.Instance.ShowUI(Defines.EUI.UIStageSelect, arg);
         });
@@ -139,7 +139,7 @@ public class LBLobbyScene : MonoBehaviour
 
         menuBtn.OnClickAsObservable().Subscribe(_ =>
         {
-            var arg = new UIStageSelectArg();
+            UIStageSelectArg arg = new UIStageSelectArg();
             arg.stageSelect += async (select) => await StageSelect(select);
             CHMUI.Instance.ShowUI(Defines.EUI.UIStageSelect, arg);
         });
@@ -176,7 +176,7 @@ public class LBLobbyScene : MonoBehaviour
         rankingBtn.gameObject.SetActive(false);
         objWait.SetActive(false);
         userID.gameObject.SetActive(false);
-        foreach (var h in guideHoleList) h.gameObject.SetActive(false);
+        foreach (RectTransform h in guideHoleList) h.gameObject.SetActive(false);
         guideBackground.SetActive(false);
         guideBackgroundBtn.gameObject.SetActive(false);
 
@@ -207,7 +207,7 @@ public class LBLobbyScene : MonoBehaviour
         bundleDownload.Value = true;
         dataDownload.Value = true;
 
-        var login = _loginHandler.GetGPGSLogin();
+        bool login = _loginHandler.GetGPGSLogin();
         connectGPGSBtn.gameObject.SetActive(!login);
         logoutBtn.gameObject.SetActive(login);
 
@@ -258,7 +258,7 @@ public class LBLobbyScene : MonoBehaviour
 
         CHMSound.Instance.Play(Defines.ESound.Bgm);
 
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
         if (loginData.guideIndex == 0)
         {
             Time.timeScale = 0;

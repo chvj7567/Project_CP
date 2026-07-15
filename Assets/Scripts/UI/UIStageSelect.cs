@@ -36,16 +36,16 @@ public class UIStageSelect : UIBase
         hardLockObj.SetActive(false);
         bossLockObj.SetActive(false);
 
-        var loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
+        Data.Login loginData = CHMData.Instance.GetLoginData(CHMString.Instance.CatPang);
 
-        var hardLockValue = CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.HardStage_NormalStageLock);
+        long hardLockValue = CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.HardStage_NormalStageLock);
         if (hardLockValue > loginData.normalStage)
         {
             hardStageLock = true;
             hardLockObj.SetActive(true);
         }
 
-        var bossLockValue = CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.BossStage_HardStageLock);
+        long bossLockValue = CHMJson.Instance.GetConstValueInfo(Defines.EConstValue.BossStage_HardStageLock);
         if (bossLockValue > loginData.hardStage)
         {
             bossStageLock = true;
